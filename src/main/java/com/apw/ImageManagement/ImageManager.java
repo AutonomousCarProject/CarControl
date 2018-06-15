@@ -32,7 +32,8 @@ public class ImageManager {
         picker = new ImagePicker(trakcam, 30);
         nrows = picker.getNrows();
         ncols = picker.getNcols();
-        byte tile =  (byte) (trakcam.PixTile()-1);
+        tile =  (byte) (trakcam.PixTile()-1);
+        System.out.println(tile);
         //mono = new byte[nrows * ncols];
         //rgb = new int[nrows*ncols];
         //cameraInt = new int[cameraWidth*cameraHeight];
