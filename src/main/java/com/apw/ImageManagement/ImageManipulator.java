@@ -42,8 +42,18 @@ public class ImageManipulator {
 	}
 
 
+
 	public static void convertToBlackWhiteRaster(byte[] bayer, byte[] mono, int nrows, int ncols, byte tile) {
-        for (int r = 0; r < nrows; r++) {
+    	for (int r = 0; r < nrows; r++) {
+    		int averageLuminance = 0;
+        	for(int c = 0; c < ncols; c++) {
+				int R = ((((int)bayer[(r*ncols*2 + c)*2+getBit(tile,0)+ncols*2*getBit(tile,1)]) & 0xFF));				//Top left (red)
+				int G = ((((int)bayer[(r*ncols*2 + c)*2 +1-getBit(tile,0)])&0xFF)); 			//Top right (green)
+				int B = (((int)bayer[(r*ncols*2 + c)*2 + 1+2*ncols-ncols*2*getBit(tile,1)-getBit(tile,0)])&0xFF);			//Bottom right (blue)
+				averageLuminance += R+G+B/3;
+			}
+			averageLuminance /= ncols;
+
             for (int c = 0; c < ncols; c++) {
 
 				/*
@@ -55,11 +65,11 @@ public class ImageManipulator {
 				*/
 
 
-            	int R = ((((int)bayer[(r*ncols*2 + c)*2+getBit(tile,0)+ncols*2*getBit(tile,1)]) & 0xFF));				//Top left (red)
-                int G = ((((int)bayer[(r*ncols*2 + c)*2 +1-getBit(tile,0)+ncols*2*getBit(tile,1)])&0xFF)); 			//Top right (green)
-                int B = (((int)bayer[(r*ncols*2 + c)*2 + 1+2*ncols-ncols*2*getBit(tile,1)-getBit(tile,0)])&0xFF);			//Bottom right (blue)
-                int pix =R+G+B;
-				if(pix>700){
+				int R = ((((int)bayer[(r*ncols*2 + c)*2+getBit(tile,0)+ncols*2*getBit(tile,1)]) & 0xFF));				//Top left (red)
+				int G = ((((int)bayer[(r*ncols*2 + c)*2 +1-getBit(tile,0)])&0xFF)); 			//Top right (green)
+				int B = (((int)bayer[(r*ncols*2 + c)*2 + 1+2*ncols-ncols*2*getBit(tile,1)-getBit(tile,0)])&0xFF);			//Bottom right (blue)
+				int pix =(R+G+B)/3;
+				if(pix > averageLuminance){
 					mono[r*ncols + c] = 1;
 				}else{
 					mono[r*ncols + c] = 0;
@@ -176,22 +186,31 @@ public class ImageManipulator {
     }
 
     public static void findRoad(byte[] bayer, int[] output, int nrows, int ncols, byte tile){
-    	for(int r = 0; r < ncols; r++){
+    	for(int col = 0; col < ncols; col++){
+			int averageLuminance = 0;
+			for(int row = nrows-1; row > 0; row--) {
+				int R = ((((int)bayer[(row*ncols*2 + col)*2+getBit(tile,0)+ncols*2*getBit(tile,1)]) & 0xFF));				//Top left (red)
+				int G = ((((int)bayer[(row*ncols*2 + col)*2 +1-getBit(tile,0)])&0xFF)); 			//Top right (green)
+				int B = (((int)bayer[(row*ncols*2 + col)*2 + 1+2*ncols-ncols*2*getBit(tile,1)-getBit(tile,0)])&0xFF);			//Bottom right (blue)
+				averageLuminance += R+G+B/3;
+			}
+			averageLuminance /= ncols;
     		boolean endFound = false;
-    		for(int c = nrows-1; c > 0; c--){
-    			int R = ((((int)bayer[(r*ncols*2 + c)*2+getBit(tile,0)+ncols*2*getBit(tile,1)]) & 0xFF));				//Top left (red)
-                int G = ((((int)bayer[(r*ncols*2 + c)*2 +1-getBit(tile,0)+ncols*2*getBit(tile,1)])&0xFF)); 			//Top right (green)
-                int B = (((int)bayer[(r*ncols*2 + c)*2 + 1+2*ncols-ncols*2*getBit(tile,1)-getBit(tile,0)])&0xFF);			//Bottom right (blue)
-                int pix =R+G+B;
-				if(r > 640 || c < 240 || c > 455){
-					output[c*ncols+r] = 0;
-				} else if(pix>700){
+
+    		for(int row = nrows-1; row > 0; row--){
+				int R = ((((int)bayer[(row*ncols*2 + col)*2+getBit(tile,0)+ncols*2*getBit(tile,1)]) & 0xFF));				//Top left (red)
+				int G = ((((int)bayer[(row*ncols*2 + col)*2 +1-getBit(tile,0)])&0xFF)); 			//Top right (green)
+				int B = (((int)bayer[(row*ncols*2 + col)*2 + 1+2*ncols-ncols*2*getBit(tile,1)-getBit(tile,0)])&0xFF);			//Bottom right (blue)
+				int pix =(R+G+B)/3;
+				if(col >= 640 || row < 240 || row > 455){
+					output[row*ncols+col] = 0;
+				} else if(pix>averageLuminance){
 					endFound = true;
-					output[c*ncols+r] = 0xFFFFFF;
+					output[row*ncols+col] = 0xFFFFFF;
 				}else if(!endFound){
-					output[c*ncols + r] = 0x0000FF;
+					output[row*ncols + col] = 0xF63FFC;
 				}else{
-					output[c*ncols + r] = 0x000000;
+					output[row*ncols + col] = 0x000000;
 				}
 			}
 		}
