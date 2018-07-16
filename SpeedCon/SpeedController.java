@@ -7,7 +7,7 @@ public class SpeedController {
 	
 	public void calculateDesiredSpeed(){
 		double curveSteepness = 0; // Steering.getCurveSteepness();
-		desiredSpeed = Math.max((1 - curveSteepness)*MAX_SPEED, MIN_SPEED);
+		desiredSpeed = Math.max((1 - curveSteepness)*Constants.MAX_SPEED, Constants.MIN_SPEED);
 	}
 	
 	public double getEstimatedSpeed(){
