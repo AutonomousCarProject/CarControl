@@ -469,6 +469,8 @@ public class DrDemo extends JFrame implements MouseListener {
   public void DrawDemo() { // examples of drawing on TrakSim image..
     int haff = ScrHi/2, tx = theSim.TurnRadRow(), t2x = tx>>16,
         HafScrn = ImgWi/2, nx, zx, whar = 0;
+
+	  	  System.out.println("***\n\n " + t2x + "\n\n***");
     double fmid = MyMath.Fix2flt(Haf_Scrn,0);
     String aLine;
     if (!CanDraw) return;
@@ -506,8 +508,12 @@ public class DrDemo extends JFrame implements MouseListener {
             zx = theSim.ZoomMapCoord(false,MyMath.Fix2flt(t2x,0),fmid);
             if (zx>0) break;
             t2x = t2x+4;} //~while
-          if (zx>0) theSim.DrawLine(CarColo,zx>>16,zx&0xFFF,
-              whar>>16,whar&0xFFF);}}}} //~DrawDemo
+          if (zx>0) {
+        	      theSim.DrawLine(CarColo,zx>>16,zx&0xFFF,
+        			whar>>16,whar&0xFFF);
+        	      
+          }
+          }}}} //~DrawDemo
 
  /**
   * Converts a RGB pixel array to BufferedImage for painting.
