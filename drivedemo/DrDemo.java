@@ -589,6 +589,8 @@ public class DrDemo extends JFrame implements MouseListener {
         ///** If you have self-driving code, you could put it here **///
         	//TestServos(); // (replace this with your own code)
         
+        speedControl.calculateEstimatedSpeed(this.GasPedal);
+        speedControl.calculateDesiredSpeed();
         AxLR8(true, speedControl.getDesiredSpeed());
         
 
