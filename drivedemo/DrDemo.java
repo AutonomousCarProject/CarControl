@@ -28,6 +28,7 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
+import SpeedCon.SpeedController;
 // import fly2cam.CameraBase;
 import fly2cam.FlyCamera;
 import fakefirm.Arduino;
@@ -38,6 +39,8 @@ import apw3.TrakSim;
 import apw3.SimCamera;
 
 public class DrDemo extends JFrame implements MouseListener {
+	private SpeedController speedControl = new SpeedController();
+	
   private static final long serialVersionUID = 1L; // unneed but Java insists {
 
   private static final int MinESCact = DriverCons.D_MinESCact,
@@ -584,7 +587,10 @@ public class DrDemo extends JFrame implements MouseListener {
         if ((StartYourEngines==0)||(NoneStep<0)) fno = DidFrame;
 
         ///** If you have self-driving code, you could put it here **///
-        	TestServos(); // (replace this with your own code)
+        	//TestServos(); // (replace this with your own code)
+        
+        AxLR8(true, speedControl.getDesiredSpeed());
+        
 
         if (CanDraw) {
           DrawDemo();
