@@ -3,33 +3,34 @@ package Steering;
 import apw3.DriverCons;
 
 public class Steering {
-	public point[] leftPoints = new point[32];
-	public point[] rightPoints = new point[32];
+	public Point[] leftPoints = new Point[32];
+	public Point[] rightPoints = new Point[32];
 	
-	public point[] midPoints = new point[32];
+	public Point[] midPoints = new Point[32];
 	
 	//767 is white
 	
-	int heightOfArea = 32;
-	int startingHeight = 272;
+	private int heightOfArea = 32;
+	private int startingHeight = 272;
 	
-	int screenWidth = 912;
-	int cameraWidth = 640;
-	int screenHeight = DriverCons.D_ImHi;
+	private int screenWidth = 912;
+	private int cameraWidth = 640;
+	private int screenHeight = DriverCons.D_ImHi;
+	private Point steerPoint = new Point(0, 0);
 	
-	point origin = new point(screenWidth/2, screenHeight);
+	private Point origin = new Point(cameraWidth/2, screenHeight);
 	
-	Boolean found = false;
+	private Boolean found = false;
 	
 	public Steering() {
 		for (int i = 0; i<32; i++) {
-			leftPoints[i] = new point(0, 0);
-			rightPoints[i] = new point(0, 0);
-			midPoints[i] = new point(0, 0);
+			leftPoints[i] = new Point(0, 0);
+			rightPoints[i] = new Point(0, 0);
+			midPoints[i] = new Point(0, 0);
 		}
 	}
 	
-	public point[] findPoints(int[] pixels) {
+	public Point[] findPoints(int[] pixels) {
 		int roadMiddle = cameraWidth;
 
 		for (int i = 0; i<heightOfArea; i++) {
@@ -70,11 +71,37 @@ public class Steering {
 		return midPoints;
 	}
 	
-	public double turnAngle(point tarPoint) {
-		return Math.atan(Math.abs((origin.x-tarPoint.x)/(origin.y-tarPoint.y)))*(180/Math.PI);
-	}
-	
 	public double curveSteepness(double turnAngle) {
 		return turnAngle/(90);
 	}
+
+
+	/*
+	find the average point from the midpoints array
+	 */
+	public void averageMidpoints() {
+        double tempY = 0;
+        double tempX = 0;
+
+        // Sum the x's and the y's
+	    for (Point point: midPoints) {
+            tempX += point.x;
+            tempY += point.y;
+        }
+
+        // assign the steerPoint to the average x's and y's
+        steerPoint.x = (int)(tempX / midPoints.length);
+	    steerPoint.y = (int)(tempY / midPoints.length);
+    }
+
+
+    public int getDegreeOffset() {
+	    int xOffset = origin.x - steerPoint.x;
+	    int yOffset = Math.abs(origin.y - steerPoint.y);
+
+	    Point[] tempMidPoints = midPoints;
+	    int tempDeg = (int)((Math.atan2(-xOffset, yOffset)) * (180 / Math.PI));
+
+	    return (int)((Math.atan2(-xOffset, yOffset)) * (180 / Math.PI));
+    }
 }

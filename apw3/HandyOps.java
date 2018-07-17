@@ -136,8 +136,8 @@ public class HandyOps { // first some useful debug logging ops..
     return Hex2Log(before,whom,3,after);} //~Colo2Log
 
  /**
-  * Formats a floating-point number and returns it with a prefix and suffix.
-  * If there is no fractional part, no digits are shown after the decimal point;
+  * Formats a floating-Point number and returns it with a prefix and suffix.
+  * If there is no fractional part, no digits are shown after the decimal Point;
   * otherwise a single (rounded) fractional digit is shown.
   *
   * This is one of several similar tools for building debug print lines.
@@ -337,7 +337,7 @@ public class HandyOps { // first some useful debug logging ops..
     return aWord;} //~NthItemOf
 
  /**
-  * A safe (no exceptions) way to extract an floating-point number from
+  * A safe (no exceptions) way to extract an floating-Point number from
   * a string. Leading white space is ignored, and the first character
   * that is not part of the number ends the scan.
   *
@@ -786,7 +786,7 @@ public class HandyOps { // first some useful debug logging ops..
     return res;} //~ReadTiff32Image
 
  /**
-  * Formats a fixed.point integer with three bits of fraction and returns it
+  * Formats a fixed.Point integer with three bits of fraction and returns it
   * as a precise decimal number with a prefix and suffix. Similar to Flt2Log.
   *
   * @param  before The prefix

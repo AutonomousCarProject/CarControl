@@ -73,7 +73,7 @@ public class MyMath {
   public static int iMin(int lft, int rit) {return Math.min(lft,rit);}
 
  /**
-  * Strongly-typed (not overloaded) maximum of two floating-point numbers.
+  * Strongly-typed (not overloaded) maximum of two floating-Point numbers.
   *
   * @param  lft   One of the two numbers
   * @param  rit   The other of the two numbers
@@ -83,7 +83,7 @@ public class MyMath {
   public static double fMax(double lft, double rit) {return Math.max(lft,rit);}
 
  /**
-  * Strongly-typed (not overloaded) minimum of two floating-point numbers.
+  * Strongly-typed (not overloaded) minimum of two floating-Point numbers.
   *
   * @param  lft   One of the two numbers
   * @param  rit   The other of the two numbers
@@ -93,7 +93,7 @@ public class MyMath {
   public static double fMin(double lft, double rit) {return Math.min(lft,rit);}
 
  /**
-  * Strongly-typed (not overloaded) absolute value of a floating-point number.
+  * Strongly-typed (not overloaded) absolute value of a floating-Point number.
   *
   * @param  whom  The signed number
   *
@@ -102,9 +102,9 @@ public class MyMath {
   public static double fAbs(double whom) {return Math.abs(whom);}
 
  /**
-  * Converts a floating-point number to an integer by discarding the fraction.
+  * Converts a floating-Point number to an integer by discarding the fraction.
   *
-  * @param  whom  The floating-point number
+  * @param  whom  The floating-Point number
   *
   * @return       The same number as an integer
   */
@@ -112,9 +112,9 @@ public class MyMath {
     return (int)Math.round(Math.floor(whom));}
 
  /**
-  * Reduces a floating-point number to just its sign.
+  * Reduces a floating-Point number to just its sign.
   *
-  * @param  whom  The floating-point number
+  * @param  whom  The floating-Point number
   *
   * @return       The sign of that number, -1.0 or +1.0 (or 0.0)
   */
@@ -124,12 +124,12 @@ public class MyMath {
     return whom;}
 
  /**
-  * Converts an integer representation of fixed-point to floating-point.
+  * Converts an integer representation of fixed-Point to floating-Point.
   *
-  * @param  whom  The floating-point number
+  * @param  whom  The floating-Point number
   * @param  fbits The number of bits in the fraction
   *
-  * @return       The same number as floating-point
+  * @return       The same number as floating-Point
   */
   public static double Fix2flt(int whom, int fbits) {
     double valu = (double)whom; // std Fix2flt fbits: 0,1,2,4,6,10,12,19,22
@@ -153,14 +153,14 @@ public class MyMath {
 
  /**
   * The full-circle arc-tangent of a slope represented as x and y coordinates
-  * returned as floating-point degrees. The sine of aTan0(y,x) = y,
+  * returned as floating-Point degrees. The sine of aTan0(y,x) = y,
   * and the cosine of aTan0(y,x) = x.
   *
   * TrakSim uses a (TV) raster coordinate system where (0,0) is the northwest
   * or upper left corner, and angles are in degrees clockwise from north.
   *
-  * @param  y     The floating-point sine component of the angle
-  * @param  x     The floating-point cosine component of the angle
+  * @param  y     The floating-Point sine component of the angle
+  * @param  x     The floating-Point cosine component of the angle
   *
   * @return       The angle in degrees, between -180 and +180
   */
@@ -174,7 +174,7 @@ public class MyMath {
   * TrakSim uses a (TV) raster coordinate system where (0,0) is the northwest
   * or upper left corner, and angles are in degrees clockwise from north.
   *
-  * @param  degs  The floating-point angle in degrees
+  * @param  degs  The floating-Point angle in degrees
   *
   * @return       The sine is in MyMath.Sine and the cosine is in MyMath.Cose
   */
