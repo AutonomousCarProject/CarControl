@@ -16,7 +16,7 @@ public class ImagePicker extends TimerTask {
     private byte[] pixels;
     private int nrows, ncols;
 
-    public ImagePicker(SimCamera cam, int fps) {
+    ImagePicker(SimCamera cam, int fps) {
         //Keep camera ref and fps
         this.cam = cam;
         this.fps = fps;
