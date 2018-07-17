@@ -3,7 +3,6 @@ package Steering;
 import apw3.DriverCons;
 
 public class Steering {
-
 	public point[] leftPoints = new point[32];
 	public point[] rightPoints = new point[32];
 	
@@ -71,13 +70,11 @@ public class Steering {
 		return midPoints;
 	}
 	
-	
-	public double turnAngle(point tarPoin) {
-		return arctan(Math.abs((origin.x-tarPoint.x)/(origin.y-tarPoint.y)))*(180/Math.PI);
+	public double turnAngle(point tarPoint) {
+		return Math.atan(Math.abs((origin.x-tarPoint.x)/(origin.y-tarPoint.y)))*(180/Math.PI);
 	}
 	
 	public double curveSteepness(double turnAngle) {
 		return turnAngle/(90);
 	}
 }
-
