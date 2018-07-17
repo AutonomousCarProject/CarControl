@@ -26,35 +26,42 @@ public class ImageProcessing {
 
     public static class ImageKernel extends Kernel {
 
-        /** RGB buffer used to store the cameras image. This buffer holds (width * height) RGB values. */
+        /**
+         * RGB buffer used to store the cameras image. This buffer holds (width * height) RGB values.
+         */
         private int[] rgb;
 
-        /** cameras image width. */
+        /**
+         * cameras image width.
+         */
         private int width;
 
-        /** cameras image height. */
+        /**
+         * cameras image height.
+         */
         private int height;
 
         /**
          * Initialize the Kernel.
          *
-         * @param width camera image width
+         * @param width  camera image width
          * @param height camera image height
-         * @param rgb camera image RGB buffer
+         * @param rgb    camera image RGB buffer
          */
         ImageKernel(int width, int height, int[] rgb) {
-            this.width  = width;
+            this.width = width;
             this.height = height;
-            this.rgb    = rgb;
+            this.rgb = rgb;
         }
 
         public void resetImage(int width, int height, int[] rgb) {
-            this.width  = width;
+            this.width = width;
             this.height = height;
-            this.rgb    = rgb;
+            this.rgb = rgb;
         }
 
-        @Override public void run() {
+        @Override
+        public void run() {
 
             // Determine which RGB value is going to be processed (0 - rgb.length)
             final int gid = getGlobalId();
