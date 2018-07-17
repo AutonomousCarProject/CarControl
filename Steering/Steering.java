@@ -25,7 +25,6 @@ public class Steering {
 	}
 	
 	public void findPoints(int[] pixels) {
-		System.out.println(pixels.length);
 		for (int i = 0; i<heightOfArea; i++) {
 			//center to left
 			found = false;
