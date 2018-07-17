@@ -38,7 +38,7 @@ public class Steering {
 			found = false;
 			leftPoints[i].y = startingHeight + i;
 			
-			for (int j = roadMiddle; j>=0; j--) {
+			for (int j = roadMiddle/2; j>=0; j--) {
 				if (pixels[(screenWidth * (i + startingHeight)) + j] == 16777215) {
 					leftPoints[i].x = j;
 					found = true;
@@ -54,7 +54,7 @@ public class Steering {
 			//center to right
 			found = false;
 			rightPoints[i].y = leftPoints[i].y;
-			for (int j = roadMiddle; j<cameraWidth; j++) {
+			for (int j = roadMiddle/2; j<cameraWidth; j++) {
 				if (pixels[(screenWidth * (i + startingHeight)) + j] == 16777215) {
 					rightPoints[i].x = j;
 					found = true;
@@ -64,12 +64,13 @@ public class Steering {
 			if (found == false) {
 				rightPoints[i].x = cameraWidth;
 			}
-			roadMiddle = (leftPoints[i].x + rightPoints[i].x) / 2;
+			roadMiddle = (leftPoints[i].x + rightPoints[i].x);
 			midPoints[i].x = (leftPoints[i].x + rightPoints[i].x)/2;
 			midPoints[i].y = (leftPoints[i].y);
 		}
 		return midPoints;
 	}
+	
 	
 	public double turnAngle(point tarPoin) {
 		return arctan(Math.abs((origin.x-tarPoint.x)/(origin.y-tarPoint.y)))*(180/Math.PI);
