@@ -20,6 +20,7 @@ import java.awt.event.ActionEvent; // these all used by the mechanism..
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Insets; // not available at win creation
 import java.awt.image.BufferedImage;
@@ -28,6 +29,8 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
+import Steering.Steering;
+import Steering.point;
 // import fly2cam.CameraBase;
 import fly2cam.FlyCamera;
 import fakefirm.Arduino;
@@ -38,6 +41,10 @@ import apw3.TrakSim;
 import apw3.SimCamera;
 
 public class DrDemo extends JFrame implements MouseListener {
+	
+	Steering testSteering = new Steering();
+	
+	
   private static final long serialVersionUID = 1L; // unneed but Java insists {
 
   private static final int MinESCact = DriverCons.D_MinESCact,
@@ -469,8 +476,6 @@ public class DrDemo extends JFrame implements MouseListener {
   public void DrawDemo() { // examples of drawing on TrakSim image..
     int haff = ScrHi/2, tx = theSim.TurnRadRow(), t2x = tx>>16,
         HafScrn = ImgWi/2, nx, zx, whar = 0;
-
-	  	  System.out.println("***\n\n " + t2x + "\n\n***");
     double fmid = MyMath.Fix2flt(Haf_Scrn,0);
     String aLine;
     if (!CanDraw) return;
@@ -499,7 +504,9 @@ public class DrDemo extends JFrame implements MouseListener {
       if (tx<ScrTop) theSim.DrawLine(CarColo,tx,Haf_Scrn-32,tx,Haf_Scrn+32);
         else tx = ScrTop-1;
       if (t2x>haff) if (t2x<tx) { // also center line between them..
+    	  //center
         theSim.DrawLine(CarColo,t2x,Haf_Scrn,tx,Haf_Scrn);
+        //top
         theSim.DrawLine(CarColo,t2x,Haf_Scrn-32,t2x,Haf_Scrn+32);
         whar = theSim.ZoomMapCoord(false,MyMath.Fix2flt(tx,0),fmid);
         if (whar>0) { // draw center line on map close-up, if possible..
@@ -508,12 +515,8 @@ public class DrDemo extends JFrame implements MouseListener {
             zx = theSim.ZoomMapCoord(false,MyMath.Fix2flt(t2x,0),fmid);
             if (zx>0) break;
             t2x = t2x+4;} //~while
-          if (zx>0) {
-        	      theSim.DrawLine(CarColo,zx>>16,zx&0xFFF,
-        			whar>>16,whar&0xFFF);
-        	      
-          }
-          }}}} //~DrawDemo
+          if (zx>0) theSim.DrawLine(CarColo,zx>>16,zx&0xFFF,
+              whar>>16,whar&0xFFF);}}}} //~DrawDemo
 
  /**
   * Converts a RGB pixel array to BufferedImage for painting.
@@ -590,8 +593,7 @@ public class DrDemo extends JFrame implements MouseListener {
         if ((StartYourEngines==0)||(NoneStep<0)) fno = DidFrame;
 
         ///** If you have self-driving code, you could put it here **///
-        	TestServos(); // (replace this with your own code)
-
+          TestServos(); // (replace this with your own code)
         if (CanDraw) {
           DrawDemo();
           if (CameraView) theSim.DrawSteerWheel(SteerDegs,true,true);} //~if
@@ -604,7 +606,19 @@ public class DrDemo extends JFrame implements MouseListener {
           theSim.SetMyScreen(SaveScrn,DimSave>>16,DimSave&0xFFFF,1);
         theImag = Int2BufImg(thePixels,ScrWi,ScrHi);}} //~if
     catch (Exception ex) {theImag = null;}
-    BusyPaint = false;} //~paint
+    BusyPaint = false;
+    
+    this.GetCameraImg();
+    point[] hi = testSteering.findPoints(thePixels);
+    graf.setColor(Color.YELLOW);
+    
+    for (int i = 0; i<32; i++) {
+    	graf.fillRect(hi[i].x, hi[i].y, 5, 5);
+    		//graf.fillRect(testSteering.leftPoints[i].x + edges.left, testSteering.leftPoints[i].y + edges.top, 5, 5);
+    		//graf.fillRect(testSteering.rightPoints[i].x + edges.left, testSteering.rightPoints[i].y + edges.top, 5, 5);
+    }
+    
+  } //~paint
 
   private static void starting() {theWindow = new DrDemo();}
 
