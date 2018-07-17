@@ -4,7 +4,6 @@ import com.aparapi.Kernel;
 
 public class LineSlopeKernel extends Kernel {
 
-
     LineSlopeKernel() {
 
     }
