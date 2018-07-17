@@ -613,7 +613,7 @@ public class DrDemo extends JFrame implements MouseListener {
     graf.setColor(Color.YELLOW);
     
     for (int i = 0; i<32; i++) {
-    	graf.fillRect(hi[i].x, hi[i].y, 5, 5);
+    	graf.fillRect(hi[i].x, hi[i].y + edges.top, 5, 5);
     		//graf.fillRect(testSteering.leftPoints[i].x + edges.left, testSteering.leftPoints[i].y + edges.top, 5, 5);
     		//graf.fillRect(testSteering.rightPoints[i].x + edges.left, testSteering.rightPoints[i].y + edges.top, 5, 5);
     }
