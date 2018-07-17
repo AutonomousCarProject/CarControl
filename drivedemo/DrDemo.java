@@ -610,13 +610,24 @@ public class DrDemo extends JFrame implements MouseListener {
     
     this.GetCameraImg();
     point[] hi = testSteering.findPoints(thePixels);
-    graf.setColor(Color.YELLOW);
     
-    for (int i = 0; i<32; i++) {
-    	graf.fillRect(hi[i].x, hi[i].y + edges.top, 5, 5);
-    		//graf.fillRect(testSteering.leftPoints[i].x + edges.left, testSteering.leftPoints[i].y + edges.top, 5, 5);
-    		//graf.fillRect(testSteering.rightPoints[i].x + edges.left, testSteering.rightPoints[i].y + edges.top, 5, 5);
+    graf.setColor(Color.RED);
+    //graf.fillRect(100, testSteering.startingPoint, 1, 1);
+    for (int i = 0; i<testSteering.startingPoint - (testSteering.startingHeight + testSteering.heightOfArea); i++) {
+    		graf.fillRect(testSteering.leadingMidPoints[i].x, testSteering.leadingMidPoints[i].y +  + edges.top, 5, 5);
+    }   
+    
+    
+    
+    for (int i = 0; i<hi.length; i++) {
+    		graf.setColor(Color.ORANGE);
+    		graf.fillRect(hi[i].x, hi[i].y + edges.top, 5, 5);
+    		graf.setColor(Color.YELLOW);
+    		graf.fillRect(testSteering.leftPoints[i].x + edges.left, testSteering.leftPoints[i].y + edges.top, 5, 5);
+    		graf.fillRect(testSteering.rightPoints[i].x + edges.left, testSteering.rightPoints[i].y + edges.top, 5, 5);
     }
+    
+
     
   } //~paint
 
