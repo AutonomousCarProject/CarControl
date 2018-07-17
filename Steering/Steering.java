@@ -3,6 +3,7 @@ package Steering;
 import apw3.DriverCons;
 
 public class Steering {
+	
 	point[] leftPoints = new point[57];
 	point[] rightPoints = new point[57];
 	
@@ -13,6 +14,8 @@ public class Steering {
 	
 	int screenWidth = DriverCons.D_ImWi;
 	int screenHeight = DriverCons.D_ImHi;
+	
+	point origin = new point(screenWidth/2, screenHeight);
 	
 	Boolean found = false;
 	
@@ -64,5 +67,13 @@ public class Steering {
 			}
 		}
 		return currentOffset;
+	}
+	
+	public double turnAngle(point tarPoin) {
+		return arctan(Math.abs((origin.x-tarPoint.x)/(origin.y-tarPoint.y)))*(180/Math.PI);
+	}
+	
+	public double curveSteepness(double turnAngle) {
+		return turnAngle/(90);
 	}
 }
