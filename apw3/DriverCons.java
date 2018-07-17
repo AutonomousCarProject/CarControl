@@ -30,7 +30,7 @@ public class DriverCons { // TrakSim constant parameters
   public static final boolean // options & diagnostic switches..
     D_LiveCam = false,       // F: omit connecting to FlyCamera
     D_StartLive = false,    // T: start in live camera if possible
-    D_FixedSpeed = false,    // ignore speed control, assume fMinSpeed
+    D_FixedSpeed = true,    // ignore speed control, assume fMinSpeed
     D_StayInTrack = true,   // ignore steering control, stay centered in track
     D_ShoTrkTstPts = false, // T: show test points used to calc StayInTrack
     D_ShoClikGrid = false,  // T: to see where to click to steer/accelerate
@@ -50,7 +50,7 @@ public class DriverCons { // TrakSim constant parameters
     D_Zoom35 = 35,     // 35mm-equivalent focal length for "camera"
     D_BayTile = 1,     // Bayer8 tiling code (RG/GB) as defined by Pt.Grey
     D_FrameTime = 200, // =5/fps, nominal frame rate for camera (must >= 20ms)
-    D_nServoTests = 0, // number of times to run through test (1: no ESC)
+    D_nServoTests = 5, // number of times to run through test (1: no ESC)
     D_ServoMsgPos = 200*0x10000+0, // position of warning in image file,
       D_ServoMsgTL = 40*0x10001, D_ServoMsgSiz = 40*0x10000+80, // posn on screen
     D_ImHi = 480, D_ImWi = 640, // Camera image (and display window) size
