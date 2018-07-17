@@ -1,16 +1,21 @@
 /*ImageManager: Retrieves and preprocesses images from the camera and displays feed onscreen*/
 
-package imagemanagement;
+package ImageManagement;
 
 import apw3.SimCamera;
 
 public class ImageManager {
 	
 	private ImagePicker picker;
+	int nrows, ncols;
+	private byte simple[];
 	
 	/*Main*/
 	public ImageManager(SimCamera trakcam) {
 		picker = new ImagePicker(trakcam, 30);
+		nrows = picker.getNrows();
+		ncols = picker.getNcols();
+		simple = new byte[nrows*ncols];
 	}
 
 	/*Serves monochrome raster of camera feed
@@ -24,10 +29,11 @@ public class ImageManager {
 	 * 1 = GREEN
 	 * 2 = BLUE
 	 * 3 = WHITE
-	 * 4 = BLACK
-	 * 6 = GREY
+	 * 4 = GREY
+	 * 5 = BLACK
 	 */
 	public byte[] getSimpleColorRaster() {
-		return null;
+		ImageManipulator.convertToSimpleColorRaster(picker.getPixels(), simple, nrows, ncols);
+		return simple;
 	}
 }
