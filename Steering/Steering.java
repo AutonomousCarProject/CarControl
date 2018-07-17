@@ -8,67 +8,133 @@ public class Steering {
 	
 	public Point[] midPoints = new Point[32];
 	
+	public int startingPoint = 0;
+	
 	//767 is white
-	
-	private int heightOfArea = 32;
-	private int startingHeight = 272;
-	
+
+	public int heightOfArea = 32;
+	public int startingHeight = 272;
+
 	private int screenWidth = 912;
 	private int cameraWidth = 640;
 	private int screenHeight = DriverCons.D_ImHi;
 	private Point steerPoint = new Point(0, 0);
+
+	public Point[] leadingMidPoints = new Point[startingHeight + heightOfArea];
 	
-	private Point origin = new Point(cameraWidth/2, screenHeight);
+	Point origin = new Point(screenWidth/2, screenHeight);
 	
-	private Boolean found = false;
-	
+	Boolean found = false;
+	Boolean leftSideFound = false;
+	Boolean rightSideFound = false;
+
 	public Steering() {
 		for (int i = 0; i<32; i++) {
 			leftPoints[i] = new Point(0, 0);
 			rightPoints[i] = new Point(0, 0);
 			midPoints[i] = new Point(0, 0);
 		}
+		for (int i = 0; i<leadingMidPoints.length; i++) {
+			leadingMidPoints[i] = new Point(0, 0);
+		}
 	}
 	
 	public Point[] findPoints(int[] pixels) {
 		int roadMiddle = cameraWidth;
-
-		for (int i = 0; i<heightOfArea; i++) {
-			//center to left
-			found = false;
-			leftPoints[i].y = startingHeight + i;
+		int leftSideTemp = 0;
+		int rightSideTemp = 0;
+		startingPoint = 0;
+		
+		//first, find where road starts on both sides
+		for (int i = screenHeight - 1; i>startingHeight + heightOfArea; i--) {
 			
 			for (int j = roadMiddle/2; j>=0; j--) {
-				if (pixels[(screenWidth * (i + startingHeight)) + j] == 16777215) {
-					leftPoints[i].x = j;
+				if (pixels[(screenWidth * (i)) + j] == 16777215) {
+					leftSideFound = true;
+					break;
+				}
+			}
+			for (int j = roadMiddle/2; j<cameraWidth; j++) {
+				if (pixels[(screenWidth * (i)) + j] == 16777215) {
+					rightSideFound = true;
+					break;
+				}
+			}
+
+			if (leftSideFound && rightSideFound) {
+				startingPoint = i;
+				leftSideFound = false;
+				rightSideFound = false;
+				break;
+			}
+			leftSideFound = false;
+			rightSideFound = false;
+		}
+		
+		//Next, calculate the roadpoint 
+		
+		int count = 0;
+		
+		for (int i = startingPoint; i > startingHeight + heightOfArea; i--) {
+			for (int j = roadMiddle/2; j>=0; j--) {
+				if (pixels[screenWidth * i + j] == 16777215) {
+					leftSideTemp = j;
+					break;
+				}
+			}
+			for (int j = roadMiddle/2; j<cameraWidth; j++) {
+				if (pixels[screenWidth * i + j] == 16777215) {
+					rightSideTemp = j;
+					break;
+				}
+			}
+			
+			leadingMidPoints[count].x = roadMiddle / 2;
+			leadingMidPoints[count].y = i;
+			count++;
+			roadMiddle = leftSideTemp + rightSideTemp;
+		}
+		
+		count = 0;
+		for (int i = startingHeight + heightOfArea; i>startingHeight; i--) {
+			//center to left
+			found = false;
+			leftPoints[count].y = i;
+			
+			for (int j = roadMiddle/2; j>=0; j--) {
+				if (pixels[screenWidth * i + j] == 16777215) {
+					leftPoints[count].x = j;
 					found = true;
 					break;
 				}
 				
 			}
 			if (found == false) {
-				leftPoints[i].x = 0;
+				leftPoints[count].x = 0;
 			}
 			
 			
 			//center to right
 			found = false;
-			rightPoints[i].y = leftPoints[i].y;
+			rightPoints[count].y = leftPoints[count].y;
 			for (int j = roadMiddle/2; j<cameraWidth; j++) {
-				if (pixels[(screenWidth * (i + startingHeight)) + j] == 16777215) {
-					rightPoints[i].x = j;
+				if (pixels[screenWidth * i + j] == 16777215) {
+					rightPoints[count].x = j;
 					found = true;
 					break;
 				}
 			}
 			if (found == false) {
-				rightPoints[i].x = cameraWidth;
+				rightPoints[count].x = cameraWidth;
 			}
-			roadMiddle = (leftPoints[i].x + rightPoints[i].x);
-			midPoints[i].x = (leftPoints[i].x + rightPoints[i].x)/2;
-			midPoints[i].y = (leftPoints[i].y);
+			
+			midPoints[count].x = roadMiddle/2;
+			midPoints[count].y = (leftPoints[count].y);
+			roadMiddle = (leftPoints[count].x + rightPoints[count].x);
+			count++;
 		}
 		return midPoints;
+		
 	}
 	
 	public double curveSteepness(double turnAngle) {
@@ -105,3 +171,4 @@ public class Steering {
 	    return (int)((Math.atan2(-xOffset, yOffset)) * (180 / Math.PI));
     }
 }
+
