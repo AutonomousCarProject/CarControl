@@ -3,7 +3,6 @@ package Steering;
 import apw3.DriverCons;
 
 public class Steering {
-
 	public point[] leftPoints = new point[32];
 	public point[] rightPoints = new point[32];
 	
@@ -79,4 +78,3 @@ public class Steering {
 		return turnAngle/(90);
 	}
 }
-

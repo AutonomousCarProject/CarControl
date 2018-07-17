@@ -15,7 +15,7 @@ public class FlyCamera { // (in Java/fly2cam)
       errn; // returns an error number, see ErrorNumberText()
   private long stuff; // used for error reporting, or not at all
 
- // static {System.loadLibrary("FlyCamera");} // comment this line out if no DLLs
+  //static {System.loadLibrary("FlyCamera");} // comment this line out if no DLLs
 
  /**
   * Start a new camera session with the specified frame rate.
