@@ -3,16 +3,11 @@ package Steering;
 import apw3.DriverCons;
 
 public class Steering {
-<<<<<<< HEAD
-	
-	point[] leftPoints = new point[57];
-	point[] rightPoints = new point[57];
-=======
+
 	public point[] leftPoints = new point[32];
 	public point[] rightPoints = new point[32];
 	
 	public point[] midPoints = new point[32];
->>>>>>> 76f26e96c70a5bde34e3d862c309b999d602c9bc
 	
 	//767 is white
 	
@@ -76,18 +71,6 @@ public class Steering {
 		return midPoints;
 	}
 	
-<<<<<<< HEAD
-	public int getOffset(int[] pixels, int topBound, int bottomBound) {
-		int currentOffset = 0;
-		
-		for (int i = topBound; i <= bottomBound; i++) {
-			for (int j = 320; j < 640; j++) {
-				//pixels[i * 640 + j];
-			}
-		}
-		return currentOffset;
-	}
-	
 	public double turnAngle(point tarPoin) {
 		return arctan(Math.abs((origin.x-tarPoint.x)/(origin.y-tarPoint.y)))*(180/Math.PI);
 	}
@@ -95,7 +78,5 @@ public class Steering {
 	public double curveSteepness(double turnAngle) {
 		return turnAngle/(90);
 	}
-=======
-
->>>>>>> 76f26e96c70a5bde34e3d862c309b999d602c9bc
 }
+
