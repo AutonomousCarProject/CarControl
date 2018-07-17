@@ -12,7 +12,9 @@ public class LineSlopeKernel extends Kernel {
     @Override
     public void run() {
 
-        // TODO anything
+        // TODO implement LineSlope method from TrakSim
+
+
 
     }
 }

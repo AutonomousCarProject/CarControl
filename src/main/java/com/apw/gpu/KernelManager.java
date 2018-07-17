@@ -1,12 +1,11 @@
 package com.apw.gpu;
+
 import com.aparapi.Kernel;
 import com.aparapi.Range;
-import com.aparapi.internal.kernel.KernelArg;
-import com.aparapi.opencl.OpenCL;
 
 import java.util.HashMap;
 
-public class TrakSimKernels {
+public class KernelManager {
 
     public static void ExecuteKernel(KernelType kernelType, Range range) throws KernelNotFoundException {
 
@@ -20,17 +19,14 @@ public class TrakSimKernels {
         kernel.dispose();
     }
 
-    private static HashMap<KernelType, Kernel> KernelList = new HashMap<KernelType, Kernel>()
-    {{
-      put(KernelType.LINE_SLOPE_KERNAL, new LineSlopeKernel());
+    private static HashMap<KernelType, Kernel> KernelList = new HashMap<>() {{
+        put(KernelType.LINE_SLOPE_KERNAL, new LineSlopeKernel());
     }};
 
     public static class KernelNotFoundException extends Exception {
-
-        public KernelNotFoundException(String message) {
+        KernelNotFoundException(String message) {
             super(message);
         }
-
     }
 
 }
