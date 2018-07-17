@@ -1,4 +1,4 @@
-package ImageManagement;
+package imagemanagement;
 
 import java.util.Date;
 import java.util.Timer;
@@ -14,7 +14,7 @@ public class ImagePicker extends TimerTask {
 	private SimCamera cam;
 	private int fps;
 	private byte[] pixels;
-	private int numpixels;
+	private int nrows, ncols;
 	
 	public ImagePicker(SimCamera cam, int fps) {
 		//Keep camera ref and fps
@@ -22,12 +22,13 @@ public class ImagePicker extends TimerTask {
 		this.fps = fps;
 		
 		//Get number of pixels
-		numpixels = cam.Dimz() >> 16 * (cam.Dimz() << 16) >> 16;
-		pixels = new byte[numpixels];
+		nrows = cam.Dimz() >> 16;
+		ncols = cam.Dimz() << 16 >> 16;
+		pixels = new byte[nrows * ncols];
 		
 		//Schedule task
 		Timer pickerTaskTimer = new Timer();
-		pickerTaskTimer.scheduleAtFixedRate(this, new Date(), (long) (1000/(float)fps));
+		pickerTaskTimer.scheduleAtFixedRate(this, new Date(), (long) (1000/(float)this.fps));
 		
 	}
 
