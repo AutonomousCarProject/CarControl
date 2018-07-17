@@ -1,4 +1,4 @@
-package ImageManagement;
+package com.apw.ImageManagement;
 
 public class ImageManipulator {
 

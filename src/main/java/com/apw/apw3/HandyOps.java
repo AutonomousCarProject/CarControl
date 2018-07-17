@@ -14,16 +14,11 @@
  * than LattePanda, you can substitute package noJSSC, which has the same
  * APIs (as used by FakeFirmata) but does nothing.
  */
-package apw3;                                        // 2018 May 25
+package com.apw.apw3;                                        // 2018 May 25
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileInputStream;
-import java.io.IOException;
-import java.lang.Math;
-
-import apw3.DriverCons;
-import apw3.MyMath;
+import java.io.FileReader;
 
 /**
  * Handy Operations that should be simple (but maybe aren't so in Java)..

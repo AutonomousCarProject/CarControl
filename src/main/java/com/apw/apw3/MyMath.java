@@ -14,9 +14,7 @@
  * than LattePanda, you can substitute package noJSSC, which has the same
  * APIs (as used by FakeFirmata) but does nothing.
  */
-package apw3;                                     // 2018 May 25
-
-import java.lang.Math;
+package com.apw.apw3;                                     // 2018 May 25
 
 /**
  * Some Pseudo-Math Operations..

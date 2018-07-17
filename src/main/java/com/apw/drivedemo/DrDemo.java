@@ -14,28 +14,22 @@
  * than LattePanda, you can substitute package noJSSC, which has the same
  * APIs (as used by FakeFirmata) but does nothing.
  */
-package drivedemo;                                    // 2018 June 13
+package com.apw.drivedemo;                                    // 2018 June 13
 
-import java.awt.event.ActionEvent; // these all used by the mechanism..
+import com.apw.apw3.*;
+import com.apw.fakefirm.Arduino;
+import com.apw.fly2cam.FlyCamera;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
-import java.awt.Graphics;
-import java.awt.Insets; // not available at win creation
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
-import javax.swing.Timer;
 
 // import fly2cam.CameraBase;
-import fly2cam.FlyCamera;
-import fakefirm.Arduino;
-import apw3.DriverCons;
-import apw3.HandyOps;
-import apw3.MyMath;
-import apw3.TrakSim;
-import apw3.SimCamera;
 
 public class DrDemo extends JFrame implements MouseListener {
   private static final long serialVersionUID = 1L; // unneed but Java insists {

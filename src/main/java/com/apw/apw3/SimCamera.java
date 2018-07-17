@@ -11,12 +11,9 @@
  *
  * SimCamera is based on fly2cam.FlyCamera, which is in the public domain.
  */
-package apw3;                                      // 2018 May 25
+package com.apw.apw3;                                      // 2018 May 25
 
-import apw3.DriverCons;
-import apw3.TrakSim;
-
-import fly2cam.FlyCamera;
+import com.apw.fly2cam.FlyCamera;
 
 /**
  * FlyCamera Simulator for TrakSim (but different name)

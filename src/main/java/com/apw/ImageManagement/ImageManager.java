@@ -1,6 +1,6 @@
 /*ImageManager: Retrieves and preprocesses images from the camera and displays feed onscreen*/
 
-package ImageManagement;
+package com.apw.ImageManagement;
 
 import apw3.SimCamera;
 

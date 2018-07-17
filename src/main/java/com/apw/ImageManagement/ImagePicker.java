@@ -1,10 +1,10 @@
-package ImageManagement;
+package com.apw.ImageManagement;
+
+import apw3.SimCamera;
 
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import apw3.SimCamera;
 
 /*ImagePicker: Periodically retrieves an image from the camera (traksim feed or onboard cam)
 */

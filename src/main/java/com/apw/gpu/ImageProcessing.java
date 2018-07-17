@@ -1,4 +1,4 @@
-package com.apw;
+package com.apw.gpu;
 
 import com.aparapi.Kernel;
 import com.aparapi.Range;

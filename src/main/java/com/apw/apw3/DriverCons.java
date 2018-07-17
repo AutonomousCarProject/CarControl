@@ -14,7 +14,7 @@
  * than LattePanda, you can substitute package noJSSC, which has the same
  * APIs (as used by FakeFirmata) but does nothing.
  */
-package apw3;                                       // 2018 June 12
+package com.apw.apw3;                                       // 2018 June 12
 
 /**
  * Separate Java file for Driving Simulator constants.

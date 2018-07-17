@@ -14,18 +14,13 @@
  * than LattePanda, you can substitute package noJSSC, which has the same
  * APIs (as used by FakeFirmata) but does nothing.
  */
-package apw3;                                       // 2018 June 13
+package com.apw.apw3;                                       // 2018 June 13
+
+import com.apw.fakefirm.Arduino;
+import com.apw.fakefirm.SimHookBase;
 
 import java.io.File;
 import java.io.FileInputStream;
-
-import java.lang.Math;
-
-import apw3.DriverCons;
-import apw3.HandyOps;
-import apw3.MyMath;
-import fakefirm.SimHookBase;
-import fakefirm.Arduino;
 
 /**
  * The main TrakSim Car Simulator class..
