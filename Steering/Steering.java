@@ -12,7 +12,7 @@ public class Steering {
 	int startingHeight = 272;
 	
 	int screenWidth = 912;
-	int cameraWidth = 620;
+	int cameraWidth = 640;
 	int screenHeight = DriverCons.D_ImHi;
 	
 	Boolean found = false;
@@ -25,10 +25,11 @@ public class Steering {
 	}
 	
 	public void findPoints(int[] pixels) {
+		System.out.println(pixels.length);
 		for (int i = 0; i<heightOfArea; i++) {
 			//center to left
 			found = false;
-			leftPoints[i].y = startingHeight + 23 + i;
+			leftPoints[i].y = startingHeight + i;
 			
 			for (int j = cameraWidth / 2; j>=0; j--) {
 				if (pixels[(screenWidth * (i + startingHeight)) + j] == 16777215) {
