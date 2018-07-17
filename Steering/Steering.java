@@ -3,15 +3,16 @@ package Steering;
 import apw3.DriverCons;
 
 public class Steering {
-	point[] leftPoints = new point[57];
-	point[] rightPoints = new point[57];
+	public point[] leftPoints = new point[57];
+	public point[] rightPoints = new point[57];
 	
 	//767 is white
 	
-	int heightOfArea = 57;
+	int heightOfArea = 32;
 	int startingHeight = 272;
 	
-	int screenWidth = DriverCons.D_ImWi;
+	int screenWidth = 912;
+	int cameraWidth = 620;
 	int screenHeight = DriverCons.D_ImHi;
 	
 	Boolean found = false;
@@ -27,13 +28,15 @@ public class Steering {
 		for (int i = 0; i<heightOfArea; i++) {
 			//center to left
 			found = false;
-			for (int j = screenWidth / 2; j>0; j--) {
-				if (pixels[screenWidth * i + j] == 767) {
+			leftPoints[i].y = startingHeight + 23 + i;
+			
+			for (int j = cameraWidth / 2; j>=0; j--) {
+				if (pixels[(screenWidth * (i + startingHeight)) + j] == 16777215) {
 					leftPoints[i].x = j;
-					leftPoints[i].y = startingHeight + i;
 					found = true;
 					break;
 				}
+				
 			}
 			if (found == false) {
 				leftPoints[i].x = 0;
@@ -42,27 +45,19 @@ public class Steering {
 			
 			//center to right
 			found = false;
-			for (int j = screenWidth / 2; j<screenWidth; j++) {
-				if (pixels[screenWidth * i + j] == 767) {
+			rightPoints[i].y = leftPoints[i].y;
+			for (int j =cameraWidth / 2; j<cameraWidth; j++) {
+				if (pixels[(screenWidth * (i + startingHeight)) + j] == 16777215) {
 					rightPoints[i].x = j;
-					rightPoints[i].y = startingHeight + i;
+					found = true;
 					break;
 				}
 			}
 			if (found == false) {
-				rightPoints[i].x = screenWidth;
+				rightPoints[i].x = cameraWidth;
 			}
 		}
 	}
 	
-	public int getOffset(int[] pixels, int topBound, int bottomBound) {
-		int currentOffset = 0;
-		
-		for (int i = topBound; i <= bottomBound; i++) {
-			for (int j = 320; j < 640; j++) {
-				//pixels[i * 640 + j];
-			}
-		}
-		return currentOffset;
-	}
+
 }
