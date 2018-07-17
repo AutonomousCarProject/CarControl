@@ -3,8 +3,10 @@ package Steering;
 import apw3.DriverCons;
 
 public class Steering {
-	public point[] leftPoints = new point[57];
-	public point[] rightPoints = new point[57];
+	public point[] leftPoints = new point[32];
+	public point[] rightPoints = new point[32];
+	
+	public point[] midPoints = new point[32];
 	
 	//767 is white
 	
@@ -18,19 +20,22 @@ public class Steering {
 	Boolean found = false;
 	
 	public Steering() {
-		for (int i = 0; i<57; i++) {
+		for (int i = 0; i<32; i++) {
 			leftPoints[i] = new point(0, 0);
 			rightPoints[i] = new point(0, 0);
+			midPoints[i] = new point(0, 0);
 		}
 	}
 	
-	public void findPoints(int[] pixels) {
+	public point[] findPoints(int[] pixels) {
+		int roadMiddle = cameraWidth;
+
 		for (int i = 0; i<heightOfArea; i++) {
 			//center to left
 			found = false;
 			leftPoints[i].y = startingHeight + i;
 			
-			for (int j = cameraWidth / 2; j>=0; j--) {
+			for (int j = roadMiddle; j>=0; j--) {
 				if (pixels[(screenWidth * (i + startingHeight)) + j] == 16777215) {
 					leftPoints[i].x = j;
 					found = true;
@@ -46,7 +51,7 @@ public class Steering {
 			//center to right
 			found = false;
 			rightPoints[i].y = leftPoints[i].y;
-			for (int j =cameraWidth / 2; j<cameraWidth; j++) {
+			for (int j = roadMiddle; j<cameraWidth; j++) {
 				if (pixels[(screenWidth * (i + startingHeight)) + j] == 16777215) {
 					rightPoints[i].x = j;
 					found = true;
@@ -56,7 +61,11 @@ public class Steering {
 			if (found == false) {
 				rightPoints[i].x = cameraWidth;
 			}
+			roadMiddle = (leftPoints[i].x + rightPoints[i].x) / 2;
+			midPoints[i].x = (leftPoints[i].x + rightPoints[i].x)/2;
+			midPoints[i].y = (leftPoints[i].y);
 		}
+		return midPoints;
 	}
 	
 
