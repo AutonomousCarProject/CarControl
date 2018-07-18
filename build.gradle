@@ -1,0 +1,10 @@
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+	compile group: 'com.aparapi', name: 'aparapi', version: '1.9.0'
+	compile group: 'com.aparapi', name: 'aparapi-jni', version: '1.4.1'
+}
