@@ -11,9 +11,11 @@ public class SpeedController {
 	private boolean stoppingAtLight;
 	private boolean stoppedAtLight;
 	private boolean readyToGo;
+	private boolean emergencyStop;
 	private int cyclesToStopAtSign = Constants.DRIFT_TO_STOPSIGN_FRAMES;
 	private int cyclesToGo;
 	private int cyclesToStopAtLight = Constants.DRIFT_TO_STOPLIGHT_FRAMES;
+	
 	
 	private SpeedFinder speedFinder;
 	
@@ -48,7 +50,9 @@ public class SpeedController {
         else if (shouldStopLight == 0){
         	this.desiredSpeed = 0;
         }
-		
+		if (this.emergencyStop){
+			this.desiredSpeed = 0;
+		}
 	}
 	
 	//Returns the estimated speed IN METERS PER SECOND
@@ -143,6 +147,15 @@ public class SpeedController {
 	public void setStoppingAtLight(){
 		stoppingAtLight = true;
 		cyclesToStopAtLight = Constants.DRIFT_TO_STOPLIGHT_FRAMES;
+	}
+	
+	//Getting and setting our emergency stop boolean
+	public boolean getEmergencyStop(){
+		return emergencyStop;
+	}
+	
+	public void setEmergencyStop(boolean emer){
+		this.emergencyStop = emer;
 	}
 	
 	//This returns our distance from an object. Currently non-functional
