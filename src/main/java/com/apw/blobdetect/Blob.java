@@ -3,6 +3,7 @@ package com.apw.blobdetect;
 import com.apw.oldimage.IPixel;
 
 public class Blob {
+
     public static int currentId = 0;
     public int width, height;
     public int x, y;

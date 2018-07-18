@@ -16,6 +16,7 @@
  */
 package com.apw.apw3;                                       // 2018 June 13
 
+
 import com.apw.fakefirm.Arduino;
 import com.apw.fakefirm.SimHookBase;
 
@@ -27,8 +28,7 @@ import java.io.FileInputStream;
  */
 public class TrakSim {
 
-    public static final int WinWi = (ShowMap ? MapWide + 16 : 0) + ImWi, // window width
-            Lin2 = WinWi * 2, nPixels = ImHi * WinWi; // + pix in whole window
+
     // fGratio cnvrts ESC steps to nominal velocity; fMinSpeed=4.0,MinESC=10
     // ..adjust multiplier so it's correct for your car: *1.0 => fGratio=0.4
     private static final double fMinSpeed = DriverCons.D_fMinSpeed,
@@ -42,6 +42,7 @@ public class TrakSim {
             NoisyMap = DriverCons.D_NoisyMap, Reversible = DriverCons.D_Reversible,
             UseTexTrak = DriverCons.D_UseTexTrak, Fax_Log = DriverCons.D_Fax_Log,
             ShoClikGrid = DriverCons.D_ShoClikGrid, GoodLog = true;
+
     private static final int Vramp = DriverCons.D_Vramp, // imported constants,
             ImHi = DriverCons.D_ImHi, ImWi = DriverCons.D_ImWi, // ..local names
             Hramp = DriverCons.D_Hramp, RampA = DriverCons.D_RampA,
@@ -64,6 +65,9 @@ public class TrakSim {
             ParkDims = MapTall * 0x10000 + MapWide, CheckerBd = DriverCons.D_CheckerBd,
             ServoStepRate = 0, // = FrameTime/20, // Vscale = DriverCons.D_Vscale,
             TweakRx = DriverCons.D_TweakRx, Crummy = DriverCons.D_Crummy;
+
+    public static final int WinWi = (ShowMap ? MapWide + 16 : 0) + ImWi, // window width
+            Lin2 = WinWi * 2, nPixels = ImHi * WinWi; // + pix in whole window
     private static final double TurnRadius = DriverCons.D_TurnRadius,
             LfDeScaleSt = 90.0 / ((double) DriverCons.D_LeftSteer),
             RtDeScaleSt = 90.0 / ((double) DriverCons.D_RiteSteer),
@@ -263,9 +267,9 @@ public class TrakSim {
         if (eps >= 0x1000) Mconst = Cast_I2F(0xFFF);
         else if (why != 0) if (eps + 1 == 0) Mconst = Cast_I2F(eps - 1);
         Kconst = Kconst + MyMath.Fix2flt(32, 12);
-        // RatLib floats are 1-bit sign, 19-bit integer, 12-bit fraction.. ï¿½ï¿½ï¿½
+        // RatLib floats are 1-bit sign, 19-bit integer, 12-bit fraction.. ¥¥¥
         //   masking Mconst&0x1FFF gets only signed fraction (&0x1000 is sign)
-        //   Kconst has worst case range (45ï¿½ @ bot corner = 2*(-399..+910))
+        //   Kconst has worst case range (45¡ @ bot corner = 2*(-399..+910))
         //     for 1-bit sign + 11-bit int + [31-2-13-12 =] 4-bit fract;
         //     implicit /4 then +5 shift here puts decode bin.pt in bit 19.
         bitz = ((Cast_F2I(Kconst) & 0xFFFFC0) << 5) // must decode(/4) into meters
@@ -526,7 +530,6 @@ public class TrakSim {
      * @param theImgs An array of RGB pixels containing artifact images.
      * @return The track map ready to write to a file
      */
-
     public static int[] BuildMap(String theList, int ImDims,
                                  int[] theImgs) { // used BildMap codes: @ABcdEFgHIjKLmNOPQRSTuVWXYZ
         final int GridSz = HalfTall * HalfMap;
@@ -2024,7 +2027,7 @@ public class TrakSim {
             AverageAim = Facing;
             // NuData++; // caller does
             break;
-        } //~while   // ZMD=12,16 ZSf=4 ZB=34,322 ZSc=32. ZW=0.1 ZT=10,8 // ï¿½
+        } //~while   // ZMD=12,16 ZSf=4 ZB=34,322 ZSc=32. ZW=0.1 ZT=10,8 // ¥
         if (Mini_Log) System.out.println(HandyOps.TF2Log("(ZooMp2tru) ", aim2,
                 HandyOps.Dec2Log(" ", rx, HandyOps.Dec2Log("/", cx,
                         HandyOps.Int2Log(" ", base, HandyOps.Int2Log(" ", zx,
@@ -2697,7 +2700,7 @@ public class TrakSim {
             if (anim > 4) { // one-shot indexed movable stuff (setup @ [%]f)..
                 why = 3;
                 if (NoisyMap) if (Anim_Log > 0) if ((Anim_Log >> 16) == anim)
-                    if ((Anim_Log & 0xFFFF) > FrameNo) logz = GoodLog; ///ï¿½ change to Mini_Log;
+                    if ((Anim_Log & 0xFFFF) > FrameNo) logz = GoodLog; ///¥ change to Mini_Log;
                 TmpI = (whar << 16) + whar + 1; // anchors are only one word long
                 locn = -5;
                 here = ActivAnima[anim & 15]; // -> this object's sequence list
@@ -3893,7 +3896,7 @@ public class TrakSim {
                 //   is dx/fZoom meters wide, and the map position of the left edge
                 //   of the image plane at distance dx is -90 degrees to the left
                 //   (=Fc-90 in degrees C-wise from North) to map point Vat/Hat
-                //   ï¿½ = (VIc-dx*cos(Lp)/(2*fZoom),HIc+dx*sin(Lp)/(2*fZoom)).
+                //   ¥ = (VIc-dx*cos(Lp)/(2*fZoom),HIc+dx*sin(Lp)/(2*fZoom)).
                 // Stepping from the left, each pixel adds dx*cos(Lp)/(ImWi*fZoom)
                 //   to V and subtracts dx*sin(Lp)/(ImWi*fZoom) from H.
                 // We calculate Vbase = -cos(Fa)-cos(Lp)/(2*fZoom) and Hbase sim'ly,
@@ -3955,7 +3958,7 @@ public class TrakSim {
                             cx = 0;
                             doit = doit >> 3; // = distance in half-meters (=deep*4)
                             if (doit > 63) Darken = 0x3F3F3F;
-                            else if (doit > 0) { // ZoomPix=ImWi*50/Zoom35.. ï¿½ I don't believe this ï¿½ï¿½
+                            else if (doit > 0) { // ZoomPix=ImWi*50/Zoom35.. ¥ I don't believe this ¥¥
                                 cx = ZoomPix * 2 / doit; // = pix/meter (12cm @ 1:8), = baseboard
                                 Darken = doit * 0x10101;
                             } //~if

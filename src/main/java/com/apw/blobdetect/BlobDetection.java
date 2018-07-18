@@ -9,6 +9,7 @@ import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 public class BlobDetection implements IBlobDetection {
+
     public static final int MAXIMUM_DIFFERENCE_IN_WIDTH_BETWEEN_TWO_BLOBS_IN_ORDER_TO_JOIN = 75;
 
     //creates data structures to organize different stages of blobs
