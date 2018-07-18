@@ -58,7 +58,7 @@ public class DriverCons { // TrakSim constant parameters
             D_DrawDash = 12,                    // dashboard height at bottom of image
             D_SteerServo = 9, D_GasServo = 10,  // FakeArduino output pins for servos
             D_MinESCact = 10, D_MaxESCact = 22, // active range of ESC, in steps +90
-            D_LeftSteer = 180, D_RiteSteer = 180, // (measured) full range (33,44)
+            D_LeftSteer = 33, D_RiteSteer = 44, // (measured) full range (33,44)
             D_MarinBlue = 0x0099FF, // the color of driving info added to image
             D_SteerColo = 0xCC9900, // the color of the steering wheel in the image
             D_CreamWall = 0xFFFFCC, // (indoor) wall&door colors..

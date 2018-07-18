@@ -169,11 +169,11 @@ public class SpeedController {
 	
 	//Break Rate Math
 	
-	//The total distance it will take to stop, does not include gravity/friction
+	//The total distance it will take to stop
     double calcStopDist(double targetStopDist, double speed)
     {
 
-        return Math.pow(speed, 2) / 2;
+        return Math.pow(speed, 2) / (Constants.FRICT * Constants.GRAV * 2);
 
     }
 
@@ -202,4 +202,6 @@ public class SpeedController {
 		return (int)desiredSpeed;
 	}
 	
+	
+	public bool is
 }

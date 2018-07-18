@@ -6,9 +6,9 @@ public class Constants {
 		MIN_SPEED = 4,					//Car's minimum speed
 		PIN_TO_METER_PER_SECOND = 0.4,	//Conversion for motor position to m/s. DO NOT TOUCH
 		GRAV = 9.80665,					//Average gravitational acceleration
-		SQRT_GRAV = 3.132,				//The square root of the average gravitational acceleration
+		SQRT_GRAV = Math.sqrt(GRAV),				//The square root of the average gravitational acceleration
 		FRICT = 0.75,					//Given coefficient of friction
-		SQRT_FRICT = 0.866;				//The square root of the given coefficient of friction
+		SQRT_FRICT = Math.sqrt(FRICT);				//The square root of the given coefficient of friction
 		
 		public static final int
 		DRIFT_TO_STOPSIGN_FRAMES = 15,	//Frames to drift forward after stopsign detected
