@@ -22,7 +22,7 @@ public class Steering {
 
 	public Point[] leadingMidPoints = new Point[startingHeight + heightOfArea];
 	
-	Point origin = new Point(screenWidth/2, screenHeight);
+	Point origin = new Point(cameraWidth/2, screenHeight);
 	
 	Boolean found = false;
 	Boolean leftSideFound = false;

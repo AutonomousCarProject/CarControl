@@ -603,21 +603,31 @@ public class DrDemo extends JFrame implements MouseListener {
     
     this.GetCameraImg();
     Point[] hi = testSteering.findPoints(thePixels);
+
+    // Steer between lines
+    testSteering.averageMidpoints();
+    int tempDeg = testSteering.getDegreeOffset();
+    theServos.servoWrite(SteerPin, (int)((tempDeg) + 90));
     
     graf.setColor(Color.RED);
     //graf.fillRect(100, testSteering.startingPoint, 1, 1);
-    for (int i = 0; i<testSteering.startingPoint - (testSteering.startingHeight + testSteering.heightOfArea); i++) {
-    		graf.fillRect(testSteering.leadingMidPoints[i].x, testSteering.leadingMidPoints[i].y +  + edges.top, 5, 5);
-    }   
-    
+    if (DriverCons.D_DrawCurrent == true) {
+    		for (int i = 0; i<testSteering.startingPoint - (testSteering.startingHeight + testSteering.heightOfArea); i++) {
+    			graf.fillRect(testSteering.leadingMidPoints[i].x, testSteering.leadingMidPoints[i].y +  + edges.top, 5, 5);
+    		}   
+    	}
     
     
     for (int i = 0; i<hi.length; i++) {
-    		graf.setColor(Color.ORANGE);
-    		graf.fillRect(hi[i].x, hi[i].y + edges.top, 5, 5);
-    		graf.setColor(Color.YELLOW);
-    		graf.fillRect(testSteering.leftPoints[i].x + edges.left, testSteering.leftPoints[i].y + edges.top, 5, 5);
-    		graf.fillRect(testSteering.rightPoints[i].x + edges.left, testSteering.rightPoints[i].y + edges.top, 5, 5);
+    		if (DriverCons.D_DrawPredicted == true) {
+    			graf.setColor(Color.ORANGE);
+    			graf.fillRect(hi[i].x, hi[i].y + edges.top, 5, 5);
+    		}
+    		if (DriverCons.D_DrawOnSides == true) {
+    			graf.setColor(Color.YELLOW);
+    			graf.fillRect(testSteering.leftPoints[i].x + edges.left, testSteering.leftPoints[i].y + edges.top, 5, 5);
+    			graf.fillRect(testSteering.rightPoints[i].x + edges.left, testSteering.rightPoints[i].y + edges.top, 5, 5);
+    		}
     }
     
 
