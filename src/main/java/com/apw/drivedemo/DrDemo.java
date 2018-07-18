@@ -22,6 +22,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Insets; // not available at win creation
 import java.awt.image.BufferedImage;
@@ -592,6 +593,10 @@ public class DrDemo extends JFrame implements MouseListener,KeyListener {
               if (nx>0) theSim.DrawGrid();}} //~if
           else DimSave = 0;} //~if
         if ((StartYourEngines==0)||(NoneStep<0)) fno = DidFrame;
+        
+        
+        graf.setColor(Color.ORANGE);
+        graf.drawRect(Constants.STOPLIGHT_MIN_X, Constants.STOPLIGHT_MIN_Y, Constants.STOPLIGHT_MAX_X-Constants.STOPLIGHT_MIN_X, Constants.STOPLIGHT_MAX_Y-Constants.STOPLIGHT_MIN_Y);
 
         ///** If you have self-driving code, you could put it here **///
         	//TestServos(); // (replace this with your own code)

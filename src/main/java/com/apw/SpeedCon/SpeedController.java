@@ -25,16 +25,20 @@ public class SpeedController {
 		this.speedFinder = new SpeedFinder();
 	}
 	
+	//A method to be called every frame. Calculates desired speed and actual speed
+	//Also takes stopping into account
 	public void onUpdate(int gasAmount, int steerDegs, int manualSpeed){
 		this.calculateEstimatedSpeed(gasAmount);
 		this.calculateDesiredSpeed(steerDegs, manualSpeed);
 		
+		//This part runs on-screen blobs thru a set of tests to figure out if they are
+		//relevant, and then what to do with them
 		List<MovingBlob> blobs = new LinkedList<>();
 		for(MovingBlob i : blobs){
-			if(detectStopSign(i)){
+			if(detectStopLight(i)){
 				setStoppingAtSign();
 			}
-			else if(detectStopLight(i)){
+			else if(detectStopSign(i)){
 				setStoppingAtLight();
 			}
 		}
@@ -206,7 +210,7 @@ public class SpeedController {
     	return calcStopRate(currentSpeed, getStopTime(targetDist, currentSpeed));
     }
 	
-    // End Of Break Rate Math
+    // End Of Brake Rate Math
     
 	public int getDesiredSpeed(){
 		return (int)desiredSpeed;
