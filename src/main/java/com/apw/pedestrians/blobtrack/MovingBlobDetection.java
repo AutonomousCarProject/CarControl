@@ -7,22 +7,22 @@ import java.util.*;
 
 public class MovingBlobDetection implements IMovingBlobDetection {
     //maximum time before unmatched MovingBlob is deleted
-    int maxTimeOffScreen = Constant.MAX_TIME_OFF_SCREEN;
-    int maxTimeOffScreenUnified = 3;
+    private int maxTimeOffScreen = Constant.MAX_TIME_OFF_SCREEN;
+    private int maxTimeOffScreenUnified = 3;
     //maximum distance in pixels between blobs that can be matched
-    int distanceLimitX = Constant.DISTANCE_LIMIT_X;
-    int distanceLimitY = Constant.DISTANCE_LIMIT_Y;
-    int widthChangeLimit = Constant.MAX_CHANGE_WIDTH;
-    int heightChangeLimit = Constant.MAX_CHANGE_HEIGHT;
-    float kernelBandwidth = 15;
-    float maxDistBetweenPointsInCluster = 80;
-    float xDistWeight = 1f;
-    float yDistWeight = 0.25f;
-    float vXWeight = 1.5f;
-    float vYWeight = 0.25f;
-    float distanceUnifyMatchLimit = 60;
-    float percentWidthChangeUnifyMatchLimit = .5f;
-    float percentHeightChangeUnifyMatchLimit = .5f;
+    private int distanceLimitX = Constant.DISTANCE_LIMIT_X;
+    private int distanceLimitY = Constant.DISTANCE_LIMIT_Y;
+    private int widthChangeLimit = Constant.MAX_CHANGE_WIDTH;
+    private int heightChangeLimit = Constant.MAX_CHANGE_HEIGHT;
+    private float kernelBandwidth = 15;
+    private float maxDistBetweenPointsInCluster = 80;
+    private float xDistWeight = 1f;
+    private float yDistWeight = 0.25f;
+    private float vXWeight = 1.5f;
+    private float vYWeight = 0.25f;
+    private float distanceUnifyMatchLimit = 60;
+    private float percentWidthChangeUnifyMatchLimit = .5f;
+    private float percentHeightChangeUnifyMatchLimit = .5f;
     //list of all moving blobs that have been recently tracked
     private List<MovingBlob> movingBlobs;
     private List<MovingBlob> filteredUnifiedBlobs;
