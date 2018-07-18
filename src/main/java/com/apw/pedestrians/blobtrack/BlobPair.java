@@ -1,9 +1,8 @@
-package com.apw.blobtrack;
+package com.apw.pedestrians.blobtrack;
 
-import com.apw.blobdetect.Blob;
+import com.apw.pedestrians.blobdetect.Blob;
 
 public class BlobPair implements Comparable<BlobPair> {
-
     // The Blob in the current frame.
     Blob newBlob;
     // The MovingBlob from the previous frame.
@@ -35,6 +34,4 @@ public class BlobPair implements Comparable<BlobPair> {
     public int compareTo(BlobPair o) {
         return (int) Math.signum(distance - o.distance);
     }
-
-
 }

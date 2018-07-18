@@ -1,26 +1,18 @@
-package com.apw.blobtrack;
+package com.apw.pedestrians.blobtrack;
 
-import com.apw.blobdetect.Blob;
-import com.apw.oldglobal.Constant;
-import com.apw.oldimage.IPixel;
+import com.apw.pedestrians.blobdetect.Blob;
+import com.apw.pedestrians.Constant;
 
 public class MovingBlob extends Blob {
-
     // The X and Y components of the MovingBlob's velocity.
     public float velocityX, velocityY;
-
     public float velocityChangeX, velocityChangeY;
-
     // The predicted X and Y center coordinates of the MovingBlob in the next frame.
     public float predictedX, predictedY;
-
     // The time, in frames, that the MovingBlob has been on-screen.
     public int age;
-
     // The time, in frames, that the MovingBlob has been off-screen.
     public int ageOffScreen;
-
-    private int score = 0;
 
     /**
      * Creates a MovingBlob from a Blob. This is used when a previously unseen
@@ -43,25 +35,6 @@ public class MovingBlob extends Blob {
      */
     public MovingBlob() {
         super(0, 0, 0, 0, null);
-    }
-
-    public MovingBlob(int width, int height, int x, int y, IPixel color, float velocityX, float velocityY) {
-        super(width, height, x, y, color);
-        this.velocityX = velocityX;
-        this.velocityY = velocityY;
-        this.age = 0;
-        this.ageOffScreen = 0;
-        updatePredictedPosition();
-    }
-
-    //for testing only
-    public MovingBlob(int width, int height, int x, int y, float velocityX, float velocityY, int age) {
-        super(width, height, x, y, null);
-        this.velocityX = velocityX;
-        this.velocityY = velocityY;
-        this.age = age;
-        this.ageOffScreen = 0;
-        updatePredictedPosition();
     }
 
     /**
@@ -89,17 +62,6 @@ public class MovingBlob extends Blob {
     }
 
     /**
-     * Simple method to get the magnitude of the MovingBlob's velocity.
-     *
-     * @return The magnitude of the scaled velocity of the MovingBlob
-     */
-    public float getVelocityMagnitude() {
-        float scaledX = this.getScaledVelocityX();
-        float scaledY = this.getScaledVelocityY();
-        return (float) Math.sqrt(scaledX * scaledX + scaledY * scaledY);
-    }
-
-    /**
      * Updates the predicted position of the MovingBlob based on its center and
      * velocity.
      */
@@ -113,18 +75,6 @@ public class MovingBlob extends Blob {
         return "Moving blob: Color " + /* color.getColor() + */ " X: " + x + " Y: " + y + " vX: " + velocityX +
                 " vY: " + velocityY + " pX: " + predictedX + " pY: " + predictedY + " w: " + width + " h: " + height
                 + " age: " + age + " ageoff: " + ageOffScreen;
-    }
-
-    public void incrementScore() {
-        score++;
-    }
-
-    public int getScore() {
-        return score;
-    }
-
-    public void setScore(int score) {
-        this.score = score;
     }
 
     public float getDensity() {

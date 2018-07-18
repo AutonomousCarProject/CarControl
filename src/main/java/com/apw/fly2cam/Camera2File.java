@@ -1,5 +1,7 @@
 package com.apw.fly2cam;                                         // 2017 February 27
 
+import com.apw.pedestrians.PedestrianFlyCamera;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -23,7 +25,7 @@ public class Camera2File extends JFrame implements MouseListener {
     public int IzFile, tile, twosie, nFiles, toRecord, CamFPS, nFrames;
     boolean autoShutter = true;
     private BufferedImage theImag = null; // (needed in myAction)..
-    private OldFlyCamera theVideo = null;
+    private PedestrianFlyCamera theVideo = null;
     private FileOutputStream theFile = null;
     private Timer TickTock = null;
     private BufferedImage theBuff = null;
@@ -36,7 +38,7 @@ public class Camera2File extends JFrame implements MouseListener {
         int nx = nPixels;
         boolean didit = false;
         Timer titok;
-        OldFlyCamera myVid;
+        PedestrianFlyCamera myVid;
         String sayso = "= ";
         int[] myPix;
         tile = 0;
@@ -46,8 +48,8 @@ public class Camera2File extends JFrame implements MouseListener {
         nFrames = 0;
         toRecord = 0; // number of frames to go (while recording)
         CamFPS = 0;
-        if (fps == 15) CamFPS = OldFlyCamera.FrameRate_15;
-        else if (fps == 30) CamFPS = OldFlyCamera.FrameRate_30;
+        if (fps == 15) CamFPS = PedestrianFlyCamera.FrameRate_15;
+        else if (fps == 30) CamFPS = PedestrianFlyCamera.FrameRate_30;
         myPix = new int[nPixels];
         thePixels = myPix;
         while (nx > 0) {
@@ -55,7 +57,7 @@ public class Camera2File extends JFrame implements MouseListener {
             myPix[nx] = 0x6699CC;
         } //~while // prefill with blue-gray
         theHead = new byte[4];
-        theVideo = new OldFlyCamera();
+        theVideo = new PedestrianFlyCamera();
         doOften = new myAction();
         TickTock = new Timer(FrameTime, doOften);
         theBuff = new BufferedImage(ImWi, ImHi, BufferedImage.TYPE_INT_RGB);
@@ -200,7 +202,7 @@ public class Camera2File extends JFrame implements MouseListener {
         myPix[thar + 2] = 0xFF0000;
     } //~AddRedDot
 
-    public boolean CamSize(OldFlyCamera myVid) { // true if good
+    public boolean CamSize(PedestrianFlyCamera myVid) { // true if good
         int hi = 0, wi = 0;
         twosie = 0;
         tile = 0;
@@ -227,7 +229,7 @@ public class Camera2File extends JFrame implements MouseListener {
 
     public boolean RestartCam() { // true if did
         boolean didit = false;
-        OldFlyCamera myVid = theVideo;
+        PedestrianFlyCamera myVid = theVideo;
         if (camBytes != null) if (myVid != null) if (IzFile == 1) {
             IzFile = -1;
             myVid.Finish();
@@ -242,7 +244,7 @@ public class Camera2File extends JFrame implements MouseListener {
         boolean gotit = false;
         short[] myBy = camBytes; // local vars visible in debugger ;-)
         int[] myPix = thePixels;
-        OldFlyCamera myVid = theVideo;
+        PedestrianFlyCamera myVid = theVideo;
         if (myBy != null) if (myPix != null) if (myVid != null)
             gotit = myVid.NextFrame(myBy);
         if (!gotit) {
@@ -387,7 +389,7 @@ public class Camera2File extends JFrame implements MouseListener {
         int Vx = 0, Hx = 0;                        // we only implement/o'ride this one
         String aName = ".By8";
         File myFile = null;
-        OldFlyCamera myVid = theVideo;
+        PedestrianFlyCamera myVid = theVideo;
         if (evt != null) {
             Hx = evt.getX();
             Vx = evt.getY();

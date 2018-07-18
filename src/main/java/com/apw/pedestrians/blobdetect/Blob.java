@@ -1,9 +1,8 @@
-package com.apw.blobdetect;
+package com.apw.pedestrians.blobdetect;
 
-import com.apw.oldimage.IPixel;
+import com.apw.pedestrians.image.IPixel;
 
 public class Blob {
-
     public static int currentId = 0;
     public int width, height;
     public int x, y;

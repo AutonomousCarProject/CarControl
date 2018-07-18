@@ -1,4 +1,4 @@
-package com.apw.oldimage;
+package com.apw.pedestrians.image;
 
 public interface IPixel {
     // All values between 0 and 255

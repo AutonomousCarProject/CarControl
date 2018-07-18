@@ -1,4 +1,4 @@
-package com.apw.oldimage;
+package com.apw.pedestrians.image;
 
 //Defines basic implementation for pixel
 public class Pixel implements IPixel { // 0-765
