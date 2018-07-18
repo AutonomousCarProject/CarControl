@@ -203,5 +203,11 @@ public class SpeedController {
 	}
 	
 	
-	public bool is
+	public boolean detectStopSign() {
+		return true;
+	}
+	
+	public boolean detectStopLight() {
+		return true;
+	}
 }
