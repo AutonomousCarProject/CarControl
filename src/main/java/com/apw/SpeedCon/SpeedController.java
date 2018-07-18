@@ -184,9 +184,7 @@ public class SpeedController {
 	//The total distance it will take to stop
     double calcStopDist(double targetStopDist, double speed)
     {
-
         return Math.pow(speed, 2) / (Constants.FRICT * Constants.GRAV * 2);
-
     }
 
     //The amount of time that is needed to stop at the given speed.
@@ -214,15 +212,22 @@ public class SpeedController {
 		return (int)desiredSpeed;
 	}
 	
+	// Checks a given blob for the properties of a stopsign (size, age, position, color)
 	public boolean detectStopSign(MovingBlob blob) {
-		if(blob.height > Constants.BLOB_HEIGHT && blob.width > Constants.BLOB_WIDTH && blob.age > Constants.BLOB_AGE) {
+		if(blob.height > Constants.BLOB_HEIGHT && blob.width > Constants.BLOB_WIDTH && blob.age > Constants.BLOB_AGE && blob.x > Constants.STOPLIGHT_MIN_X && blob.x < Constants.STOPLIGHT_MAX_X && blob.y > Constants.STOPLIGHT_MIN_Y && blob.y < Constants.STOPLIGHT_MAX_Y && blob.color.getColor() == 0) {
 			return true;
 		} else {
 			return false;
 		}
 	}
 	
+	// Checks a given blob for the properties of a stoplight (size, age, position, color)
 	public boolean detectStopLight(MovingBlob blob) {
-		return true;
+		if (blob.height > Constants.BLOB_HEIGHT && blob.width > Constants.BLOB_WIDTH && blob.age > Constants.BLOB_AGE && blob.x > Constants.STOPSIGN_MIN_X && blob.x < Constants.STOPSIGN_MAX_X && blob.y > Constants.STOPSIGN_MIN_Y && blob.y < Constants.STOPSIGN_MAX_Y && blob.color.getColor() == 0) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 }
