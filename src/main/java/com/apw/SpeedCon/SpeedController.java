@@ -21,10 +21,34 @@ public class SpeedController {
 		this.speedFinder = new SpeedFinder();
 	}
 	
+	public void onUpdate(int gasAmount, int steerDegs, int manualSpeed){
+		this.calculateEstimatedSpeed(gasAmount);
+		this.calculateDesiredSpeed(steerDegs, manualSpeed);
+	}
+	
 	//This figures out the speed that we want to be traveling at
 	public void calculateDesiredSpeed(int wheelAngle, int manualSpeed){
 		double curveSteepness = 0; // Steering.getCurveSteepness();
-		desiredSpeed = Math.min(Math.max((1 - Math.abs((double)(wheelAngle)/90.0))*Constants.MAX_SPEED + manualSpeed, Constants.MIN_SPEED), Constants.MAX_SPEED);
+		
+        int shouldStopSign = this.updateStopSign();
+        int shouldStopLight = this.updateStopLight();
+        
+		if(shouldStopSign == 1 && shouldStopLight == 1){
+			this.desiredSpeed = Math.min(Math.max((1 - Math.abs((double)(wheelAngle)/90.0))*Constants.MAX_SPEED + manualSpeed, Constants.MIN_SPEED), Constants.MAX_SPEED);
+        }
+        else if (shouldStopSign == -1){
+        	this.desiredSpeed = Constants.STOPSIGN_DRIFT_SPEED;
+        }
+        else if (shouldStopSign == 0){
+        	this.desiredSpeed = 0;
+        }
+        else if (shouldStopLight == -1){
+        	this.desiredSpeed = Constants.STOPLIGHT_DRIFT_SPEED;
+        }
+        else if (shouldStopLight == 0){
+        	this.desiredSpeed = 0;
+        }
+		
 	}
 	
 	//Returns the estimated speed IN METERS PER SECOND

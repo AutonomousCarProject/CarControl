@@ -595,28 +595,9 @@ public class DrDemo extends JFrame implements MouseListener,KeyListener {
         
         
         //Begin Speed Code
-        speedControl.calculateEstimatedSpeed(this.GasPedal);
-        speedControl.calculateDesiredSpeed(this.SteerDegs, manualSpeed);
-        int shouldStopSign = speedControl.updateStopSign();
-        int shouldStopLight = speedControl.updateStopLight();
-        if(shouldStopSign == 1 && shouldStopLight == 1){
-        	AxLR8(true, speedControl.getDesiredSpeed());
-        }
-        else if (shouldStopSign == -1){
-        	AxLR8(true, Constants.STOPSIGN_DRIFT_SPEED);
-        }
-        else if (shouldStopSign == 0){
-        	AxLR8(true, 0);
-        }
-        else if (shouldStopLight == -1){
-        	AxLR8(true, Constants.STOPLIGHT_DRIFT_SPEED);
-        }
-        else if (shouldStopLight == 0){
-        	AxLR8(true, 0);
-        }
+        speedControl.onUpdate(this.GasPedal, this.SteerDegs, this.manualSpeed);
         System.out.println(this.GasPedal);
         System.out.println(this.SteerDegs);
-        System.out.println(shouldStopLight);
         System.out.println(speedControl.getDesiredSpeed());
         //End Speed Code
 
