@@ -3,10 +3,7 @@ package com.apw.blobdetect;
 import com.apw.blobfilter.BlobFilter;
 import com.apw.blobtrack.MovingBlob;
 import com.apw.blobtrack.MovingBlobDetection;
-import com.apw.oldimage.IImage;
-import com.apw.oldimage.IPixel;
-import com.apw.oldimage.Image;
-import com.apw.oldimage.Pixel;
+import com.apw.oldimage.*;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -66,8 +63,8 @@ public class BlobDetectionRender extends Application {
         MovingBlobDetection movingBlobDetection = new MovingBlobDetection();
         BlobFilter blobFilter = new BlobFilter();
 
-        // IImage image = new JpgImage("src/testImage1.png");
-        IImage image = file == null ? new Image() : new FileImage(file.getPath(), true);
+        IImage image = new JpgImage("src/testImage1.png");
+        //IImage image = file == null ? new Image();
 
 
         //IImage -image = new JpgImage("src/testImage1.png");
