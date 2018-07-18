@@ -21,15 +21,18 @@ package com.apw.apw3;                                     // 2018 May 25
  */
 public class MyMath {
 
+    /**
+     * Sine and Cose are the return values set by Angle2cart.
+     */
+    public static double Sine = 0.0, Cose = 1.0, preAngle = 0.0;
     private static int[] pow2 = {1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048,
             0x1000, 0x2000, 0x4000, 0x8000, 0x10000, 0x20000, 0x40000, 0x80000,
             0x100000, 0x200000, 0x400000, 0x800000, 0x01000000, 0x02000000,
             0x04000000, 0x08000000, 0x10000000, 0x20000000, 0x40000000, 0};
 
-    /**
-     * Sine and Cose are the return values set by Angle2cart.
-     */
-    public static double Sine = 0.0, Cose = 1.0, preAngle = 0.0;
+    public MyMath() { // outer class const'r..FakeMath() {
+        System.out.println("MyMath");
+    }
 
     /**
      * Sign-extends the low 16 bits of a packed number pair.
@@ -194,8 +197,4 @@ public class MyMath {
         Sine = (double) Math.sin(radn);
         Cose = (double) Math.cos(radn);
     } //~Angle2cart
-
-    public MyMath() { // outer class const'r..FakeMath() {
-        System.out.println("MyMath");
-    }
 } //~MyMath (apw3) (MM)

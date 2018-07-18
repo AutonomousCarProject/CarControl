@@ -1,13 +1,6 @@
 package com.apw.oldglobal;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -19,20 +12,23 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
-public class LogFX extends Application
-{
-    public static void main(String[] args)
-    {
-        launch(args);
-    }
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
+public class LogFX extends Application {
     private List<Line> lines = new ArrayList<>();
     private TextArea ta = null;
     private int level = 0;
 
+    public static void main(String[] args) {
+        launch(args);
+    }
+
     @Override
-    public void start(Stage stage) throws Exception
-    {
+    public void start(Stage stage) throws Exception {
         VBox box = new VBox();
 
         Button b = new Button();
@@ -40,34 +36,26 @@ public class LogFX extends Application
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Open Log File");
             File logs = new File("./logs");
-            if(logs.exists())
-            {
+            if (logs.exists()) {
                 fileChooser.setInitialDirectory(logs);
-            }
-            else
-            {
+            } else {
                 fileChooser.setInitialDirectory(new File("."));
             }
-            
+
             fileChooser.setSelectedExtensionFilter(new ExtensionFilter("Logfile", ".log"));
             File file = fileChooser.showOpenDialog(stage);
-            if (file != null)
-            {
+            if (file != null) {
                 lines.clear();
                 Scanner sc;
-                try
-                {
+                try {
                     sc = new Scanner(file);
-                    while (sc.hasNextLine())
-                    {
+                    while (sc.hasNextLine()) {
                         lines.add(new Line(sc.nextLine()));
                     }
                     sc.close();
 
                     updateTextArea();
-                }
-                catch (FileNotFoundException e)
-                {
+                } catch (FileNotFoundException e) {
                     throw new RuntimeException(e);
                 }
             }
@@ -99,13 +87,10 @@ public class LogFX extends Application
         stage.show();
     }
 
-    private void updateTextArea()
-    {
+    private void updateTextArea() {
         StringBuilder s = new StringBuilder();
-        for (Line line : lines)
-        {
-            if(line.level.ordinal() >= level)
-            {
+        for (Line line : lines) {
+            if (line.level.ordinal() >= level) {
                 s.append(line);
                 s.append("\n");
             }
@@ -113,20 +98,16 @@ public class LogFX extends Application
         ta.setText(s.toString());
     }
 
-    private static class Line
-    {
+    private static class Line {
         private String s;
         private Log.Level level;
 
-        public Line(String s)
-        {
+        public Line(String s) {
             int index = Integer.MAX_VALUE;
 
-            for (Log.Level possibleLevel : Log.Level.values())
-            {
+            for (Log.Level possibleLevel : Log.Level.values()) {
                 int currentIndex = s.indexOf(possibleLevel.toString());
-                if (currentIndex != -1 && currentIndex < index)
-                {
+                if (currentIndex != -1 && currentIndex < index) {
                     level = possibleLevel;
                     index = currentIndex;
                 }
@@ -135,8 +116,7 @@ public class LogFX extends Application
             this.s = s;
         }
 
-        public String toString()
-        {
+        public String toString() {
             return s;
         }
     }

@@ -19,6 +19,10 @@ package com.apw.fakefirm;                             // 2018 February 10
  */
 public class SimHookBase { // override to drive simulator
 
+    public SimHookBase() {
+        System.out.println("new SimHookBase");
+    }
+
     /**
      * Override this method to see the data being sent to the Arduino.
      *
@@ -33,8 +37,4 @@ public class SimHookBase { // override to drive simulator
     public String toString() {
         return "(SimHookBase)";
     } //~toString
-
-    public SimHookBase() {
-        System.out.println("new SimHookBase");
-    }
 } //~SimHookBase // (SB)

@@ -29,6 +29,10 @@ public class HandyOps { // first some useful debug logging ops..
             TifImDimz = 0, TifDataOfx = 0; // cached by ReadTiff32Im for 2nd read
     private static String fraction = "", TifFileNm = "";
 
+    public HandyOps() { // (unused) class const'r..FakeHandy() {
+        System.out.println("new HandyOps");
+    }
+
     /**
      * Strongly-typed (not overloaded) string selector.
      * This is part of a collection of tools for building debug print lines.
@@ -875,8 +879,4 @@ public class HandyOps { // first some useful debug logging ops..
         }
         return before + ".?" + after;
     } //~Fixt8th
-
-    public HandyOps() { // (unused) class const'r..FakeHandy() {
-        System.out.println("new HandyOps");
-    }
 } //~HandyOps (apw3) (HO)

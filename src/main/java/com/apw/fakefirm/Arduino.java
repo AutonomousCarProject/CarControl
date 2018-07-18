@@ -22,10 +22,6 @@ public class Arduino { // Adapted to Java from arduino.cs ... (FakeFirmata)
     // (subclass this to add input capability)
 
     public static final String CommPortNo = "COM3";
-    protected static boolean GoodOpen = false;
-
-    protected static final boolean SpeakEasy = true;
-
     public static final int MAX_DATA_BYTES = 16, // =64 in LattePanda's Arduino.cs
             MDB_msk = MAX_DATA_BYTES - 1;
     public static final int SET_PIN_MODE = 0xF4;
@@ -33,29 +29,44 @@ public class Arduino { // Adapted to Java from arduino.cs ... (FakeFirmata)
     public static final int DIGITAL_MESSAGE = 0x90;
     // send data for a digital port
     public static final int ANALOG_MESSAGE = 0xE0;
-    // send data for an analog pin (or PWM)
-
     // Use these selectors to set listeners..
     public static final int REPORT_ANALOG = 0xC0;
     // enable analog input by pin +
     public static final int REPORT_DIGITAL = 0xD0;
+    // send data for an analog pin (or PWM)
     // enable digital input by port
     public static final int REPORT_VERSION = 0xF9;
-    // report firmware version
-
     public static final byte LOW = 0;
     public static final byte HIGH = 1;
+    // report firmware version
     public static final byte INPUT = 0;
     public static final byte OUTPUT = 1;
     public static final byte ANALOG = 2;
     public static final byte PWM = 3;
     public static final byte SERVO = 4;
-
+    protected static final boolean SpeakEasy = true;
+    protected static boolean GoodOpen = false;
     protected static SimHookBase DoMore = null; // for extensions
 
     protected int[] digitalOutputData;
     protected
     SerialPort surrealPort;
+
+    public Arduino() { // outer class constructor..
+        surrealPort = new SerialPort(CommPortNo);
+        System.out.println("new Arduino " + CommPortNo + " " + (surrealPort != null));
+        digitalOutputData = new int[MAX_DATA_BYTES];
+        Open();
+    }
+
+    /**
+     * Use this to link simulator actions to Firmata.
+     *
+     * @param whom An instance of a subclass of SimHookBase
+     */
+    public static void HookExtend(SimHookBase whom) {
+        DoMore = whom;
+    }
 
     /**
      * Current status of the FakeFirmata library, =true if successfully open.
@@ -134,15 +145,6 @@ public class Arduino { // Adapted to Java from arduino.cs ... (FakeFirmata)
     } //~servoWrite
 
     /**
-     * Use this to link simulator actions to Firmata.
-     *
-     * @param whom An instance of a subclass of SimHookBase
-     */
-    public static void HookExtend(SimHookBase whom) {
-        DoMore = whom;
-    }
-
-    /**
      * Opens the serial port connection, should it be required.
      * By default the port is opened when the object is first created.
      * <p>
@@ -182,11 +184,4 @@ public class Arduino { // Adapted to Java from arduino.cs ... (FakeFirmata)
         }
         GoodOpen = false;
     } //~Close
-
-    public Arduino() { // outer class constructor..
-        surrealPort = new SerialPort(CommPortNo);
-        System.out.println("new Arduino " + CommPortNo + " " + (surrealPort != null));
-        digitalOutputData = new int[MAX_DATA_BYTES];
-        Open();
-    }
 } //~Arduino (fakefirm) (OO)

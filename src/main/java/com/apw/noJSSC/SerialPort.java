@@ -11,6 +11,15 @@ package com.apw.noJSSC;                                 // 2018 May 11
 public class SerialPort {
     static final boolean logo = true; // enable logging..
 
+    public SerialPort() {
+        if (logo) System.out.println("noJSC/new SerialPort");
+    }
+
+    public SerialPort(String myPortName) { // constructor..
+        if (logo) System.out.println("noJSC/new SerialPort '"
+                + myPortName + "'");
+    }
+
     /**
      * Port opening
      *
@@ -57,13 +66,4 @@ public class SerialPort {
         if (logo) System.out.println("noJSC/closePort");
         return true;
     } //~closePort
-
-    public SerialPort() {
-        if (logo) System.out.println("noJSC/new SerialPort");
-    }
-
-    public SerialPort(String myPortName) { // constructor..
-        if (logo) System.out.println("noJSC/new SerialPort '"
-                + myPortName + "'");
-    }
 } //~SerialPort (nojssc) (NS)

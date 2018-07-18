@@ -27,14 +27,14 @@ import java.io.FileInputStream;
  */
 public class TrakSim {
 
+    public static final int WinWi = (ShowMap ? MapWide + 16 : 0) + ImWi, // window width
+            Lin2 = WinWi * 2, nPixels = ImHi * WinWi; // + pix in whole window
+    // fGratio cnvrts ESC steps to nominal velocity; fMinSpeed=4.0,MinESC=10
+    // ..adjust multiplier so it's correct for your car: *1.0 => fGratio=0.4
     private static final double fMinSpeed = DriverCons.D_fMinSpeed,
             fMinESC = (double) DriverCons.D_MinESCact,
             fGratio = 1.0 * fMinSpeed / fMinESC;
-    // fGratio cnvrts ESC steps to nominal velocity; fMinSpeed=4.0,MinESC=10
-    // ..adjust multiplier so it's correct for your car: *1.0 => fGratio=0.4
-
     private static final String SceneFiName = DriverCons.D_SceneFiName;
-
     private static final boolean RampServos = DriverCons.D_RampServos,
             Log_Draw = DriverCons.D_Log_Draw, Log_Log = DriverCons.D_Log_Log,
             Mini_Log = DriverCons.D_Mini_Log, DoCloseUp = DriverCons.D_DoCloseUp,
@@ -42,7 +42,6 @@ public class TrakSim {
             NoisyMap = DriverCons.D_NoisyMap, Reversible = DriverCons.D_Reversible,
             UseTexTrak = DriverCons.D_UseTexTrak, Fax_Log = DriverCons.D_Fax_Log,
             ShoClikGrid = DriverCons.D_ShoClikGrid, GoodLog = true;
-
     private static final int Vramp = DriverCons.D_Vramp, // imported constants,
             ImHi = DriverCons.D_ImHi, ImWi = DriverCons.D_ImWi, // ..local names
             Hramp = DriverCons.D_Hramp, RampA = DriverCons.D_RampA,
@@ -65,10 +64,6 @@ public class TrakSim {
             ParkDims = MapTall * 0x10000 + MapWide, CheckerBd = DriverCons.D_CheckerBd,
             ServoStepRate = 0, // = FrameTime/20, // Vscale = DriverCons.D_Vscale,
             TweakRx = DriverCons.D_TweakRx, Crummy = DriverCons.D_Crummy;
-
-    public static final int WinWi = (ShowMap ? MapWide + 16 : 0) + ImWi, // window width
-            Lin2 = WinWi * 2, nPixels = ImHi * WinWi; // + pix in whole window
-
     private static final double TurnRadius = DriverCons.D_TurnRadius,
             LfDeScaleSt = 90.0 / ((double) DriverCons.D_LeftSteer),
             RtDeScaleSt = 90.0 / ((double) DriverCons.D_RiteSteer),
@@ -80,7 +75,43 @@ public class TrakSim {
             fMaxSpeed = fGratio * ((double) MaxESCact),
             MaxRspeed = (Reversible ? -0.5 * fMaxSpeed : 0.0),
             fTime4mass = fMinESC * fFtime / Acceleration;
-
+    private static final String[] CompNames = {" N  ", " NNE ", " NE ", " ENE ",
+            " E  ", " ESE ", " SE ", " SSE ", " S  ", " SSW ", " SW ", " WSW ",
+            " W  ", " WNW ", " NW ", " NNW "};
+    private static final String StopInfo // see: case '@':
+            // [O r c f] v-rng tall wide H-off ppm anim..
+            = " 90 128 29 1 44 0~1 -- stop sign full-on (default)\n"
+            + " 90 64 15 60 22 0~2 -- stop sign back full-on\n"
+            + " 160 128 17 32 44 0~3 -- stop sign front angled\n"
+            + " 160 64 9 50 22 0~4 -- stop sign back angled\n"
+            + " 180 64 3 76 22 0~5 -- stop sign S-edge-on\n"
+            + " 0 64 3 80 22 0~6 -- stop sign P-edge-on\n"
+            + " 255 25 84 50~7 \n" // dark traffic lite
+            + " 0 255 25 110 50 1~8`5 -- green lite\n"
+            + " 0 255 25 136 50 1~9`6 -- yellow lite\n"
+            + " 0 255 25 162 50 1~10`7 -- red lite\n"
+            + " 0 64 23 55^132 25~11 -- pedestrian standing left\n"
+            + " 0 64 29 52^66 25~12 -- pedestrian stepping left\n"
+            + " 0 64 23 1^132 25~13 -- pedestrian standing right\n"
+            + " 0 64 29 25^132 25~14 -- pedestrian stepping right\n"
+            + " 0 83 99 412^172 32~15 -- white painted STOP line";
+    private static final String MapMacros
+            = "ZE 0x1000F0 -- right corner, N->E"
+            + "\nZS 0x100001 -- right corner, E->S"
+            + "\nZW 0x100010 -- right corner, S->W"
+            + "\nZN 0x10000F -- right corner, W->N"
+            + "\nZW 0x1000F0 -- left corner, N->W"
+            + "\nZN 0x100001 -- left corner, E->N"
+            + "\nZE 0x100010 -- left corner, S->E"
+            + "\nZS 0x10000F -- left corner, W->S"
+            + "\nZNEE 0xF3E1D1 -- inside curve, N->E"
+            + "\nZESS 0x311213 -- inside curve, E->S"
+            + "\nZSWW 0x1D2F3F -- inside curve, S->W"
+            + "\nZWNN 0xDFFEFD -- inside curve, W->N"
+            + "\nZNWW 0xFCCDCF -- outside curve, N->W"
+            + "\nZENN 0xC1D4F4 -- outside curve, E->N"
+            + "\nZSEE 0x144341 -- outside curve, S->E"
+            + "\nZWSS 0x4F3C1C -- outside curve, W->S";
     private static int SceneTall = 0, SceneWide = 0, SceneBayer = 0,
             NuData = 0, Waiting = 0, ShoSteer = 0, SteerWhee = 0, GasBrake = 0,
             SpecGas = 0, SpecWheel = 0, CarTest = 0, tRadix = 0, t2Radix = 0,
@@ -106,9 +137,7 @@ public class TrakSim {
             InWalls = false, SimInTrak = DriverCons.D_StayInTrack,
             ShoTrkTstPts = DriverCons.D_ShoTrkTstPts,
             SimSpedFixt = DriverCons.D_FixedSpeed;
-
     private static String TempStr;
-
     private static int[] RangeRow = null; // screen row ix'd by dx in 2m steps
     private static int[] RowRange = null; // dx in m/16 (6cm units) ix'd by row
     private static int[] MapIndex = null;
@@ -120,59 +149,6 @@ public class TrakSim {
     private static int[] BreadCrumbs = null;
     private static int[] GridLocTable = null;
     private static double[] RasterMap = null;
-
-    private static final String[] CompNames = {" N  ", " NNE ", " NE ", " ENE ",
-            " E  ", " ESE ", " SE ", " SSE ", " S  ", " SSW ", " SW ", " WSW ",
-            " W  ", " WNW ", " NW ", " NNW "};
-
-    private int Left_X, Rite_X, PreViewLoc, PreViewAim;
-
-    private SimHookBase SerialCalls = null;
-
-    private static final String StopInfo // see: case '@':
-            // [O r c f] v-rng tall wide H-off ppm anim..
-            = " 90 128 29 1 44 0~1 -- stop sign full-on (default)\n"
-            + " 90 64 15 60 22 0~2 -- stop sign back full-on\n"
-            + " 160 128 17 32 44 0~3 -- stop sign front angled\n"
-            + " 160 64 9 50 22 0~4 -- stop sign back angled\n"
-            + " 180 64 3 76 22 0~5 -- stop sign S-edge-on\n"
-            + " 0 64 3 80 22 0~6 -- stop sign P-edge-on\n"
-            + " 255 25 84 50~7 \n" // dark traffic lite
-            + " 0 255 25 110 50 1~8`5 -- green lite\n"
-            + " 0 255 25 136 50 1~9`6 -- yellow lite\n"
-            + " 0 255 25 162 50 1~10`7 -- red lite\n"
-            + " 0 64 23 55^132 25~11 -- pedestrian standing left\n"
-            + " 0 64 29 52^66 25~12 -- pedestrian stepping left\n"
-            + " 0 64 23 1^132 25~13 -- pedestrian standing right\n"
-            + " 0 64 29 25^132 25~14 -- pedestrian stepping right\n"
-            + " 0 83 99 412^172 32~15 -- white painted STOP line";
-    // + " 60     55 78 274^172 36~16=16 -- BlueCar front\n"
-    // + " 32+45  54 157 190^2  36~17=16 -- BlueCar right-front\n"
-    // + " 60+90  54 155 352^114 36~18=16 -- BlueCar right\n"
-    // + " 32+135 54 157 352^58 36~19=16 -- BlueCar right-back\n"
-    // + " 60+180 55 78 190^172 36~20=16 -- BlueCar back\n"
-    // + " 32+225 54 157 190^58 36~21=16 -- BlueCar left-back\n"
-    // + " 60+270 54 155 190^114 36~22=16 -- BlueCar left\n"
-    // + " 0      54 157 352^2  36~23=16 -- BlueCar left-front";
-
-    private static final String MapMacros
-            = "ZE 0x1000F0 -- right corner, N->E"
-            + "\nZS 0x100001 -- right corner, E->S"
-            + "\nZW 0x100010 -- right corner, S->W"
-            + "\nZN 0x10000F -- right corner, W->N"
-            + "\nZW 0x1000F0 -- left corner, N->W"
-            + "\nZN 0x100001 -- left corner, E->N"
-            + "\nZE 0x100010 -- left corner, S->E"
-            + "\nZS 0x10000F -- left corner, W->S"
-            + "\nZNEE 0xF3E1D1 -- inside curve, N->E"
-            + "\nZESS 0x311213 -- inside curve, E->S"
-            + "\nZSWW 0x1D2F3F -- inside curve, S->W"
-            + "\nZWNN 0xDFFEFD -- inside curve, W->N"
-            + "\nZNWW 0xFCCDCF -- outside curve, N->W"
-            + "\nZENN 0xC1D4F4 -- outside curve, E->N"
-            + "\nZSEE 0x144341 -- outside curve, S->E"
-            + "\nZWSS 0x4F3C1C -- outside curve, W->S";
-
     final int[] TinyBits = {//    *       *     * *     * *         *   * * *     * *   * * *
             0x25552, 0x22227,  //  *   *     *         *       *   *   *   *       *           *
             0x61247, 0x61216,  //  *   *     *       *       *     *   *   * *     * *       *
@@ -183,14 +159,20 @@ public class TrakSim {
             //    *       * *   *   *   *  * *       *    *   *   *        *
             0x34216, 0x699996,  //  *   *       *   *     * *  *           *  *   *   *      *
             2, 0x00700};  //    *     * *     *       *  * * *   * *      *   *    *   *
-
+    // + " 60     55 78 274^172 36~16=16 -- BlueCar front\n"
+    // + " 32+45  54 157 190^2  36~17=16 -- BlueCar right-front\n"
+    // + " 60+90  54 155 352^114 36~18=16 -- BlueCar right\n"
+    // + " 32+135 54 157 352^58 36~19=16 -- BlueCar right-back\n"
+    // + " 60+180 55 78 190^172 36~20=16 -- BlueCar back\n"
+    // + " 32+225 54 157 190^58 36~21=16 -- BlueCar left-back\n"
+    // + " 60+270 54 155 190^114 36~22=16 -- BlueCar left\n"
+    // + " 0      54 157 352^2  36~23=16 -- BlueCar left-front";
     private final int[] Grid_Locns = {6, 12, 16, 18, 26, 29, // (GridLocT) block index
             0, 16, ImHaf - 40, ImHaf - 2, ImHi - DrawDash, ImHi,  // vert div'ns
             0, 20, ImWi - 20, ImWi, 0, ImWi,  // top horz divs, (no gas)
             0, ImWi / 7, ImWi * 2 / 7, ImWi * 3 / 7, ImWi * 4 / 7, ImWi * 5 / 7, ImWi * 6 / 7, ImWi, // mid
             0, 20, ImWi, // ImWi/4, ImWi/2, ImWi*3/4, ImWi, // no gas posns (obsolete)
             0, 20, ImMid, ImWi - 20, ImWi};                   // bottom horz div'ns
-
     private final int[] TapedWheel = {-2 * 65536 + 0 * 256 + 12,         // 0..0,
             2 * 65536 + 1 * 256 + 17, 5 * 65536 + 3 * 256 + 22, 9 * 65536 + 6 * 256 + 28,       // 1..3,
             12 * 65536 + 10 * 256 + 34, 15 * 65536 + 15 * 256 + 41, 18 * 65536 + 22 * 256 + 48, // 4..6,
@@ -208,52 +190,11 @@ public class TrakSim {
             0x4, 0xE, 0x1F, 0x3E, 0x7C, 0xF8, 0xF0, 0x60, 0x20, 0,     // 9 @73/25
             0x1, 0x3, 0x7, 0xF, 0x1F, 0x1E, 0xC, 0x4, 0,             // 10 @83/28
             1, 3, 3, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // lsb: scrn botm  // 11 @92/33;  [12 @97/38]
+    private int Left_X, Rite_X, PreViewLoc, PreViewAim;
+    private SimHookBase SerialCalls = null;
 
-    /**
-     * Gets a pointer to the current image TrakSim is drawing on.
-     * <p>
-     * TrakSim maintains its own integer array to be used as a screen buffer,
-     * but a client can "borrow" TrakSim's drawing tools by saving the screen
-     * buffer, then restoring it when done.
-     *
-     * @return The current screen buffer
-     */
-    public int[] GetMyScreenAry() {
-        return myScreen;
-    } // so to trade out multiple..
-
-    /**
-     * Gets the size of the current image TrakSim is drawing on.
-     * <p>
-     * TrakSim maintains its own integer array to be used as a screen buffer,
-     * but a client can "borrow" TrakSim's drawing tools by saving the screen
-     * buffer, then restoring it when done.
-     *
-     * @return The height and width of screen buffer packed into an integer
-     */
-    public int GetMyScreenDims() {
-        return (SceneTall << 16) + SceneWide;
-    }
-
-    /**
-     * Gets the current frame count. TrakSim increases this number each time
-     * some data changes and it is redrawn. Screen buffers requested between
-     * changes do not increase the frame count.
-     *
-     * @return The current frame count
-     */
-    public int GetFrameNo() {
-        return FrameNo;
-    }
-
-    /**
-     * Gets the width of the image file (if loaded), or else =0. Use this
-     * to convert pixel row & column into position for SeeOnScrnPaint
-     *
-     * @return The image width
-     */
-    public int GetImgWide() {
-        return ImageWide;
+    public TrakSim() {
+        StartPatty("TrakSimCons");
     }
 
     private static double Cast_I2F(int whom) {
@@ -1946,6 +1887,53 @@ public class TrakSim {
         } //~if
         return aim;
     } //~MidAngle
+
+    /**
+     * Gets a pointer to the current image TrakSim is drawing on.
+     * <p>
+     * TrakSim maintains its own integer array to be used as a screen buffer,
+     * but a client can "borrow" TrakSim's drawing tools by saving the screen
+     * buffer, then restoring it when done.
+     *
+     * @return The current screen buffer
+     */
+    public int[] GetMyScreenAry() {
+        return myScreen;
+    } // so to trade out multiple..
+
+    /**
+     * Gets the size of the current image TrakSim is drawing on.
+     * <p>
+     * TrakSim maintains its own integer array to be used as a screen buffer,
+     * but a client can "borrow" TrakSim's drawing tools by saving the screen
+     * buffer, then restoring it when done.
+     *
+     * @return The height and width of screen buffer packed into an integer
+     */
+    public int GetMyScreenDims() {
+        return (SceneTall << 16) + SceneWide;
+    }
+
+    /**
+     * Gets the current frame count. TrakSim increases this number each time
+     * some data changes and it is redrawn. Screen buffers requested between
+     * changes do not increase the frame count.
+     *
+     * @return The current frame count
+     */
+    public int GetFrameNo() {
+        return FrameNo;
+    }
+
+    /**
+     * Gets the width of the image file (if loaded), or else =0. Use this
+     * to convert pixel row & column into position for SeeOnScrnPaint
+     *
+     * @return The image width
+     */
+    public int GetImgWide() {
+        return ImageWide;
+    }
 
     /**
      * Sets the position and direction of the simulated car.
@@ -4981,12 +4969,6 @@ public class TrakSim {
                 (((int) msg[2]) << 7) | ((int) msg[1]) & 0x7F);
     } //~GotBytes
 
-    public class SimHookX extends SimHookBase {
-        public void SendBytes(byte[] msg, int lxx) {
-            GotBytes(msg, lxx);
-        }
-    } //~SimHookX
-
     private int Color4ix(int whom) { // only frm InitInd
         int why = whom & 15, info = GroundsColors;
         if (whom > 1) {        // unpack grounds colors from single int..
@@ -5495,7 +5477,9 @@ public class TrakSim {
         nClients++;
     } //~StartPatty
 
-    public TrakSim() {
-        StartPatty("TrakSimCons");
-    }
+    public class SimHookX extends SimHookBase {
+        public void SendBytes(byte[] msg, int lxx) {
+            GotBytes(msg, lxx);
+        }
+    } //~SimHookX
 } //~TrakSim (apw3) (TS) (PA)

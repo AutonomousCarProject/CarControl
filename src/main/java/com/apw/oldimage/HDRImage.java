@@ -1,43 +1,36 @@
 package com.apw.oldimage;
 
-import com.apw.fly2cam.FlyCamera;
 import com.apw.fly2cam.OldFlyCamera;
 import com.apw.oldglobal.Constant;
 
 import java.util.Arrays;
 
 import static com.apw.oldimage.Pixel.*;
+
 /**
  * Image class for HDR images, handles the sequence of four images sent by the camera using HDR
  */
 
 public class HDRImage implements IImage {
-    public int height;
-    public int width;
-
-    public int frameRate = 4;
-    private OldFlyCamera flyCam = new OldFlyCamera();
-
-    private short[] camBytes;
-    private int[][][] images;
-    private IPixel[][] out;
-
-    private int tile;
-
-    private int autoCount = 0;
-    private static int AUTO_FREQ = 15;
-
     //hehe
     private static final int windowSize = 3;
-    private int[][][] justOnce;
-    private int[][] set = new int[3][windowSize * windowSize];
-
     private static final int WHITE_BAL_ITR_COUNT = 6;
     private static final int PIX_INC = 10;
-
+    private static int AUTO_FREQ = 15;
     private final float greyRatio = Constant.GREY_RATIO;
     private final int blackRange = Constant.BLACK_RANGE * 3;
     private final int whiteRange = Constant.WHITE_RANGE * 3;
+    public int height;
+    public int width;
+    public int frameRate = 4;
+    private OldFlyCamera flyCam = new OldFlyCamera();
+    private short[] camBytes;
+    private int[][][] images;
+    private IPixel[][] out;
+    private int tile;
+    private int autoCount = 0;
+    private int[][][] justOnce;
+    private int[][] set = new int[3][windowSize * windowSize];
 
     public HDRImage(int exposure, int shutter, int gain) {
         flyCam.Connect(frameRate, exposure, shutter, gain);
@@ -56,6 +49,20 @@ public class HDRImage implements IImage {
         tile = 1;
         //auto white balance such that our greys are maximized at at stared
         //autoWhiteBalance();
+    }
+
+    private static int cheapSaturationTotal(short[] camBytes, int width, int height, int pixInc) {
+        int ret = 0;
+        for (int i = 0; i < height; i += pixInc) {
+            for (int j = 0; j < width; j += pixInc) {
+                final int pos = j * 2 + i * width * 4;
+                final int r = (camBytes[pos] & 0xffff) >> 4;
+                final int g = (camBytes[pos + 1] & 0xffff) >> 4;
+                final int b = (camBytes[pos + 1 + width * 2] & 0xffff) >> 4;
+                ret += Math.max(r, Math.max(g, b)) - Math.min(r, Math.min(g, b));
+            }
+        }
+        return ret;
     }
 
     @Override
@@ -375,7 +382,6 @@ public class HDRImage implements IImage {
 
     }
 
-
     private void autoWhiteBalance() {
         int redBal = 512;
         int blueBal = 512;
@@ -424,20 +430,6 @@ public class HDRImage implements IImage {
         }
         //do the thing
         flyCam.SafeWriteRegister(0x80C, (1 << 25) | redBal | (blueBal << 12), "white balance write failed");
-    }
-
-    private static int cheapSaturationTotal(short[] camBytes, int width, int height, int pixInc) {
-        int ret = 0;
-        for (int i = 0; i < height; i += pixInc) {
-            for (int j = 0; j < width; j += pixInc) {
-                final int pos = j * 2 + i * width * 4;
-                final int r = (camBytes[pos] & 0xffff) >> 4;
-                final int g = (camBytes[pos + 1] & 0xffff) >> 4;
-                final int b = (camBytes[pos + 1 + width * 2] & 0xffff) >> 4;
-                ret += Math.max(r, Math.max(g, b)) - Math.min(r, Math.min(g, b));
-            }
-        }
-        return ret;
     }
 
 	/*

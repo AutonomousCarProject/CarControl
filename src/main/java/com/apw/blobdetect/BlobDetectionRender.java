@@ -1,8 +1,5 @@
 package com.apw.blobdetect;
 
-import java.io.File;
-import java.util.List;
-
 import com.apw.blobfilter.BlobFilter;
 import com.apw.blobtrack.MovingBlob;
 import com.apw.blobtrack.MovingBlobDetection;
@@ -18,39 +15,57 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.stage.Stage;
 
-public class BlobDetectionRender extends Application
-{
+import java.io.File;
+import java.util.List;
+
+public class BlobDetectionRender extends Application {
     boolean drawBlobs = true; // boolean for whether or not we draw blobs in the render class
     boolean filter = true; // enables or disables the blob filter
     boolean posterize = false; // enables or disables posterization
- 
 
-    public static void main(String... args)
-    {
+
+    public static void main(String... args) {
         launch(args);
     }
 
+    private static Paint getPaint(IPixel p) {
+        switch (p.getColor()) {
+            case 0:
+                return (Color.RED);
+            case 1:
+                return (Color.LIME);
+            case 2:
+                return (Color.BLUE);
+            case 3:
+                return (Color.GRAY);
+            case 4:
+                return (Color.BLACK);
+            case 5:
+                return (Color.WHITE);
+            default:
+                throw new IllegalStateException("Invalid color code " + p.getColor() + ".");
+        }
+    }
+
     @Override
-    public void start(Stage primaryStage) throws Exception
-    {
+    public void start(Stage primaryStage) throws Exception {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Log File");
         fileChooser.setInitialDirectory(new File("."));
-        
+
         fileChooser.setSelectedExtensionFilter(new ExtensionFilter("Bayer-8 Encoded Raw Video", ".By8"));
         File file = fileChooser.showOpenDialog(primaryStage);
 
         BlobDetection blobDetection = new BlobDetection();
         MovingBlobDetection movingBlobDetection = new MovingBlobDetection();
         BlobFilter blobFilter = new BlobFilter();
-        
-        // IImage image = new JpgImage("src/testImage1.png");
-        IImage image = file == null ? new Image() : new FileImage(file.getPath(), true);
-        
-        
+
+        IImage image = new JpgImage("src/testImage1.png");
+        //IImage image = file == null ? new Image();
+
 
         //IImage -image = new JpgImage("src/testImage1.png");
         //IImage image = new Image(0, 50, 0);
@@ -58,8 +73,7 @@ public class BlobDetectionRender extends Application
         IPixel[][] pixels = image.getImage();
         final int scale = 2;
 
-        if (pixels.length == 0)
-        {
+        if (pixels.length == 0) {
             System.err.println("Please plug in the camera.");
             System.exit(1);
         }
@@ -71,65 +85,58 @@ public class BlobDetectionRender extends Application
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
         image.setAutoFreq(15);
-        
+
 
         AnimationTimer timer = new AnimationTimer() {
-        	@Override
-        	public void handle(long time)
-        	{
+            @Override
+            public void handle(long time) {
         		/*
         		if(lastTime != -1)
         		{
         			cumulativeTime += (time - lastTime);
         		}
-        		
+
         		lastTime = time;
-        		
+
         		if(++currentFrame != framesPerCall && image instanceof FileImage)
         		{
         		    return;
         		}
-        		
+
         		currentFrame = 0;
-        		
+
         		if(cumulativeTime >= calTime)
         		{
         			cumulativeTime = 0;
         			image.autoColor();
         		}
         		*/
-        		
-		        image.readCam();
-		        IPixel[][] pixels = image.getImage();
-		
-		        final int width = pixels[0].length;
-		        final int height = pixels.length;
-		
-		        final float blockedOutArea = (0);
-		        for (int i = 0; i < width; i++)
-		        {
-		            for (int j = 0; j < height; j++)
-		            {
-		                if (j < (height * blockedOutArea))
-		                {
-		                    gc.setFill(Color.RED);
-		                    pixels[j][i] = new Pixel((short) 255, (short) 0, (short) 0);
-		                }
-		                else
-		                {
-		                    //@formatter:off
 
-		                    IPixel p = pixels[j][i];
-		                    Paint fill = Color.rgb(p.getRed(), p.getGreen(), p.getBlue());
-		                    
-		                    if(posterize)
-		                    {
-		                    	fill = getPaint(p);	
-		                    }
-		                    
-		                    gc.setFill(fill);
-		                    
-		                    //@formatter:on
+                image.readCam();
+                IPixel[][] pixels = image.getImage();
+
+                final int width = pixels[0].length;
+                final int height = pixels.length;
+
+                final float blockedOutArea = (0);
+                for (int i = 0; i < width; i++) {
+                    for (int j = 0; j < height; j++) {
+                        if (j < (height * blockedOutArea)) {
+                            gc.setFill(Color.RED);
+                            pixels[j][i] = new Pixel((short) 255, (short) 0, (short) 0);
+                        } else {
+                            //@formatter:off
+
+                            IPixel p = pixels[j][i];
+                            Paint fill = Color.rgb(p.getRed(), p.getGreen(), p.getBlue());
+
+                            if (posterize) {
+                                fill = getPaint(p);
+                            }
+
+                            gc.setFill(fill);
+
+                            //@formatter:on
                         }
 
                         gc.fillRect(i * scale, j * scale, scale, scale);
@@ -143,26 +150,19 @@ public class BlobDetectionRender extends Application
                 List<MovingBlob> funifiedBlobs = blobFilter.filterUnifiedBlobs(unifiedBlobs);
 
 
-                
                 List<MovingBlob> filteredBlobs = blobFilter.filterMovingBlobs(movingBlobDetection.getUnifiedBlobs(blobFilter.filterMovingBlobs(movingBlobs)));
 
 
                 gc.setStroke(Color.DARKGOLDENROD);
                 gc.setLineWidth(4);
 
-                if (drawBlobs)
-                {
-                    if (filter)
-                    {
-                        for (Blob blob : funifiedBlobs)
-                        {
+                if (drawBlobs) {
+                    if (filter) {
+                        for (Blob blob : funifiedBlobs) {
                             gc.strokeRect(blob.x * scale, blob.y * scale, blob.width * scale, blob.height * scale);
                         }
-                    }
-                    else
-                    {
-                        for (Blob blob : unifiedBlobs)
-                        {
+                    } else {
+                        for (Blob blob : unifiedBlobs) {
                             gc.strokeRect(blob.x * scale, blob.y * scale, blob.width * scale, blob.height * scale);
                         }
                     }
@@ -180,13 +180,10 @@ public class BlobDetectionRender extends Application
         Scene myScene = new Scene(rootNode, width * scale, height * scale);
         primaryStage.setScene(myScene);
 
-        primaryStage.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>()
-        {
+        primaryStage.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
             @Override
-            public void handle(KeyEvent arg0)
-            {
-                switch (arg0.getCode())
-                {
+            public void handle(KeyEvent arg0) {
+                switch (arg0.getCode()) {
                     case P:
                         posterize = !posterize;
                         break;
@@ -206,34 +203,13 @@ public class BlobDetectionRender extends Application
                 }
             }
         });
-        
-        primaryStage.setOnCloseRequest(event -> 
+
+        primaryStage.setOnCloseRequest(event ->
         {
             image.finish();
             System.out.println("image finished");
         });
-        
-        primaryStage.show();
-    }
 
-    private static Paint getPaint(IPixel p)
-    {
-        switch (p.getColor())
-        {
-            case 0:
-                return (Color.RED);
-            case 1:
-                return (Color.LIME);
-            case 2:
-                return (Color.BLUE);
-            case 3:
-                return (Color.GRAY);
-            case 4:
-                return (Color.BLACK);
-            case 5:
-                return (Color.WHITE);
-            default:
-                throw new IllegalStateException("Invalid color code " + p.getColor() + ".");
-        }
+        primaryStage.show();
     }
 }
