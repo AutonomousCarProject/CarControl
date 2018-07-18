@@ -30,12 +30,12 @@ public class DriverCons { // TrakSim constant parameters
   public static final boolean // options & diagnostic switches..
     D_LiveCam = false,       // F: omit connecting to FlyCamera
     D_StartLive = false,    // T: start in live camera if possible
-    D_FixedSpeed = false,    // ignore speed control, assume fMinSpeed
+    D_FixedSpeed = true,    // ignore speed control, assume fMinSpeed
     D_StayInTrack = true,   // ignore steering control, stay centered in track
     D_ShoTrkTstPts = false, // T: show test points used to calc StayInTrack
-    D_ShoClikGrid = false,  // T: to see where to click to steer/accelerate
-    D_ShowMap = true,       // T: show the map next to the scene
-    D_DoCloseUp = true,     // T: show close-up map if there is room
+    D_ShoClikGrid = true,  // F: to see where to click to steer/accelerate
+    D_ShowMap = false,       // T: show the map next to the scene
+    D_DoCloseUp = false,     // T: show close-up map if there is room
     D_RampServos = false,   // T: servos take time to arrive at setting
     D_TrakNoPix = false,    // T: draw track only, omit artifacts & trees
     D_UseTexTrak = true,    // T: use text file to build track to drive
@@ -55,7 +55,7 @@ public class DriverCons { // TrakSim constant parameters
       D_ServoMsgTL = 40*0x10001, D_ServoMsgSiz = 40*0x10000+80, // posn on screen
     D_ImHi = 480, D_ImWi = 640, // Camera image (and display window) size
     D_HalfTall = 100, D_HalfMap = 128,  // 2x2 grid map size (in 2m units)
-    D_DrawDash = 12,                    // dashboard height at bottom of image
+    D_DrawDash = 0,                    // dashboard height at bottom of image
     D_SteerServo = 9, D_GasServo = 10,  // FakeArduino output pins for servos
     D_MinESCact = 10, D_MaxESCact = 22, // active range of ESC, in steps +90
     D_LeftSteer = 33, D_RiteSteer = 44, // (measured) full range (33,44)

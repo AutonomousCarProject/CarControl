@@ -587,7 +587,7 @@ public class DrDemo extends JFrame implements MouseListener {
         	TestServos(); // (replace this with your own code)
 
         if (CanDraw) {
-          DrawDemo();
+          //DrawDemo();
           if (CameraView) theSim.DrawSteerWheel(SteerDegs,true,true);} //~if
         DidFrame = fno;
         ///� if (!CameraView) if (StartYourEngines>0) {

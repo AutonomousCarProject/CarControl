@@ -1,4 +1,4 @@
-package imagemanagement;
+package ImageManagement;
 
 import java.util.Date;
 import java.util.Timer;
@@ -42,6 +42,17 @@ public class ImagePicker extends TimerTask {
 	
 	int getCols() {
 		return ncols;
+	}
+	public int getNrows(){
+		return nrows;
+	}
+
+	public int getNcols(){
+		return ncols;
+	}
+
+	public byte[] getPixels() {
+		return pixels;
 	}
 
 	@Override
