@@ -731,11 +731,9 @@ public class DrDemo extends JFrame implements MouseListener,KeyListener {
 		if(e.getKeyCode() == KeyEvent.VK_DOWN)
 			manualSpeed -= 1;
 		if(e.getKeyCode() == KeyEvent.VK_P){
-			AxLR8(false, Constants.STOPSIGN_DRIFT_SPEED);
 			speedControl.setStoppingAtSign();
 		}
 		if(e.getKeyCode() == KeyEvent.VK_O){
-			AxLR8(false, Constants.STOPLIGHT_DRIFT_SPEED);
 			speedControl.setStoppingAtLight();
 		}
 		if(e.getKeyCode() == KeyEvent.VK_I){

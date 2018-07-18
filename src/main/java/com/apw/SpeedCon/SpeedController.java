@@ -1,5 +1,7 @@
 package com.apw.SpeedCon;
 
+import java.util.*;
+import com.apw.blobtrack.*;
 
 
 public class SpeedController {
@@ -26,6 +28,16 @@ public class SpeedController {
 	public void onUpdate(int gasAmount, int steerDegs, int manualSpeed){
 		this.calculateEstimatedSpeed(gasAmount);
 		this.calculateDesiredSpeed(steerDegs, manualSpeed);
+		
+		List<MovingBlob> blobs = new LinkedList<>();
+		for(MovingBlob i : blobs){
+			if(detectStopSign(i)){
+				setStoppingAtSign();
+			}
+			else if(detectStopLight(i)){
+				setStoppingAtLight();
+			}
+		}
 	}
 	
 	//This figures out the speed that we want to be traveling at
@@ -203,11 +215,5 @@ public class SpeedController {
 	}
 	
 	
-	public boolean detectStopSign() {
-		return true;
-	}
-	
-	public boolean detectStopLight() {
-		return true;
-	}
+	public bool is
 }
