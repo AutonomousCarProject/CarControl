@@ -620,7 +620,7 @@ public class DrDemo extends JFrame implements MouseListener {
     
     for (int i = 0; i<hi.length; i++) {
     		if (DriverCons.D_DrawPredicted == true) {
-    			graf.setColor(Color.ORANGE);
+    			graf.setColor(Color.BLUE);
     			graf.fillRect(hi[i].x, hi[i].y + edges.top, 5, 5);
     		}
     		if (DriverCons.D_DrawOnSides == true) {

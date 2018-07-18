@@ -3,10 +3,7 @@ package Steering;
 import apw3.DriverCons;
 
 public class Steering {
-	public Point[] leftPoints = new Point[32];
-	public Point[] rightPoints = new Point[32];
-	
-	public Point[] midPoints = new Point[32];
+
 	
 	public int startingPoint = 0;
 	
@@ -18,10 +15,13 @@ public class Steering {
 	private int screenWidth = 912;
 	private int cameraWidth = 640;
 	private int screenHeight = DriverCons.D_ImHi;
-	private Point steerPoint = new Point(0, 0);
+	public Point steerPoint = new Point(0, 0);
 
 	public Point[] leadingMidPoints = new Point[startingHeight + heightOfArea];
+	public Point[] leftPoints = new Point[heightOfArea];
+	public Point[] rightPoints = new Point[heightOfArea];
 	
+	public Point[] midPoints = new Point[heightOfArea];
 	Point origin = new Point(cameraWidth/2, screenHeight);
 	
 	Boolean found = false;
@@ -29,7 +29,7 @@ public class Steering {
 	Boolean rightSideFound = false;
 
 	public Steering() {
-		for (int i = 0; i<32; i++) {
+		for (int i = 0; i<heightOfArea; i++) {
 			leftPoints[i] = new Point(0, 0);
 			rightPoints[i] = new Point(0, 0);
 			midPoints[i] = new Point(0, 0);
@@ -46,7 +46,9 @@ public class Steering {
 		startingPoint = 0;
 		
 		//first, find where road starts on both sides
-		for (int i = screenHeight - 1; i>startingHeight + heightOfArea; i--) {
+		leftSideFound = false;
+		rightSideFound = false;
+		for (int i = screenHeight - 22; i>startingHeight + heightOfArea; i--) {
 			
 			for (int j = roadMiddle/2; j>=0; j--) {
 				if (pixels[(screenWidth * (i)) + j] == 16777215) {
@@ -94,7 +96,7 @@ public class Steering {
 			count++;
 			roadMiddle = leftSideTemp + rightSideTemp;
 		}
-		
+		System.out.println("\n\n\n" + count + "\n\n\n");
 		count = 0;
 		for (int i = startingHeight + heightOfArea; i>startingHeight; i--) {
 			//center to left
@@ -148,16 +150,26 @@ public class Steering {
 	public void averageMidpoints() {
         double tempY = 0;
         double tempX = 0;
+        int tempCount = 0;
 
         // Sum the x's and the y's
-	    for (Point point: midPoints) {
+	    for (int i = 0; i<startingPoint - (startingHeight + heightOfArea); i++) {
+	    		Point point = new Point (leadingMidPoints[i].x, leadingMidPoints[i].y);
             tempX += point.x;
             tempY += point.y;
+            tempCount++;
         }
+	    if (tempCount == 0) {
+		    for (int i = 0; i<midPoints.length; i++) {
+	    			Point point = new Point (midPoints[i].x, midPoints[i].y);
+	    			tempX += point.x;
+	    			tempY += point.y;
+	    			tempCount++;
+		    }
+	    }
 
-        // assign the steerPoint to the average x's and y's
-        steerPoint.x = (int)(tempX / midPoints.length);
-	    steerPoint.y = (int)(tempY / midPoints.length);
+        steerPoint.x = (int)(tempX / tempCount);
+	    steerPoint.y = (int)(tempY / tempCount);
     }
 
 
@@ -165,10 +177,15 @@ public class Steering {
 	    int xOffset = origin.x - steerPoint.x;
 	    int yOffset = Math.abs(origin.y - steerPoint.y);
 
-	    Point[] tempMidPoints = midPoints;
 	    int tempDeg = (int)((Math.atan2(-xOffset, yOffset)) * (180 / Math.PI));
+	    
 
 	    return (int)((Math.atan2(-xOffset, yOffset)) * (180 / Math.PI));
+    }
+    
+    //placeholder
+    public int getEstimatedSpeed() {
+    		return 5;
     }
 }
 
