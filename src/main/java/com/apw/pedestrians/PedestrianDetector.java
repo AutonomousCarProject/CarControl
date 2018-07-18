@@ -8,6 +8,7 @@ import com.apw.pedestrians.blobfilter.IMovingBlobReduction;
 import com.apw.pedestrians.blobtrack.IMovingBlobDetection;
 import com.apw.pedestrians.blobtrack.MovingBlob;
 import com.apw.pedestrians.blobtrack.MovingBlobDetection;
+import com.apw.pedestrians.image.Color;
 import com.apw.pedestrians.image.IPixel;
 import com.apw.pedestrians.image.Pixel;
 
@@ -50,20 +51,6 @@ public class PedestrianDetector {
     }
 
     public IPixel getPixel(byte b) {
-        int i = b;
-        if(i == 3)
-        {
-            i = 5;
-        }
-        else if(i == 4)
-        {
-            i = 3;
-        }
-        else if(i == 5)
-        {
-            i = 4;
-        }
-
-        return new Pixel(i);
+        return new Pixel(Color.values()[b]);
     }
 }

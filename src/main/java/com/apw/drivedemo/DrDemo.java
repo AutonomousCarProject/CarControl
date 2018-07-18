@@ -649,10 +649,10 @@ public class DrDemo extends JFrame implements MouseListener {
                     if (CameraView) theSim.DrawSteerWheel(SteerDegs, true, true);
                 } //~if
                 DidFrame = fno;
-                ///¥ if (!CameraView) if (StartYourEngines>0) {
-                ///¥   theSim.SimStep(0);
-                ///¥   StartYourEngines = 0;
-                ///¥   AxLR8(true,0);} //~if
+                /// if (!CameraView) if (StartYourEngines>0) {
+                ///   theSim.SimStep(0);
+                ///   StartYourEngines = 0;
+                ///   AxLR8(true,0);} //~if
                 if (DrawStuff) if (CanDraw) if (DimSave > 0) if (SaveScrn != null)
                     theSim.SetMyScreen(SaveScrn, DimSave >> 16, DimSave & 0xFFFF, 1);
                 theImag = Int2BufImg(thePixels, ScrWi, ScrHi);
