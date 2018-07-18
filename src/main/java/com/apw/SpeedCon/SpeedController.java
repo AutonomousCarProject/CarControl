@@ -31,10 +31,10 @@ public class SpeedController {
 		
 		List<MovingBlob> blobs = new LinkedList<>();
 		for(MovingBlob i : blobs){
-			if(detectStopSign(i)){
+			if(detectStopLight(i)){
 				setStoppingAtSign();
 			}
-			else if(detectStopLight(i)){
+			else if(detectStopSign(i)){
 				setStoppingAtLight();
 			}
 		}
@@ -214,11 +214,11 @@ public class SpeedController {
 		return (int)desiredSpeed;
 	}
 	
-	public boolean detectStopSign() {
+	public boolean detectStopSign(MovingBlob blob) {
 		return true;
 	}
 	
-	public boolean detectStopLight() {
+	public boolean detectStopLight(MovingBlob blob) {
 		return true;
 	}
 }
