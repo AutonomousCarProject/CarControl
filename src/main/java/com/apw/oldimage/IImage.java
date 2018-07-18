@@ -3,12 +3,12 @@ package com.apw.oldimage;
 public interface IImage {
     IPixel[][] getImage();
 
+    default void setImage(IPixel[][] image) {
+    }
+
     void readCam();
 
     void finish();
-
-    default void setImage(IPixel[][] image) {
-    }
 
     default int getFrameNo() {
         return 0;

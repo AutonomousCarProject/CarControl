@@ -7,12 +7,11 @@ import java.io.IOException;
 
 //Defines image as an 2d array of pixels
 public class JpgImage implements IImage {
-    BufferedImage img = null;
-    private IPixel[][] image;
-
     private static final int rMask = 0b00000000_11111111_00000000_00000000;
     private static final int gMask = 0b00000000_00000000_11111111_00000000;
     private static final int bMask = 0b00000000_00000000_00000000_11111111;
+    BufferedImage img = null;
+    private IPixel[][] image;
 
     public JpgImage(String fileName) {
         try {
@@ -27,6 +26,12 @@ public class JpgImage implements IImage {
     @Override
     public IPixel[][] getImage() {
         return image;
+    }
+
+    @Override
+    public void setImage(IPixel[][] image) {
+        // TODO Auto-generated method stub
+
     }
 
     // gets a single frame
@@ -60,12 +65,6 @@ public class JpgImage implements IImage {
 
     @Override
     public void setAutoFreq(int autoFreq) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void setImage(IPixel[][] image) {
         // TODO Auto-generated method stub
 
     }

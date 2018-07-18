@@ -1,15 +1,13 @@
 package com.apw.blobdetect;
 
+import com.apw.oldimage.IImage;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import com.apw.oldimage.IImage;
-
-public class TestBlobDetection implements IBlobDetection
-{
+public class TestBlobDetection implements IBlobDetection {
     @Override
-    public List<Blob> getBlobs(IImage image)
-    {
+    public List<Blob> getBlobs(IImage image) {
         List<Blob> blobs = new ArrayList<>();
 
         blobs.add(new Blob(120, 121, 60, 60, new TestPixel(0)));

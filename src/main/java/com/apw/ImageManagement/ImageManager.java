@@ -6,8 +6,8 @@ import com.apw.apw3.SimCamera;
 
 public class ImageManager {
 
-    private ImagePicker picker;
     int nrows, ncols;
+    private ImagePicker picker;
     private byte simple[];
 
     /*Main*/

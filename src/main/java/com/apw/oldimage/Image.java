@@ -1,24 +1,21 @@
 package com.apw.oldimage;
 
 //import group1.fly0cam.FlyCamera;
+
 import com.apw.fly2cam.OldFlyCamera;
 import com.apw.oldglobal.Constant;
 
 //Defines image as an 2d array of pixels
 public class Image implements IImage {
-    public int height;
-    public int width;
-
     private final int frameRate = 3;
-
-    public OldFlyCamera flyCam = new OldFlyCamera();
     //parameters for the coloratiion of the image
     private final float greyRatio = Constant.GREY_RATIO;
     private final int blackRange = Constant.BLACK_RANGE;
     private final int whiteRange = Constant.WHITE_RANGE;
     private final int lightDark = Constant.LIGHT_DARK_THRESHOLD;
-
-
+    public int height;
+    public int width;
+    public OldFlyCamera flyCam = new OldFlyCamera();
     private int tile;
     private int autoCount = 0;
     private int autoFreq = 15;
@@ -28,6 +25,7 @@ public class Image implements IImage {
     private short[] camBytes;
     private byte[] tempBytes;
     private IPixel[][] image;
+    private int frameNo = 0;
 
     //default values for image
     public Image() {
@@ -59,6 +57,10 @@ public class Image implements IImage {
         return image;
     }
 
+    public void setImage(IPixel[][] i) {
+        image = i;
+    }
+
     // gets a single frame
     @Override
     public void readCam() {
@@ -86,11 +88,6 @@ public class Image implements IImage {
 
     public void finish() {
         flyCam.Finish();
-    }
-
-
-    public void setImage(IPixel[][] i) {
-        image = i;
     }
 
     //converts image from bytes to arrays of pixels
@@ -202,133 +199,6 @@ public class Image implements IImage {
         Pixel.whiteMargin = average2 + whiteRange;
         System.out.println("Variation: " + variation + " greyRatio: " + greyRatio);
         System.out.println("greyMargin: " + Pixel.greyMargin + " blackMargin: " + Pixel.blackMargin + " whiteMargin: " + Pixel.whiteMargin);
-
-    }
-
-
-    private void autoConvertWeighted() {
-
-        int average;    //0-255
-        int average2;   //0-765
-        int variation = 0;
-        final int divisor = (width * height);
-
-
-        //autoThreshold variable
-        int avg; //0-765
-        int r, b, g;
-        int lesserSum = 0;
-        int greaterSum = 0;
-        int lesserCount = 0;
-        int greaterCount = 0;
-        int lesserMean;
-        int greaterMean;
-
-        int pos = 0;
-        if (tile == 1) {
-            for (int i = 0; i < height; i++) {
-
-                for (int j = 0; j < width; j++) {
-
-                    image[i][j] = new Pixel((short) (camBytes[pos] & 255), (short) (camBytes[pos + 1] & 255), (short) (camBytes[pos + 1 + width * 2] & 255));
-                    pos += 2;
-
-                    r = image[i][j].getRed();
-                    b = image[i][j].getBlue();
-                    g = image[i][j].getGreen();
-
-                    avg = (r + b + g);
-
-                    if (avg < lightDark) {
-
-                        lesserSum += avg;
-                        lesserCount++;
-
-                    } else {
-
-                        greaterSum += avg;
-                        greaterCount++;
-
-                    }
-
-
-                }
-
-                pos += width << 1;
-
-            }
-
-
-        } else if (tile == 3) {
-            for (int i = 0; i < height; i++) {
-
-                for (int j = 0; j < width; j++) {
-
-                    image[i][j] = new Pixel((short) (camBytes[pos + width * 2] & 255), (short) (camBytes[pos] & 255), (short) (camBytes[pos + 1] & 255));
-                    pos += 2;
-
-                    r = image[i][j].getRed();
-                    b = image[i][j].getBlue();
-                    g = image[i][j].getGreen();
-
-                    avg = (r + b + g);
-
-                    if (avg < lightDark) {
-
-                        lesserSum += avg;
-                        lesserCount++;
-
-                    } else {
-
-                        greaterSum += avg;
-                        greaterCount++;
-
-                    }
-
-                }
-
-                pos += width << 1;
-
-            }
-
-
-        }
-
-        lesserMean = lesserSum / lesserCount;
-        greaterMean = greaterSum / greaterCount;
-
-        average2 = (lesserMean + greaterMean) >> 1;
-        average = average2 / 3;
-
-
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-
-                IPixel temp = image[i][j];
-                int rVar = temp.getRed() - average;
-                if (rVar < 0) {
-                    rVar = -rVar;
-                }
-
-                int gVar = temp.getGreen() - average;
-                if (gVar < 0) {
-                    gVar = -rVar;
-                }
-
-                int bVar = temp.getBlue() - average;
-                if (bVar < 0) {
-                    bVar = -bVar;
-                }
-
-                variation += rVar + gVar + bVar;
-            }
-
-        }
-
-        variation = variation / divisor;
-        Pixel.greyMargin = (int) (variation * greyRatio);
-        Pixel.blackMargin = average2 - blackRange;
-        Pixel.whiteMargin = average2 + whiteRange;
 
     }
 
@@ -469,7 +339,131 @@ public class Image implements IImage {
 
 //gets the current frame number and increases by 1 whenever queried
 
-    private int frameNo = 0;
+    private void autoConvertWeighted() {
+
+        int average;    //0-255
+        int average2;   //0-765
+        int variation = 0;
+        final int divisor = (width * height);
+
+
+        //autoThreshold variable
+        int avg; //0-765
+        int r, b, g;
+        int lesserSum = 0;
+        int greaterSum = 0;
+        int lesserCount = 0;
+        int greaterCount = 0;
+        int lesserMean;
+        int greaterMean;
+
+        int pos = 0;
+        if (tile == 1) {
+            for (int i = 0; i < height; i++) {
+
+                for (int j = 0; j < width; j++) {
+
+                    image[i][j] = new Pixel((short) (camBytes[pos] & 255), (short) (camBytes[pos + 1] & 255), (short) (camBytes[pos + 1 + width * 2] & 255));
+                    pos += 2;
+
+                    r = image[i][j].getRed();
+                    b = image[i][j].getBlue();
+                    g = image[i][j].getGreen();
+
+                    avg = (r + b + g);
+
+                    if (avg < lightDark) {
+
+                        lesserSum += avg;
+                        lesserCount++;
+
+                    } else {
+
+                        greaterSum += avg;
+                        greaterCount++;
+
+                    }
+
+
+                }
+
+                pos += width << 1;
+
+            }
+
+
+        } else if (tile == 3) {
+            for (int i = 0; i < height; i++) {
+
+                for (int j = 0; j < width; j++) {
+
+                    image[i][j] = new Pixel((short) (camBytes[pos + width * 2] & 255), (short) (camBytes[pos] & 255), (short) (camBytes[pos + 1] & 255));
+                    pos += 2;
+
+                    r = image[i][j].getRed();
+                    b = image[i][j].getBlue();
+                    g = image[i][j].getGreen();
+
+                    avg = (r + b + g);
+
+                    if (avg < lightDark) {
+
+                        lesserSum += avg;
+                        lesserCount++;
+
+                    } else {
+
+                        greaterSum += avg;
+                        greaterCount++;
+
+                    }
+
+                }
+
+                pos += width << 1;
+
+            }
+
+
+        }
+
+        lesserMean = lesserSum / lesserCount;
+        greaterMean = greaterSum / greaterCount;
+
+        average2 = (lesserMean + greaterMean) >> 1;
+        average = average2 / 3;
+
+
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+
+                IPixel temp = image[i][j];
+                int rVar = temp.getRed() - average;
+                if (rVar < 0) {
+                    rVar = -rVar;
+                }
+
+                int gVar = temp.getGreen() - average;
+                if (gVar < 0) {
+                    gVar = -rVar;
+                }
+
+                int bVar = temp.getBlue() - average;
+                if (bVar < 0) {
+                    bVar = -bVar;
+                }
+
+                variation += rVar + gVar + bVar;
+            }
+
+        }
+
+        variation = variation / divisor;
+        Pixel.greyMargin = (int) (variation * greyRatio);
+        Pixel.blackMargin = average2 - blackRange;
+        Pixel.whiteMargin = average2 + whiteRange;
+
+    }
 
     @Override
     public int getFrameNo() {

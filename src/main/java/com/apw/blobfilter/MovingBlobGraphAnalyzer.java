@@ -10,10 +10,8 @@ import com.apw.blobtrack.MovingBlob;
 import java.util.List;
 
 /**
- *
  * @author peter_000
  */
-public interface MovingBlobGraphAnalyzer 
-{
+public interface MovingBlobGraphAnalyzer {
     public List<MovingBlob> analyze(List<MovingBlob> blobsWithScores);
 }

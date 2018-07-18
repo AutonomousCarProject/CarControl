@@ -18,27 +18,13 @@ public class FlyCamera { // (in Java/fly2cam)
 
     // static {System.loadLibrary("FlyCamera");} // comment this line out if no DLLs
 
-    /**
-     * Start a new camera session with the specified frame rate.
-     *
-     * @param frameRate =4 for 30 fps, =3 for 15, =2 for 7.5 pfs
-     * @return True if success, false otherwise
-     */
-    public native boolean Connect(int frameRate); // required, sets rose,colz,tile
-
-    /**
-     * Gets one frame from the Chameleon3 or FireFly camera.
-     *
-     * @param pixels Fills this array with pixels in Bayer8 encoding
-     * @return True if success, false otherwise
-     */
-    public native boolean NextFrame(byte[] pixels); // fills pixels, false if cant
-
-    /**
-     * Terminate the session.
-     * Required by Flir/Pt.Grey drivers to prevent memory leaks.
-     */
-    public native void Finish(); // required at end to prevent memory leaks
+    public FlyCamera() { // (in Java/fly2cam)
+        FrameNo = 0;
+        rose = 0;
+        colz = 0;
+        tile = 0;
+        errn = 0;
+    }
 
     /**
      * Gets a text description of an error number.
@@ -114,6 +100,47 @@ public class FlyCamera { // (in Java/fly2cam)
         return "fc2RetrieveBuffer probably returned some format other than Bayer8";
     } //~ErrorNumberText
 
+    public static void main(String[] args) { // to test the interface (fly2cam)
+        int tall = 0, wide = 0, pix = -1;
+        byte[] buff;
+        FlyCamera hello = new FlyCamera();
+        if (hello.Connect(0)) tall = hello.Dimz();
+        wide = tall & 0xFFFF;
+        tall = tall >> 16;
+        if (tall > 0) if (wide > 0) { // we got reasonable image size, get one image..
+            buff = new byte[tall * wide * 4];
+            if (hello.NextFrame(buff)) // got an image, extract 1st pixel..
+                pix = (((int) buff[0]) << 24) | ((((int) buff[1]) & 255) << 16)
+                        | ((((int) buff[wide + wide]) & 255) << 8) | (((int) buff[wide + wide + 1]) & 255);
+            else pix = 0; // no image came
+            // set breakpoint here to look in the debugger, or else log pix
+            wide = pix;
+        } // otherwise Java complains that it's unused
+        hello.Finish();
+        pix = 0;
+    } //~main
+
+    /**
+     * Start a new camera session with the specified frame rate.
+     *
+     * @param frameRate =4 for 30 fps, =3 for 15, =2 for 7.5 pfs
+     * @return True if success, false otherwise
+     */
+    public native boolean Connect(int frameRate); // required, sets rose,colz,tile
+
+    /**
+     * Gets one frame from the Chameleon3 or FireFly camera.
+     *
+     * @param pixels Fills this array with pixels in Bayer8 encoding
+     * @return True if success, false otherwise
+     */
+    public native boolean NextFrame(byte[] pixels); // fills pixels, false if cant
+
+    /**
+     * Terminate the session.
+     * Required by Flir/Pt.Grey drivers to prevent memory leaks.
+     */
+    public native void Finish(); // required at end to prevent memory leaks
 
     /**
      * Gets the image size (rows and columns) for this camera.
@@ -144,33 +171,5 @@ public class FlyCamera { // (in Java/fly2cam)
 
     public String toString() { // (fly2cam)
         return "fly2cam.FlyCam " + errn + ": " + ErrorNumberText(errn);
-    }
-
-    public static void main(String[] args) { // to test the interface (fly2cam)
-        int tall = 0, wide = 0, pix = -1;
-        byte[] buff;
-        FlyCamera hello = new FlyCamera();
-        if (hello.Connect(0)) tall = hello.Dimz();
-        wide = tall & 0xFFFF;
-        tall = tall >> 16;
-        if (tall > 0) if (wide > 0) { // we got reasonable image size, get one image..
-            buff = new byte[tall * wide * 4];
-            if (hello.NextFrame(buff)) // got an image, extract 1st pixel..
-                pix = (((int) buff[0]) << 24) | ((((int) buff[1]) & 255) << 16)
-                        | ((((int) buff[wide + wide]) & 255) << 8) | (((int) buff[wide + wide + 1]) & 255);
-            else pix = 0; // no image came
-            // set breakpoint here to look in the debugger, or else log pix
-            wide = pix;
-        } // otherwise Java complains that it's unused
-        hello.Finish();
-        pix = 0;
-    } //~main
-
-    public FlyCamera() { // (in Java/fly2cam)
-        FrameNo = 0;
-        rose = 0;
-        colz = 0;
-        tile = 0;
-        errn = 0;
     }
 } //~FlyCamera (fly2cam) (F2)

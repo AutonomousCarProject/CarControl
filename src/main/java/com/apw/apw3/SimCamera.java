@@ -37,6 +37,18 @@ public class SimCamera extends FlyCamera {
 
     private TrakSim theSim = null;
 
+    public SimCamera() {
+        if (NoisyFaker) System.out.println(HandyOps.Dec2Log("apw3.SimCamera ", CamHi,
+                HandyOps.Dec2Log("/", CamWi, "")));
+        theSim = new TrakSim();
+        theSim.StartPatty("FlyCam");
+        rose = CamHi;
+        colz = CamWi;
+        tile = SimTile;
+        FrameNo = 0;
+        errn = 0;
+    }
+
     /**
      * Gets one frame from the (fake) camera by fetching it from TrakSim.
      *
@@ -61,6 +73,10 @@ public class SimCamera extends FlyCamera {
         tile = 0;
         FrameNo = 0;
     } //~Finish
+
+    // public static String ErrorNumberText(int errno) -> super
+    // public int Dimz() {return (rose<<16)+colz;} // access cam image size (SimCam)
+    // public int PixTile() {return tile;} // Bayer encoding, frex RG/GB =1, GB/RG =3
 
     /**
      * Start a new (fake) camera session with the specified frame rate.
@@ -93,10 +109,6 @@ public class SimCamera extends FlyCamera {
         return why == 0;
     } //~Connect
 
-    // public static String ErrorNumberText(int errno) -> super
-    // public int Dimz() {return (rose<<16)+colz;} // access cam image size (SimCam)
-    // public int PixTile() {return tile;} // Bayer encoding, frex RG/GB =1, GB/RG =3
-
     /**
      * Tells if this camera is live or fake.
      *
@@ -108,17 +120,5 @@ public class SimCamera extends FlyCamera {
 
     public String toString() { // (SimCam)
         return "apw3.SimCamera " + errn + ": " + ErrorNumberText(errn);
-    }
-
-    public SimCamera() {
-        if (NoisyFaker) System.out.println(HandyOps.Dec2Log("apw3.SimCamera ", CamHi,
-                HandyOps.Dec2Log("/", CamWi, "")));
-        theSim = new TrakSim();
-        theSim.StartPatty("FlyCam");
-        rose = CamHi;
-        colz = CamWi;
-        tile = SimTile;
-        FrameNo = 0;
-        errn = 0;
     }
 } //~SimCamera (apw3) (SC)

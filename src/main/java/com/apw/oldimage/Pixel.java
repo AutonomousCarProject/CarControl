@@ -1,27 +1,51 @@
 package com.apw.oldimage;
 
-import com.apw.oldimage.IPixel;
-
 //Defines basic implementation for pixel
 public class Pixel implements IPixel { // 0-765
+    public static int greyMargin = 60;
+    public static int blackMargin = 300;
+    public static int whiteMargin = 700; // 0-765
+    // white
     // YUV
     private short luma;
     private short saturation;
     private short color; // 0: red, 1: green, 2: blue, 3: grey, 4: black, 5:
-    // white
-
     // RGB Values 0-255
     private short red;
     private short green;
     private short blue;
 
-
-    public static int greyMargin = 60;
-    public static int blackMargin = 300;
-    public static int whiteMargin = 700; // 0-765
-
     public Pixel(int color) {
         this.setColor(color);
+    }
+
+    public Pixel(short red, short green, short blue) {
+        this.red = red;
+        this.green = green;
+        this.blue = blue;
+        simpleConvert();
+    }
+
+    public void setRGB(short red, short green, short blue) {
+        this.red = red;
+        this.green = green;
+        this.blue = blue;
+        simpleConvert();
+    }
+
+    @Override
+    public short getLuma() {
+        return luma;
+    }
+
+    @Override
+    public short getSaturation() {
+        return saturation;
+    }
+
+    @Override
+    public short getColor() {
+        return color;
     }
 
     public void setColor(int color) {
@@ -58,35 +82,6 @@ public class Pixel implements IPixel { // 0-765
                 this.blue = 255;
                 break;
         }
-    }
-
-    public Pixel(short red, short green, short blue) {
-        this.red = red;
-        this.green = green;
-        this.blue = blue;
-        simpleConvert();
-    }
-
-    public void setRGB(short red, short green, short blue) {
-        this.red = red;
-        this.green = green;
-        this.blue = blue;
-        simpleConvert();
-    }
-
-    @Override
-    public short getLuma() {
-        return luma;
-    }
-
-    @Override
-    public short getSaturation() {
-        return saturation;
-    }
-
-    @Override
-    public short getColor() {
-        return color;
     }
 
     @Override

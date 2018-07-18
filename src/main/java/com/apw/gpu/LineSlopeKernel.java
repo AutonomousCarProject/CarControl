@@ -5,34 +5,28 @@ import com.aparapi.Kernel;
 public class LineSlopeKernel extends Kernel {
 
 
-
-    LineSlopeKernel() {
-        KernelManager.AddKernel(KernelType.LINE_SLOPE_KERNAL, this);
-    }
-
     /**
      * vertical coordinate of any point along a line
      */
     private double Vat;
-
     /**
      * horizontal coordinate of any point along a line
      */
     private double Hat;
-
     /**
      * cos of c-wise angle from north
      */
     private double Vstp;
-
     /**
      * sin of c-wise angle from north
      */
     private double Hstp;
-
     private boolean logy;
-
     private String msg;
+
+    LineSlopeKernel() {
+        KernelManager.AddKernel(KernelType.LINE_SLOPE_KERNAL, this);
+    }
 
     @Override
     public void run() {
