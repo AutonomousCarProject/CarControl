@@ -148,15 +148,17 @@ public class Steering {
 	public void averageMidpoints() {
         double tempY = 0;
         double tempX = 0;
+        int counter = 0;
 
         // Sum the x's and the y's
-	    for (Point point: midPoints) {
-            tempX += point.x;
-            tempY += point.y;
+	    for (int idx = 0; idx < midPoints.length; idx++) {
+	    	counter  += (idx < midPoints.length / 3) ? 3 :  1;
+	    	tempX += (idx < midPoints.length / 3) ? midPoints[idx].x * 3 :  midPoints[idx].x;
+            tempY += midPoints[idx].y;
         }
 
         // assign the steerPoint to the average x's and y's
-        steerPoint.x = (int)(tempX / midPoints.length);
+        steerPoint.x = (int)(tempX / counter);
 	    steerPoint.y = (int)(tempY / midPoints.length);
     }
 
