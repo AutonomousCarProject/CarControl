@@ -19,11 +19,14 @@ public class KernelManager {
         kernel.dispose();
     }
 
-    private static HashMap<KernelType, Kernel> KernelList = new HashMap<>() {{
-        put(KernelType.LINE_SLOPE_KERNAL, new LineSlopeKernel());
-    }};
+    private static HashMap<KernelType, Kernel> KernelList = new HashMap<>();
 
-    public static class KernelNotFoundException extends Exception {
+    public static void AddKernel(KernelType type, Kernel kernel)
+    {
+        KernelList.put(type, kernel);
+    }
+
+    private static class KernelNotFoundException extends Exception {
         KernelNotFoundException(String message) {
             super(message);
         }

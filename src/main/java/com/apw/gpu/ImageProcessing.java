@@ -5,6 +5,7 @@ import com.aparapi.Range;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
+import java.util.Arrays;
 
 public class ImageProcessing {
     public static void main(String[] args) {
@@ -21,6 +22,7 @@ public class ImageProcessing {
 
         kernel.execute(range);
 
+        Arrays.stream(imageRgb).forEach(System.out::println);
         System.out.printf("Execution time = %sms%n", (int) kernel.getAccumulatedExecutionTime());
     }
 
