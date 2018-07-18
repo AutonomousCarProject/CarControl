@@ -1,5 +1,6 @@
 package com.apw.pedestrians.blobdetect;
 
+import com.apw.pedestrians.image.Color;
 import com.apw.pedestrians.image.IImage;
 import com.apw.pedestrians.image.IPixel;
 
@@ -123,7 +124,7 @@ public class BlobDetection implements IBlobDetection {
                     if (!added.contains(bip.id)) {
                         added.add(bip.id);
                         if (bip.width() >= 4 && bip.height() >= 4 && bip.width() < (pixels[0].length >> 1)
-                                && bip.height() < (pixels.length >> 1) && bip.color.getColor() != 3) {
+                                && bip.height() < (pixels.length >> 1) && bip.color.getColor() != Color.GREY) {
                             blobs.add(getBlob(bip));
                         }
                     }
