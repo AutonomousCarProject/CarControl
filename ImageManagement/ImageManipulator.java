@@ -3,7 +3,7 @@ package ImageManagement;
 public class ImageManipulator {
 
 	public static void convertToMonochromeRaster(byte[] bayer, byte[] mono, int nrows, int ncols) {
-<<<<<<< HEAD
+
 		for (int r = 0; r < nrows; r++) {
 			for (int c = 0; c < ncols; c++) {
 				
@@ -18,12 +18,7 @@ public class ImageManipulator {
 			}
 		}
 	}
-	
-	public static void convertToSimpleColorRaster(byte[] bayer, byte[] simple, int nrows, int ncols) {
-		
-=======
 
-	}
 	
 	public static void convertToSimpleColorRaster(byte[] bayer, byte[] simple, int nrows, int ncols) {
 		/*
@@ -61,7 +56,6 @@ public class ImageManipulator {
 				}
 			}
 		}
->>>>>>> 1b875f393ed0b51b09a4e6facc110eb840a60fb3
 	}
 	
 	public static void convertToRGBRaster(byte[] bayer, int[] rgb, int nrows, int ncols) {

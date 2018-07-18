@@ -7,8 +7,8 @@ import fly2cam.FlyCamera;
 public class ImageManager {
 	
 	private ImagePicker picker;
-<<<<<<< HEAD
 	private byte[] mono;
+	private byte simple[];
 	private int[] rgb;
 	int nrows, ncols;
 	
@@ -19,18 +19,9 @@ public class ImageManager {
 		this.ncols = picker.getCols();
 		mono = new byte[nrows * ncols];
 		rgb = new int[nrows * ncols];
-=======
-	int nrows, ncols;
-	private byte simple[];
-	
-	/*Main*/
-	public ImageManager(SimCamera trakcam) {
-		picker = new ImagePicker(trakcam, 30);
-		nrows = picker.getNrows();
-		ncols = picker.getNcols();
-		simple = new byte[nrows*ncols];
->>>>>>> 1b875f393ed0b51b09a4e6facc110eb840a60fb3
 	}
+
+
 	
 	/*Get number of rows and cols*/
 	public int getRows() { return nrows; }

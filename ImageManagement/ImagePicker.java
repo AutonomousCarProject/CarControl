@@ -31,10 +31,7 @@ public class ImagePicker extends TimerTask {
 		Timer pickerTaskTimer = new Timer();
 		pickerTaskTimer.scheduleAtFixedRate(this, new Date(), (long) (1000/this.fps));
 	}
-	
-	byte[] getPixels() {
-		return pixels;
-	}
+
 	
 	int getRows() {
 		return nrows;
