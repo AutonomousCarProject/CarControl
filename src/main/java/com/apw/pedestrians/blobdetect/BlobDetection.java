@@ -1,5 +1,6 @@
 package com.apw.pedestrians.blobdetect;
 
+import com.apw.pedestrians.image.IImage;
 import com.apw.pedestrians.image.IPixel;
 
 import java.util.*;
