@@ -5,18 +5,19 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import apw3.SimCamera;
+import fly2cam.FlyCamera;
 
 /*ImagePicker: Periodically retrieves an image from the camera (traksim feed or onboard cam)
 */
 
 public class ImagePicker extends TimerTask {
 	
-	private SimCamera cam;
+	private FlyCamera cam;
 	private int fps;
 	private byte[] pixels;
 	private int nrows, ncols;
 	
-	public ImagePicker(SimCamera cam, int fps) {
+	public ImagePicker(FlyCamera cam, int fps) {
 		//Keep camera ref and fps
 		this.cam = cam;
 		this.fps = fps;
@@ -24,16 +25,31 @@ public class ImagePicker extends TimerTask {
 		//Get number of pixels
 		nrows = cam.Dimz() >> 16;
 		ncols = cam.Dimz() << 16 >> 16;
-		pixels = new byte[nrows * ncols];
+		pixels = new byte[nrows * ncols * 4];
 		
 		//Schedule task
 		Timer pickerTaskTimer = new Timer();
-		pickerTaskTimer.scheduleAtFixedRate(this, new Date(), (long) (1000/(float)this.fps));
-		
+		pickerTaskTimer.scheduleAtFixedRate(this, new Date(), (long) (1000/this.fps));
+	}
+	
+	byte[] getPixels() {
+		return pixels;
+	}
+	
+	int getRows() {
+		return nrows;
+	}
+	
+	int getCols() {
+		return ncols;
 	}
 
 	@Override
 	public void run() {
-		cam.NextFrame(pixels);
+		try {
+			cam.NextFrame(pixels);
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		}
 	}
 }
