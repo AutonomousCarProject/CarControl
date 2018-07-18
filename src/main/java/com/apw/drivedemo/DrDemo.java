@@ -30,6 +30,7 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
+import com.apw.ImageManagement.ImageManager;
 import com.apw.SpeedCon.Constants;
 import com.apw.SpeedCon.SpeedController;
 // import fly2cam.CameraBase;
@@ -42,7 +43,9 @@ import com.apw.apw3.TrakSim;
 import com.apw.apw3.SimCamera;
 
 public class DrDemo extends JFrame implements MouseListener,KeyListener {
-	private SpeedController speedControl = new SpeedController();
+	
+	private SpeedController speedControl;
+	private ImageManager imageManager;
 	
   private static final long serialVersionUID = 1L; // unneed but Java insists {
 
@@ -707,7 +710,11 @@ public class DrDemo extends JFrame implements MouseListener,KeyListener {
     setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE);
     addMouseListener(this); // if 'implements MouseListen..'
     addKeyListener(this);
-    setVisible(true);}
+    setVisible(true);
+  
+	this.speedControl = new SpeedController();
+	this.imageManager = new ImageManager(simVideo);
+  }
 
 	@Override
 	public void keyTyped(KeyEvent e) {
