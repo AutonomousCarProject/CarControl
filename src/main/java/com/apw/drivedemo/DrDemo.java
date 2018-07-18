@@ -14,7 +14,7 @@
  * than LattePanda, you can substitute package noJSSC, which has the same
  * APIs (as used by FakeFirmata) but does nothing.
  */
-package drivedemo;                                    // 2018 June 13
+package com.apw.drivedemo;                                    // 2018 June 13
 
 import java.awt.event.ActionEvent; // these all used by the mechanism..
 import java.awt.event.ActionListener;
@@ -30,16 +30,16 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
-import SpeedCon.Constants;
-import SpeedCon.SpeedController;
+import com.apw.SpeedCon.Constants;
+import com.apw.SpeedCon.SpeedController;
 // import fly2cam.CameraBase;
-import fly2cam.FlyCamera;
-import fakefirm.Arduino;
-import apw3.DriverCons;
-import apw3.HandyOps;
-import apw3.MyMath;
-import apw3.TrakSim;
-import apw3.SimCamera;
+import com.apw.fly2cam.FlyCamera;
+import com.apw.fakefirm.Arduino;
+import com.apw.apw3.DriverCons;
+import com.apw.apw3.HandyOps;
+import com.apw.apw3.MyMath;
+import com.apw.apw3.TrakSim;
+import com.apw.apw3.SimCamera;
 
 public class DrDemo extends JFrame implements MouseListener,KeyListener {
 	private SpeedController speedControl = new SpeedController();
@@ -603,13 +603,13 @@ public class DrDemo extends JFrame implements MouseListener,KeyListener {
         	AxLR8(true, speedControl.getDesiredSpeed());
         }
         else if (shouldStopSign == -1){
-        	AxLR8(true, SpeedCon.Constants.STOPSIGN_DRIFT_SPEED);
+        	AxLR8(true, Constants.STOPSIGN_DRIFT_SPEED);
         }
         else if (shouldStopSign == 0){
         	AxLR8(true, 0);
         }
         else if (shouldStopLight == -1){
-        	AxLR8(true, SpeedCon.Constants.STOPLIGHT_DRIFT_SPEED);
+        	AxLR8(true, Constants.STOPLIGHT_DRIFT_SPEED);
         }
         else if (shouldStopLight == 0){
         	AxLR8(true, 0);

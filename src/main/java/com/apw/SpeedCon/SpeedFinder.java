@@ -1,4 +1,4 @@
-package SpeedCon;
+package com.apw.SpeedCon;
 
 
 public class SpeedFinder {
