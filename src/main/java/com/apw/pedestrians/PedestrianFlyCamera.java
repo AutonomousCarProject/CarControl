@@ -2,9 +2,9 @@
 
 //   You need both FlyCapture2_C.dll and FlyCapture2.dll in your Java project folder
 
-package com.apw.fly2cam; // (same API as fly0cam)
+package com.apw.pedestrians; // (same API as fly0cam)
 
-public class OldFlyCamera {
+public class PedestrianFlyCamera {
     public static final int FrameRate_15 = 3, FrameRate_30 = 4;
     private static final int HDRCtrl = 0x1800;
     private static final int HDRShutter1 = 0x1820;
@@ -33,7 +33,7 @@ public class OldFlyCamera {
             tile, // see FlyCapture2Defs.fc2BayerTileFormat
             errn; // returns an error number, see ErrorNumberText()
     private long stuff; // used for error reporting, or not at all
-    public OldFlyCamera() {
+    public PedestrianFlyCamera() {
         rose = 0;
         colz = 0;
         tile = 0;
@@ -110,7 +110,7 @@ public class OldFlyCamera {
     public static void main(String[] args) { // to test the interface
         int tall = 0, wide = 0, pix = -1;
         short[] buff;
-        OldFlyCamera hello = new OldFlyCamera();
+        PedestrianFlyCamera hello = new PedestrianFlyCamera();
         if (hello.Connect(0, 0, 0, 0)) tall = hello.Dimz();
         wide = tall & 0xFFFF;
         tall = tall >> 16;
@@ -204,7 +204,7 @@ public class OldFlyCamera {
     } // image Bayer encoding, frex RG/GB = 1, GB/RG = 3
 
     public String toString() {
-        return "fly2cam.OldFlyCamera " + ErrorNumberText(errn);
+        return "fly2cam.PedestrianFlyCamera " + ErrorNumberText(errn);
     }
 
     public boolean Live() {

@@ -1,6 +1,6 @@
-package com.apw.blobdetect;
+package com.apw.pedestrians.blobdetect;
 
-import com.apw.oldimage.IImage;
+import com.apw.pedestrians.image.IImage;
 
 import java.util.List;
 

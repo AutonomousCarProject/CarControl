@@ -1,20 +1,19 @@
-package com.apw.blobtrack;
+package com.apw.pedestrians.blobtrack;
 
-import com.apw.blobdetect.Blob;
-import com.apw.oldglobal.Constant;
+import com.apw.pedestrians.blobdetect.Blob;
+import com.apw.pedestrians.Constant;
 
 import java.util.*;
 
 public class MovingBlobDetection implements IMovingBlobDetection {
-    Constant c = new Constant();
     //maximum time before unmatched MovingBlob is deleted
-    int maxTimeOffScreen = c.MAX_TIME_OFF_SCREEN;
+    int maxTimeOffScreen = Constant.MAX_TIME_OFF_SCREEN;
     int maxTimeOffScreenUnified = 3;
     //maximum distance in pixels between blobs that can be matched
-    int distanceLimitX = c.DISTANCE_LIMIT_X;
-    int distanceLimitY = c.DISTANCE_LIMIT_Y;
-    int widthChangeLimit = c.MAX_CHANGE_WIDTH;
-    int heightChangeLimit = c.MAX_CHANGE_HEIGHT;
+    int distanceLimitX = Constant.DISTANCE_LIMIT_X;
+    int distanceLimitY = Constant.DISTANCE_LIMIT_Y;
+    int widthChangeLimit = Constant.MAX_CHANGE_WIDTH;
+    int heightChangeLimit = Constant.MAX_CHANGE_HEIGHT;
     float kernelBandwidth = 15;
     float maxDistBetweenPointsInCluster = 80;
     float xDistWeight = 1f;
@@ -38,6 +37,7 @@ public class MovingBlobDetection implements IMovingBlobDetection {
         return movingBlobs;
     }
 
+    @Override
     public List<MovingBlob> getFilteredUnifiedBlobs(List<MovingBlob> blobList) {
         updateFilteredUnifiedBlobs(blobList);
         return filteredUnifiedBlobs;
@@ -75,16 +75,7 @@ public class MovingBlobDetection implements IMovingBlobDetection {
             }
         }
 
-        //System.out.println(distances.length);
-
-        Arrays.sort(distances, new Comparator<float[]>() {
-            @Override
-            public int compare(float[] o1, float[] o2) {
-                int answer = (int) Math.signum(o1[0] - o2[0]);
-                return answer;
-            }
-
-        });
+        Arrays.sort(distances, (o1, o2) -> (int) Math.signum(o1[0] - o2[0]));
 
         HashMap<Integer, HashSet<Integer>> map = new HashMap<>();
         for (int i = 0; i < distances.length; i++) {
@@ -227,19 +218,14 @@ public class MovingBlobDetection implements IMovingBlobDetection {
                 j++;
             }
         }
-        Arrays.sort(pairs, new Comparator<MovingBlob[]>() {
-            @Override
-            public int compare(MovingBlob[] o1, MovingBlob[] o2) {
-                float distanceX1 = Math.abs(o1[0].predictedX - (o1[1].x + o1[1].width / 2));
-                float distanceY1 = Math.abs(o1[0].predictedY - (o1[1].y + o1[1].height / 2));
-                float distance1 = (float) Math.sqrt(distanceX1 * distanceX1 + distanceY1 * distanceY1);
-                float distanceX2 = Math.abs(o2[0].predictedX - (o2[1].x + o2[1].width / 2));
-                float distanceY2 = Math.abs(o2[0].predictedY - (o2[1].y + o2[1].height / 2));
-                float distance2 = (float) Math.sqrt(distanceX2 * distanceX2 + distanceY2 * distanceY2);
-                int answer = (int) Math.signum(distance1 - distance2);
-                return answer;
-            }
-
+        Arrays.sort(pairs, (o1, o2) -> {
+            float distanceX1 = Math.abs(o1[0].predictedX - (o1[1].x + o1[1].width / 2));
+            float distanceY1 = Math.abs(o1[0].predictedY - (o1[1].y + o1[1].height / 2));
+            float distance1 = (float) Math.sqrt(distanceX1 * distanceX1 + distanceY1 * distanceY1);
+            float distanceX2 = Math.abs(o2[0].predictedX - (o2[1].x + o2[1].width / 2));
+            float distanceY2 = Math.abs(o2[0].predictedY - (o2[1].y + o2[1].height / 2));
+            float distance2 = (float) Math.sqrt(distanceX2 * distanceX2 + distanceY2 * distanceY2);
+            return (int) Math.signum(distance1 - distance2);
         });
         HashSet<MovingBlob> oldBlobs = new HashSet<>(filteredUnifiedBlobs);
         HashSet<MovingBlob> newBlobs = new HashSet<>(blobList);
@@ -263,9 +249,7 @@ public class MovingBlobDetection implements IMovingBlobDetection {
             updateUnmatchedUnifiedBlob(blob);
         }
 
-        for (MovingBlob blob : newBlobs) {
-            filteredUnifiedBlobs.add(blob);
-        }
+        filteredUnifiedBlobs.addAll(newBlobs);
 
     }
 

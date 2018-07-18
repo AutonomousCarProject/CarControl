@@ -1,16 +1,14 @@
-package com.apw.blobtrack;
+package com.apw.pedestrians.blobtrack;
 
 import java.util.Set;
 
 public class UnifiedBlob extends MovingBlob {
-
     private float density;
 
     public UnifiedBlob(Set<MovingBlob> movingBlobs) {
         super();
         int numBlobs = movingBlobs.size();
         int minAgeOffScreen = 100000;
-        int maxAge = 0;
         float totalVelocityX = 0;
         float totalVelocityY = 0;
         float top = 1000000;
@@ -23,7 +21,6 @@ public class UnifiedBlob extends MovingBlob {
         //find averages and other values
         for (MovingBlob movingBlob : movingBlobs) {
             minAgeOffScreen = Math.min(minAgeOffScreen, movingBlob.ageOffScreen);
-            maxAge = Math.max(age, movingBlob.age);
 
             totalVelocityX += movingBlob.velocityX;
             totalVelocityY += movingBlob.velocityY;
