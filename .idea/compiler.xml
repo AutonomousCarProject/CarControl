@@ -10,6 +10,8 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="CarControl_main" target="1.10" />
+      <module name="CarControl_test" target="1.10" />
       <module name="ImageProcessing" target="1.10" />
     </bytecodeTargetLevel>
   </component>
