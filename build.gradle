@@ -1,0 +1,19 @@
+plugins {
+    id 'java'
+}
+
+apply plugin: 'java'
+apply plugin: 'maven'
+
+sourceCompatibility = 1.10
+targetCompatibility = 1.10
+
+repositories {
+        
+     maven { url "http://repo.maven.apache.org/maven2" }
+}
+dependencies {
+    compile group: 'com.aparapi', name: 'aparapi', version:'1.9.0'
+    compile group: 'com.aparapi', name: 'aparapi-jni', version:'1.4.1'
+}
+version '1.0-SNAPSHOT'
