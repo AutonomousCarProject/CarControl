@@ -27,8 +27,6 @@ import java.io.FileInputStream;
  */
 public class TrakSim {
 
-    public static final int WinWi = (ShowMap ? MapWide + 16 : 0) + ImWi, // window width
-            Lin2 = WinWi * 2, nPixels = ImHi * WinWi; // + pix in whole window
     // fGratio cnvrts ESC steps to nominal velocity; fMinSpeed=4.0,MinESC=10
     // ..adjust multiplier so it's correct for your car: *1.0 => fGratio=0.4
     private static final double fMinSpeed = DriverCons.D_fMinSpeed,
@@ -64,6 +62,10 @@ public class TrakSim {
             ParkDims = MapTall * 0x10000 + MapWide, CheckerBd = DriverCons.D_CheckerBd,
             ServoStepRate = 0, // = FrameTime/20, // Vscale = DriverCons.D_Vscale,
             TweakRx = DriverCons.D_TweakRx, Crummy = DriverCons.D_Crummy;
+    
+    public static final int WinWi = (ShowMap ? MapWide + 16 : 0) + ImWi, // window width
+            Lin2 = WinWi * 2, nPixels = ImHi * WinWi; // + pix in whole window
+    
     private static final double TurnRadius = DriverCons.D_TurnRadius,
             LfDeScaleSt = 90.0 / ((double) DriverCons.D_LeftSteer),
             RtDeScaleSt = 90.0 / ((double) DriverCons.D_RiteSteer),
