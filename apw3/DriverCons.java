@@ -75,7 +75,7 @@ public class DriverCons { // TrakSim constant parameters
 
   public static final double D_TurnRadius = 7.0, // nom. meters in park coords
       // measured from midline fully cramped, servo position = 0/180
-    D_fMinSpeed = 4.0, // measured min (8x actual m/s = mph/2) @ MinESCact;
+    D_fMinSpeed = 8.0, // measured min (8x actual m/s = mph/2) @ MinESCact;
       // 1mph = 0.5m/s park speed = 3"/sec @ 1:8 scale floor speed
       // 1mph floor speed is 8mph park speed = 4m/s
     D_WhiteLnWi = 0.25,   // in real-world meters, here 10"

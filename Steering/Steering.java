@@ -170,6 +170,7 @@ public class Steering {
 
         steerPoint.x = (int)(tempX / tempCount);
 	    steerPoint.y = (int)(tempY / tempCount);
+
     }
 
 
