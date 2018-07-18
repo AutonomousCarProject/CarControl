@@ -15,7 +15,7 @@ import javax.swing.JLabel;
 
 import apw3.SimCamera;
 import apw3.TrakSim;
-import imagemanagement.ImageManager;
+import ImageManagement.ImageManager;
 
 public class DriveTest extends TimerTask {
 	

@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="161e4979-68fe-4ba9-9cd2-dfa9b83449d2" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/ImageManagement/ImageManipulator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/drivedemo/DriveTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/drivedemo/DriveTest.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -14,52 +15,52 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file leaf-file-name="ImageManager.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ImageManagement/ImageManager.java">
+        <entry file="file://$PROJECT_DIR$/ImageManagement/ImageManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="10" column="26" selection-start-line="10" selection-start-column="26" selection-end-line="10" selection-end-column="26" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ImageManipulator.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/ImageManagement/ImageManipulator.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="236">
-              <caret line="43" column="9" lean-forward="true" selection-start-line="43" selection-start-column="9" selection-end-line="43" selection-end-column="9" />
+            <state relative-caret-position="219">
+              <caret line="51" column="61" lean-forward="true" selection-start-line="51" selection-start-column="61" selection-end-line="51" selection-end-column="61" />
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="ImagePicker.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ImageManagement/ImagePicker.java">
+        <entry file="file://$PROJECT_DIR$/ImageManagement/ImagePicker.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="595">
-              <caret line="43" column="5" selection-start-line="43" selection-start-column="5" selection-end-line="43" selection-end-column="5" />
-              <folding>
-                <element signature="e#777#778#0" expanded="true" />
-                <element signature="e#796#797#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="25">
+              <caret line="33" selection-start-line="33" selection-end-line="33" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ImageManipulator.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ImageManagement/ImageManipulator.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1207">
+              <caret line="71" lean-forward="true" selection-start-line="71" selection-end-line="71" />
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="DrDemo.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/drivedemo/DrDemo.java">
+        <entry file="file://$PROJECT_DIR$/drivedemo/DrDemo.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="37" column="22" lean-forward="true" selection-start-line="37" selection-start-column="22" selection-end-line="37" selection-end-column="22" />
+            <state relative-caret-position="6647">
+              <caret line="425" column="6" selection-start-line="425" selection-start-column="6" selection-end-line="425" selection-end-column="6" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TrackImg.txt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/TrackImg.txt">
-          <provider selected="true" editor-type-id="text-editor" />
+      <file leaf-file-name="DriveTest.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/drivedemo/DriveTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-349">
+              <caret line="15" column="22" lean-forward="true" selection-start-line="15" selection-start-column="22" selection-end-line="15" selection-end-column="22" />
+            </state>
+          </provider>
         </entry>
       </file>
       <file leaf-file-name="TrakSim.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/apw3/TrakSim.java">
+        <entry file="file://$PROJECT_DIR$/apw3/TrakSim.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="136">
               <caret line="32" column="13" selection-start-line="32" selection-start-column="13" selection-end-line="32" selection-end-column="13" />
@@ -67,22 +68,9 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DriverCons.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/apw3/DriverCons.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="27" column="49" selection-start-line="27" selection-start-column="49" selection-end-line="27" selection-end-column="49" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SimCamera.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/apw3/SimCamera.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1173">
-              <caret line="84" column="18" selection-start-line="84" selection-start-column="17" selection-end-line="84" selection-end-column="18" />
-            </state>
-          </provider>
+      <file leaf-file-name="TrackImg.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/TrackImg.txt">
+          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
     </leaf>
@@ -105,8 +93,12 @@
         <option value="$PROJECT_DIR$/src/ImageManagement/ImagePicker.java" />
         <option value="$PROJECT_DIR$/src/drivedemo/DrDemo.java" />
         <option value="$PROJECT_DIR$/src/ImageManagement/ImageManager.java" />
-        <option value="$PROJECT_DIR$/TrackImg.txt" />
         <option value="$PROJECT_DIR$/src/ImageManagement/ImageManipulator.java" />
+        <option value="$PROJECT_DIR$/TrackImg.txt" />
+        <option value="$PROJECT_DIR$/ImageManagement/ImageManager.java" />
+        <option value="$PROJECT_DIR$/ImageManagement/ImageManipulator.java" />
+        <option value="$PROJECT_DIR$/ImageManagement/ImagePicker.java" />
+        <option value="$PROJECT_DIR$/drivedemo/DriveTest.java" />
       </list>
     </option>
   </component>
@@ -134,35 +126,16 @@
             <path>
               <item name="AutonomousCar" type="b2602c69:ProjectViewProjectNode" />
               <item name="AutonomousCar" type="462c0819:PsiDirectoryNode" />
-              <item name="fly2cam" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="AutonomousCar" type="b2602c69:ProjectViewProjectNode" />
-              <item name="AutonomousCar" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="AutonomousCar" type="b2602c69:ProjectViewProjectNode" />
-              <item name="AutonomousCar" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="apw3" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="AutonomousCar" type="b2602c69:ProjectViewProjectNode" />
-              <item name="AutonomousCar" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="drivedemo" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="AutonomousCar" type="b2602c69:ProjectViewProjectNode" />
               <item name="AutonomousCar" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="fly2cam" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="AutonomousCar" type="b2602c69:ProjectViewProjectNode" />
               <item name="AutonomousCar" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="ImageManagement" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
@@ -284,11 +257,11 @@
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
       <window_info anchor="right" id="Maven Projects" order="3" />
       <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.20578231" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.20578231" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24277908" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24277908" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info id="UI Designer" order="2" />
@@ -425,17 +398,62 @@
     <entry file="file://$PROJECT_DIR$/src/drivedemo/DrDemo.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="51">
-          <caret line="37" column="22" lean-forward="true" selection-start-line="37" selection-start-column="22" selection-end-line="37" selection-end-column="22" />
+          <caret line="37" column="22" selection-start-line="37" selection-start-column="22" selection-end-line="37" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ImageManagement/ImageManipulator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="263">
+          <caret line="43" column="9" selection-start-line="43" selection-start-column="9" selection-end-line="43" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/modules.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/apw3/TrakSim.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="32" column="13" selection-start-line="32" selection-start-column="13" selection-end-line="32" selection-end-column="13" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/TrackImg.txt">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ImageManagement/ImageManipulator.java">
+    <entry file="file://$PROJECT_DIR$/drivedemo/DrDemo.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="236">
-          <caret line="43" column="9" lean-forward="true" selection-start-line="43" selection-start-column="9" selection-end-line="43" selection-end-column="9" />
+        <state relative-caret-position="6647">
+          <caret line="425" column="6" selection-start-line="425" selection-start-column="6" selection-end-line="425" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ImageManagement/ImageManipulator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1207">
+          <caret line="71" lean-forward="true" selection-start-line="71" selection-end-line="71" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ImageManagement/ImageManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="219">
+          <caret line="51" column="61" lean-forward="true" selection-start-line="51" selection-start-column="61" selection-end-line="51" selection-end-column="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ImageManagement/ImagePicker.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="25">
+          <caret line="33" selection-start-line="33" selection-end-line="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/drivedemo/DriveTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-349">
+          <caret line="15" column="22" lean-forward="true" selection-start-line="15" selection-start-column="22" selection-end-line="15" selection-end-column="22" />
         </state>
       </provider>
     </entry>
