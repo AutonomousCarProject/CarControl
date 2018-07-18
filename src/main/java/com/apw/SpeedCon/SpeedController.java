@@ -215,7 +215,15 @@ public class SpeedController {
 	}
 	
 	public boolean detectStopSign(MovingBlob blob) {
+<<<<<<< HEAD
 		return true;
+=======
+		if(blob.height > Constants.BLOB_HEIGHT && blob.width > Constants.BLOB_WIDTH && blob.age > Constants.BLOB_AGE) {
+			return true;
+		} else {
+			return false;
+		}
+>>>>>>> 9377728c5adce04e9a7bfa19cfdfccc54b0d6e54
 	}
 	
 	public boolean detectStopLight(MovingBlob blob) {
