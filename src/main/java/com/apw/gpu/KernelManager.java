@@ -7,7 +7,9 @@ import java.util.HashMap;
 
 public class KernelManager {
 
-    private static HashMap<KernelType, Kernel> KernelList = new HashMap<>();
+    private static HashMap<KernelType, Kernel> KernelList = new HashMap<>() {{
+       put(KernelType.MONOCHROME_RASTER_KERNEL, new MonochromeRasterKernel());
+    }};
 
     /**
      * Executes a specified kernel over a set range.
