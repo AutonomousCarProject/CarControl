@@ -3,7 +3,8 @@ package com.apw.SpeedCon;
 import java.util.*;
 import com.apw.pedestrians.blobtrack.*;
 import com.apw.pedestrians.image.Color;
-
+import com.apw.pedestrians.*;
+import com.apw.ImageManagement.*;
 
 public class SpeedController {
 	
@@ -34,7 +35,9 @@ public class SpeedController {
 		
 		//This part runs on-screen blobs thru a set of tests to figure out if they are
 		//relevant, and then what to do with them
-		List<MovingBlob> blobs = new LinkedList<>();
+		PedestrianDetector pedDetect = new PedestrianDetector();
+		ImageManager imageManager = new ImageManager(new com.apw.fly2cam.FlyCamera());
+		List<MovingBlob> blobs = pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), 640);
 		for(MovingBlob i : blobs){
 			if(detectStopLight(i)){
 				setStoppingAtSign();
