@@ -208,6 +208,8 @@ public class TrakSim {
             0x4, 0xE, 0x1F, 0x3E, 0x7C, 0xF8, 0xF0, 0x60, 0x20, 0,     // 9 @73/25
             0x1, 0x3, 0x7, 0xF, 0x1F, 0x1E, 0xC, 0x4, 0,             // 10 @83/28
             1, 3, 3, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // lsb: scrn botm  // 11 @92/33;  [12 @97/38]
+    
+    private static double Vlft, Vrit;
 
     /**
      * Gets a pointer to the current image TrakSim is drawing on.
@@ -262,8 +264,9 @@ public class TrakSim {
      * @return the position of the car compared to the left road side
      */
     
-    public int getLeftRoadSide() {
-    		return Math.abs((Left_X & 0xFFF) - (int) Vposn);
+    public double getLeftRoadSide() {
+    		//System.out.println((Left_X >> 16) + " " + (Rite_X >> 16) + " " + Vposn);
+    		return Math.abs(Vlft - Vposn);
     }
     
     /**
@@ -272,8 +275,8 @@ public class TrakSim {
      * @return the position of the car compared to the right road side
      */
     
-    public int getRightRoadSide() {
-    		return Math.abs((Rite_X & 0xFFF) - (int) Vposn);
+    public double getRightRoadSide() {
+    		return Math.abs(Vrit - Vposn);
     }
 
     private static double Cast_I2F(int whom) {
@@ -4189,8 +4192,11 @@ public class TrakSim {
         double Vstp = 0.0, Hstp = 0.0, Vinc = 0.0, Hinc = 0.0, nuly = 0.0,
                 Atmp = 0.0, Ztmp = 0.0, Vat = 0.0, Hat = 0.0, Ccon = 0.0, Tcon = 0.0,
                 Mconst = 0.0, Kconst = 0.0, good = 0.0,
-                Vlft = Vposn, Hlft = Hposn, Vrit = Vposn, Hrit = Hposn,
+                VHlft = Hposn, Hrit = Hposn,
                 aim = Facing, avg = AverageAim, ftmp;
+        
+        Vlft = Vposn;
+        	Vrit = Vposn;
         while (true) { // find edges..
             why++; // why = 1                 // Grtr: (whom&0x40000000)==0 // > is in
             while (aim < 0.0) aim = aim + 360.0;  // Horz: (whom&0x20000000)==0
@@ -4244,11 +4250,11 @@ public class TrakSim {
                     } //~if // off-track, prior is best
                     else if ((whom == 0) && !doit) { // was off-track, this is left edge..
                         Vlft = Vat + Vstp;
-                        Hlft = Hat + Hstp;
+                        VHlft = Hat + Hstp;
                         Vrit = Vlft;
-                        Hrit = Hlft;
+                        Hrit = VHlft;
                         if (info > 0) ledge = 0; // overshot edge
-                        else if (MapColor(5, Vlft, Hlft, 0) == PavColo) ledge = info; // inside
+                        else if (MapColor(5, Vlft, VHlft, 0) == PavColo) ledge = info; // inside
                         else ledge = info & 0x7FFFFFFF;
                         whom--;
                     } //~if
@@ -4270,18 +4276,18 @@ public class TrakSim {
                 } //~if // prior was best edge
                 if (ledge <= 0) { // left edge still unseen..
                     Vat = Vlft - Vstp;
-                    Hat = Hlft - Hstp;
+                    Hat = VHlft - Hstp;
                     more = MapColor(8, Vat, Hat, 0);
                     if (more == 0) if ((whom == 0) && !doit) { // was/still off-track,
                         Vlft = Vat; // keep looking..
-                        Hlft = Hat;
+                        VHlft = Hat;
                     } //~if
                     else ledge = ledge & 0x7FFFFFFF; // off-track, prior is best
                     else if ((whom == 0) && !doit) { // was off-track, this is right edge..
                         Vrit = Vat - Vstp;
                         Hrit = Hat - Hstp;
                         Vlft = Vrit;
-                        Hlft = Hrit;
+                        VHlft = Hrit;
                         if (more > 0) ridge = 0; // overshot edge
                         else if (MapColor(5, Vrit, Hrit, 0) == PavColo) ridge = more; // inside
                         else ridge = more & 0x7FFFFFFF;
@@ -4289,22 +4295,22 @@ public class TrakSim {
                     } //~if
                     else if (more > 0) { // (inside track)
                         Vlft = Vat;
-                        Hlft = Hat;
+                        VHlft = Hat;
                     } //~if
                     else if (((more - ridge) & 0x7FFFFFFF) == 0) { // edge = rite (ignore)..
                         Vlft = Vat;
-                        Hlft = Hat;
+                        VHlft = Hat;
                     } //~if
-                    else if (MapColor(5, Vlft, Hlft, 0) == PavColo) { // still inside..
+                    else if (MapColor(5, Vlft, VHlft, 0) == PavColo) { // still inside..
                         ledge = more;
                         Vlft = Vat;
-                        Hlft = Hat;
+                        VHlft = Hat;
                     } //~if
                     else if (ledge == 0) ledge = more & 0x7FFFFFFF; // just past edge
                     else ledge = ledge & 0x7FFFFFFF;
                 } //~if // prior was best edge
                 if (logy) System.out.println(HandyOps.Dec2Log("  .:. ", nx,
-                        HandyOps.Flt2Log(" L=", Vlft, HandyOps.Flt2Log("/", Hlft,
+                        HandyOps.Flt2Log(" L=", Vlft, HandyOps.Flt2Log("/", VHlft,
                                 HandyOps.Int2Log(" ", more, HandyOps.Flt2Log(" R=", Vrit,
                                         HandyOps.Flt2Log("/", Hrit, HandyOps.Int2Log(" ", info,
                                                 HandyOps.IffyStr(whom > 0, " + ", HandyOps.IffyStr(whom < 0, " - ", " = "))
@@ -4317,7 +4323,7 @@ public class TrakSim {
                 if (doit) break;
             } //~for // good enough (stepping out 5m to each side)
             if (ShowMap) { // show farthest test points regardless..
-                Left_X = ZoomMapCoord(true, Vlft, Hlft);
+                Left_X = ZoomMapCoord(true, Vlft, VHlft);
                 Rite_X = ZoomMapCoord(true, Vrit, Hrit);
             } //~if
             if (!doit) if (whom == 0) { // no track, no edges ever seen,
@@ -4331,7 +4337,7 @@ public class TrakSim {
             else if (ridge != 0) nx++;
             if (nx > 0) { // can/should center the car in the track..
                 Vat = (Vlft + Vrit) * 0.5;
-                Hat = (Hlft + Hrit) * 0.5;
+                Hat = (VHlft + Hrit) * 0.5;
                 if (nx > 3) { // was off-track..
                     Vposn = Vat;
                     Hposn = Hat;
@@ -4511,7 +4517,7 @@ public class TrakSim {
         else aLine = "";
         System.out.println(HandyOps.Int2Log("  [", Left_X, HandyOps.Int2Log("/", Rite_X,
                 HandyOps.Int2Log("] ", ledge, HandyOps.Int2Log("/", ridge,
-                        HandyOps.Flt2Log(" ", Vlft, HandyOps.Flt2Log("/", Hlft,
+                        HandyOps.Flt2Log(" ", Vlft, HandyOps.Flt2Log("/", VHlft,
                                 HandyOps.Flt2Log("|", Vrit, HandyOps.Flt2Log("/", Hrit,
                                         HandyOps.Flt2Log(" +", Vstp, HandyOps.Flt2Log("/", Hstp,
                                                 HandyOps.Flt2Log(" a=", Atmp,
