@@ -29,7 +29,11 @@ public class ImageManipulator {
 						+ bayer[(r+1)*ncols*2 + c*2]*2;	//Bottom left
 				mono[r*ncols + c] = (byte) (total >> 2);
 				*/
-				if(((((int)bayer[(r*ncols*2 + c)*2 +1])&0xFF)>200)){
+				int R = ((((int)bayer[(r*ncols*2 + c)*2]) & 0xFF));				//Top left (red)
+				int G = ((((int)bayer[(r*ncols*2 + c)*2 +1])&0xFF)); 			//Top right (green)
+				int B = (((int)bayer[(r*ncols*2 + c)*2 + 1+2*ncols])&0xFF);			//Bottom right (blue)
+				int pix =R+G+B;
+				if(pix>700){
 					mono[r*ncols + c] = 1;
 				}else{
 					mono[r*ncols + c] = 0;
