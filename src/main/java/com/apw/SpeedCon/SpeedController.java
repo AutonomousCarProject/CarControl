@@ -1,5 +1,6 @@
 package com.apw.SpeedCon;
 
+import java.awt.Graphics;
 import java.util.*;
 import com.apw.pedestrians.blobtrack.*;
 import com.apw.pedestrians.image.Color;
@@ -29,7 +30,7 @@ public class SpeedController {
 	
 	//A method to be called every frame. Calculates desired speed and actual speed
 	//Also takes stopping into account
-	public void onUpdate(int gasAmount, int steerDegs, int manualSpeed){
+	public void onUpdate(int gasAmount, int steerDegs, int manualSpeed, Graphics graf){
 		this.calculateEstimatedSpeed(gasAmount);
 		this.calculateDesiredSpeed(steerDegs, manualSpeed);
 		
@@ -41,6 +42,7 @@ public class SpeedController {
 		ImageManager imageManager = new ImageManager(new com.apw.fly2cam.FlyCamera());
 		List<MovingBlob> blobs = pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), 640);
 		for(MovingBlob i : blobs){
+			graf.fillRect(i.x, i.y, i.width, i.height);
 			if(detectStopLight(i)){
 				setStoppingAtSign();
 			}
