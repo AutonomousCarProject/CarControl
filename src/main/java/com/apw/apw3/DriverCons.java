@@ -42,9 +42,11 @@ public class DriverCons { // TrakSim constant parameters
             D_Reversible = false,   // T: allow reverse (untested)
             D_StartInCalibrate = false, // T: use this to calibrate servo limits
             D_Log_Draw = false, D_Log_Log = false, D_Fax_Log = false,
-            D_Mini_Log = false, D_NoisyMap = true;
+            D_Mini_Log = false, D_NoisyMap = true,
+            D_DrawOnSides = true, D_DrawPredicted = true, D_DrawCurrent = true;
 
     public static final int
+            D_SecondViewType = 3,   //0 = no view, 1 = RGB, 2 = monochrome, 3 = simplified
             D_Vramp = 68, D_Hramp = 172, // Initial pos'n for car, meters from NW
             D_RampA = 300,     // Initial orient'n for car, c-wise degrees from north
             D_Zoom35 = 35,     // 35mm-equivalent focal length for "camera"

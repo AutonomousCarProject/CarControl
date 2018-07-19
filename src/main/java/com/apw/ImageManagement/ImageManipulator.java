@@ -6,7 +6,7 @@ public class ImageManipulator {
 
         for (int r = 0; r < nrows; r++) {
             for (int c = 0; c < ncols; c++) {
-
+				
 				/*
 				//Averaging all colors
 				int total = bayer[r*ncols*2 + c*2] 		//Top left (
@@ -14,7 +14,7 @@ public class ImageManipulator {
 						+ bayer[(r+1)*ncols*2 + c*2]*2;	//Bottom left
 				mono[r*ncols + c] = (byte) (total >> 2);
 				*/
-                mono[r*ncols + c] = bayer[r*ncols*2 + c*2 + 1];	//Use only top right (green)
+                mono[r * ncols + c] = (byte) ((((int) bayer[(r * ncols * 2 + c) * 2 + 1]) & 0xFF));            //Use only top right (green)
             }
         }
     }
@@ -31,28 +31,28 @@ public class ImageManipulator {
          * 4 = GREY
          * 5 = BLACK
          */
-        for(int i = 0; i < nrows; i++){
-            for(int j = 0; j < ncols; j++){
-                int r = bayer[2*i*nrows+j*2];
-                int g = bayer[2*i*nrows+j*2+1];
-                int b = bayer[(2*i*nrows)+1+j+1];
+        for (int r = 0; r < nrows; r++) {
+            for (int c = 0; c < ncols; c++) {
+                int R = ((((int) bayer[(r * ncols * 2 + c) * 2]) & 0xFF));                //Top left (red)
+                int G = ((((int) bayer[(r * ncols * 2 + c) * 2 + 1]) & 0xFF));            //Top right (green)
+                int B = (((int) bayer[(r * ncols * 2 + c) * 2 + 1 + 2 * ncols]) & 0xFF);            //Bottom right (blue)
                 //If one of the colors has a value 50 greater than both other colors
                 //it assigns that pixel to that color
-                if(r > g+50 && r > b+50){
-                    simple[i*nrows+j] = 0;
-                } else if(g > r+50 && g > b+50){
-                    simple[i*nrows+j] = 1;
-                } else if(b > r+50 && b > g+50){
-                    simple[i*nrows+j] = 2;
+                if (R > G + 51 && R > B + 51) {
+                    simple[r * ncols + c] = 0;
+                } else if (G > R + 50 && G > B + 50) {
+                    simple[r * ncols + c] = 1;
+                } else if (B > R + 50 && B > G + 50) {
+                    simple[r * ncols + c] = 2;
                 }
                 //Otherwise it sees if one of the colors has a value above 170 for white
                 // if not, 85 for grey and below 85 for black
-                else if(r > 170 || g > 170 || b > 170){
-                    simple[i*nrows+j] = 3;
-                } else if(r > 85 || g > 85 || b > 85){
-                    simple[i*nrows+j] = 4;
-                } else if(r < 85 || g < 85 || b < 85){
-                    simple[i*nrows+j] = 5;
+                else if (R > 170 || G > 170 || B > 170) {
+                    simple[r * ncols + c] = 3;
+                } else if (R > 85 || G > 85 || B > 85) {
+                    simple[r * ncols + c] = 4; //0x808080
+                } else if (R < 85 || G < 85 || B < 85) {
+                    simple[r * ncols + c] = 5;
                 }
             }
         }
@@ -61,11 +61,13 @@ public class ImageManipulator {
     public static void convertToRGBRaster(byte[] bayer, int[] rgb, int nrows, int ncols) {
         for (int r = 0; r < nrows; r++) {
             for (int c = 0; c < ncols; c++) {
-                int pix = bayer[(r*ncols + c)*2] << 16				//Top left (red)
-                        + bayer[(r*ncols + c)*2 +1] << 8 			//Top right (green)
-                        + bayer[((r+1)*ncols + c)*2 + 1];			//Bottom right (blue)
-                rgb[r*ncols + c] = pix;
+                int R = ((((int) bayer[(r * ncols * 2 + c) * 2]) & 0xFF));                //Top left (red)
+                int G = ((((int) bayer[(r * ncols * 2 + c) * 2 + 1]) & 0xFF));            //Top right (green)
+                int B = (((int) bayer[(r * ncols * 2 + c) * 2 + 1 + 2 * ncols]) & 0xFF);            //Bottom right (blue)
+                int pix = (R << 16) + (G << 8) + B;
+                rgb[r * ncols + c] = pix;
             }
+
         }
     }
 }
