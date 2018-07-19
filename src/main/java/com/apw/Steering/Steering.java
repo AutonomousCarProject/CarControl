@@ -140,7 +140,7 @@ public class Steering {
 	}
 	
 	public double curveSteepness(double turnAngle) {
-		return turnAngle/(90);
+		return turnAngle/(45);
 	}
 
 
