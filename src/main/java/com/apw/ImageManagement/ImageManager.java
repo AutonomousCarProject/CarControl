@@ -10,12 +10,17 @@ import com.apw.gpu.SimpleColorRasterKernel;
 
 public class ImageManager {
 
+    enum Processsor {
+        CPU,
+        GPU
+    }
+
     int nrows, ncols;
     private ImagePicker picker;
     private byte mono[];
     private byte simple[];
     private int rgb[];
-    private boolean runOnGpu = true;
+    private Processsor processsor;
     /*Main*/
     public ImageManager(FlyCamera trakcam) {
         picker = new ImagePicker(trakcam, 30);
@@ -34,10 +39,18 @@ public class ImageManager {
         return ncols;
     }
 
+    public void runOnGpu(boolean value)
+    {
+        if (value)
+            processsor = Processsor.GPU;
+        else
+            processsor = Processsor.CPU;
+    }
+
     /*Serves monochrome raster of camera feed
      * Formatted in 1D array of bytes*/
     public byte[] getMonochromeRaster() {
-        if (runOnGpu) {
+        if (processsor == Processsor.GPU) {
             MonochromeRasterKernel kernel = new MonochromeRasterKernel(picker.getPixels(), mono, nrows, ncols);
             kernel.execute(Range.create(nrows * ncols));
             kernel.dispose();
@@ -57,7 +70,7 @@ public class ImageManager {
      * 5 = BLACK
      */
     public byte[] getSimpleColorRaster() {
-        if (runOnGpu) {
+        if (processsor == Processsor.GPU) {
             SimpleColorRasterKernel kernel = new SimpleColorRasterKernel(picker.getPixels(), simple, nrows, ncols);
             kernel.execute(Range.create(nrows * ncols));
             kernel.dispose();
@@ -70,7 +83,7 @@ public class ImageManager {
     }
 
     public int[] getRGBRaster() {
-        if (runOnGpu) {
+        if (processsor == Processsor.GPU) {
             RGBRasterKernel kernel = new RGBRasterKernel(picker.getPixels(), rgb, nrows, ncols);
             kernel.execute(Range.create(nrows * ncols));
             kernel.dispose();
