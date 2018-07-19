@@ -11,8 +11,8 @@ public class MonochromeRasterKernel extends Kernel {
     @Override
     public void run() {
 
-        var r = getGlobalId()/nrows;
-        var c = getGlobalId()/ncols;
+        int r = getGlobalId()/nrows;
+        int c = getGlobalId()/ncols;
 
         mono[r*ncols + c] = bayer[r*ncols*2 + c*2 + 1];
     }
