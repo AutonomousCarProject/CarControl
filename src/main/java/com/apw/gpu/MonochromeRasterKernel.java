@@ -8,6 +8,14 @@ public class MonochromeRasterKernel extends Kernel {
 
     private byte[] bayer, mono;
 
+    public MonochromeRasterKernel(int nrows, int ncols, byte[] bayer, byte[] mono)
+    {
+        this.nrows = nrows;
+        this.ncols = ncols;
+        this.bayer = bayer;
+        this.mono = mono;
+    }
+
     @Override
     public void run() {
 
