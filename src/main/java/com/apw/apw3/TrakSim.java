@@ -4856,6 +4856,7 @@ public class TrakSim {
      * @param seen True to draw the red "X" on the screen
      */
     public void CrashMe(boolean seen) { // caller logs
+        wasted = true;
         SimStep(3);
         if (seen) DrawRedX();
         NuData++;
