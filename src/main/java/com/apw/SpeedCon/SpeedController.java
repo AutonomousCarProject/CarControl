@@ -36,6 +36,8 @@ public class SpeedController {
 		//This part runs on-screen blobs thru a set of tests to figure out if they are
 		//relevant, and then what to do with them
 		PedestrianDetector pedDetect = new PedestrianDetector();
+		
+		/*			Uncomment when image management team fixes their code
 		ImageManager imageManager = new ImageManager(new com.apw.fly2cam.FlyCamera());
 		List<MovingBlob> blobs = pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), 640);
 		for(MovingBlob i : blobs){
@@ -46,6 +48,8 @@ public class SpeedController {
 				setStoppingAtLight();
 			}
 		}
+		*/
+		
 	}
 	
 	//This figures out the speed that we want to be traveling at
