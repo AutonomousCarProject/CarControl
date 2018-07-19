@@ -30,6 +30,11 @@ public class SimpleColorRasterKernel extends Kernel {
         this.simple = simple;
     }
 
+    /**
+     * Returns an simple color raster of a bayer byte array,
+     * Should be called to retrieve result after kernel is executed.
+     * @return Simple color raster byte array
+     */
     public byte[] getSimple() {
         return simple;
     }
@@ -56,8 +61,8 @@ public class SimpleColorRasterKernel extends Kernel {
         int g = bayer[2 * rows * nrows + cols * 2 + 1  ];
         int b = bayer[(2 * rows * nrows) + 1 + cols + 1];
 
-        //if one of the colors has a value 50 greater than both other colors
-        //it assigns that pixel to that color
+        // if one of the colors has a value 50 greater than both other colors
+        // it assigns that pixel to that color
         if (r > g + 50 && r > b + 50) {
             simple[rows * nrows + cols] = 0;
         } else if (g > r + 50 && g > b + 50) {
@@ -66,7 +71,7 @@ public class SimpleColorRasterKernel extends Kernel {
             simple[rows * nrows + cols] = 2;
         }
 
-        //Otherwise it sees if one of the colors has a value above 170 for white
+        // Otherwise it sees if one of the colors has a value above 170 for white
         // if not, 85 for grey and below 85 for black
         else if (r > 170 || g > 170 || b > 170) {
             simple[rows * nrows + cols] = 3;
