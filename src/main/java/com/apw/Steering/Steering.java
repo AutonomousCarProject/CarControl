@@ -147,6 +147,7 @@ public class Steering {
 	/*
 	find the average point from the midpoints array
 	 */
+
 	public void averageMidpoints() {
         double tempY = 0;
         double tempX = 0;
@@ -189,4 +190,5 @@ public class Steering {
     		return 5;
     }
 }
+
 

@@ -16,6 +16,13 @@
  */
 package com.apw.drivedemo;                                    // 2018 June 13
 
+import com.apw.apw3.*;
+import com.apw.fakefirm.Arduino;
+import com.apw.fly2cam.FlyCamera;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionEvent; // these all used by the mechanism..
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -610,7 +617,9 @@ public class DrDemo extends JFrame implements MouseListener,KeyListener {
         
         graf.setColor(Color.ORANGE);
         //graf.drawRect(Constants.STOPLIGHT_MIN_X, Constants.STOPLIGHT_MIN_Y, Constants.STOPLIGHT_MAX_X-Constants.STOPLIGHT_MIN_X, Constants.STOPLIGHT_MAX_Y-Constants.STOPLIGHT_MIN_Y);
-
+        
+        TestServos(); // (replace this with your own code)
+        
         graf.setColor(Color.RED);
         //graf.drawRect(Constants.STOPSIGN_MIN_X, Constants.STOPSIGN_MIN_Y, Constants.STOPSIGN_MAX_X-Constants.STOPSIGN_MIN_X, Constants.STOPSIGN_MAX_Y-Constants.STOPSIGN_MIN_Y);
         
@@ -645,7 +654,6 @@ public class DrDemo extends JFrame implements MouseListener,KeyListener {
                 graf.fillRect(testSteering.leadingMidPoints[i].x, testSteering.leadingMidPoints[i].y +  + edges.top, 5, 5);
             }   
         }
-        
         
         for (int i = 0; i<hi.length; i++) {
         		if (DriverCons.D_DrawPredicted == true) {
@@ -786,5 +794,5 @@ public class DrDemo extends JFrame implements MouseListener,KeyListener {
 	public void keyReleased(KeyEvent e) {
 		//SteerMe(true, 0);
 	}
-	
+
 } //~DrDemo (drivedemo) (DM) (SD)

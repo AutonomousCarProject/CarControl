@@ -1,6 +1,8 @@
 package com.apw.ImageManagement;
 
+
 import com.apw.apw3.SimCamera;
+
 import com.apw.fly2cam.FlyCamera;
 
 import java.util.Date;
@@ -25,7 +27,7 @@ public class ImagePicker extends TimerTask {
         //Get number of pixels
         nrows = cam.Dimz() >> 16;
         ncols = cam.Dimz() << 16 >> 16;
-        pixels = new byte[nrows * ncols];
+        pixels = new byte[nrows * ncols * 4];
 
         //Schedule task
         Timer pickerTaskTimer = new Timer();
