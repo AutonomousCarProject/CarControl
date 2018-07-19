@@ -1,6 +1,6 @@
 package com.apw.gpu;
 
-import aparapi.Kernel;
+import com.aparapi.Kernel;
 
 public class MonochromeRasterKernel extends Kernel {
 

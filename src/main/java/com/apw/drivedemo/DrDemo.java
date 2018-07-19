@@ -594,10 +594,6 @@ public class DrDemo extends JFrame implements MouseListener,KeyListener {
           else DimSave = 0;} //~if
         if ((StartYourEngines==0)||(NoneStep<0)) fno = DidFrame;
         
-        
-        graf.setColor(Color.ORANGE);
-        graf.drawRect(Constants.STOPLIGHT_MIN_X, Constants.STOPLIGHT_MIN_Y, Constants.STOPLIGHT_MAX_X-Constants.STOPLIGHT_MIN_X, Constants.STOPLIGHT_MAX_Y-Constants.STOPLIGHT_MIN_Y);
-
         ///** If you have self-driving code, you could put it here **///
         	//TestServos(); // (replace this with your own code)
         
@@ -608,6 +604,9 @@ public class DrDemo extends JFrame implements MouseListener,KeyListener {
         System.out.println(this.GasPedal);
         System.out.println(this.SteerDegs);
         System.out.println(speedControl.getDesiredSpeed());
+        
+        graf.setColor(Color.ORANGE);
+        graf.drawRect(Constants.STOPLIGHT_MIN_X, Constants.STOPLIGHT_MIN_Y, Constants.STOPLIGHT_MAX_X-Constants.STOPLIGHT_MIN_X, Constants.STOPLIGHT_MAX_Y-Constants.STOPLIGHT_MIN_Y);
         //End Speed Code
 
         
