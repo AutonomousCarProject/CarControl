@@ -255,6 +255,26 @@ public class TrakSim {
     public int GetImgWide() {
         return ImageWide;
     }
+    
+    /**
+     * Gets the position of the car compared to the left road side
+     *
+     * @return the position of the car compared to the left road side
+     */
+    
+    public int getLeftRoadSide() {
+    		return Math.abs((Left_X & 0xFFF) - (int) Vposn);
+    }
+    
+    /**
+     * Gets the position of the car compared to the right road side
+     *
+     * @return the position of the car compared to the right road side
+     */
+    
+    public int getRightRoadSide() {
+    		return Math.abs((Rite_X & 0xFFF) - (int) Vposn);
+    }
 
     private static double Cast_I2F(int whom) {
         // convert int rep'n of fix-Point -> float..
@@ -4160,7 +4180,7 @@ public class TrakSim {
         }
     } //~BuildFrame
 
-    private void InTrackIt() { // calc new posn & aim to stay centered in track
+    public void InTrackIt() { // calc new posn & aim to stay centered in track
         boolean doit = true, logy = Mini_Log;
         int // Vat = MyMath.Trunc8(Vposn), Hat = MyMath.Trunc8(Hposn),
                 whom = MapColor(8, Vposn, Hposn, 0), // =0 if off-track
@@ -4423,7 +4443,7 @@ public class TrakSim {
             why = why | 16; // why = 19/../28
             break;
         } //~while // (find edges)
-        if (why > 1) { // not steering (or already did), but still moving..
+        if (1 == 2) { // not steering (or already did), but still moving..
             Vat = Vposn;
             Hat = Hposn;
             ftmp = nuly - aim;
