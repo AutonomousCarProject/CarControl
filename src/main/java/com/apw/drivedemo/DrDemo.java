@@ -17,9 +17,8 @@
 package com.apw.drivedemo;                                    // 2018 June 13
 
 import com.apw.apw3.*;
-import com.apw.fly2cam.FlyCamera;
 import com.apw.fakefirm.Arduino;
-
+import com.apw.fly2cam.FlyCamera;
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,7 +33,6 @@ import java.awt.image.DataBufferInt;
 
 public class DrDemo extends JFrame implements MouseListener {
     private static final long serialVersionUID = 1L; // unneed but Java insists {
-
     private static final int MinESCact = DriverCons.D_MinESCact,
             MaxESCact = DriverCons.D_MaxESCact, StartGas = MinESCact * 9 / 4,
             ScrPix = TrakSim.nPixels, nServoTests = DriverCons.D_nServoTests,
@@ -664,7 +662,8 @@ public class DrDemo extends JFrame implements MouseListener {
         BusyPaint = false;
         
          this.GetCameraImg();
-    Point[] hi = testSteering.findPoints(thePixels);
+    /*
+         Point[] hi = testSteering.findPoints(thePixels);
 
     // Steer between lines
     testSteering.averageMidpoints();
@@ -678,7 +677,7 @@ public class DrDemo extends JFrame implements MouseListener {
     			graf.fillRect(testSteering.leadingMidPoints[i].x, testSteering.leadingMidPoints[i].y +  + edges.top, 5, 5);
     		}   
     	}
-    
+
     
     for (int i = 0; i<hi.length; i++) {
     		if (DriverCons.D_DrawPredicted == true) {
@@ -690,7 +689,7 @@ public class DrDemo extends JFrame implements MouseListener {
     			graf.fillRect(testSteering.leftPoints[i].x + edges.left, testSteering.leftPoints[i].y + edges.top, 5, 5);
     			graf.fillRect(testSteering.rightPoints[i].x + edges.left, testSteering.rightPoints[i].y + edges.top, 5, 5);
     		}
-    }
+    }//*/
     } //~paint
 
     private static void starting() {
@@ -708,6 +707,7 @@ public class DrDemo extends JFrame implements MouseListener {
      * This is the constructor, which sets everything up.
      */
     public DrDemo() { // outer class constructor..
+
         int nx = ScrPix; // CamFPS = FlyCamera.FrameRate_15-1;
         String sayso = "= " + ScrWi + "x" + ScrHi; // "(Cal8="
         boolean dunit = false;
@@ -795,5 +795,9 @@ public class DrDemo extends JFrame implements MouseListener {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         addMouseListener(this); // if 'implements MouseListen..'
         setVisible(true);
+        if(DriverCons.D_SecondViewType!=0) {
+            DriveTest.subMain(theSim, simVideo);
+        }
+
     }
 } //~DrDemo (drivedemo) (DM) (SD)

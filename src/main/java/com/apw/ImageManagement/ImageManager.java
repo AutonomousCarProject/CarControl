@@ -2,7 +2,7 @@
 
 package com.apw.ImageManagement;
 
-import com.apw.apw3.SimCamera;
+import com.apw.fly2cam.FlyCamera;
 
 public class ImageManager {
 
@@ -13,7 +13,7 @@ public class ImageManager {
     private int rgb[];
 
     /*Main*/
-    public ImageManager(SimCamera trakcam) {
+    public ImageManager(FlyCamera trakcam) {
         picker = new ImagePicker(trakcam, 30);
         nrows = picker.getNrows();
         ncols = picker.getNcols();
