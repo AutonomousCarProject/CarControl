@@ -18,7 +18,25 @@ public class ImageManipulator {
 			}
 		}
 	}
+	public static void convertToBlackWhiteRaster(byte[] bayer, byte[] mono, int nrows, int ncols){
+		for (int r = 0; r < nrows; r++) {
+			for (int c = 0; c < ncols; c++) {
 
+				/*
+				//Averaging all colors
+				int total = bayer[r*ncols*2 + c*2] 		//Top left (
+						+ bayer[r*ncols*2 + c*2+1] 		//Top right
+						+ bayer[(r+1)*ncols*2 + c*2]*2;	//Bottom left
+				mono[r*ncols + c] = (byte) (total >> 2);
+				*/
+				if(((((int)bayer[(r*ncols*2 + c)*2 +1])&0xFF)>200)){
+					mono[r*ncols + c] = 1;
+				}else{
+					mono[r*ncols + c] = 0;
+				}
+			}
+		}
+	}
 	
 	public static void convertToSimpleColorRaster(byte[] bayer, byte[] simple, int nrows, int ncols) {
 		/*

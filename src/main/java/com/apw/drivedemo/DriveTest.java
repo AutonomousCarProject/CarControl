@@ -54,6 +54,7 @@ public class DriveTest extends TimerTask {
 						break;
 					case 1:
 					case 3:
+					case 4:
 						displayimage = new BufferedImage(ncols, nrows, BufferedImage.TYPE_INT_RGB);
 						break;
 				}
@@ -93,6 +94,13 @@ public class DriveTest extends TimerTask {
 						int[] simpleRGB = new int[Bimagepixels.length];
 						imagemanager.convertSimpleToRGB(Bimagepixels, simpleRGB, Bimagepixels.length);
 						System.arraycopy(simpleRGB, 0, Bdisplaypixels, 0, Bimagepixels.length);
+						break;
+					case 4:
+						byte[] Cimagepixels = imagemanager.getBlackWhiteRaster();
+						int[] Cdisplaypixels = ((DataBufferInt) displayimage.getRaster().getDataBuffer()).getData();
+						int[] CsimpleRGB = new int[Cimagepixels.length];
+						imagemanager.convertBWToRGB(Cimagepixels, CsimpleRGB, Cimagepixels.length);
+						System.arraycopy(CsimpleRGB, 0, Cdisplaypixels, 0, Cimagepixels.length);
 						break;
 				}
 				System.out.println("Repainting");

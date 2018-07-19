@@ -36,7 +36,10 @@ public class ImageManager {
         ImageManipulator.convertToMonochromeRaster(picker.getPixels(), mono, nrows, ncols);
         return mono;
     }
-
+    public byte[] getBlackWhiteRaster(){
+        ImageManipulator.convertToBlackWhiteRaster(picker.getPixels(), mono, nrows, ncols);
+        return mono;
+    }
     /*Serves color raster encoded in 1D of values 0-5 with
      * 0 = RED
      * 1 = GREEN
@@ -75,6 +78,18 @@ public class ImageManager {
                     break;
                 case 5:
                     simpleRGB[i] = 0x000000;
+                    break;
+            }
+        }
+    }
+    public static void convertBWToRGB(byte[] simpleByte, int[] mono, int length){
+        for(int i = 0; i < length; i++){
+            switch(simpleByte[i]){
+                case 0:
+                    mono[i] = 0x000000;
+                    break;
+                case 1:
+                    mono[i] = 0xFFFFFF;
                     break;
             }
         }

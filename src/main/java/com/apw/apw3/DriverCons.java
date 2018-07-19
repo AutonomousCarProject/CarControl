@@ -46,7 +46,7 @@ public class DriverCons { // TrakSim constant parameters
             D_DrawOnSides = true, D_DrawPredicted = true, D_DrawCurrent = true;
 
     public static final int
-            D_SecondViewType = 3,   //0 = no view, 1 = RGB, 2 = monochrome, 3 = simplified
+            D_SecondViewType = 4,   //0 = no view, 1 = RGB, 2 = monochrome, 3 = simplified, 4 = Black/White only
             D_Vramp = 68, D_Hramp = 172, // Initial pos'n for car, meters from NW
             D_RampA = 300,     // Initial orient'n for car, c-wise degrees from north
             D_Zoom35 = 35,     // 35mm-equivalent focal length for "camera"
