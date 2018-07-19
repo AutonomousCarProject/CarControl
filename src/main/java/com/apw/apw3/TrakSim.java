@@ -27,7 +27,8 @@ import java.io.FileInputStream;
  * The main TrakSim Car Simulator class..
  */
 public class TrakSim {
-
+    
+     public boolean wasted = false;
 
     // fGratio cnvrts ESC steps to nominal velocity; fMinSpeed=4.0,MinESC=10
     // ..adjust multiplier so it's correct for your car: *1.0 => fGratio=0.4
@@ -2654,6 +2655,9 @@ public class TrakSim {
             StepOne = (nuly == 1);
             NextFrUpdate = 0;
         } //~if // in mode=2 this is when to update image
+        if (prio == 3) {
+       		wasted = true;
+        }
         System.out.println(HandyOps.Dec2Log(" (SimStep) o", mode,
                 HandyOps.Dec2Log("/", prio, HandyOps.IffyStr(prio == 3, " (Crashed)",
                         HandyOps.IffyStr((nuly == 3) && (prio < 3), " ($$ CrashMe $$)",
