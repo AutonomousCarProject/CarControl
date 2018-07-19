@@ -125,6 +125,8 @@ public class DrDemo extends JFrame implements MouseListener,KeyListener {
       if (theWindow != null) theWindow.repaint();}} //~PaintAction
 
   private PaintAction doOften = null;
+	
+  private BufferedImage image;
 
 
  /**
@@ -640,6 +642,8 @@ public class DrDemo extends JFrame implements MouseListener,KeyListener {
     	catch (Exception ex) {theImag = null;}
     	BusyPaint = false;
     	
+	if (theSim.wasted == true) graf.drawImage(image, 320 - image.getWidth()/2, 240, this);
+	  
     	Point[] hi = testSteering.findPoints(thePixels);
 
         // Steer between lines
@@ -759,6 +763,11 @@ public class DrDemo extends JFrame implements MouseListener,KeyListener {
     setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE);
     addMouseListener(this); // if 'implements MouseListen..'
     addKeyListener(this);
+     try {                
+        image = ImageIO.read(new File("wasted.png"));
+     } catch (IOException ex) {
+          // handle exception...
+     }
     setVisible(true);
   
 	this.speedControl = new SpeedController();
