@@ -61,11 +61,13 @@ public class ImageManipulator {
 	public static void convertToRGBRaster(byte[] bayer, int[] rgb, int nrows, int ncols) {
 		for (int r = 0; r < nrows; r++) {
 			for (int c = 0; c < ncols; c++) {
-				int pix = bayer[(r*ncols + c)*2] << 16				//Top left (red)
-						+ bayer[(r*ncols + c)*2 +1] << 8 			//Top right (green)
-						+ bayer[((r+1)*ncols + c)*2 + 1];			//Bottom right (blue)
+				int R = ((((int)bayer[(r*ncols*2 + c)*2]) & 0xFF));				//Top left (red)
+				int G = ((((int)bayer[(r*ncols*2 + c)*2 +1])&0xFF)); 			//Top right (green)
+				int B = (((int)bayer[(r*ncols*2 + c)*2 + 1+2*ncols])&0xFF);			//Bottom right (blue)
+				int pix =(R<<16)+(G<<8)+B;
 				rgb[r*ncols + c] = pix;
 			}
+			
 		}
 	}
 }
