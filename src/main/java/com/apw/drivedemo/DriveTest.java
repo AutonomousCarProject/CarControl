@@ -1,7 +1,6 @@
 package com.apw.drivedemo;
 
 import com.apw.ImageManagement.ImageManager;
-import com.apw.apw3.DriverCons;
 import com.apw.apw3.SimCamera;
 import com.apw.apw3.TrakSim;
 import com.apw.fakefirm.Arduino;
@@ -28,16 +27,19 @@ public class DriveTest extends TimerTask {
 	private BufferedImage displayimage;
 	private Icon displayicon;
 	private JLabel displaylabel;
+	private int viewType;
 
-        	public DriveTest(TrakSim sim, FlyCamera simcam) {
+        	public DriveTest(TrakSim sim, FlyCamera simcam, int viewType) {
         		this.sim=sim;
         		this.simcam=simcam;
+        		this.viewType = viewType;
 				finishInit();
         	}
         	public DriveTest(){
 				sim = new TrakSim();
 				simcam = new SimCamera();
 				simcam.Connect(FRAME_RATE_NUMBER);
+				viewType = 1;
 				finishInit();
 			}
 			private void finishInit(){
@@ -48,7 +50,7 @@ public class DriveTest extends TimerTask {
 				window = new JFrame();
 				window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				window.setSize(ncols, nrows);
-				switch(DriverCons.D_SecondViewType){
+				switch(viewType){
 					case 2:
 						displayimage = new BufferedImage(ncols, nrows, BufferedImage.TYPE_BYTE_GRAY);
 						break;
@@ -71,13 +73,13 @@ public class DriveTest extends TimerTask {
         		Timer displayTaskTimer = new Timer();
         		displayTaskTimer.scheduleAtFixedRate(new DriveTest(), new Date(), 1000/FPS);
         	}
-			public static void subMain(TrakSim sim, FlyCamera simcam){
+			public static void subMain(TrakSim sim, FlyCamera simcam, int viewType){
 				Timer displayTaskTimer = new Timer();
-				displayTaskTimer.scheduleAtFixedRate(new DriveTest(sim, simcam), new Date(), 1000/FPS);
+				displayTaskTimer.scheduleAtFixedRate(new DriveTest(sim, simcam, viewType), new Date(), 1000/FPS);
 			}
         	@Override
 	public void run() {
-				switch(DriverCons.D_SecondViewType){
+				switch(viewType){
 					case 1:
 						int[] imagepixels = imagemanager.getRGBRaster();
 						int[] displaypixels = ((DataBufferInt) displayimage.getRaster().getDataBuffer()).getData();

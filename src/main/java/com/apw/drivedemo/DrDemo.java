@@ -45,6 +45,7 @@ public class DrDemo extends JFrame implements MouseListener {
             ScrWi = TrakSim.WinWi,
             ScrFrTime = DriverCons.D_FrameTime, Scr2L = ScrWi * 2,
             CamFPS = FlyCamera.FrameRate_15 - 1, // CamTime = 528>>CamFPS, // cam frame in ms
+            SecondViewType = DriverCons.D_SecondViewType,
 
     DrawDash = DriverCons.D_DrawDash, CarColo = DriverCons.D_CarColo,
             AddColo = DriverCons.D_MarinBlue,
@@ -798,8 +799,8 @@ public class DrDemo extends JFrame implements MouseListener {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         addMouseListener(this); // if 'implements MouseListen..'
         setVisible(true);
-        if(DriverCons.D_SecondViewType!=0) {
-            DriveTest.subMain(theSim, simVideo);
+        if(SecondViewType!=0) {
+            DriveTest.subMain(theSim, simVideo, SecondViewType);
         }
 
     }
