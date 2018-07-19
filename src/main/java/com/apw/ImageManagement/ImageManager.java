@@ -2,7 +2,11 @@
 
 package com.apw.ImageManagement;
 
+import com.aparapi.Range;
 import com.apw.fly2cam.FlyCamera;
+import com.apw.gpu.MonochromeRasterKernel;
+import com.apw.gpu.RGBRasterKernel;
+import com.apw.gpu.SimpleColorRasterKernel;
 
 public class ImageManager {
 
@@ -11,7 +15,7 @@ public class ImageManager {
     private byte mono[];
     private byte simple[];
     private int rgb[];
-
+    private boolean runOnGpu = true;
     /*Main*/
     public ImageManager(FlyCamera trakcam) {
         picker = new ImagePicker(trakcam, 30);
@@ -33,8 +37,15 @@ public class ImageManager {
     /*Serves monochrome raster of camera feed
      * Formatted in 1D array of bytes*/
     public byte[] getMonochromeRaster() {
-        ImageManipulator.convertToMonochromeRaster(picker.getPixels(), mono, nrows, ncols);
-        return mono;
+        if (runOnGpu) {
+            MonochromeRasterKernel kernel = new MonochromeRasterKernel(picker.getPixels(), mono, nrows, ncols);
+            kernel.execute(Range.create(nrows * ncols));
+            kernel.dispose();
+            return kernel.getMono();
+        } else {
+            ImageManipulator.convertToMonochromeRaster(picker.getPixels(), mono, nrows, ncols);
+            return mono;
+        }
     }
 
     /*Serves color raster encoded in 1D of values 0-5 with
@@ -46,13 +57,28 @@ public class ImageManager {
      * 5 = BLACK
      */
     public byte[] getSimpleColorRaster() {
-        ImageManipulator.convertToSimpleColorRaster(picker.getPixels(), simple, nrows, ncols);
-        return simple;
+        if (runOnGpu) {
+            SimpleColorRasterKernel kernel = new SimpleColorRasterKernel(picker.getPixels(), simple, nrows, ncols);
+            kernel.execute(Range.create(nrows * ncols));
+            kernel.dispose();
+            return kernel.getSimple();
+        } else {
+            ImageManipulator.convertToSimpleColorRaster(picker.getPixels(), simple, nrows, ncols);
+            return simple;
+        }
+
     }
 
-    public int[] getRGBRaster(){
-        ImageManipulator.convertToRGBRaster(picker.getPixels(), rgb, nrows, ncols);
-        return rgb;
+    public int[] getRGBRaster() {
+        if (runOnGpu) {
+            RGBRasterKernel kernel = new RGBRasterKernel(picker.getPixels(), rgb, nrows, ncols);
+            kernel.execute(Range.create(nrows * ncols));
+            kernel.dispose();
+            return kernel.getRgb();
+        } else {
+            ImageManipulator.convertToRGBRaster(picker.getPixels(), rgb, nrows, ncols);
+            return rgb;
+       }
     }
 
     public static void convertSimpleToRGB(byte[] simpleByte, int[]simpleRGB, int length){
