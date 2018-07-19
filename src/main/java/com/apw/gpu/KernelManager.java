@@ -4,10 +4,11 @@ import com.aparapi.Kernel;
 import com.aparapi.Range;
 
 import java.util.HashMap;
+import java.util.function.Function;
 
 public class KernelManager {
 
-    private static HashMap<KernelType, Kernel> KernelList = new HashMap<>() {{
+    private static HashMap<KernelType, Kernel> KernelList = new HashMap() {{
        put(KernelType.MONOCHROME_RASTER_KERNEL, new MonochromeRasterKernel());
     }};
 
@@ -23,7 +24,7 @@ public class KernelManager {
         if (!KernelList.containsKey(kernelType))
             throw new KernelNotFoundException("Kernel " + kernelType.toString() + " was not found in KernelList");
 
-        var kernel = KernelList.get(kernelType);
+        Kernel kernel = KernelList.get(kernelType);
 
         kernel.execute(range);
 
@@ -40,7 +41,12 @@ public class KernelManager {
         KernelList.put(type, kernel);
     }
 
-    private static class KernelNotFoundException extends Exception {
+    public static Kernel GetKernel(KernelType type)
+    {
+        return KernelList.get(type);
+    }
+
+    static class KernelNotFoundException extends Exception {
         KernelNotFoundException(String message) {
             super(message);
         }
