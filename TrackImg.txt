@@ -132,49 +132,6 @@ B 12 20   1  -- drop track bucket near top
 
 . . . . . . . . -- end of descriptor -- . . . . . . . . . . . . . . . .
 
-0x500050 0x96931963 0x180025 90 5 "Minimal Circle" -- 2018 February 7
-
-// Minimal Circle track..
-
-//   80x80m park (=40x40 in grid units),
-//   brown trk + green non-trk,
-//   start 24,32 (=12,16 grid units),
-//   90 degrees = E
-//   5" (12.5cm) line width
-
-F  1  1  38 38 0 -- rect fill w/grass
-
--- outside edge from top (CCW)..
-
-W 10 19 -- start at top center facing west
-L 8     -- curve W->S (to 18,10)
-A 2     -- short straight south (20,10)
-L 8     -- curve S->E (29,18)
-A 2     -- short straight east (29,20)
-L 8     -- curve E->N (21,29)
-A 2     -- short straight north (19,29)
-L 8     -- curve N->W (10,21)
-A 2     -- short straight west to end at start
-
-I       -- inside edge from top (c-wise)..
-B 20 20 1 -- drop track bucket near car position
-
-E 12 21 -- start at top center facing east
-R 5     -- curve E->S (to 18,26)
-A 4     -- short straight south (20,26)
-R 5     -- curve S->W (26,21)
-A 4     -- short straight west (26,19)
-R 5     -- curve W->N (21,13)
-A 4     -- short straight north (19,13)
-R 5     -- curve N->E (13,18)
-A 4     -- short straight east to end at start
-
-B 20 20 0 -- drop track bucket near car position
-.         -- end of track
-
-. . . . . . . . -- end of descriptor -- . . . . . . . . . . . . . . . .
-
-
 0x4000FF 0x1AAA0999 0x12003C 60 15 "PSU TestOval" -- 2018 May 7
 
 // Concrete floor; alt color: 0x96961966 = reddish track, greenish off
@@ -269,6 +226,79 @@ B 12 102 1 -- (otherwise might miss diagonal)
 . . . . . . . . -- end of descriptor -- . . . . . . . . . . . . . . . .
 
 
+0x500050 0x96931963 0x180025 90 5 "MinimalSquare" -- 2018 April 12
+
+// This ridiculous track shows fractional edges for sharp corners
+
+// 32x32m park, brown trk + green non-trk, start 12,15; 300 degrees = WNW
+// =16x16 in grid,    (MinimalSquare)            =6,7.5 grid
+
+F  1 1  50 50 0 -- rect fill w/grass (2x2m grid coords)
+
+X 22 -- disable overstrike prevention
+
+W 10 27
+A 10
+W 11 16
+W 13 15
+W 14 15
+W 16 16
+S 17 17
+W 17 26
+//N 16 28
+//W 14 29
+//W 13 29
+//W 11 28
+//W 10 27
+
+
+. . . . . . . . -- end of descriptor -- . . . . . . . . . . . . . . . .
+
+
+0x500050 0x96931963 0x180025 90 5 "Minimal Circle" -- 2018 February 7
+
+// Minimal Circle track..
+
+//   80x80m park (=40x40 in grid units),
+//   brown trk + green non-trk,
+//   start 24,32 (=12,16 grid units),
+//   90 degrees = E
+//   5" (12.5cm) line width
+
+F  1  1  38 38 0 -- rect fill w/grass
+
+-- outside edge from top (CCW)..
+
+W 10 19 -- start at top center facing west
+L 8     -- curve W->S (to 18,10)
+A 2     -- short straight south (20,10)
+L 8     -- curve S->E (29,18)
+A 2     -- short straight east (29,20)
+L 8     -- curve E->N (21,29)
+A 2     -- short straight north (19,29)
+L 8     -- curve N->W (10,21)
+A 2     -- short straight west to end at start
+
+I       -- inside edge from top (c-wise)..
+B 20 20 1 -- drop track bucket near car position
+
+E 12 21 -- start at top center facing east
+R 5     -- curve E->S (to 18,26)
+A 4     -- short straight south (20,26)
+R 5     -- curve S->W (26,21)
+A 4     -- short straight west (26,19)
+R 5     -- curve W->N (21,13)
+A 4     -- short straight north (19,13)
+R 5     -- curve N->E (13,18)
+A 4     -- short straight east to end at start
+
+B 20 20 0 -- drop track bucket near car position
+.         -- end of track
+
+. . . . . . . . -- end of descriptor -- . . . . . . . . . . . . . . . .
+
+
+
 0x300020 0x96931963 0x24000C 0 16 "Divided Highway" -- 2018 April 26
 
 // Divided Highway..
@@ -309,49 +339,6 @@ A 4
 L 0
 
 B 20 5 1 -- bucket fill near bottom
-
-. . . . . . . . -- end of descriptor -- . . . . . . . . . . . . . . . .
-
-0x200020 0x96931963 0x0C000F 300 16 "MinimalSquare" -- 2018 April 12
-
-// This ridiculous track shows fractional edges for sharp corners
-
-// 32x32m park, brown trk + green non-trk, start 12,15; 300 degrees = WNW
-// =16x16 in grid,    (MinimalSquare)            =6,7.5 grid
-
-F  1 1  9 9 0 -- rect fill w/grass (2x2m grid coords)
-
-X 22 -- disable overstrike prevention
-
-E 3.9 3.9 -- init inside east at top left
-E 3.9 4.9 -- across top
-S 3.9 5.0 -- sharp right turn
-S 4.9 5.0 -- down right
-W 5.0 5.0 -- sharp right turn
-W 5.0 4.0 -- across bottom
-N 5.0 3.9 -- sharp right turn
-N 4.0 3.9 -- up left
-E 3.9 3.9 -- sharp right turn & end
-
-F 2 2 3 3 1 -- fill corners with track..
-F 2 5 3 6 1
-F 5 5 6 6 1
-F 5 2 6 3 1
-
-W 2.9 6.0 -- init outside west at top right
-W 2.9 3.0 -- across top
-S 2.9 2.9 -- sharp left turn (doesn't work, but smash later)
-S 5.9 2.9 -- down left
-E 6.0 2.9 -- sharp left turn
-E 6.0 5.9 -- across bottom
-N 6.0 6.0 -- sharp left turn (doesn't work, but smash later)
-N 3.0 6.0 -- up right
-W 2.9 6.0 -- sharp left turn & end
-
-F 6 6 7 7 0 -- erase corner glitches..
-F 1 1 2 2 0
-F 6 1 7 2 0
-F 1 6 2 7 0
 
 . . . . . . . . -- end of descriptor -- . . . . . . . . . . . . . . . .
 

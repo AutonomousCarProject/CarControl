@@ -16,8 +16,8 @@
  */
 package drivedemo;                                    // 2018 June 13
 
-import Steering.Steering;
 import Steering.Point;
+import Steering.Steering;
 import apw3.*;
 import fakefirm.Arduino;
 import fly2cam.FlyCamera;
@@ -35,8 +35,6 @@ import java.awt.image.DataBufferInt;
 
 public class DrDemo extends JFrame implements MouseListener {
 
-
-	
 	
   private static final long serialVersionUID = 1L; // unneed but Java insists {
 
@@ -290,94 +288,117 @@ public class DrDemo extends JFrame implements MouseListener {
  /**
   * Accepts clicks on screen image to control operation
   */
-  @Override public void mouseClicked(MouseEvent evt) { // (in DrDemo)
-    Insets edges = getInsets();
-    int kx = 0, nx = 0, zx = 0, Vx = 0, Hx = 0, why = 0;
-    boolean didit = false;
-    if (evt != null) if (edges != null) { // we only implement/o'ride this one
-      Hx = evt.getX()-edges.left;
-      Vx = evt.getY()-edges.top;} //~if
-    if (Hx<ImgWi) {
-      why = theSim.GridBlock(Vx,Hx); // find which screen chunk it's in..
-      zx = why&0xFF;
-      nx = why>>16;
-      if (nx<3) { // top half, switch to camera view..
-        didit = ((nx|zx)==1); // top left corner simulates covering lens..
-        if (didit) theSim.DarkFlash(); // unseen if switches to live cam
-        CameraView = (theVideo != null)
-            && (CamPix != null);
-        if (CameraView) {
-          theSim.SimStep(0);
-          if (Calibrating>0) SteerMe(true,0);
-          else if (Calibrating<0) AxLR8(true,0); // stop
-          else if (didit) { // if click top-left, stop so ESC can recover..
-            AxLR8(true,0);
-            unPaused = false;
-            StartYourEngines = 0;} //~if
-          Calibrating = 0;} //~if
-        DidFrame = 0;
-        unPaused = CameraView && (nx==1);} //~if // top edge runs // (nx<3)
-      else if (nx==3) { // middle region, manual steer/calibrate..
-        if (Calibrating<0) {
-          if (zx==4) AxLR8(true,0);
-            else AxLR8(false,Grid_Moves[zx&7]);} //~if
-        else if (zx==4) SteerMe(true,0);  // Grid_Moves={0,-32,-8,-1,0,1,8,32,..
-          else SteerMe(false,Grid_Moves[zx&7]);
-        theSim.FreshImage();} //~if
-      else if (Calibrating>0) {
-        SteerMe(true,0); // straight ahead
-        Calibrating = -1;} //~if
-      else if (Calibrating<0) {
-        AxLR8(true,0); // stop
-        Calibrating = 0;
-        theSim.SimStep(1);
-        StartYourEngines = 0;} //~if
-      else if (nx==5) { // bottom, switch to sim view..
-        CameraView = false;
-        DidFrame = 0;
-        if (theSim.IsCrashed()) theSim.SimStep(0); // clear crashed mode
-        if (zx==2) NoneStep = 1; // left half: 1-step
-          else NoneStep = 0; // right half: continuous
-        if (ContinuousMode) theSim.SimStep(2);
-          else theSim.SimStep(1);
-        unPaused = ((zx>1)&&(zx<4));} //~if // corners: DrDemo not control speed
-      else if (nx==4) { // low half..
-        if (zx<2) Stopit(0); // low half, left edge, kill it politely
-        else if (!CameraView) // otherwise toggle pause..
-          unPaused = !unPaused;}} //~if
-    else if (ShowMap) {
-      zx = theSim.GetMapSize(); // MapHy,MapWy = size of full map
-      nx = Hx-2-ImgWi;
-      if ((Vx<(zx>>16)) && (nx<(zx&0xFFF)))
-        theSim.SetStart(Vx,nx,MyMath.Trunc8(theSim.GetFacing()));
-      else zx = theSim.ZoomMap2true(true,Vx,Hx); // sets facing to -> click
-      unPaused = false; // pause if click on map
-      theSim.FreshImage();} //~if
-    if (Calibrating==0) {
-      why = 256;
-      if (!unPaused) { // pause it..
-        why--; // why = 255
-        if (StartYourEngines>0) theSim.SimStep(0);
-        StartYourEngines = 0;
-        AxLR8(true,0);} //~if
-      else if (StartYourEngines==0) { // start..
-        why++; // why = 257
-        if (ContinuousMode) theSim.SimStep(2);
-          // else theSim.SimStep(1);
-        StartYourEngines++;
-        DidFrame = 0;
-        if (SimSpedFixt && (ServoTestCount==0)) AxLR8(true,StartGas);
-        else if (DarkState<2) DarkState = 2;}} //~if
-    System.out.println(HandyOps.Dec2Log("(DrDemo) Got click @ ",Vx,
-        HandyOps.Dec2Log(",",Hx,HandyOps.Dec2Log(": ",nx,
-        HandyOps.Dec2Log("/",zx,HandyOps.Dec2Log(" +",kx,
-        HandyOps.Dec2Log(" ",StartYourEngines,
-        HandyOps.TF2Log(" s=", true,
-        HandyOps.TF2Log(" g=",unPaused,HandyOps.TF2Log(" cv=",CameraView,
-        HandyOps.Dec2Log(" ns=",NoneStep,HandyOps.Dec2Log(" ",Calibrating,
-        HandyOps.Dec2Log(" ",why,
-        HandyOps.PosTime( (
-          " @ "))))) ))))) )))));} //~mouseClicked
+ @Override
+ public void mouseClicked(MouseEvent evt) { // (in DrDemo)
+     Insets edges = getInsets();
+     int kx = 0, nx = 0, zx = 0, Vx = 0, Hx = 0, why = 0;
+     boolean didit = false, rite = false; /// ***
+     if (evt != null) if (edges != null) { // we only implement/o'ride this one
+         if (evt.getButton() == MouseEvent.BUTTON3) rite = true; /// ***
+         Hx = evt.getX() - edges.left;
+         Vx = evt.getY() - edges.top;
+     } //~if
+     if (Hx < ImgWi) {
+         why = theSim.GridBlock(Vx, Hx); // find which screen chunk it's in..
+         zx = why & 0xFF;
+         nx = why >> 16;
+         if (nx < 3) { // top half, switch to camera view..
+             didit = ((nx | zx) == 1); // top left corner simulates covering lens..
+             if (didit) theSim.DarkFlash(); // unseen if switches to live cam
+             CameraView = (theVideo != null)
+                     && (CamPix != null);
+             if (CameraView) {
+                 theSim.SimStep(0);
+                 if (Calibrating > 0) SteerMe(true, 0);
+                 else if (Calibrating < 0) AxLR8(true, 0); // stop
+                 else if (didit) { // if click top-left, stop so ESC can recover..
+                     AxLR8(true, 0);
+                     unPaused = false;
+                     StartYourEngines = 0;
+                 } //~if
+                 Calibrating = 0;
+             } //~if
+             DidFrame = 0;
+             unPaused = CameraView && (nx == 1);
+         } //~if // top edge runs // (nx<3)
+         else if (nx == 3) { // middle region, manual steer/calibrate..
+             if (Calibrating < 0) {
+                 if (zx == 4) AxLR8(true, 0);
+                 else AxLR8(false, Grid_Moves[zx & 7]);
+             } //~if
+             else if (zx == 4) SteerMe(true, 0);  // Grid_Moves={0,-32,-8,-1,0,1,8,32,..
+             else SteerMe(false, Grid_Moves[zx & 7]);
+             theSim.FreshImage();
+         } //~if
+         else if (Calibrating > 0) {
+             SteerMe(true, 0); // straight ahead
+             Calibrating = -1;
+         } //~if
+         else if (Calibrating < 0) {
+             AxLR8(true, 0); // stop
+             Calibrating = 0;
+             theSim.SimStep(1);
+             StartYourEngines = 0;
+         } //~if
+         else if (nx == 5) { // bottom, switch to sim view..
+             CameraView = false;
+             DidFrame = 0;
+             if (theSim.IsCrashed()) theSim.SimStep(0); // clear crashed mode
+             if (zx == 2) NoneStep = 1; // left half: 1-step
+             else NoneStep = 0; // right half: continuous
+             if (ContinuousMode) theSim.SimStep(2);
+             else theSim.SimStep(1);
+             unPaused = ((zx > 1) && (zx < 4));
+         } //~if // corners: DrDemo not control speed
+         else if (nx == 4) { // low half..
+             if (zx < 2) Stopit(0); // low half, left edge, kill it politely
+             else if (!CameraView) // otherwise toggle pause..
+                 unPaused = !unPaused;
+         }
+     } //~if
+     else if (ShowMap) {
+         zx = theSim.GetMapSize(); // MapHy,MapWy = size of full map
+         nx = Hx - 2 - ImgWi;
+         if ((Vx < (zx >> 16)) && (nx < (zx & 0xFFF)))
+             theSim.SetStart(Vx, nx, MyMath.Trunc8(theSim.GetFacing()));
+         else zx = theSim.ZoomMap2true(!rite, Vx, Hx); // sets facing to -> click
+         if (rite) { /// ***
+             Vx = zx >> 22; // ZoomMap2tru rtns (r,c)<<6..
+             Hx = (zx >> 6) & 0xFF;
+             if (Vx > 0) if (Hx > 0) theSim.SetStart(Vx, Hx, MyMath.Trunc8(theSim.GetFacing()));
+         } /// ***
+         unPaused = false; // pause if click on map
+         theSim.FreshImage();
+     } //~if
+     if (Calibrating == 0) {
+         why = 256;
+         if (!unPaused) { // pause it..
+             why--; // why = 255
+             if (StartYourEngines > 0) theSim.SimStep(0);
+             StartYourEngines = 0;
+             AxLR8(true, 0);
+         } //~if
+         else if (StartYourEngines == 0) { // start..
+             why++; // why = 257
+             if (ContinuousMode) theSim.SimStep(2);
+             // else theSim.SimStep(1);
+             StartYourEngines++;
+             DidFrame = 0;
+             if (SimSpedFixt && (ServoTestCount == 0)) AxLR8(true, StartGas);
+             else if (DarkState < 2) DarkState = 2;
+         }
+     } //~if
+     System.out.println(HandyOps.Dec2Log("(DrDemo) Got click @ ", Vx,
+             HandyOps.Dec2Log(",", Hx, HandyOps.Dec2Log(": ", nx,
+                     HandyOps.Dec2Log("/", zx, HandyOps.Dec2Log(" +", kx,
+                             HandyOps.Dec2Log(" ", StartYourEngines,
+                                     HandyOps.TF2Log(" s=", true,
+                                             HandyOps.TF2Log(" g=", unPaused, HandyOps.TF2Log(" cv=", CameraView,
+                                                     HandyOps.Dec2Log(" ns=", NoneStep, HandyOps.Dec2Log(" ", Calibrating,
+                                                             HandyOps.Dec2Log(" ", why,
+                                                                     HandyOps.PosTime((
+                                                                             " @ ")))))))))))))));
+ } //~mouseClicked
 
  /**
   * Exercise steering & ESC servos, but only if live camera.
@@ -617,6 +638,10 @@ public class DrDemo extends JFrame implements MouseListener {
     			graf.fillRect(testSteering.leadingMidPoints[i].x, testSteering.leadingMidPoints[i].y +  + edges.top, 5, 5);
     		}   
     	}
+
+      // Draw steerPoint on screen
+      graf.setColor(Color.CYAN);
+      graf.fillRect(testSteering.steerPoint.x, testSteering.steerPoint.y, 7, 7);
     
     
     for (int i = 0; i<hi.length; i++) {

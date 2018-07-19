@@ -106,6 +106,7 @@ public class Steering {
 			count++;
 			roadMiddle = leftSideTemp + rightSideTemp;
 		}
+
 		count = 0;
 		for (int i = startingHeight + heightOfArea; i>startingHeight; i--) {
 			//center to left
@@ -120,7 +121,7 @@ public class Steering {
 				}
 				
 			}
-			if (found == false) {
+			if (!found) {
 				leftPoints[count].x = 0;
 			}
 			
@@ -135,7 +136,7 @@ public class Steering {
 					break;
 				}
 			}
-			if (found == false) {
+			if (!found) {
 				rightPoints[count].x = cameraWidth;
 			}
 			
@@ -186,11 +187,9 @@ public class Steering {
     public int getDegreeOffset() {
 	    int xOffset = origin.x - steerPoint.x;
 	    int yOffset = Math.abs(origin.y - steerPoint.y);
-
-	    int tempDeg = (int)((Math.atan2(-xOffset, yOffset)) * (180 / Math.PI));
-	    
 	    System.out.println("\n\n\n" + myPID() + " " + xOffset + "\n\n\n");
-	    return (int)((Math.atan2(-(usePID?myPID():xOffset), yOffset)) * (180 / Math.PI));
+
+	    return (int)Math.round((Math.atan2(-xOffset, yOffset)) * (180 / Math.PI));
     }
     
     public double myPID() {
