@@ -35,7 +35,7 @@ import java.awt.image.DataBufferInt;
 
 public class DrDemo extends JFrame implements MouseListener {
 
-	Steering testSteering = new Steering();
+
 	
 	
   private static final long serialVersionUID = 1L; // unneed but Java insists {
@@ -72,6 +72,7 @@ public class DrDemo extends JFrame implements MouseListener {
   private Arduino theServos = null;
   private TrakSim theSim = null;
   private byte[] CamPix = null;
+  Steering testSteering = null;
   private boolean StepMe = false, SimSpedFixt = DriverCons.D_FixedSpeed,
     CamActive = false;
 
@@ -661,6 +662,7 @@ public class DrDemo extends JFrame implements MouseListener {
     simVideo = new SimCamera();
       theServos = new Arduino();
       theSim = new TrakSim();
+  	 testSteering = new Steering(theSim);
       if (LiveCam) theVideo = new FlyCamera();
     ViDied = 0;
     dunit = theServos.IsOpen();
