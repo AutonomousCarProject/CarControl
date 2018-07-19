@@ -28,6 +28,14 @@ public class RGBRasterKernel extends Kernel {
         this.ncols = ncols;
     }
 
+    /**
+     * Sets all member variables of <code>RGBRasterKernel</code>.
+     *
+     * @param bayer Array of bayer arranged rgb colors
+     * @param nrows Number of rows to filter
+     * @param ncols Number of columns to filter
+     * @param rgb   rgb raster of the bayer array
+     */
     public void setValues(byte[] bayer, int[] rgb, int nrows, int ncols) {
         this.bayer = bayer;
         this.rgb = rgb;

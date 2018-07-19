@@ -31,6 +31,14 @@ public class SimpleColorRasterKernel extends Kernel {
         this.ncols = ncols;
     }
 
+    /**
+     * Sets all member variables of <code>SimpleColorRasterKernel</code>.
+     *
+     * @param bayer  Array of bayer arranged rgb colors
+     * @param simple Simple color raster of the bayer array
+     * @param nrows  Number of rows to filter
+     * @param ncols  Number of columns to filter
+     */
     public void setValues(byte[] bayer, byte[] simple, int nrows, int ncols) {
         this.bayer = bayer;
         this.simple = simple;
