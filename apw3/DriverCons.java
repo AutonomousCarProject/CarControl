@@ -50,7 +50,7 @@ public class DriverCons { // TrakSim constant parameters
     D_RampA = 300,     // Initial orient'n for car, c-wise degrees from north
     D_Zoom35 = 35,     // 35mm-equivalent focal length for "camera"
     D_BayTile = 1,     // Bayer8 tiling code (RG/GB) as defined by Pt.Grey
-    D_FrameTime = 200, // =5/fps, nominal frame rate for camera (must >= 20ms)
+    D_FrameTime = 100, // =5/fps, nominal frame rate for camera (must >= 20ms)
     D_nServoTests = 5, // number of times to run through test (1: no ESC)
     D_ServoMsgPos = 200*0x10000+0, // position of warning in image file,
       D_ServoMsgTL = 40*0x10001, D_ServoMsgSiz = 40*0x10000+80, // posn on screen
@@ -75,7 +75,7 @@ public class DriverCons { // TrakSim constant parameters
 
   public static final double D_TurnRadius = 7.0, // nom. meters in park coords
       // measured from midline fully cramped, servo position = 0/180
-    D_fMinSpeed = 8.0, // measured min (8x actual m/s = mph/2) @ MinESCact;
+    D_fMinSpeed = 15.0, // measured min (8x actual m/s = mph/2) @ MinESCact;
       // 1mph = 0.5m/s park speed = 3"/sec @ 1:8 scale floor speed
       // 1mph floor speed is 8mph park speed = 4m/s
     D_WhiteLnWi = 0.25,   // in real-world meters, here 10"
