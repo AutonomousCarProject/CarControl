@@ -31,6 +31,13 @@ public class SimpleColorRasterKernel extends Kernel {
         this.ncols = ncols;
     }
 
+    public void setValues(byte[] bayer, byte[] simple, int nrows, int ncols) {
+        this.bayer = bayer;
+        this.simple = simple;
+        this.nrows = nrows;
+        this.ncols = ncols;
+    }
+
     /**
      * Returns an simple color raster of a bayer byte array,
      * Should be called to retrieve result after kernel is executed.

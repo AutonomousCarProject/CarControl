@@ -28,6 +28,13 @@ public class RGBRasterKernel extends Kernel {
         this.ncols = ncols;
     }
 
+    public void setValues(byte[] bayer, int[] rgb, int nrows, int ncols) {
+        this.bayer = bayer;
+        this.rgb = rgb;
+        this.nrows = nrows;
+        this.ncols = ncols;
+    }
+
     /**
      * Returns an rgb raster of a bayer byte array,
      * Should be called to retrieve result after kernel is executed.

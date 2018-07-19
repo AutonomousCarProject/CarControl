@@ -21,6 +21,9 @@ public class ImageManager {
     private byte simple[];
     private int rgb[];
     private Processsor processsor;
+    MonochromeRasterKernel  monoRasterKernel;
+    SimpleColorRasterKernel simpleRasterKernel;
+    RGBRasterKernel         rgbRasterKernel;
     /*Main*/
     public ImageManager(FlyCamera trakcam) {
         picker = new ImagePicker(trakcam, 30);
@@ -29,6 +32,9 @@ public class ImageManager {
         mono = new byte[nrows*ncols];
         simple = new byte[nrows * ncols];
         rgb = new int[nrows*ncols];
+        monoRasterKernel   = new MonochromeRasterKernel (picker.getPixels(), mono,   nrows, ncols);
+        simpleRasterKernel = new SimpleColorRasterKernel(picker.getPixels(), simple, nrows, ncols);
+        rgbRasterKernel    = new RGBRasterKernel        (picker.getPixels(), rgb,    nrows, ncols);
     }
 
     public int getNrows(){
@@ -51,10 +57,10 @@ public class ImageManager {
      * Formatted in 1D array of bytes*/
     public byte[] getMonochromeRaster() {
         if (processsor == Processsor.GPU) {
-            MonochromeRasterKernel kernel = new MonochromeRasterKernel(picker.getPixels(), mono, nrows, ncols);
-            kernel.execute(Range.create(nrows * ncols));
-            kernel.dispose();
-            return kernel.getMono();
+            monoRasterKernel.setValues(picker.getPixels(), mono, nrows, ncols);
+            monoRasterKernel.execute(Range.create(nrows * ncols));
+            monoRasterKernel.dispose();
+            return monoRasterKernel.getMono();
         } else {
             ImageManipulator.convertToMonochromeRaster(picker.getPixels(), mono, nrows, ncols);
             return mono;
@@ -71,10 +77,10 @@ public class ImageManager {
      */
     public byte[] getSimpleColorRaster() {
         if (processsor == Processsor.GPU) {
-            SimpleColorRasterKernel kernel = new SimpleColorRasterKernel(picker.getPixels(), simple, nrows, ncols);
-            kernel.execute(Range.create(nrows * ncols));
-            kernel.dispose();
-            return kernel.getSimple();
+            simpleRasterKernel.setValues(picker.getPixels(), simple, nrows, ncols);
+            simpleRasterKernel.execute(Range.create(nrows * ncols));
+            simpleRasterKernel.dispose();
+            return simpleRasterKernel.getSimple();
         } else {
             ImageManipulator.convertToSimpleColorRaster(picker.getPixels(), simple, nrows, ncols);
             return simple;
@@ -84,10 +90,10 @@ public class ImageManager {
 
     public int[] getRGBRaster() {
         if (processsor == Processsor.GPU) {
-            RGBRasterKernel kernel = new RGBRasterKernel(picker.getPixels(), rgb, nrows, ncols);
-            kernel.execute(Range.create(nrows * ncols));
-            kernel.dispose();
-            return kernel.getRgb();
+            rgbRasterKernel.setValues(picker.getPixels(), rgb, nrows, ncols);
+            rgbRasterKernel.execute(Range.create(nrows * ncols));
+            rgbRasterKernel.dispose();
+            return rgbRasterKernel.getRgb();
         } else {
             ImageManipulator.convertToRGBRaster(picker.getPixels(), rgb, nrows, ncols);
             return rgb;

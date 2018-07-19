@@ -27,6 +27,13 @@ public class MonochromeRasterKernel extends Kernel {
         this.ncols = ncols;
     }
 
+    public void setValues(byte[] bayer, byte[] mono, int nrows, int ncols) {
+        this.bayer = bayer;
+        this.mono = mono;
+        this.nrows = nrows;
+        this.ncols = ncols;
+    }
+
     /**
      * Returns a monochrome bayer byte array,
      * Should be called to retrieve result after kernel is executed.
