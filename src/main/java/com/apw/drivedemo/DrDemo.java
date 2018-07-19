@@ -610,6 +610,7 @@ public class DrDemo extends JFrame implements MouseListener,KeyListener {
         System.out.println(speedControl.getDesiredSpeed());
         //End Speed Code
 
+        
         if (CanDraw) {
           DrawDemo();
           if (CameraView) theSim.DrawSteerWheel(SteerDegs,true,true);} //~if
