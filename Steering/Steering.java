@@ -1,6 +1,7 @@
 package Steering;
 
 import apw3.DriverCons;
+import apw3.TrakSim;
 
 public class Steering {
 
@@ -27,8 +28,10 @@ public class Steering {
 	Boolean found = false;
 	Boolean leftSideFound = false;
 	Boolean rightSideFound = false;
+	
+	private TrakSim theSim;
 
-	public Steering() {
+	public Steering(TrakSim theSim) {
 		for (int i = 0; i<heightOfArea; i++) {
 			leftPoints[i] = new Point(0, 0);
 			rightPoints[i] = new Point(0, 0);
@@ -37,9 +40,11 @@ public class Steering {
 		for (int i = 0; i<leadingMidPoints.length; i++) {
 			leadingMidPoints[i] = new Point(0, 0);
 		}
+		this.theSim = theSim;
 	}
 	
 	public Point[] findPoints(int[] pixels) {
+		printErrorRates();
 		int roadMiddle = cameraWidth;
 		int leftSideTemp = 0;
 		int rightSideTemp = 0;
@@ -96,7 +101,6 @@ public class Steering {
 			count++;
 			roadMiddle = leftSideTemp + rightSideTemp;
 		}
-		System.out.println("\n\n\n" + count + "\n\n\n");
 		count = 0;
 		for (int i = startingHeight + heightOfArea; i>startingHeight; i--) {
 			//center to left
@@ -140,7 +144,7 @@ public class Steering {
 	}
 	
 	public double curveSteepness(double turnAngle) {
-		return turnAngle/(45);
+		return turnAngle/(90);
 	}
 
 
@@ -184,9 +188,10 @@ public class Steering {
 	    return (int)((Math.atan2(-xOffset, yOffset)) * (180 / Math.PI));
     }
     
-    //placeholder
-    public int getEstimatedSpeed() {
-    		return 5;
+    //print out left and right distances from car to edge of track
+    public void printErrorRates() {
+    		theSim.InTrackIt();
+    		System.out.println("\n\n\n" + "Left error: " + theSim.getLeftRoadSide() + " Right error: " + theSim.getRightRoadSide() + "\n\n\n");
     }
 }
 
