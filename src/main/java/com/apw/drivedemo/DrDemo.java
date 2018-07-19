@@ -609,6 +609,9 @@ public class DrDemo extends JFrame implements MouseListener,KeyListener {
         
         graf.setColor(Color.ORANGE);
         graf.drawRect(Constants.STOPLIGHT_MIN_X, Constants.STOPLIGHT_MIN_Y, Constants.STOPLIGHT_MAX_X-Constants.STOPLIGHT_MIN_X, Constants.STOPLIGHT_MAX_Y-Constants.STOPLIGHT_MIN_Y);
+
+        graf.setColor(Color.RED);
+        graf.drawRect(Constants.STOPSIGN_MIN_X, Constants.STOPSIGN_MIN_Y, Constants.STOPSIGN_MAX_X-Constants.STOPSIGN_MIN_X, Constants.STOPSIGN_MAX_Y-Constants.STOPSIGN_MIN_Y);
         //End Speed Code
 
         
