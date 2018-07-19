@@ -2,12 +2,27 @@ package com.apw.gpu;
 
 import com.aparapi.Kernel;
 
+/**
+ * The <code>MonochromeRasterKernel</code> subclass describes a {@link com.aparapi.Kernel Kernel}
+ * that creates a simple color raster from a bayer rgb byte array.
+ * <p>
+ *     The raster is comprised of <code>RED</code>, <code>GREEN</code>, <code>BLUE</code>, <code>WHITE</code>, and <code>GREY</code>
+ *     color codes ranging from 0 to 5.
+ * </p>
+ */
 public class SimpleColorRasterKernel extends Kernel {
 
     private int nrows, ncols;
 
     private byte[] bayer, simple;
 
+    /**
+     * Constructs an <code>SimpleColorRasterKernel</code> Aparapi {@link com.aparapi.opencl.OpenCL OpenCL} kernel.
+     * @param nrows Number of rows to filter
+     * @param ncols Number of columns to filter
+     * @param bayer Array of bayer arranged rgb colors
+     * @param simple Simple color raster of the bayer array
+     */
     public SimpleColorRasterKernel(int nrows, int ncols, byte[] bayer, byte[] simple) {
         this.nrows = nrows;
         this.ncols = ncols;
