@@ -8,20 +8,33 @@ public class ImageManager {
 
     int nrows, ncols;
     private ImagePicker picker;
+    private byte mono[];
     private byte simple[];
+    private int rgb[];
 
     /*Main*/
     public ImageManager(SimCamera trakcam) {
         picker = new ImagePicker(trakcam, 30);
         nrows = picker.getNrows();
         ncols = picker.getNcols();
+        mono = new byte[nrows*ncols];
         simple = new byte[nrows * ncols];
+        rgb = new int[nrows*ncols];
+    }
+
+    public int getNrows(){
+        return nrows;
+    }
+
+    public int getNcols(){
+        return ncols;
     }
 
     /*Serves monochrome raster of camera feed
      * Formatted in 1D array of bytes*/
     public byte[] getMonochromeRaster() {
-        return null;
+        ImageManipulator.convertToMonochromeRaster(picker.getPixels(), mono, nrows, ncols);
+        return mono;
     }
 
     /*Serves color raster encoded in 1D of values 0-5 with
@@ -35,5 +48,10 @@ public class ImageManager {
     public byte[] getSimpleColorRaster() {
         ImageManipulator.convertToSimpleColorRaster(picker.getPixels(), simple, nrows, ncols);
         return simple;
+    }
+
+    public int[] getRGBRaster(){
+        ImageManipulator.convertToRGBRaster(picker.getPixels(), rgb, nrows, ncols);
+        return rgb;
     }
 }
