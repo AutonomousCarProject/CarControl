@@ -601,7 +601,7 @@ public class DrDemo extends JFrame implements MouseListener,KeyListener {
         
         
         //Begin Speed Code
-        speedControl.onUpdate(this.GasPedal, testSteering.getDegreeOffset(), this.manualSpeed);
+        speedControl.onUpdate(this.GasPedal, testSteering.getDegreeOffset(), this.manualSpeed, graf);
         AxLR8(true, speedControl.getDesiredSpeed());
         System.out.println(this.GasPedal);
         System.out.println(this.SteerDegs);
