@@ -27,9 +27,10 @@ public class RGBRasterKernel extends Kernel {
         int rows = getGlobalId(1);
         int cols = getGlobalId(0);
 
-        int pix = bayer[(rows * ncols + cols      ) * 2    ] << 16                //Top left (red)
-                + bayer[(rows * ncols + cols      ) * 2 + 1] << 8                 //Top right (green)
-                + bayer[((rows + 1) * ncols + cols) * 2 + 1];                     //Bottom right (blue)
+        int R = ((((int) bayer[(rows * ncols * 2 + cols) * 2                ]) & 0xFF));                //Top left (red)
+        int G = ((((int) bayer[(rows * ncols * 2 + cols) * 2 + 1            ]) & 0xFF));                //Top right (green)
+        int B = (( (int) bayer[(rows * ncols * 2 + cols) * 2 + 1 + 2 * ncols]) & 0xFF);                 //Bottom right (blue)
+        int pix = (R << 16) + (G << 8) + B;
 
         rgb[rows * ncols + cols] = pix;
     }

@@ -12,7 +12,7 @@ public class ImageProcessing {
         int nrows = 4;
         int ncols = 4;
 
-        Range range = Range.create(nrows);
+        Range range = Range.create(nrows * ncols);
 
         SimpleColorRasterKernel kernel = new SimpleColorRasterKernel(nrows, ncols, bayer, simple);
 
