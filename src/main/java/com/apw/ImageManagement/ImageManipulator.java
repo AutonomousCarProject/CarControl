@@ -38,7 +38,7 @@ public class ImageManipulator {
 				int B = (((int)bayer[(r*ncols*2 + c)*2 + 1+2*ncols])&0xFF);			//Bottom right (blue)
 				//If one of the colors has a value 50 greater than both other colors
 				//it assigns that pixel to that color
-				if(R > G+50 && R > B+50){
+				if(R > G+51 && R > B+51){
 					simple[r*ncols+c] = 0;
 				} else if(G > R+50 && G > B+50){
 					simple[r*ncols+c] = 1;

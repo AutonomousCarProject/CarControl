@@ -54,4 +54,29 @@ public class ImageManager {
         ImageManipulator.convertToRGBRaster(picker.getPixels(), rgb, nrows, ncols);
         return rgb;
     }
+
+    public static void convertSimpleToRGB(byte[] simpleByte, int[]simpleRGB, int length){
+        for(int i = 0; i < length; i++){
+            switch(simpleByte[i]){
+                case 0:
+                    simpleRGB[i] = 0xFF0000;
+                    break;
+                case 1:
+                    simpleRGB[i] = 0x00FF00;
+                    break;
+                case 2:
+                    simpleRGB[i] = 0x0000FF;
+                    break;
+                case 3:
+                    simpleRGB[i] = 0xFFFFFF;
+                    break;
+                case 4:
+                    simpleRGB[i] = 0x808080;
+                    break;
+                case 5:
+                    simpleRGB[i] = 0x000000;
+                    break;
+            }
+        }
+    }
 }
