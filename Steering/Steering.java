@@ -30,6 +30,11 @@ public class Steering {
 	Boolean rightSideFound = false;
 	
 	private TrakSim theSim;
+	
+	private double integral, derivative, previousError;
+	private double kP = 0.65;
+	private double kI = 1;
+	private double kD = 1;
 
 	public Steering(TrakSim theSim) {
 		for (int i = 0; i<heightOfArea; i++) {
@@ -44,7 +49,6 @@ public class Steering {
 	}
 	
 	public Point[] findPoints(int[] pixels) {
-		printErrorRates();
 		int roadMiddle = cameraWidth;
 		int leftSideTemp = 0;
 		int rightSideTemp = 0;
@@ -184,14 +188,26 @@ public class Steering {
 
 	    int tempDeg = (int)((Math.atan2(-xOffset, yOffset)) * (180 / Math.PI));
 	    
-
-	    return (int)((Math.atan2(-xOffset, yOffset)) * (180 / Math.PI));
+	    System.out.println("\n\n\n" + myPID() + " " + xOffset + "\n\n\n");
+	    return (int)((Math.atan2(-myPID(), yOffset)) * (180 / Math.PI));
     }
     
-    //print out left and right distances from car to edge of track
-    public void printErrorRates() {
-    		theSim.InTrackIt();
-    		System.out.println("\n\n\n" + "Left error: " + theSim.getLeftRoadSide() + " Right error: " + theSim.getRightRoadSide() + "\n\n\n");
+    public double myPID() {
+ 
+    		int error = origin.x - steerPoint.x;
+    		
+    		integral += error * DriverCons.D_FrameTime;
+    		if (error == 0 || (Math.abs(error-previousError)==(Math.abs(error)+Math.abs(previousError)))) {
+    			integral = 0;
+    		}
+    		if (Math.abs(integral) > 100) {
+    			integral = 0;
+    		}
+
+    		derivative = (error - previousError)/DriverCons.D_FrameTime;
+    		previousError = error;
+    		return error*kP + integral*kI + derivative*kD;
+ 
     }
 }
 
