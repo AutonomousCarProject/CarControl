@@ -1,7 +1,7 @@
 /*ImageManager: Retrieves and preprocesses images from the camera and displays feed onscreen*/
 
 package com.apw.ImageManagement;
-
+import com.apw.apw3.SimCamera;
 import com.apw.fly2cam.FlyCamera;
 
 public class ImageManager {

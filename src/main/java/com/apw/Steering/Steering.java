@@ -14,7 +14,7 @@ public class Steering {
 
 	private int screenWidth = 912;
 	private int cameraWidth = 640;
-	private int screenHeight = DriverCons.D_ImHi;
+	private int screenHeight = com.apw.apw3.DriverCons.D_ImHi;
 	public Point steerPoint = new Point(0, 0);
 
 	public Point[] leadingMidPoints = new Point[startingHeight + heightOfArea];
@@ -140,7 +140,7 @@ public class Steering {
 	}
 	
 	public double curveSteepness(double turnAngle) {
-		return turnAngle/(90);
+		return turnAngle/(45);
 	}
 
 

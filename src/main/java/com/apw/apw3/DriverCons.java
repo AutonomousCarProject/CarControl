@@ -30,15 +30,15 @@ public class DriverCons { // TrakSim constant parameters
     public static final boolean // options & diagnostic switches..
             D_LiveCam = false,       // F: omit connecting to FlyCamera
             D_StartLive = false,    // T: start in live camera if possible
-            D_FixedSpeed = true,    // ignore speed control, assume fMinSpeed
-            D_StayInTrack = true,   // ignore steering control, stay centered in track
+            D_FixedSpeed = false,    // ignore speed control, assume fMinSpeed
+            D_StayInTrack = false,   // ignore steering control, stay centered in track
             D_ShoTrkTstPts = false, // T: show test points used to calc StayInTrack
             D_ShoClikGrid = false,  // T: to see where to click to steer/accelerate
             D_ShowMap = true,       // T: show the map next to the scene
             D_DoCloseUp = true,     // T: show close-up map if there is room
             D_RampServos = false,   // T: servos take time to arrive at setting
             D_TrakNoPix = false,    // T: draw track only, omit artifacts & trees
-            D_UseTexTrak = true,    // T: use text file to build track to drive
+            D_UseTexTrak = false,    // T: use text file to build track to drive
             D_Reversible = false,   // T: allow reverse (untested)
             D_StartInCalibrate = false, // T: use this to calibrate servo limits
             D_Log_Draw = false, D_Log_Log = false, D_Fax_Log = false,
