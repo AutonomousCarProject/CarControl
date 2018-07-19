@@ -35,6 +35,7 @@ public class Steering {
 	private double kP = 0.65;
 	private double kI = 1;
 	private double kD = 1;
+	private boolean usePID = true;
 
 	public Steering(TrakSim theSim) {
 		for (int i = 0; i<heightOfArea; i++) {
@@ -148,7 +149,7 @@ public class Steering {
 	}
 	
 	public double curveSteepness(double turnAngle) {
-		return turnAngle/(90);
+		return Math.abs(turnAngle)/(45);
 	}
 
 
@@ -189,7 +190,7 @@ public class Steering {
 	    int tempDeg = (int)((Math.atan2(-xOffset, yOffset)) * (180 / Math.PI));
 	    
 	    System.out.println("\n\n\n" + myPID() + " " + xOffset + "\n\n\n");
-	    return (int)((Math.atan2(-myPID(), yOffset)) * (180 / Math.PI));
+	    return (int)((Math.atan2(-(usePID?myPID():xOffset), yOffset)) * (180 / Math.PI));
     }
     
     public double myPID() {
