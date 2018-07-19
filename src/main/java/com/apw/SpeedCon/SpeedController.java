@@ -6,6 +6,7 @@ import com.apw.pedestrians.blobtrack.*;
 import com.apw.pedestrians.image.Color;
 import com.apw.pedestrians.*;
 import com.apw.ImageManagement.*;
+import com.apw.drivedemo.DriveTest;
 
 public class SpeedController {
 	
@@ -30,7 +31,8 @@ public class SpeedController {
 	
 	//A method to be called every frame. Calculates desired speed and actual speed
 	//Also takes stopping into account
-	public void onUpdate(int gasAmount, int steerDegs, int manualSpeed, Graphics graf){
+	public void onUpdate(int gasAmount, int steerDegs, int manualSpeed, Graphics graf, DriveTest dtest){
+		dtest.run();
 		this.calculateEstimatedSpeed(gasAmount);
 		this.calculateDesiredSpeed(steerDegs, manualSpeed);
 		
@@ -38,11 +40,12 @@ public class SpeedController {
 		//relevant, and then what to do with them
 		PedestrianDetector pedDetect = new PedestrianDetector();
 		
-		/*			Uncomment when image management team fixes their code
-		ImageManager imageManager = new ImageManager(new com.apw.fly2cam.FlyCamera());
+					//Uncomment when image management team fixes their code
+		ImageManager imageManager = dtest.getImgManager();
 		List<MovingBlob> blobs = pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), com.apw.apw3.DriverCons.D_ImWi);
 		for(MovingBlob i : blobs){
-			graf.fillRect(i.x, i.y, i.width, i.height);
+			graf.setColor(java.awt.Color.BLUE);
+			graf.drawRect(i.x, i.y, i.width, i.height);;
 			if(detectStopLight(i)){
 				setStoppingAtSign();
 			}
@@ -50,7 +53,7 @@ public class SpeedController {
 				setStoppingAtLight();
 			}
 		}
-		*/
+		
 		
 	}
 	
