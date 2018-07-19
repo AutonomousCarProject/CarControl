@@ -23,9 +23,9 @@ public class MonochromeRasterKernel extends Kernel {
     public void run() {
 
         // these might not be accurate
-        int r = getGlobalId() / nrows;
-        int c = getGlobalId() / ncols;
+        int rows = getGlobalId(1);
+        int cols = getGlobalId(0);
 
-        mono[r * ncols + c] = bayer[r * ncols * 2 + c * 2 + 1];
+        mono[rows * ncols + cols] = bayer[rows * ncols * 2 + cols * 2 + 1];
     }
 }

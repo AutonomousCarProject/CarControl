@@ -24,8 +24,8 @@ public class RGBRasterKernel extends Kernel {
     public void run() {
 
         // these might not be accurate
-        int rows = getGlobalId() / nrows;
-        int cols = getGlobalId() / ncols;
+        int rows = getGlobalId(1);
+        int cols = getGlobalId(0);
 
         int pix = bayer[(rows * ncols + cols      ) * 2    ] << 16                //Top left (red)
                 + bayer[(rows * ncols + cols      ) * 2 + 1] << 8                 //Top right (green)

@@ -12,10 +12,12 @@ public class ImageProcessing {
         int nrows = 4;
         int ncols = 4;
 
-        Range range = Range.create(nrows, ncols);
+        Range range = Range.create(nrows);
 
         SimpleColorRasterKernel kernel = new SimpleColorRasterKernel(nrows, ncols, bayer, simple);
+
         kernel.execute(range);
+        kernel.dispose();
 
         System.out.println(Arrays.toString(kernel.getSimple()));
 

@@ -34,8 +34,8 @@ public class SimpleColorRasterKernel extends Kernel {
          */
 
         // these might not be accurate
-        int rows = getGlobalId() / nrows;
-        int cols = getGlobalId() / ncols;
+        int rows = getGlobalId(1);
+        int cols = getGlobalId(0);
 
         int r = bayer[2 * rows * nrows + cols * 2      ];
         int g = bayer[2 * rows * nrows + cols * 2 + 1  ];
