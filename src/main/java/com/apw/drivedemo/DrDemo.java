@@ -34,6 +34,7 @@ import javax.swing.Timer;
 import com.apw.ImageManagement.ImageManager;
 import com.apw.SpeedCon.Constants;
 import com.apw.SpeedCon.SpeedController;
+import com.apw.Steering.Point;
 // import fly2cam.CameraBase;
 import com.apw.fly2cam.FlyCamera;
 import com.apw.fakefirm.Arduino;
@@ -45,6 +46,7 @@ import com.apw.apw3.SimCamera;
 
 public class DrDemo extends JFrame implements MouseListener,KeyListener {
 	
+	com.apw.Steering.Steering testSteering = new com.apw.Steering.Steering();
 	private SpeedController speedControl;
 	private ImageManager imageManager;
 	
@@ -599,7 +601,7 @@ public class DrDemo extends JFrame implements MouseListener,KeyListener {
         
         
         //Begin Speed Code
-        speedControl.onUpdate(this.GasPedal, this.SteerDegs, this.manualSpeed, graf);
+        speedControl.onUpdate(this.GasPedal, testSteering.getDegreeOffset(), this.manualSpeed);
         AxLR8(true, speedControl.getDesiredSpeed());
         System.out.println(this.GasPedal);
         System.out.println(this.SteerDegs);
@@ -621,8 +623,37 @@ public class DrDemo extends JFrame implements MouseListener,KeyListener {
         if (DrawStuff) if (CanDraw) if (DimSave>0) if (SaveScrn != null)
           theSim.SetMyScreen(SaveScrn,DimSave>>16,DimSave&0xFFFF,1);
         theImag = Int2BufImg(thePixels,ScrWi,ScrHi);}} //~if
-    catch (Exception ex) {theImag = null;}
-    BusyPaint = false;} //~paint
+    	catch (Exception ex) {theImag = null;}
+    	BusyPaint = false;
+    	
+    	Point[] hi = testSteering.findPoints(thePixels);
+
+        // Steer between lines
+        testSteering.averageMidpoints();
+        int tempDeg = testSteering.getDegreeOffset();
+        theServos.servoWrite(SteerPin, (int)((tempDeg) + 90));
+        
+        graf.setColor(Color.RED);
+        //graf.fillRect(100, testSteering.startingPoint, 1, 1);
+        if (DriverCons.D_DrawCurrent == true) {
+        		for (int i = 0; i<testSteering.startingPoint - (testSteering.startingHeight + testSteering.heightOfArea); i++) {
+        			graf.fillRect(testSteering.leadingMidPoints[i].x, testSteering.leadingMidPoints[i].y +  + edges.top, 5, 5);
+        		}   
+        	}
+        
+        
+        for (int i = 0; i<hi.length; i++) {
+        		if (DriverCons.D_DrawPredicted == true) {
+        			graf.setColor(Color.BLUE);
+        			graf.fillRect(hi[i].x, hi[i].y + edges.top, 5, 5);
+        		}
+        		if (DriverCons.D_DrawOnSides == true) {
+        			graf.setColor(Color.YELLOW);
+        			graf.fillRect(testSteering.leftPoints[i].x + edges.left, testSteering.leftPoints[i].y + edges.top, 5, 5);
+        			graf.fillRect(testSteering.rightPoints[i].x + edges.left, testSteering.rightPoints[i].y + edges.top, 5, 5);
+        		}
+        }
+        } //~paint
 
   private static void starting() {theWindow = new DrDemo();}
 
