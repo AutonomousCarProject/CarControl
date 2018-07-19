@@ -40,7 +40,7 @@ public class SpeedController {
 		
 		/*			Uncomment when image management team fixes their code
 		ImageManager imageManager = new ImageManager(new com.apw.fly2cam.FlyCamera());
-		List<MovingBlob> blobs = pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), 640);
+		List<MovingBlob> blobs = pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), com.apw.apw3.DriverCons.D_ImWi);
 		for(MovingBlob i : blobs){
 			graf.fillRect(i.x, i.y, i.width, i.height);
 			if(detectStopLight(i)){

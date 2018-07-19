@@ -601,7 +601,7 @@ public class DrDemo extends JFrame implements MouseListener,KeyListener {
         
         
         //Begin Speed Code
-        speedControl.onUpdate(this.GasPedal, testSteering.getDegreeOffset(), this.manualSpeed);
+        speedControl.onUpdate(this.GasPedal, testSteering.getDegreeOffset(), this.manualSpeed, graf);
         AxLR8(true, speedControl.getDesiredSpeed());
         System.out.println(this.GasPedal);
         System.out.println(this.SteerDegs);
@@ -636,10 +636,10 @@ public class DrDemo extends JFrame implements MouseListener,KeyListener {
         graf.setColor(Color.RED);
         //graf.fillRect(100, testSteering.startingPoint, 1, 1);
         if (DriverCons.D_DrawCurrent == true) {
-        		for (int i = 0; i<testSteering.startingPoint - (testSteering.startingHeight + testSteering.heightOfArea); i++) {
-        			graf.fillRect(testSteering.leadingMidPoints[i].x, testSteering.leadingMidPoints[i].y +  + edges.top, 5, 5);
-        		}   
-        	}
+            for (int i = 0; i<testSteering.startingPoint - (testSteering.startingHeight + testSteering.heightOfArea); i++) {
+                graf.fillRect(testSteering.leadingMidPoints[i].x, testSteering.leadingMidPoints[i].y +  + edges.top, 5, 5);
+            }   
+        }
         
         
         for (int i = 0; i<hi.length; i++) {
@@ -653,7 +653,7 @@ public class DrDemo extends JFrame implements MouseListener,KeyListener {
         			graf.fillRect(testSteering.rightPoints[i].x + edges.left, testSteering.rightPoints[i].y + edges.top, 5, 5);
         		}
         }
-        } //~paint
+  } //~paint
 
   private static void starting() {theWindow = new DrDemo();}
 
