@@ -6,8 +6,11 @@ import com.apw.apw3.SimCamera;
 import com.apw.apw3.TrakSim;
 import com.apw.fakefirm.Arduino;
 import com.apw.fly2cam.FlyCamera;
+import javafx.scene.input.KeyCode;
 
 import javax.swing.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.awt.image.DataBufferInt;
@@ -63,6 +66,23 @@ public class DriveTest extends TimerTask {
 				//window.addMouseListener(this);
 				window.add(displaylabel);
 				window.setVisible(true);
+
+				window.addKeyListener(new KeyListener() {
+                    @Override
+                    public void keyPressed(KeyEvent e) {
+                        if (e.getKeyCode() == KeyEvent.VK_G) {
+                            imagemanager.runOnGpu(true);
+                        }
+                    }
+                    @Override
+                    public void keyReleased(KeyEvent e) {
+                        if (e.getKeyCode() == KeyEvent.VK_G) {
+                            imagemanager.runOnGpu(false);
+                        }
+                    }
+
+                    public void keyTyped(KeyEvent e) {}
+                });
 
 				System.out.println("**************" + nrows + " " + ncols);
 			}

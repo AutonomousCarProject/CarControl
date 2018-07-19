@@ -1,17 +1,29 @@
 /*ImageManager: Retrieves and preprocesses images from the camera and displays feed onscreen*/
 
 package com.apw.ImageManagement;
-import com.apw.apw3.SimCamera;
+
+import com.aparapi.Range;
 import com.apw.fly2cam.FlyCamera;
+import com.apw.gpu.MonochromeRasterKernel;
+import com.apw.gpu.RGBRasterKernel;
+import com.apw.gpu.SimpleColorRasterKernel;
 
 public class ImageManager {
+
+    enum Processsor {
+        CPU,
+        GPU
+    }
 
     int nrows, ncols;
     private ImagePicker picker;
     private byte mono[];
     private byte simple[];
     private int rgb[];
-
+    private Processsor processsor;
+    MonochromeRasterKernel  monoRasterKernel;
+    SimpleColorRasterKernel simpleRasterKernel;
+    RGBRasterKernel         rgbRasterKernel;
     /*Main*/
     public ImageManager(FlyCamera trakcam) {
         picker = new ImagePicker(trakcam, 30);
@@ -20,6 +32,9 @@ public class ImageManager {
         mono = new byte[nrows*ncols];
         simple = new byte[nrows * ncols];
         rgb = new int[nrows*ncols];
+        monoRasterKernel   = new MonochromeRasterKernel (picker.getPixels(), mono,   nrows, ncols);
+        simpleRasterKernel = new SimpleColorRasterKernel(picker.getPixels(), simple, nrows, ncols);
+        rgbRasterKernel    = new RGBRasterKernel        (picker.getPixels(), rgb,    nrows, ncols);
     }
 
     public int getNrows(){
@@ -30,11 +45,26 @@ public class ImageManager {
         return ncols;
     }
 
+    public void runOnGpu(boolean value)
+    {
+        if (value)
+            processsor = Processsor.GPU;
+        else
+            processsor = Processsor.CPU;
+    }
+
     /*Serves monochrome raster of camera feed
      * Formatted in 1D array of bytes*/
     public byte[] getMonochromeRaster() {
-        ImageManipulator.convertToMonochromeRaster(picker.getPixels(), mono, nrows, ncols);
-        return mono;
+        if (processsor == Processsor.GPU) {
+            monoRasterKernel.setValues(picker.getPixels(), mono, nrows, ncols);
+            monoRasterKernel.execute(Range.create(nrows * ncols));
+            monoRasterKernel.dispose();
+            return monoRasterKernel.getMono();
+        } else {
+            ImageManipulator.convertToMonochromeRaster(picker.getPixels(), mono, nrows, ncols);
+            return mono;
+        }
     }
 
     /*Serves color raster encoded in 1D of values 0-5 with
@@ -46,13 +76,28 @@ public class ImageManager {
      * 5 = BLACK
      */
     public byte[] getSimpleColorRaster() {
-        ImageManipulator.convertToSimpleColorRaster(picker.getPixels(), simple, nrows, ncols);
-        return simple;
+        if (processsor == Processsor.GPU) {
+            simpleRasterKernel.setValues(picker.getPixels(), simple, nrows, ncols);
+            simpleRasterKernel.execute(Range.create(nrows * ncols));
+            simpleRasterKernel.dispose();
+            return simpleRasterKernel.getSimple();
+        } else {
+            ImageManipulator.convertToSimpleColorRaster(picker.getPixels(), simple, nrows, ncols);
+            return simple;
+        }
+
     }
 
-    public int[] getRGBRaster(){
-        ImageManipulator.convertToRGBRaster(picker.getPixels(), rgb, nrows, ncols);
-        return rgb;
+    public int[] getRGBRaster() {
+        if (processsor == Processsor.GPU) {
+            rgbRasterKernel.setValues(picker.getPixels(), rgb, nrows, ncols);
+            rgbRasterKernel.execute(Range.create(nrows * ncols));
+            rgbRasterKernel.dispose();
+            return rgbRasterKernel.getRgb();
+        } else {
+            ImageManipulator.convertToRGBRaster(picker.getPixels(), rgb, nrows, ncols);
+            return rgb;
+       }
     }
 
     public static void convertSimpleToRGB(byte[] simpleByte, int[]simpleRGB, int length){

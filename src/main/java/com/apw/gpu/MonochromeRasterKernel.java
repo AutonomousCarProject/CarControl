@@ -14,21 +14,30 @@ public class MonochromeRasterKernel extends Kernel {
 
     /**
      * Constructs an <code>MonochromeRasterKernel</code> Aparapi {@link com.aparapi.opencl.OpenCL OpenCL} kernel.
+     *
+     * @param bayer Array of bayer arranged rgb colors
+     * @param mono  Monochrome copy of the bayer array
      * @param nrows Number of rows to filter
      * @param ncols Number of columns to filter
-     * @param bayer Array of bayer arranged rgb colors
-     * @param mono Monochrome copy of the bayer array
      */
-    public MonochromeRasterKernel(int nrows, int ncols, byte[] bayer, byte[] mono) {
-        this.nrows = nrows;
-        this.ncols = ncols;
+    public MonochromeRasterKernel(byte[] bayer, byte[] mono, int nrows, int ncols) {
         this.bayer = bayer;
         this.mono = mono;
+        this.nrows = nrows;
+        this.ncols = ncols;
+    }
+
+    public void setValues(byte[] bayer, byte[] mono, int nrows, int ncols) {
+        this.bayer = bayer;
+        this.mono = mono;
+        this.nrows = nrows;
+        this.ncols = ncols;
     }
 
     /**
      * Returns a monochrome bayer byte array,
      * Should be called to retrieve result after kernel is executed.
+     *
      * @return Monochrome bayer byte array
      */
     public byte[] getMono() {

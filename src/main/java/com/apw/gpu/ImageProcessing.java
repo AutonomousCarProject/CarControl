@@ -6,19 +6,18 @@ import com.apw.ImageManagement.ImageManipulator;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
 
 public class ImageProcessing {
     public static void main(String[] args) {
 
-        byte[] bayer = { 1, 2, 3, 4 };
-        byte[] simple = { 4, 3, 2, 1 };
+        byte[] bayer = {1, 2, 3, 4};
+        byte[] simple = {4, 3, 2, 1};
         int nrows = 4;
         int ncols = 4;
 
         Range range = Range.create(nrows * ncols);
 
-        SimpleColorRasterKernel kernel = new SimpleColorRasterKernel(nrows, ncols, bayer, simple);
+        SimpleColorRasterKernel kernel = new SimpleColorRasterKernel(bayer, simple, nrows, ncols);
 
         kernel.execute(range);
         kernel.dispose();
