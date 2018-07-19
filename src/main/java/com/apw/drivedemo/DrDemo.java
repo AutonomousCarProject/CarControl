@@ -32,6 +32,9 @@ import java.awt.image.DataBufferInt;
 // import fly2cam.CameraBase;
 
 public class DrDemo extends JFrame implements MouseListener {
+    
+    com.apw.Steering.Steering testSteering = new com.apw.Steering.Steering();
+    
     private static final long serialVersionUID = 1L; // unneed but Java insists {
     private static final int MinESCact = DriverCons.D_MinESCact,
             MaxESCact = DriverCons.D_MaxESCact, StartGas = MinESCact * 9 / 4,
