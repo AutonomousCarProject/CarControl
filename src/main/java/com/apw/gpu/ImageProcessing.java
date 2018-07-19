@@ -1,8 +1,12 @@
 package com.apw.gpu;
 
 import com.aparapi.Range;
+import com.apw.ImageManagement.ImageManipulator;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
 public class ImageProcessing {
     public static void main(String[] args) {
@@ -19,8 +23,14 @@ public class ImageProcessing {
         kernel.execute(range);
         kernel.dispose();
 
+        System.out.printf("%.2fms%n", kernel.getAccumulatedExecutionTime());
         System.out.println(Arrays.toString(kernel.getSimple()));
 
+        Instant start = Instant.now();
+
+        ImageManipulator.convertToSimpleColorRaster(bayer, simple, nrows, ncols);
+
+        System.out.println(Duration.between(start, Instant.now()).toMillis());
 
     }
 }
