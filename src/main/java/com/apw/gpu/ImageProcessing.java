@@ -1,80 +1,21 @@
 package com.apw.gpu;
 
-import com.aparapi.Kernel;
+import com.apw.gpu.KernelManager.KernelNotFoundException;
 import com.aparapi.Range;
 
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferInt;
 import java.util.Arrays;
 
 public class ImageProcessing {
     public static void main(String[] args) {
+        Range range = Range.create(4, 4);
 
-        final var image = new BufferedImage(4, 4, BufferedImage.TYPE_INT_RGB);
-        final int[] imageRgb = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
+        KernelManager.GetKernel(KernelType.MONOCHROME_RASTER_KERNEL).put(new int[] { 1 });
 
-        var width = image.getWidth();
-        var height = image.getHeight();
+        /*try {
+            KernelManager.ExecuteKernel(KernelType.MONOCHROME_RASTER_KERNEL, range);
+        } catch (KernelNotFoundException e) {
+            e.printStackTrace();
+        }*/
 
-        var range = Range.create(width, height);
-
-        var kernel = new ImageKernel(width, height, imageRgb);
-
-        kernel.execute(range);
-
-        Arrays.stream(imageRgb).forEach(System.out::println);
-        System.out.printf("Execution time = %sms%n", (int) kernel.getAccumulatedExecutionTime());
-    }
-
-    public static class ImageKernel extends Kernel {
-
-        /**
-         * RGB buffer used to store the cameras image. This buffer holds (width * height) RGB values.
-         */
-        private int[] rgb;
-
-        /**
-         * cameras image width.
-         */
-        private int width;
-
-        /**
-         * cameras image height.
-         */
-        private int height;
-
-        /**
-         * Initialize the Kernel.
-         *
-         * @param width  camera image width
-         * @param height camera image height
-         * @param rgb    camera image RGB buffer
-         */
-        ImageKernel(int width, int height, int[] rgb) {
-            this.width = width;
-            this.height = height;
-            this.rgb = rgb;
-        }
-
-        public void resetImage(int width, int height, int[] rgb) {
-            this.width = width;
-            this.height = height;
-            this.rgb = rgb;
-        }
-
-        @Override
-        public void run() {
-
-            // Determine which RGB value is going to be processed (0 - rgb.length)
-            final int gid = getGlobalId();
-
-            // TODO implement convertToSimpleColorRaster method
-
-            rgb[gid] = rgb[gid];
-        }
-
-        public int[] getRgbs() {
-            return rgb;
-        }
     }
 }
