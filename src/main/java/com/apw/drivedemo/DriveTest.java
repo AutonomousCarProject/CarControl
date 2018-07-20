@@ -89,7 +89,11 @@ public class DriveTest extends TimerTask implements MouseListener {
         	}
         	public DriveTest(int viewType){
 				sim = new TrakSim();
-				simcam = new SimCamera();
+				if(DriverCons.D_LiveCam){
+					simcam = new FlyCamera();
+				}else {
+					simcam = new SimCamera();
+				}
 				driveSys = new Arduino();
 				driveSys.pinMode(SteerPin, Arduino.SERVO);
 				driveSys.pinMode(GasPin, Arduino.SERVO);
@@ -170,7 +174,7 @@ public class DriveTest extends TimerTask implements MouseListener {
 				///** If you have self-driving code, you could put it here **///
 				TestServos(); // (replace this with your own code)
 				window.repaint();
-				window.getGraphics().drawLine(0,300,640,300);
+				//window.getGraphics().drawLine(0,300,640,300);
 			}
 	/*
 	@Override
@@ -312,7 +316,7 @@ public class DriveTest extends TimerTask implements MouseListener {
 		try {
 			AxLR8(true, 0);
 			SteerMe(true, 0);
-			//if (myVid != null) myVid.Finish();
+			if (simcam != null) simcam.Finish();
 			if (driveSys != null) driveSys.Close();
 		} catch (Exception ex) {
 		}
@@ -363,7 +367,6 @@ public class DriveTest extends TimerTask implements MouseListener {
 	public void TestServos() { // exercise steering & ESC servos
 		AxLR8(false,1);
 		SteerMe(false,steerMng.getDegreeOffset());
-
 	} //~TestServos
 
 }
