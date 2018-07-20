@@ -58,40 +58,21 @@ public class ImageManager {
         return rgb;
     }
 
-    public static void convertSimpleToRGB(byte[] simpleByte, int[]simpleRGB, int length){
-        for(int i = 0; i < length; i++){
-            switch(simpleByte[i]){
-                case 0:
-                    simpleRGB[i] = 0xFF0000;
-                    break;
-                case 1:
-                    simpleRGB[i] = 0x00FF00;
-                    break;
-                case 2:
-                    simpleRGB[i] = 0x0000FF;
-                    break;
-                case 3:
-                    simpleRGB[i] = 0xFFFFFF;
-                    break;
-                case 4:
-                    simpleRGB[i] = 0x808080;
-                    break;
-                case 5:
-                    simpleRGB[i] = 0x000000;
-                    break;
-            }
-        }
+    public int[] getSimpleRGBRaster(){
+        ImageManipulator.convertToSimpleColorRaster(picker.getPixels(), simple, nrows, ncols);
+        ImageManipulator.convertSimpleToRGB(simple, rgb, simple.length);
+        return rgb;
     }
-    public static void convertBWToRGB(byte[] simpleByte, int[] mono, int length){
-        for(int i = 0; i < length; i++){
-            switch(simpleByte[i]){
-                case 0:
-                    mono[i] = 0x000000;
-                    break;
-                case 1:
-                    mono[i] = 0xFFFFFF;
-                    break;
-            }
-        }
+
+    public int[] getBWRGBRaster(){
+        ImageManipulator.convertToBlackWhiteRaster(picker.getPixels(), mono, nrows, ncols);
+        ImageManipulator.convertBWToRGB(mono, rgb, mono.length);
+        return rgb;
+    }
+
+    public int[] getMonoRGBRaster(){
+        ImageManipulator.convertToMonochromeRaster(picker.getPixels(), mono, nrows, ncols);
+        ImageManipulator.convertMonotoRGB(mono, rgb, mono.length);
+        return rgb;
     }
 }

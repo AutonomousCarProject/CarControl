@@ -92,4 +92,49 @@ public class ImageManipulator {
 			
 		}
 	}
+
+	public static void convertSimpleToRGB(byte[] simpleByte, int[]simpleRGB, int length){
+		for(int i = 0; i < length; i++){
+			switch(simpleByte[i]){
+				case 0:
+					simpleRGB[i] = 0xFF0000;
+					break;
+				case 1:
+					simpleRGB[i] = 0x00FF00;
+					break;
+				case 2:
+					simpleRGB[i] = 0x0000FF;
+					break;
+				case 3:
+					simpleRGB[i] = 0xFFFFFF;
+					break;
+				case 4:
+					simpleRGB[i] = 0x808080;
+					break;
+				case 5:
+					simpleRGB[i] = 0x000000;
+					break;
+			}
+		}
+	}
+
+	public static void convertBWToRGB(byte[] simpleByte, int[] mono, int length){
+		for(int i = 0; i < length; i++){
+			switch(simpleByte[i]){
+				case 0:
+					mono[i] = 0x000000;
+					break;
+				case 1:
+					mono[i] = 0xFFFFFF;
+					break;
+			}
+		}
+	}
+
+	public static void convertMonotoRGB(byte[] mono, int[] rgb, int length){
+		for(int i = 0; i < length; i++){
+			rgb[i] =(mono[i]<<16)+(mono[i]<<8)+mono[i];
+		}
+	}
+
 }

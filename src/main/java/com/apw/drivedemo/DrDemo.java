@@ -19,6 +19,7 @@ package com.apw.drivedemo;                                    // 2018 June 13
 import com.apw.apw3.*;
 import com.apw.fakefirm.Arduino;
 import com.apw.fly2cam.FlyCamera;
+import com.apw.Steering.Point;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,6 +29,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
+
+
 
 // import fly2cam.CameraBase;
 
@@ -664,7 +667,6 @@ public class DrDemo extends JFrame implements MouseListener {
         BusyPaint = false;
         
          this.GetCameraImg();
-    /*
          Point[] hi = testSteering.findPoints(thePixels);
 
     // Steer between lines
@@ -691,7 +693,7 @@ public class DrDemo extends JFrame implements MouseListener {
     			graf.fillRect(testSteering.leftPoints[i].x + edges.left, testSteering.leftPoints[i].y + edges.top, 5, 5);
     			graf.fillRect(testSteering.rightPoints[i].x + edges.left, testSteering.rightPoints[i].y + edges.top, 5, 5);
     		}
-    }//*/
+    }//
     } //~paint
 
     private static void starting() {
@@ -799,7 +801,7 @@ public class DrDemo extends JFrame implements MouseListener {
         if(DriverCons.D_PrimaryViewOn) {
             setVisible(true);
         }
-        DriveTest.subMain(theSim, simVideo, this,4);
+        //DriveTest.subMain(theSim, simVideo, this,2);
 
 
     }

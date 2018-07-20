@@ -146,18 +146,14 @@ public class DriveTest extends TimerTask implements MouseListener {
 						System.arraycopy(Aimagepixels, 0, Adisplaypixels, 0, Aimagepixels.length);
 						break;
 					case 3:
-						byte[] Bimagepixels = imagemanager.getSimpleColorRaster();
+						int[] Bimagepixels = imagemanager.getSimpleRGBRaster();
 						int[] Bdisplaypixels = ((DataBufferInt) displayimage.getRaster().getDataBuffer()).getData();
-						int[] simpleRGB = new int[Bimagepixels.length];
-						imagemanager.convertSimpleToRGB(Bimagepixels, simpleRGB, Bimagepixels.length);
-						System.arraycopy(simpleRGB, 0, Bdisplaypixels, 0, Bimagepixels.length);
+						System.arraycopy(Bimagepixels, 0, Bdisplaypixels, 0, Bimagepixels.length);
 						break;
 					case 4:
-						byte[] Cimagepixels = imagemanager.getBlackWhiteRaster();
+						int[] Cimagepixels = imagemanager.getBWRGBRaster();
 						int[] Cdisplaypixels = ((DataBufferInt) displayimage.getRaster().getDataBuffer()).getData();
-						int[] CsimpleRGB = new int[Cimagepixels.length];
-						imagemanager.convertBWToRGB(Cimagepixels, CsimpleRGB, Cimagepixels.length);
-						System.arraycopy(CsimpleRGB, 0, Cdisplaypixels, 0, Cimagepixels.length);
+						System.arraycopy(Cimagepixels, 0, Cdisplaypixels, 0, Cimagepixels.length);
 						break;
 				}
 				//System.out.println("Repainting");
