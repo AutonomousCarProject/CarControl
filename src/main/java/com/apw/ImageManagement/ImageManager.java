@@ -30,6 +30,10 @@ public class ImageManager {
         return ncols;
     }
 
+    public void setNrows(int nrows){this.nrows = nrows;}
+
+    public void setNcols(int ncols){this.ncols = ncols;}
+
     /*Serves monochrome raster of camera feed
      * Formatted in 1D array of bytes*/
     public byte[] getMonochromeRaster() {
