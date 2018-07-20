@@ -4,23 +4,23 @@ import com.aparapi.Kernel;
 
 /**
  * The <code>MonochromeRasterKernel</code> subclass describes a {@link com.aparapi.Kernel Kernel}
- * that converts a bayer rgb byte array into a monochromatic bayer byte array.
+ * that converts a bayer rgb byte array into a black and white bayer byte array.
  */
-public class MonochromeRasterKernel extends Kernel {
+public class BlackWhiteRasterKernel extends Kernel {
 
     private int nrows, ncols;
 
     private byte[] bayer, mono;
 
     /**
-     * Constructs an <code>MonochromeRasterKernel</code> Aparapi {@link com.aparapi.opencl.OpenCL OpenCL} kernel.
+     * Constructs an <code>BlackWhiteRasterKernel</code> Aparapi {@link com.aparapi.opencl.OpenCL OpenCL} kernel.
      *
      * @param bayer Array of bayer arranged rgb colors
      * @param mono  Monochrome copy of the bayer array
      * @param nrows Number of rows to filter
      * @param ncols Number of columns to filter
      */
-    public MonochromeRasterKernel(byte[] bayer, byte[] mono, int nrows, int ncols) {
+    public BlackWhiteRasterKernel(byte[] bayer, byte[] mono, int nrows, int ncols) {
         this.bayer = bayer;
         this.mono = mono;
         this.nrows = nrows;
@@ -28,7 +28,7 @@ public class MonochromeRasterKernel extends Kernel {
     }
 
     /**
-     * Sets all member variables of <code>MonochromeRasterKernel</code>.
+     * Sets all member variables of <code>BlackWhiteRasterKernel</code>.
      *
      * @param bayer Array of bayer arranged rgb colors
      * @param mono  Monochrome copy of the bayer array
@@ -58,6 +58,13 @@ public class MonochromeRasterKernel extends Kernel {
         int rows = getGlobalId(0);
         int cols = getGlobalId(1);
 
-        mono[rows * ncols + cols] = (byte) ((((int) bayer[(rows * ncols * 2 + cols) * 2 + 1]) & 0xFF)); //Use only top right (green)
+        int R = ((((int) bayer[(rows * ncols * 2 + cols) * 2]) & 0xFF));            //Top left (red)
+        int G = ((((int) bayer[(rows * ncols * 2 + cols) * 2 + 1]) & 0xFF));            //Top right (green)
+        int B = (((int) bayer[(rows * ncols * 2 + cols) * 2 + 1 + 2 * ncols]) & 0xFF);            //Bottom right (blue)
+        int pix = R + G + B;
+        if (pix > 700)
+            mono[rows * ncols + cols] = 1;
+        else
+            mono[rows * ncols + cols] = 0;
     }
 }

@@ -80,12 +80,8 @@ public class ImageManager {
     public byte[] getSimpleColorRaster() {
         if (processsor == Processsor.GPU) {
             //simpleRasterKernel.setValues(picker.getPixels(), simple, nrows, ncols);
-            //simpleRasterKernel.setExplicit(true);
-            //simpleRasterKernel.put(picker.getPixels()).put(simple);
-            System.out.println(Arrays.toString(simple).substring(0, 30));
-            simpleRasterKernel.execute(Range.create2D(nrows, ncols));//.get(simpleRasterKernel.getSimple());
+            simpleRasterKernel.execute(Range.create2D(nrows, ncols));
             simpleRasterKernel.dispose();
-            System.out.println(Arrays.toString(simple).substring(0, 30));
             return simpleRasterKernel.getSimple();
         } else {
             ImageManipulator.convertToSimpleColorRaster(picker.getPixels(), simple, nrows, ncols);
