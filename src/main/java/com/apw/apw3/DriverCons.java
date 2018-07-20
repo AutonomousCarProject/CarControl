@@ -31,12 +31,12 @@ public class DriverCons { // TrakSim constant parameters
             D_PrimaryViewOn = false,    // T: make the main window open up
             D_LiveCam = false,       // F: omit connecting to FlyCamera
             D_StartLive = false,    // T: start in live camera if possible
-            D_FixedSpeed = false,    // ignore speed control, assume fMinSpeed
+            D_FixedSpeed = true,    // ignore speed control, assume fMinSpeed
             D_StayInTrack = false,   // ignore steering control, stay centered in track
             D_ShoTrkTstPts = false, // T: show test points used to calc StayInTrack
             D_ShoClikGrid = false,  // T: to see where to click to steer/accelerate
-            D_ShowMap = true,       // T: show the map next to the scene
-            D_DoCloseUp = true,     // T: show close-up map if there is room
+            D_ShowMap = false,       // T: show the map next to the scene
+            D_DoCloseUp = false,     // T: show close-up map if there is room
             D_RampServos = false,   // T: servos take time to arrive at setting
             D_TrakNoPix = false,    // T: draw track only, omit artifacts & trees
             D_UseTexTrak = true,    // T: use text file to build track to drive

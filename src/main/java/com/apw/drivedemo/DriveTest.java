@@ -1,6 +1,7 @@
 package com.apw.drivedemo;
 
 import com.apw.ImageManagement.ImageManager;
+import com.apw.Steering.SteerControlCheck;
 import com.apw.apw3.*;
 import com.apw.fakefirm.Arduino;
 import com.apw.fly2cam.FlyCamera;
@@ -31,7 +32,8 @@ public class DriveTest extends TimerTask implements MouseListener {
 	private JLabel displaylabel;
 	private int viewType;
 	private DrDemo clicks;
-
+	//private Steering steerMng;
+	private SteerControlCheck steerMng;
 
 	private int Calibrating = 0;
 	private int SteerDegs = 0;
@@ -122,11 +124,14 @@ public class DriveTest extends TimerTask implements MouseListener {
 				window.addMouseListener(this);
 				window.setVisible(true);
 
+				steerMng = new SteerControlCheck(imagemanager, ncols);
+
+
 				System.out.println("**************" + nrows + " " + ncols);
 			}
         	public static void main(String[] args) {
         		Timer displayTaskTimer = new Timer();
-        		displayTaskTimer.scheduleAtFixedRate(new DriveTest(3), new Date(), 1000/FPS);
+        		displayTaskTimer.scheduleAtFixedRate(new DriveTest(1), new Date(), 1000/FPS);
         	}
 			public static void subMain(TrakSim sim, FlyCamera simcam, DrDemo clicks, int viewType){
 				Timer displayTaskTimer = new Timer();
@@ -164,8 +169,8 @@ public class DriveTest extends TimerTask implements MouseListener {
 				sim.SimStep(1);
 				///** If you have self-driving code, you could put it here **///
 				TestServos(); // (replace this with your own code)
-
 				window.repaint();
+				window.getGraphics().drawLine(0,300,640,300);
 			}
 	/*
 	@Override
@@ -357,7 +362,7 @@ public class DriveTest extends TimerTask implements MouseListener {
 	// Steering and Speed Control on each frame
 	public void TestServos() { // exercise steering & ESC servos
 		AxLR8(false,1);
-		SteerMe(false,1);
+		SteerMe(false,steerMng.getDegreeOffset());
 
 	} //~TestServos
 
