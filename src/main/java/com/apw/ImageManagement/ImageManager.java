@@ -82,9 +82,11 @@ public class ImageManager {
             //simpleRasterKernel.setValues(picker.getPixels(), simple, nrows, ncols);
             simpleRasterKernel.setExplicit(true);
             simpleRasterKernel.put(picker.getPixels()).put(simple);
-            simpleRasterKernel.execute(Range.create(nrows)).get(simple);
+            System.out.println(Arrays.toString(simple).substring(0, 30));
+            simpleRasterKernel.execute(Range.create(nrows)).get(simpleRasterKernel.getSimple());
             simpleRasterKernel.dispose();
-            return simple;
+            System.out.println(Arrays.toString(simple).substring(0, 30));
+            return simpleRasterKernel.getSimple();
         } else {
             ImageManipulator.convertToSimpleColorRaster(picker.getPixels(), simple, nrows, ncols);
             return simple;

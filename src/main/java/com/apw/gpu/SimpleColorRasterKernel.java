@@ -75,7 +75,7 @@ public class SimpleColorRasterKernel extends Kernel {
         int rows = getGlobalId(1);
         int cols = getGlobalId(0);
 
-        int R = ((((int) bayer[(rows * ncols * 2 + cols) * 2                ]) & 0xFF)); // Top left (red)
+        int R = 0;//((((int) bayer[(rows * ncols * 2 + cols) * 2                ]) & 0xFF)); // Top left (red)
         int G = ((((int) bayer[(rows * ncols * 2 + cols) * 2 + 1            ]) & 0xFF)); // Top right (green)
         int B = (((int ) bayer[(rows * ncols * 2 + cols) * 2 + 1 + 2 * ncols]) & 0xFF);  // Bottom right (blue)
 
