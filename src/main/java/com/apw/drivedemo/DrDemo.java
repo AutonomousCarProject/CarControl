@@ -57,6 +57,8 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 	private SpeedController speedControl;
 	private ImageManager imageManager;
 	private DriveTest dtest = new DriveTest();
+	private boolean overlayOn = Constants.DEFAULT_OVERLAY;
+	private boolean blobsOn = Constants.DEFAULT_BLOBS;
 
 	private static final long serialVersionUID = 1L; // unneed but Java insists {
 
@@ -791,24 +793,26 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 					
 					// Begin Speed Code
 
-					speedControl.onUpdate(this.GasPedal, testSteering.getDegreeOffset(), this.manualSpeed, graf, dtest);
+					speedControl.onUpdate(this.GasPedal, testSteering.getDegreeOffset(), this.manualSpeed, graf, dtest, blobsOn, overlayOn);
 					AxLR8(true, speedControl.getDesiredSpeed());
 					System.out.println(this.GasPedal);
 					System.out.println(this.SteerDegs);
 					System.out.println(speedControl.getStoppingAtLight());
 					System.out.println(speedControl.getStoppingAtSign());
-
-					graf.setColor(Color.ORANGE);
-					 graf.drawRect(Constants.STOPLIGHT_MIN_X, Constants.STOPLIGHT_MIN_Y,
-					 Constants.STOPLIGHT_MAX_X-Constants.STOPLIGHT_MIN_X,
-					 Constants.STOPLIGHT_MAX_Y-Constants.STOPLIGHT_MIN_Y);
+					if(overlayOn){
+						graf.setColor(Color.ORANGE);
+						 graf.drawRect(Constants.STOPLIGHT_MIN_X, Constants.STOPLIGHT_MIN_Y,
+						 Constants.STOPLIGHT_MAX_X-Constants.STOPLIGHT_MIN_X,
+						 Constants.STOPLIGHT_MAX_Y-Constants.STOPLIGHT_MIN_Y);
+						graf.setColor(Color.PINK);
+						 graf.drawRect(Constants.STOPSIGN_MIN_X, Constants.STOPSIGN_MIN_Y,
+						 Constants.STOPSIGN_MAX_X-Constants.STOPSIGN_MIN_X,
+						 Constants.STOPSIGN_MAX_Y-Constants.STOPSIGN_MIN_Y);
+					}
 
 					TestServos(); // (replace this with your own code)
 
-					graf.setColor(Color.PINK);
-					 graf.drawRect(Constants.STOPSIGN_MIN_X, Constants.STOPSIGN_MIN_Y,
-					 Constants.STOPSIGN_MAX_X-Constants.STOPSIGN_MIN_X,
-					 Constants.STOPSIGN_MAX_Y-Constants.STOPSIGN_MIN_Y);
+					
 
 					// End Speed Code
 
@@ -1019,6 +1023,12 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 		}
 		if (e.getKeyCode() == KeyEvent.VK_I) {
 			speedControl.readyToGo();
+		}
+		if (e.getKeyCode() == KeyEvent.VK_B) {
+			blobsOn = !blobsOn;
+		}
+		if (e.getKeyCode() == KeyEvent.VK_V){
+			overlayOn = !overlayOn;
 		}
 	}
 
