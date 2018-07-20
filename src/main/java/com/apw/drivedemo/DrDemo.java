@@ -606,7 +606,6 @@ public class DrDemo extends JFrame implements MouseListener,KeyListener {
         ///** If you have self-driving code, you could put it here **///
         	//TestServos(); // (replace this with your own code)
         
-        
         //Begin Speed Code
         
         speedControl.onUpdate(this.GasPedal, testSteering.getDegreeOffset(), this.manualSpeed, graf);
