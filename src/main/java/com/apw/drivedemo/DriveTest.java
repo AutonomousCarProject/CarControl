@@ -40,6 +40,11 @@ public class DriveTest extends TimerTask {
 				simcam.Connect(FRAME_RATE_NUMBER);
 				finishInit();
 			}
+        	
+        	public ImageManager getImgManager(){
+        		return imagemanager;
+        	}
+        	
 			private void finishInit(){
 				imagemanager = new ImageManager(simcam);
         		nrows = imagemanager.getNrows();

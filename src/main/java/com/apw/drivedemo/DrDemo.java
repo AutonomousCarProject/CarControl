@@ -56,6 +56,7 @@ public class DrDemo extends JFrame implements MouseListener,KeyListener {
 	com.apw.Steering.Steering testSteering = new com.apw.Steering.Steering();
 	private SpeedController speedControl;
 	private ImageManager imageManager;
+	private DriveTest dtest = new DriveTest();
 	
   private static final long serialVersionUID = 1L; // unneed but Java insists {
 
@@ -608,7 +609,11 @@ public class DrDemo extends JFrame implements MouseListener,KeyListener {
         
         //Begin Speed Code
         
-        speedControl.onUpdate(this.GasPedal, testSteering.getDegreeOffset(), this.manualSpeed, graf);
+        
+        
+        
+        
+        speedControl.onUpdate(this.GasPedal, testSteering.getDegreeOffset(), this.manualSpeed, graf, dtest);
         AxLR8(true, speedControl.getDesiredSpeed());
         System.out.println(this.GasPedal);
         System.out.println(this.SteerDegs);
@@ -679,7 +684,6 @@ public class DrDemo extends JFrame implements MouseListener,KeyListener {
   * This is the constructor, which sets everything up.
   */
   public DrDemo() { // outer class constructor..
-	 
 	  
     int nx = ScrPix; // CamFPS = FlyCamera.FrameRate_15-1;
     String sayso = "= " + ScrWi + "x" + ScrHi; // "(Cal8="
