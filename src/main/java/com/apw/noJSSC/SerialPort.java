@@ -53,7 +53,8 @@ public class SerialPort {
      */
     public boolean writeBytes(byte[] buffer) {
         if (buffer == null) return false;
-        if (logo) System.out.println("noJSC/writeBytes " + buffer[0]);
+//ABCDE
+//        if (logo) System.out.println("noJSC/writeBytes " + buffer[0]);
         return true;
     } //~writeBytes
 
