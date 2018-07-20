@@ -18,7 +18,7 @@ import java.util.TimerTask;
 
 public class DriveTest extends TimerTask implements MouseListener {
     public static final int FRAME_RATE_NUMBER = 4;	//4 corresponds to 30fps
-    public static final int FPS = 30;
+    public static final int FPS = 15;
 
     private JFrame window;
     private TrakSim sim;
@@ -162,6 +162,9 @@ public class DriveTest extends TimerTask implements MouseListener {
 				}
 				//System.out.println("Repainting");
 				sim.SimStep(1);
+				///** If you have self-driving code, you could put it here **///
+				TestServos(); // (replace this with your own code)
+
 				window.repaint();
 			}
 	/*
@@ -176,7 +179,7 @@ public class DriveTest extends TimerTask implements MouseListener {
 	}
 	//*/
 	@Override
-	public void mouseEntered(MouseEvent evt){
+	public void mouseClicked(MouseEvent evt){
 		Insets edges = window.getInsets();
 		int kx = 0, nx = 0, zx = 0, Vx = 0, Hx = 0, why = 0;
 		boolean didit = false;
@@ -291,7 +294,7 @@ public class DriveTest extends TimerTask implements MouseListener {
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent e) {
+	public void mouseEntered(MouseEvent e) {
 
 	}
 
@@ -349,4 +352,13 @@ public class DriveTest extends TimerTask implements MouseListener {
 		StepMe = true;
 		driveSys.servoWrite(GasPin, whar + 90);
 	} //~AxLR8
+
+
+	// Steering and Speed Control on each frame
+	public void TestServos() { // exercise steering & ESC servos
+		AxLR8(false,1);
+		SteerMe(false,1);
+
+	} //~TestServos
+
 }
