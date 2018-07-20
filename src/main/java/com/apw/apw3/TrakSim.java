@@ -54,7 +54,7 @@ public class TrakSim {
             CreamWall = DriverCons.D_CreamWall, DarkWall = DriverCons.D_DarkWall,
             BackWall = DriverCons.D_BackWall, PilasterCo = DriverCons.D_PilColo,
             CarColo = DriverCons.D_CarColo, ArtiColo = DriverCons.D_ArtiColo,
-            MarinBlue = DriverCons.D_MarinBlue, SteerColo = DriverCons.D_SteerColo,
+            MarinBlue = DriverCons.D_MarinBlue, //SteerColo = DriverCons.D_SteerColo,
             xTrLiteTime = DriverCons.D_xTrLiteTime,
             BayerTile = DriverCons.D_BayTile, // 1=RG/GB
 
@@ -2429,7 +2429,7 @@ public class TrakSim {
             for (here = doit; here <= 11; here++) { // draw steering wheel..
                 thar = TapedWheel[here & 15];
                 whar = thar >> 16;
-                info = SteerColo; // SteerColo=0xCC9900;
+                //info = SteerColo; // SteerColo=0xCC9900;
                 if (doit == 0) {
                     if (here == posn) info = 0xFFFFFF; // PixWhit;
                     whar = whar + SteerMid;
@@ -2445,8 +2445,8 @@ public class TrakSim {
                     if (bitz == 0) break;
                     for (cx = 0; cx <= 31; cx++) {
                         rx = ImHi - 1 - cx;
-                        if ((bitz & 1) != 0) PokePixel(info, rx, whar);
-                        bitz = bitz >> 1;
+                        //if ((bitz & 1) != 0) PokePixel(info, rx, whar);
+                        //bitz = bitz >> 1;
                         if (bitz == 0) break;
                     } //~for // (cx)
                     if (doit == 0) whar++;
@@ -5396,7 +5396,7 @@ public class TrakSim {
         if (!TrakNoPix) if ((info & -info) != info) // if (DoScenery)
             System.out.println("<!> Masks like CheckerBd only work as 2^n-1");
         if ((MarinBlue & -0x01000000) != 0) aWord = "MarinBlue";
-        else if ((SteerColo & -0x01000000) != 0) aWord = "SteerColo";
+        //else if ((SteerColo & -0x01000000) != 0) aWord = "SteerColo";
         else if ((CarColo & -0x01000000) != 0) aWord = "CarColo";
         else if ((DarkWall & -0x01000000) != 0) aWord = "DarkWall";
         else if ((BackWall & -0x01000000) != 0) aWord = "BackWall";

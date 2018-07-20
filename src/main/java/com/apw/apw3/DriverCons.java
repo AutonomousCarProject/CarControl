@@ -35,8 +35,8 @@ public class DriverCons { // TrakSim constant parameters
             D_StayInTrack = false,   // ignore steering control, stay centered in track
             D_ShoTrkTstPts = false, // T: show test points used to calc StayInTrack
             D_ShoClikGrid = false,  // T: to see where to click to steer/accelerate
-            D_ShowMap = false,       // T: show the map next to the scene
-            D_DoCloseUp = false,     // T: show close-up map if there is room
+            D_ShowMap = true,       // T: show the map next to the scene
+            D_DoCloseUp = true,     // T: show close-up map if there is room
             D_RampServos = false,   // T: servos take time to arrive at setting
             D_TrakNoPix = false,    // T: draw track only, omit artifacts & trees
             D_UseTexTrak = true,    // T: use text file to build track to drive
@@ -62,7 +62,7 @@ public class DriverCons { // TrakSim constant parameters
             D_MinESCact = 10, D_MaxESCact = 22, // active range of ESC, in steps +90
             D_LeftSteer = 33, D_RiteSteer = 44, // (measured) full range (33,44)
             D_MarinBlue = 0x0099FF, // the color of driving info added to image
-            D_SteerColo = 0xCC9900, // the color of the steering wheel in the image
+            //D_SteerColo = 0xCC9900, // the color of the steering wheel in the image
             D_CreamWall = 0xFFFFCC, // (indoor) wall&door colors..
             D_DarkWall = 0x999966, D_BackWall = 0x66CC66, D_PilColo = 0x666666,
             D_CarColo = 0xFF0099, D_ArtiColo = 0xFFCC00, // pink car color, amber a'fact
