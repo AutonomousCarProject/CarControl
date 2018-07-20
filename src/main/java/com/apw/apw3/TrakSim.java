@@ -49,7 +49,8 @@ public class TrakSim {
             HalfMap = DriverCons.D_HalfMap, HalfTall = DriverCons.D_HalfTall,
             SteerServo = DriverCons.D_SteerServo, GasServo = DriverCons.D_GasServo,
             MinESCact = DriverCons.D_MinESCact, MaxESCact = DriverCons.D_MaxESCact,
-            DrawDash = DriverCons.D_DrawDash, FrameTime = DriverCons.D_FrameTime,
+            DrawDash = DriverCons.D_DrawDash,
+            FrameTime = DriverCons.D_FrameTime,
             Zoom35 = DriverCons.D_Zoom35, xCloseUp = DriverCons.D_xCloseUp,
             CreamWall = DriverCons.D_CreamWall, DarkWall = DriverCons.D_DarkWall,
             BackWall = DriverCons.D_BackWall, PilasterCo = DriverCons.D_PilColo,
@@ -2402,6 +2403,7 @@ public class TrakSim {
         // with white tape (if posn in range) + steer/speed servo settings..
         int prio = posn, info, nx, doit, here, thar, whar, rx, cx, bitz = 0;
         String myDash = "", LefDash = "";
+        /*
         if (DrawDash > 0) if (dash2) { // show dashboard..
             if (OpMode == 3) bitz = 0xCC0000; // red when crashed,
             else if (MyMath.iAbs(SpecWheel) > 88) bitz = 0xFF; // blue when crimped
@@ -2415,6 +2417,7 @@ public class TrakSim {
             LabelScene(myDash, SceneTall - 4, myDash.length() * 2 + SteerMid, 0xFF9999);
             if (Log_Draw) myDash = " '" + LefDash + "/" + myDash + "'";
         } //~if // (dash2)
+        //*/ //MARKERPOINT
         if (scaled) if (posn < 127) { // scale it to TapedWheel..
             info = MyMath.iAbs(posn);
             if (info != 0) for (nx = (TapedWheel[0] & 255) - 1; nx >= 0; nx += -1) {
@@ -3159,12 +3162,12 @@ public class TrakSim {
                                                     HandyOps.Dec2Log(" ", yx, HandyOps.Dec2Log("/", cx,
                                                             HandyOps.Dec2Log(" @ ", Vx, HandyOps.Flt2Log(" ", Vat * 16.0,
                                                                     HandyOps.Hex2Log(" x", oops, 4,
-                                                                            HandyOps.IffyStr(yx >= ImHi - DrawDash, " = ^",
+                                                                            HandyOps.IffyStr(yx >= ImHi - 1, " = ^",
                                                                                     HandyOps.IffyStr(info < 0, " = _",
                                                                                             HandyOps.Colo2Log(" = ", info, ""))))))))))));
                                 } //~if
                                 if (oops != 0) break; // otherwise commit..
-                                if (info >= 0) if (yx < ImHi - DrawDash) PokePixel(info, yx, cx);
+                                if (info >= 0) if (yx < ImHi - 1) PokePixel(info, yx, cx);     //MARKERPOINT
                                 Vat = Vat + step;
                                 while (Vat >= 1.0) {
                                     Vx = Vx - ImgWi;
@@ -3527,8 +3530,9 @@ public class TrakSim {
         if (LookFrame + FrameNo == 0) LookFrame = 0;
         while (Facing < 0.0) Facing = Facing + 360.0;
         while (Facing > 360.0) Facing = Facing - 360.0;
-        if ((DrawDash > 0) || (ZooMapDim != 0)) {
-            kx = (MyMath.Trunc8(Facing + Facing) + 22) / 45; // if (DrawDash>0) {
+        //*
+        if ((1 > 0) || (ZooMapDim != 0)) {
+            kx = (MyMath.Trunc8(Facing + Facing) + 22) / 45; // if (1>0) {
             aWord = CompNames[kx & 15];
             myDash = HandyOps.Flt2Log(" ", Vposn, HandyOps.Flt2Log("S ", Hposn,
                     HandyOps.Flt2Log("E -- ", Facing, HandyOps.Dec2Log(aWord, GasBrake, ""))));
@@ -3539,12 +3543,15 @@ public class TrakSim {
                     HandyOps.Dec2Log(LefDash, FrameNo, HandyOps.IffyStr(LookFrame == 0, "",
                             HandyOps.Dec2Log(" (", LookFrame, ")"))));
         } //~if
+        //*/ //MARKERPOINT
+        //*
         System.out.println(HandyOps.Dec2Log("(..BF..) ", FrameNo, // (**frozen format**)
                 HandyOps.Dec2Log(" ", NuData, HandyOps.Int2Log(" ", ZooMapDim, " [ s="
                         + HandyOps.Dec2Log(LefDash + HandyOps.IffyStr(OpMode == 3, "# ! ", "# / ")
-                        + myDash + " =g ] ", ImHi - DrawDash, HandyOps.Int2Log(" ", TripLine,
+                        + myDash + " =g ] ", ImHi - 1, HandyOps.Int2Log(" ", TripLine,
                         HandyOps.Flt2Log(HandyOps.IffyStr(SimSpedFixt, " [Fx ", " [v="), Velocity,
                                 HandyOps.Dec2Log("] ", optn, HandyOps.PosTime(" @ ")))))))));
+        //*/    //MARKERPOINT
         if (Log_Draw) OopsLog = " %";
         for (cx = 0; cx <= ImWi - 1; cx++) PrioRaster[cx] = 0;
         Vmap = MyMath.Trunc8(Vposn); // = current posn in park meters (2x map grid)
@@ -3738,7 +3745,7 @@ public class TrakSim {
                     else colo = 0xFFFF;
                 } //~if // aiming for 3399FF in highest sky
                 else bitz = 0xFF00; // green // 0xFFFFCC99; // not dirt
-                if (DrawDash > 0) if (rx > ImHi - DrawDash) bitz = 0x333300; // dk.brown
+                if (1 > 0) if (rx > ImHi - 1) bitz = 0x333300; // dk.brown
                 if (ZooMapDim == 0) dx = -1;
                 else dx = rx - (ZooMapBase >> 16); // <0 if above close-up view (in c-u pix)
                 // ZMD=32,32 ZSf=3 ZB=224,642 ZSc=16. ZW=0.2 ZT=8,16
@@ -3856,7 +3863,8 @@ public class TrakSim {
                     DrawLine(MarinBlue, rx, cx - 1, rx, cx + 1);
                 }
             } //~if // (info) (ShowMap)
-            if (DrawDash > 0) { // DrawDash=12 to draw it
+            //*
+            if (1 > 0) { // 1=12 to draw it
                 if (ShoClikGrid) DrawGrid();
                 LabelScene(myDash, ImHi - 4, ImWi - 8, -1);
                 myDash = HandyOps.Flt2Log(" ", Velocity * dFtime, " "); // (5/fps) dFtime=5
@@ -3869,7 +3877,8 @@ public class TrakSim {
                 LefDash = HandyOps.Fixt8th(" ", RealTimeNow, " ");
                 LabelScene(LefDash, SceneTall - 4, LefDash.length() * 2 + ImMid, 0xFF9900);
                 myDash = myDash + " t=" + LefDash;
-            } //~if // (DrawDash>0)
+            } //~if // (1>0)
+            //*/    //MARKERPOINT
             // Vmap = MyMath.Trunc8(Vposn); // = current posn in park meters (2x grid)
             // Hmap = MyMath.Trunc8(Hposn);
             info = -1;
@@ -3885,11 +3894,15 @@ public class TrakSim {
                     info = theInx[Pmap];
                 if (OpMode < 3) if (info >= 0)
                     if (!SimSpedFixt) if ((info & 0x60000000) != 0x40000000) SimStep(6);
+
+                //*
                 System.out.println(HandyOps.Dec2Log(HandyOps.IffyStr(OpMode == 3, "(DoSc $$) ",
-                        "(DoSc) "), DrawDash, HandyOps.Dec2Log(" ", Vmap,
+                        "(DoSc) "), 1, HandyOps.Dec2Log(" ", Vmap,
                         HandyOps.Dec2Log("/", Hmap, HandyOps.Hex2Log(" = ", info, 8,
                                 HandyOps.Dec2Log(" ", LookFrame, HandyOps.Dec2Log(" ", TripLine,
                                         HandyOps.PosTime(" @ "))))))));
+                //*/ //MARKERPOINT
+
                 //
                 // The car is at (Vposn,Hposn), facing (init'ly NW) -> Facing (Fa)
                 // The screen is ImWi pixels wide, which imaged at distance dx
@@ -3915,7 +3928,7 @@ public class TrakSim {
                 doit = 0;
                 rx = RangeRow[255] - 1; // at horizon, mid-screen
                 for (dx = 255; dx >= -ImHaf; dx += -1) {    // convert depth to raster line number..
-                    if (rx > ImHi - DrawDash) break; // normal exit at bottom of screen
+                    if (rx > ImHi - 1) break; // normal exit at bottom of screen
                     if (dx < 0) break;
                     robe = RangeRow[dx & 255]; // dx: nominal depth in park 25cm units
                     // far = far&0xFFFFFF|(robe<<24);
@@ -3932,7 +3945,7 @@ public class TrakSim {
                             seen = false;
                         }
                         cx = rx - ImHaf; // RowRange is bottom half of screen only // ImHaf=240
-                        if (cx > ImHaf - DrawDash) break;
+                        if (cx > ImHaf - 1) break;
                         doit = RowRange[cx];
                         deep = ((double) doit) * 0.03125; // RR: m*16 (6cm), deep: 2m
                         Vbase = deep * Vstp + Vposn * 0.5; // current center of the view at this dx,
@@ -3988,7 +4001,8 @@ public class TrakSim {
                                     if (RwL != 0) seen = false;
                                 }
                             } //~if // (Mtrk)
-                            if (rx == ImHi - 2 - DrawDash) { // DrawDash=12
+                            /*
+                            if (rx == ImHi - 2 - 1) { // 1=12
                                 if (ZooMapDim != 0) { // draw view trapezoid..
                                     zx = ZoomMapCoord(false, MyMath.Fix2flt(rx, 0), 1.0); // sb = Lww
                                     Lww = ZoomMapCoord(true, Vat + Vat, Hat + Hat); // should be visible
@@ -4010,7 +4024,8 @@ public class TrakSim {
                                         MyMath.Trunc8(Hat + Hat) + ImWi + 2, cx,
                                         MyMath.Trunc8(Hoffm + Hoffm) + ImWi + 2);
                             }
-                        } //~if // (DrawDash) (ShowMap)
+                            //*/    //MARKERPOINT
+                        } //~if // (1) (ShowMap)
                         if (VuEdge == 0.0) if (Mtrk != 0) {
                             VuEdge = MyMath.aTan0(Hoffm + Hoffm - Hposn, Vposn - Voffm - Voffm) - Facing;
                             while (VuEdge > 180.0) VuEdge = VuEdge - 360.0;
@@ -5331,9 +5346,9 @@ public class TrakSim {
                     + " (", ImHi, HandyOps.Dec2Log("x", ImWi, ")")));
             break;
         } //~while
-        if (DrawDash > 32) {
-            System.out.println("<!> A large DrawDash leaves no image space for track");
-            if (DrawDash * 4 > ImHi) NG = true;
+        if (1 > 32) {
+            System.out.println("<!> A large 1 leaves no image space for track");
+            if (1 * 4 > ImHi) NG = true;
         } //~if
         while (true) {
             if (MapTall == 200) if (MapWide == 256) break;
@@ -5452,7 +5467,7 @@ public class TrakSim {
             // WiZoom = (Dzoom*32.0)/FltWi; // = 16/(ImWi*fZoom)
             // fZoom = ((double)Zoom35)/((double)zx50); // = 2x for 100mm-equivalent lens
             // MakeRangeTbl(); // builds RangeRo,RowRang, sets tRadix
-            if (TweakRx != 0) while (tRadix > ImHi - 8 - DrawDash) { // TweakRx=0
+            if (TweakRx != 0) while (tRadix > ImHi - 8 - 1) { // TweakRx=0
                 if (TweakRx > 0) {
                     effTurnRad = effTurnRad + MyMath.Fix2flt(TweakRx, 0); // +TurnRadius/4.0;
                     MakeRangeTbl();
