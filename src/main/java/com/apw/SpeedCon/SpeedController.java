@@ -6,6 +6,7 @@ import com.apw.pedestrians.blobtrack.*;
 import com.apw.pedestrians.image.Color;
 import com.apw.pedestrians.*;
 import com.apw.ImageManagement.*;
+import com.apw.apw3.TrakSim;
 import com.apw.drivedemo.DriveTest;
 
 public class SpeedController {
@@ -18,6 +19,7 @@ public class SpeedController {
 	private boolean stoppedAtLight;
 	private boolean readyToGo;
 	private boolean emergencyStop;
+	private int color;
 	private int cyclesToStopAtSign = Constants.DRIFT_TO_STOPSIGN_FRAMES;
 	private int cyclesToGo;
 	private int cyclesToStopAtLight = Constants.DRIFT_TO_STOPLIGHT_FRAMES;
@@ -25,6 +27,8 @@ public class SpeedController {
 	
 	
 	private SpeedFinder speedFinder;
+	
+	TrakSim trackSim = new TrakSim();
 	
 	public SpeedController(){
 		this.speedFinder = new SpeedFinder();
@@ -44,31 +48,30 @@ public class SpeedController {
 		//This part runs on-screen blobs thru a set of tests to figure out if they are
 		//relevant, and then what to do with them
 		PedestrianDetector pedDetect = new PedestrianDetector();
-		
-					//Uncomment when image management team fixes their code
 		ImageManager imageManager = dtest.getImgManager();
 		List<MovingBlob> blobs = pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), 912);
 		for(MovingBlob i : blobs){
 			
 			if (i.color.getColor() == Color.BLACK) {
-				graf.setColor(java.awt.Color.BLACK);	
+				color = 0x000000;	
 			}
 			else if (i.color.getColor() == Color.GREY) {
-				graf.setColor(java.awt.Color.GRAY);
+				color = 0xd3d3d3;
 			}
 			else if (i.color.getColor() == Color.WHITE) {
-				graf.setColor(java.awt.Color.WHITE);
+				color = 0xffffff;
 			}
 			else if (i.color.getColor() == Color.RED) {
-				graf.setColor(java.awt.Color.RED);
+				color = 0xff000000;
 			}
 			else if (i.color.getColor() == Color.GREEN) {
-				graf.setColor(java.awt.Color.GREEN);
+				color = 0x00ff00;
 			}
 			else if (i.color.getColor() == Color.BLUE) {
-				graf.setColor(java.awt.Color.BLUE);
+				color = 0x0000ff;
 			}
-			graf.drawRect(i.x+8, i.y+40, i.width, i.height);;
+			trackSim.RectFill(color, i.x, i.y, i.x+i.width, i.y+i.height);
+			//graf.drawRect(i.x+8, i.y+40, i.width, i.height);;
 			
 			if(detectStopLight(i)){
 				System.out.println("Stop light blob " + i);

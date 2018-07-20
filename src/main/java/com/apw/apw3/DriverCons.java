@@ -33,7 +33,7 @@ public class DriverCons { // TrakSim constant parameters
             D_FixedSpeed = false,    // ignore speed control, assume fMinSpeed
             D_StayInTrack = false,   // ignore steering control, stay centered in track
             D_ShoTrkTstPts = false, // T: show test points used to calc StayInTrack
-            D_ShoClikGrid = false,  // T: to see where to click to steer/accelerate
+            D_ShoClikGrid = true,  // T: to see where to click to steer/accelerate
             D_ShowMap = true,       // T: show the map next to the scene
             D_DoCloseUp = true,     // T: show close-up map if there is room
             D_RampServos = false,   // T: servos take time to arrive at setting
@@ -42,7 +42,7 @@ public class DriverCons { // TrakSim constant parameters
             D_Reversible = false,   // T: allow reverse (untested)
             D_StartInCalibrate = false, // T: use this to calibrate servo limits
             D_Log_Draw = false, D_Log_Log = false, D_Fax_Log = false,
-            D_Mini_Log = false, D_NoisyMap = true,
+            D_Mini_Log = false, D_NoisyMap = false,
             D_DrawOnSides = true, D_DrawPredicted = true, D_DrawCurrent = true;
 
     public static final int
@@ -51,7 +51,7 @@ public class DriverCons { // TrakSim constant parameters
             D_RampA = 300,     // Initial orient'n for car, c-wise degrees from north
             D_Zoom35 = 35,     // 35mm-equivalent focal length for "camera"
             D_BayTile = 1,     // Bayer8 tiling code (RG/GB) as defined by Pt.Grey
-            D_FrameTime = 50, // =5/fps, nominal frame rate for camera (must >= 20ms)
+            D_FrameTime = 200, // =5/fps, nominal frame rate for camera (must >= 20ms)
             D_nServoTests = 0, // number of times to run through test (1: no ESC)
             D_ServoMsgPos = 200 * 0x10000 + 0, // position of warning in image file,
             D_ServoMsgTL = 40 * 0x10001, D_ServoMsgSiz = 40 * 0x10000 + 80, // posn on screen
