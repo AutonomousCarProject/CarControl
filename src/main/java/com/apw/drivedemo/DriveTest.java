@@ -6,7 +6,6 @@ import com.apw.apw3.SimCamera;
 import com.apw.apw3.TrakSim;
 import com.apw.fakefirm.Arduino;
 import com.apw.fly2cam.FlyCamera;
-import javafx.scene.input.KeyCode;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
