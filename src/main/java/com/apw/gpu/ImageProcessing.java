@@ -15,12 +15,15 @@ public class ImageProcessing {
         int nrows = 4;
         int ncols = 4;
 
-        Range range = Range.create(nrows * ncols);
+        Range range = Range.create2D(nrows, ncols);
 
         SimpleColorRasterKernel kernel = new SimpleColorRasterKernel(bayer, simple, nrows, ncols);
 
-        kernel.execute(range);
-        kernel.dispose();
+        for (int i = 0; i < 50; ++i) {
+            kernel.execute(range);
+            kernel.dispose();
+            System.out.printf("%.2fms%n", kernel.getAccumulatedExecutionTime());
+        }
 
         System.out.printf("%.2fms%n", kernel.getAccumulatedExecutionTime());
         System.out.println(Arrays.toString(kernel.getSimple()));

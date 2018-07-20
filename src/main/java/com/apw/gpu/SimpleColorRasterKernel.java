@@ -2,6 +2,8 @@ package com.apw.gpu;
 
 import com.aparapi.Kernel;
 
+import java.util.Arrays;
+
 /**
  * The <code>MonochromeRasterKernel</code> subclass describes a {@link com.aparapi.Kernel Kernel}
  * that creates a simple color raster from a bayer rgb byte array.
@@ -70,58 +72,22 @@ public class SimpleColorRasterKernel extends Kernel {
          * 5 = BLACK
          */
 
-        // these might not be accurate
         int rows = getGlobalId(1);
         int cols = getGlobalId(0);
 
-        int R = ((((int) bayer[(rows * ncols * 2 + cols) * 2                ]) & 0xFF));                //Top left (red)
-        int G = ((((int) bayer[(rows * ncols * 2 + cols) * 2 + 1            ]) & 0xFF));                //Top right (green)
-        int B = (((int ) bayer[(rows * ncols * 2 + cols) * 2 + 1 + 2 * ncols]) & 0xFF);                 //Bottom right (blue)
+        int R = ((((int) bayer[(rows * ncols * 2 + cols) * 2                ]) & 0xFF)); // Top left (red)
+        int G = ((((int) bayer[(rows * ncols * 2 + cols) * 2 + 1            ]) & 0xFF)); // Top right (green)
+        int B = (((int ) bayer[(rows * ncols * 2 + cols) * 2 + 1 + 2 * ncols]) & 0xFF);  // Bottom right (blue)
 
-        //If one of the colors has a value 50 greater than both other colors
-        //it assigns that pixel to that color
-        if (R > G + 51 && R > B + 51) {
-            simple[rows * ncols + cols] = 0;
-        } else if (G > R + 50 && G > B + 50) {
-            simple[rows * ncols + cols] = 1;
-        } else if (B > R + 50 && B > G + 50) {
-            simple[rows * ncols + cols] = 2;
-        }
-        //Otherwise it sees if one of the colors has a value above 170 for white
+        // If one of the colors has a value 50 greater than both other colors
+        // it assigns that pixel to that color
+             if (R > G + 51 && R > B + 51) simple[rows * ncols + cols] = 0;
+        else if (G > R + 50 && G > B + 50) simple[rows * ncols + cols] = 1;
+        else if (B > R + 50 && B > G + 50) simple[rows * ncols + cols] = 2;
+        // Otherwise it sees if one of the colors has a value above 170 for white
         // if not, 85 for grey and below 85 for black
-        else if (R > 170 || G > 170 || B > 170) {
-            simple[rows * ncols + cols] = 3;
-        } else if (R > 85 || G > 85 || B > 85) {
-            simple[rows * ncols + cols] = 4; //0x808080
-        } else if (R < 85 || G < 85 || B < 85) {
-            simple[rows * ncols + cols] = 5;
-        }
+        else if (R > 170 || G > 170 || B > 170) simple[rows * ncols + cols] = 3;
+        else if (R > 85  || G > 85  || B > 85 ) simple[rows * ncols + cols] = 4; //0x808080
+        else if (R < 85  || G < 85  || B < 85 ) simple[rows * ncols + cols] = 5;
     }
 }
-
-/*
-int rows = getGlobalId(1);
-        int cols = getGlobalId(0);
-
-        int R = ((((int) bayer[(rows * ncols * 2 + cols) * 2                ]) & 0xFF));                //Top left (red)
-        int G = ((((int) bayer[(rows * ncols * 2 + cols) * 2 + 1            ]) & 0xFF));                //Top right (green)
-        int B = (((int ) bayer[(rows * ncols * 2 + cols) * 2 + 1 + 2 * ncols]) & 0xFF);                 //Bottom right (blue)
-
-        //If one of the colors has a value 50 greater than both other colors
-        //it assigns that pixel to that color
-        if (R > G + 51 && R > B + 51) {
-            simple[rows * ncols + cols] = 0;
-        } else if (G > R + 50 && G > B + 50) {
-            simple[rows * ncols + cols] = 1;
-        } else if (B > R + 50 && B > G + 50) {
-            simple[rows * ncols + cols] = 2;
-        }
-        //Otherwise it sees if one of the colors has a value above 170 for white
-        // if not, 85 for grey and below 85 for black
-        else if (R > 170 || G > 170 || B > 170) {
-            simple[rows * ncols + cols] = 3;
-        } else if (R > 85 || G > 85 || B > 85) {
-            simple[rows * ncols + cols] = 4; //0x808080
-        } else if (R < 85 || G < 85 || B < 85) {
-            simple[rows * ncols + cols] = 5;
- */

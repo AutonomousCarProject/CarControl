@@ -55,10 +55,9 @@ public class MonochromeRasterKernel extends Kernel {
     @Override
     public void run() {
 
-        // these might not be accurate
         int rows = getGlobalId(1);
         int cols = getGlobalId(0);
 
-        mono[rows * ncols + cols] = bayer[rows * ncols * 2 + cols * 2 + 1];
+        mono[rows * ncols + cols] = (byte) ((((int) bayer[(rows * ncols * 2 + cols) * 2 + 1]) & 0xFF)); //Use only top right (green)
     }
 }
