@@ -32,7 +32,7 @@ public class SpeedController {
 	
 	//A method to be called every frame. Calculates desired speed and actual speed
 	//Also takes stopping into account
-	public void onUpdate(int gasAmount, int steerDegs, int manualSpeed, Graphics graf, DriveTest dtest){
+	public void onUpdate(int gasAmount, int steerDegs, int manualSpeed, Graphics graf, DriveTest dtest, boolean blobsOn, boolean overlayOn){
 		if (cyclesUntilCanDetectStopsign > 0){
 			cyclesUntilCanDetectStopsign--;
 		}
@@ -49,27 +49,27 @@ public class SpeedController {
 		ImageManager imageManager = dtest.getImgManager();
 		List<MovingBlob> blobs = pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), 912);
 		for(MovingBlob i : blobs){
-			
-			if (i.color.getColor() == Color.BLACK) {
-				graf.setColor(java.awt.Color.BLACK);	
+			if(blobsOn){
+				if (i.color.getColor() == Color.BLACK) {
+					graf.setColor(java.awt.Color.BLACK);	
+				}
+				else if (i.color.getColor() == Color.GREY) {
+					graf.setColor(java.awt.Color.GRAY);
+				}
+				else if (i.color.getColor() == Color.WHITE) {
+					graf.setColor(java.awt.Color.WHITE);
+				}
+				else if (i.color.getColor() == Color.RED) {
+					graf.setColor(java.awt.Color.RED);
+				}
+				else if (i.color.getColor() == Color.GREEN) {
+					graf.setColor(java.awt.Color.GREEN);
+				}
+				else if (i.color.getColor() == Color.BLUE) {
+					graf.setColor(java.awt.Color.BLUE);
+				}
+				graf.drawRect(i.x+8, i.y+40, i.width, i.height);;
 			}
-			else if (i.color.getColor() == Color.GREY) {
-				graf.setColor(java.awt.Color.GRAY);
-			}
-			else if (i.color.getColor() == Color.WHITE) {
-				graf.setColor(java.awt.Color.WHITE);
-			}
-			else if (i.color.getColor() == Color.RED) {
-				graf.setColor(java.awt.Color.RED);
-			}
-			else if (i.color.getColor() == Color.GREEN) {
-				graf.setColor(java.awt.Color.GREEN);
-			}
-			else if (i.color.getColor() == Color.BLUE) {
-				graf.setColor(java.awt.Color.BLUE);
-			}
-			graf.drawRect(i.x+8, i.y+40, i.width, i.height);;
-			
 			if(detectStopLight(i)){
 				System.out.println("Stop light blob " + i);
 				setStoppingAtLight();

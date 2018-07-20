@@ -1,6 +1,10 @@
 package com.apw.SpeedCon;
 
 public class Constants {
+		public static final boolean
+		DEFAULT_OVERLAY = true,
+		DEFAULT_BLOBS = true;
+	
 		public static final double 
 		//Speed
 		MAX_SPEED = 20,					//Car's maximum speed
