@@ -21,6 +21,7 @@ public class SpeedController {
 	private int cyclesToStopAtSign = Constants.DRIFT_TO_STOPSIGN_FRAMES;
 	private int cyclesToGo;
 	private int cyclesToStopAtLight = Constants.DRIFT_TO_STOPLIGHT_FRAMES;
+	private int cyclesUntilCanDetectStopsign = Constants.WAIT_AFTER_STOPSIGN;
 	
 	
 	private SpeedFinder speedFinder;
@@ -32,6 +33,9 @@ public class SpeedController {
 	//A method to be called every frame. Calculates desired speed and actual speed
 	//Also takes stopping into account
 	public void onUpdate(int gasAmount, int steerDegs, int manualSpeed, Graphics graf, DriveTest dtest){
+		if (cyclesUntilCanDetectStopsign > 0){
+			cyclesUntilCanDetectStopsign--;
+		}
 		dtest.run();
 		//dtest.window.paint(graf);
 		this.calculateEstimatedSpeed(gasAmount);
@@ -68,11 +72,12 @@ public class SpeedController {
 			
 			if(detectStopLight(i)){
 				System.out.println("Stop light blob " + i);
-				setStoppingAtSign();
-			}
-			else if(detectStopSign(i)){
-				System.out.println("Stop sign blob " + i);
 				setStoppingAtLight();
+			}
+			else if(detectStopSign(i) && cyclesUntilCanDetectStopsign <= 0){
+				System.out.println("Stop sign blob " + i);
+				cyclesUntilCanDetectStopsign = 100;
+				setStoppingAtSign();
 			}
 			else {
 				System.out.println("Blob " + i);
