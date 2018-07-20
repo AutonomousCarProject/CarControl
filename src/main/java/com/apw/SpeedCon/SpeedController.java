@@ -6,6 +6,7 @@ import com.apw.pedestrians.blobtrack.*;
 import com.apw.pedestrians.image.Color;
 import com.apw.pedestrians.*;
 import com.apw.ImageManagement.*;
+import com.apw.apw3.TrakSim;
 import com.apw.drivedemo.DriveTest;
 
 public class SpeedController {
@@ -18,6 +19,7 @@ public class SpeedController {
 	private boolean stoppedAtLight;
 	private boolean readyToGo;
 	private boolean emergencyStop;
+	private int color;
 	private int cyclesToStopAtSign = Constants.DRIFT_TO_STOPSIGN_FRAMES;
 	private int cyclesToGo;
 	private int cyclesToStopAtLight = Constants.DRIFT_TO_STOPLIGHT_FRAMES;
@@ -25,6 +27,8 @@ public class SpeedController {
 	
 	
 	private SpeedFinder speedFinder;
+	
+	TrakSim trackSim = new TrakSim();
 	
 	public SpeedController(){
 		this.speedFinder = new SpeedFinder();
@@ -46,8 +50,11 @@ public class SpeedController {
 		//This part runs on-screen blobs thru a set of tests to figure out if they are
 		//relevant, and then what to do with them
 		PedestrianDetector pedDetect = new PedestrianDetector();
+<<<<<<< HEAD
 		
 		//Gets blobs from the simplified image we get from the image management team
+=======
+>>>>>>> 6ab4fd4f82f63d9703a0778e7316e90d31f9f73c
 		ImageManager imageManager = dtest.getImgManager();
 		List<MovingBlob> blobs = pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), 912);
 		
