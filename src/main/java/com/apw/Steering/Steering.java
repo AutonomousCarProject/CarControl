@@ -51,13 +51,13 @@ public class Steering {
 		for (int i = screenHeight - 22; i>startingHeight + heightOfArea; i--) {
 			
 			for (int j = roadMiddle/2; j>=0; j--) {
-				if (pixels[(screenWidth * (i)) + j] == 16777215) {
+				if (pixels[(screenWidth * (i)) + j] > 0xDDDDCC) {
 					leftSideFound = true;
 					break;
 				}
 			}
 			for (int j = roadMiddle/2; j<cameraWidth; j++) {
-				if (pixels[(screenWidth * (i)) + j] == 16777215) {
+				if (pixels[(screenWidth * (i)) + j] > 0xDDDDCC) {
 					rightSideFound = true;
 					break;
 				}
