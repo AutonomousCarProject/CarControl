@@ -794,7 +794,8 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 					AxLR8(true, speedControl.getDesiredSpeed());
 					System.out.println(this.GasPedal);
 					System.out.println(this.SteerDegs);
-					System.out.println(speedControl.getDesiredSpeed());
+					System.out.println(speedControl.getStoppingAtLight());
+					System.out.println(speedControl.getStoppingAtSign());
 
 					graf.setColor(Color.ORANGE);
 					 graf.drawRect(Constants.STOPLIGHT_MIN_X, Constants.STOPLIGHT_MIN_Y,

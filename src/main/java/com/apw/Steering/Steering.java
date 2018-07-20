@@ -96,7 +96,9 @@ public class Steering {
 			count++;
 			roadMiddle = leftSideTemp + rightSideTemp;
 		}
-		System.out.println(count);
+
+//ABCDE		
+//		System.out.println(count);
 		count = 0;
 		for (int i = startingHeight + heightOfArea; i>startingHeight; i--) {
 			//center to left
