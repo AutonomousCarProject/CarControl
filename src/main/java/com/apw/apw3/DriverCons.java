@@ -28,10 +28,11 @@ package com.apw.apw3;                                       // 2018 June 12
 public class DriverCons { // TrakSim constant parameters
 
     public static final boolean // options & diagnostic switches..
+            D_PrimaryViewOn = false,    // T: make the main window open up
             D_LiveCam = false,       // F: omit connecting to FlyCamera
             D_StartLive = false,    // T: start in live camera if possible
             D_FixedSpeed = true,    // ignore speed control, assume fMinSpeed
-            D_StayInTrack = true,   // ignore steering control, stay centered in track
+            D_StayInTrack = false,   // ignore steering control, stay centered in track
             D_ShoTrkTstPts = false, // T: show test points used to calc StayInTrack
             D_ShoClikGrid = false,  // T: to see where to click to steer/accelerate
             D_ShowMap = true,       // T: show the map next to the scene
@@ -46,7 +47,6 @@ public class DriverCons { // TrakSim constant parameters
             D_DrawOnSides = true, D_DrawPredicted = true, D_DrawCurrent = true;
 
     public static final int
-            D_SecondViewType = 1,   //0 = no view, 1 = RGB, 2 = monochrome, 3 = simplified
             D_Vramp = 68, D_Hramp = 172, // Initial pos'n for car, meters from NW
             D_RampA = 300,     // Initial orient'n for car, c-wise degrees from north
             D_Zoom35 = 35,     // 35mm-equivalent focal length for "camera"
@@ -57,13 +57,13 @@ public class DriverCons { // TrakSim constant parameters
             D_ServoMsgTL = 40 * 0x10001, D_ServoMsgSiz = 40 * 0x10000 + 80, // posn on screen
             D_ImHi = 480, D_ImWi = 640, // Camera image (and display window) size
             D_HalfTall = 100, D_HalfMap = 128,  // 2x2 grid map size (in 2m units)
-            D_DrawDash = 12,                    // dashboard height at bottom of image
+            D_DrawDash = 12,                    // dashboard height at bottom of image   // Never set to 0 since it will delete things like stop signs.
             D_SteerServo = 9, D_GasServo = 10,  // FakeArduino output pins for servos
             D_MinESCact = 10, D_MaxESCact = 22, // active range of ESC, in steps +90
             D_LeftSteer = 33, D_RiteSteer = 44, // (measured) full range (33,44)
             D_MarinBlue = 0x0099FF, // the color of driving info added to image
-            D_SteerColo = 0xCC9900, // the color of the steering wheel in the image
-            D_CreamWall = 0xFFFFCC, // (indoor) wall&door colors..
+    //D_SteerColo = 0xCC9900, // the color of the steering wheel in the image
+    D_CreamWall = 0xFFFFCC, // (indoor) wall&door colors..
             D_DarkWall = 0x999966, D_BackWall = 0x66CC66, D_PilColo = 0x666666,
             D_CarColo = 0xFF0099, D_ArtiColo = 0xFFCC00, // pink car color, amber a'fact
             D_Transprnt = 0xFEFEFE, // magical interior image color -> transparent
