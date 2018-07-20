@@ -46,9 +46,26 @@ public class SpeedController {
 		List<MovingBlob> blobs = pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), 912);
 		for(MovingBlob i : blobs){
 			
-			graf.setColor(java.awt.Color.BLUE);
+			if (i.color.getColor() == Color.BLACK) {
+				graf.setColor(java.awt.Color.BLACK);	
+			}
+			else if (i.color.getColor() == Color.GREY) {
+				graf.setColor(java.awt.Color.GRAY);
+			}
+			else if (i.color.getColor() == Color.WHITE) {
+				graf.setColor(java.awt.Color.WHITE);
+			}
+			else if (i.color.getColor() == Color.RED) {
+				graf.setColor(java.awt.Color.RED);
+			}
+			else if (i.color.getColor() == Color.GREEN) {
+				graf.setColor(java.awt.Color.GREEN);
+			}
+			else if (i.color.getColor() == Color.BLUE) {
+				graf.setColor(java.awt.Color.BLUE);
+			}
 			graf.drawRect(i.x+8, i.y+40, i.width, i.height);;
-
+			
 			if(detectStopLight(i)){
 				System.out.println("Stop light blob " + i);
 				setStoppingAtSign();
