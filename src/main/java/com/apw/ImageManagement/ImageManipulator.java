@@ -52,6 +52,7 @@ public class ImageManipulator {
 	 		* 3 = WHITE
 	 		* 4 = GREY
 	 		* 5 = BLACK
+	 		* 6 = YELLOW
 		*/
 		for(int r = 0; r < nrows; r++){
 			for(int c = 0; c < ncols; c++){
@@ -66,6 +67,8 @@ public class ImageManipulator {
 					simple[r*ncols+c] = 1;
 				} else if(B > R+50 && B > G+50){
 					simple[r*ncols+c] = 2;
+				}else if(R<G+20&&G<R+20&&(R>B+50)){
+					simple[r*ncols+c] = 6;
 				}
 				//Otherwise it sees if one of the colors has a value above 170 for white
 				// if not, 85 for grey and below 85 for black
@@ -73,8 +76,8 @@ public class ImageManipulator {
 					simple[r*ncols+c] = 3;
 				} else if(R > 85 || G > 85 || B > 85){
 					simple[r*ncols+c] = 4; //0x808080
-				} else if(R < 85 || G < 85 || B < 85){
-					simple[r*ncols+c] = 5;
+				} else if(R < 85 || G < 85 || B < 85) {
+					simple[r * ncols + c] = 5;
 				}
 			}
 		}
@@ -113,6 +116,9 @@ public class ImageManipulator {
 					break;
 				case 5:
 					simpleRGB[i] = 0x000000;
+					break;
+				case 6:
+					simpleRGB[i] = 0xDDDD00;
 					break;
 			}
 		}

@@ -1,7 +1,9 @@
 package com.apw.drivedemo;
 
 import com.apw.ImageManagement.ImageManager;
+import com.apw.Steering.Point;
 import com.apw.Steering.SteerControlCheck;
+import com.apw.Steering.Steering;
 import com.apw.apw3.*;
 import com.apw.fakefirm.Arduino;
 import com.apw.fly2cam.FlyCamera;
@@ -28,12 +30,16 @@ public class DriveTest extends TimerTask implements MouseListener {
 	private int nrows, ncols;
 	private Arduino driveSys;
 	private BufferedImage displayimage;
+	private BufferedImage bufferimage;
+	private BufferedImage tempimage;
 	private Icon displayicon;
 	private JLabel displaylabel;
 	private int viewType;
 	private DrDemo clicks;
-	//private Steering steerMng;
-	private SteerControlCheck steerMng;
+	private Steering testSteering;
+	//private SteerControlCheck steerMng;
+	private int[] imagepixels;
+	private int[] displaypixels;
 
 	private int Calibrating = 0;
 	private int SteerDegs = 0;
@@ -45,6 +51,7 @@ public class DriveTest extends TimerTask implements MouseListener {
 	private boolean CanDraw = false;
 	public boolean CameraView = false;
 	public boolean unPaused = false;
+	private Insets edges;
 	private boolean StepMe = false,SimSpedFixt = DriverCons.D_FixedSpeed;
 
 	private final int[] Grid_Moves = {0, -32, -8, -1, 0, 1, 8, 32, 0, 1, 8, 32, 0, 1, 8, 32};
@@ -104,8 +111,20 @@ public class DriveTest extends TimerTask implements MouseListener {
 			}
 			private void finishInit(){
 				imagemanager = new ImageManager(simcam);
-        		nrows = imagemanager.getNrows();
+				nrows = imagemanager.getNrows();
 				ncols = imagemanager.getNcols();
+				switch(viewType){
+					case 2:
+						displayimage = new BufferedImage(ncols, nrows, BufferedImage.TYPE_BYTE_GRAY);
+						bufferimage = new BufferedImage(ncols, nrows, BufferedImage.TYPE_BYTE_GRAY);
+						break;
+					case 1:
+					case 3:
+					case 4:
+						displayimage = new BufferedImage(ncols, nrows, BufferedImage.TYPE_INT_RGB);
+						bufferimage = new BufferedImage(ncols, nrows, BufferedImage.TYPE_INT_RGB);
+						break;
+				}
 
 				window = new JFrame();
 				window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -128,14 +147,16 @@ public class DriveTest extends TimerTask implements MouseListener {
 				window.addMouseListener(this);
 				window.setVisible(true);
 
-				steerMng = new SteerControlCheck(imagemanager, ncols);
+				testSteering = new Steering();
+				AxLR8(false,10);
+
 
 
 				System.out.println("**************" + nrows + " " + ncols);
 			}
         	public static void main(String[] args) {
         		Timer displayTaskTimer = new Timer();
-        		displayTaskTimer.scheduleAtFixedRate(new DriveTest(1), new Date(), 1000/FPS);
+        		displayTaskTimer.scheduleAtFixedRate(new DriveTest(3), new Date(), 1000/FPS);
         	}
 			public static void subMain(TrakSim sim, FlyCamera simcam, DrDemo clicks, int viewType){
 				Timer displayTaskTimer = new Timer();
@@ -143,35 +164,33 @@ public class DriveTest extends TimerTask implements MouseListener {
 			}
         	@Override
 	public void run() {
-				switch(viewType){
-					case 1:
-						int[] imagepixels = imagemanager.getRGBRaster();
-						int[] displaypixels = ((DataBufferInt) displayimage.getRaster().getDataBuffer()).getData();
-						System.arraycopy(imagepixels, 0, displaypixels, 0, imagepixels.length);
-						break;
-					case 2:
-						byte[] Aimagepixels = imagemanager.getMonochromeRaster();
-						byte[] Adisplaypixels = ((DataBufferByte) displayimage.getRaster().getDataBuffer()).getData();
-						System.arraycopy(Aimagepixels, 0, Adisplaypixels, 0, Aimagepixels.length);
-						break;
-					case 3:
-						int[] Bimagepixels = imagemanager.getSimpleRGBRaster();
-						int[] Bdisplaypixels = ((DataBufferInt) displayimage.getRaster().getDataBuffer()).getData();
-						System.arraycopy(Bimagepixels, 0, Bdisplaypixels, 0, Bimagepixels.length);
-						break;
-					case 4:
-						int[] Cimagepixels = imagemanager.getBWRGBRaster();
-						int[] Cdisplaypixels = ((DataBufferInt) displayimage.getRaster().getDataBuffer()).getData();
-						System.arraycopy(Cimagepixels, 0, Cdisplaypixels, 0, Cimagepixels.length);
-						break;
-				}
-				//System.out.println("Repainting");
-				sim.SimStep(1);
-				///** If you have self-driving code, you could put it here **///
-				TestServos(); // (replace this with your own code)
-				window.repaint();
-				//window.getGraphics().drawLine(0,300,640,300);
-			}
+		imagepixels=null;
+		switch(viewType){
+			case 1:
+				imagepixels = imagemanager.getRGBRaster();
+				break;
+			case 2:
+				imagepixels = imagemanager.getMonoRGBRaster();
+				break;
+			case 3:
+				imagepixels = imagemanager.getSimpleRGBRaster();
+				break;
+			case 4:
+				imagepixels = imagemanager.getBWRGBRaster();
+				break;
+		}
+		displaypixels = ((DataBufferInt) bufferimage.getRaster().getDataBuffer()).getData();
+		System.arraycopy(imagepixels, 0, displaypixels, 0, imagepixels.length);
+		sim.SimStep(1);
+		TestServos(); // (replace this with your own code)
+		//imagepixels = ((DataBufferInt) bufferimage.getRaster().getDataBuffer()).getData();
+		//displaypixels = ((DataBufferInt) displayimage.getRaster().getDataBuffer()).getData();
+		//System.arraycopy(imagepixels, 0, displaypixels, 0, imagepixels.length);
+		tempimage=displayimage;
+		displayimage=bufferimage;
+		bufferimage=tempimage;
+		window.repaint();
+	}
 	/*
 	@Override
 	public void mouseClicked(MouseEvent e) {
@@ -185,7 +204,7 @@ public class DriveTest extends TimerTask implements MouseListener {
 	//*/
 	@Override
 	public void mouseClicked(MouseEvent evt){
-		Insets edges = window.getInsets();
+		edges = window.getInsets();
 		int kx = 0, nx = 0, zx = 0, Vx = 0, Hx = 0, why = 0;
 		boolean didit = false;
 		if (evt != null) if (edges != null) { // we only implement/o'ride this one
@@ -361,8 +380,33 @@ public class DriveTest extends TimerTask implements MouseListener {
 
 	// Steering and Speed Control on each frame
 	public void TestServos() { // exercise steering & ESC servos
-		AxLR8(false,1);
-		SteerMe(false,steerMng.getDegreeOffset());
+		Graphics graf = bufferimage.getGraphics();
+		steerCode(graf);
 	} //~TestServos
+	public void steerCode(Graphics graf){
+		Point[] hi = testSteering.findPoints(imagemanager.getRGBRaster());
+		testSteering.averageMidpoints();
+		int tempDeg = testSteering.getDegreeOffset();
+		driveSys.servoWrite(SteerPin, (int)((tempDeg) + 90));
+		bufferimage.getGraphics().setColor(Color.RED);
+		bufferimage.getGraphics().fillRect(100, testSteering.startingPoint, 1, 1);
+		if (DriverCons.D_DrawCurrent == true) {
+			for (int i = 0; i<testSteering.startingPoint - (testSteering.startingHeight + testSteering.heightOfArea); i++) {
+				//bufferimage.getGraphics().fillRect(testSteering.leadingMidPoints[i].x, testSteering.leadingMidPoints[i].y +  + edges.top, 5, 5);
+			}
+		}
 
+
+		for (int i = 0; i<hi.length; i++) {
+			if (DriverCons.D_DrawPredicted == true) {
+				bufferimage.getGraphics().setColor(Color.BLUE);
+				//bufferimage.getGraphics().fillRect(hi[i].x, hi[i].y + edges.top, 5, 5);
+			}
+			if (DriverCons.D_DrawOnSides == true) {
+				bufferimage.getGraphics().setColor(Color.YELLOW);
+				//bufferimage.getGraphics().fillRect(testSteering.leftPoints[i].x + edges.left, testSteering.leftPoints[i].y + edges.top, 5, 5);
+				//bufferimage.getGraphics().fillRect(testSteering.rightPoints[i].x + edges.left, testSteering.rightPoints[i].y + edges.top, 5, 5);
+			}
+		}
+	}
 }
