@@ -22,7 +22,7 @@ public class Constants {
 		DRIFT_TO_STOPSIGN_FRAMES = 15,	//Frames to drift forward after stopsign detected
 		WAIT_AT_STOPSIGN_FRAMES = 50,	//Frames to wait at stopsign once stopped
 		STOPSIGN_DRIFT_SPEED = 12,		//Speed at which the car pulls up to a stopsign
-		DRIFT_TO_STOPLIGHT_FRAMES = 15,	//Frames to drift forward after stoplight detected
+		DRIFT_TO_STOPLIGHT_FRAMES = 0,	//Frames to drift forward after stoplight detected
 		STOPLIGHT_DRIFT_SPEED = 12,		//Speed at which the car pulls up to a stoplight
 		WAIT_AFTER_STOPSIGN = 100,
 		

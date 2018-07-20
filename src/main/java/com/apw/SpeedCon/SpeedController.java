@@ -36,8 +36,10 @@ public class SpeedController {
 		if (cyclesUntilCanDetectStopsign > 0){
 			cyclesUntilCanDetectStopsign--;
 		}
+		//This part updates the simple color window that opens up along with traksim
 		dtest.run();
-		//dtest.window.paint(graf);
+		
+		//Right here we update our current calculated speed and find our current desired speed
 		this.calculateEstimatedSpeed(gasAmount);
 		this.calculateDesiredSpeed(steerDegs, manualSpeed);
 		
@@ -45,9 +47,17 @@ public class SpeedController {
 		//relevant, and then what to do with them
 		PedestrianDetector pedDetect = new PedestrianDetector();
 		
-					//Uncomment when image management team fixes their code
+		//Gets blobs from the simplified image we get from the image management team
 		ImageManager imageManager = dtest.getImgManager();
 		List<MovingBlob> blobs = pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), 912);
+		
+		//We then:
+		//A. Display those blobs on screen as empty rectangular boxes of the correct color
+		//B. Test if those blobs are a useful roadsign/light
+		//C. Do whatever we need to do if so
+		//D. Write to the console what has happened
+		//We need all of the if statements to display the colors, 
+		//as we need to convert from IPixel colors to Java.awt colors for display reasons
 		for(MovingBlob i : blobs){
 			if(blobsOn){
 				if (i.color.getColor() == Color.BLACK) {
@@ -68,7 +78,7 @@ public class SpeedController {
 				else if (i.color.getColor() == Color.BLUE) {
 					graf.setColor(java.awt.Color.BLUE);
 				}
-				graf.drawRect(i.x+8, i.y+40, i.width, i.height);;
+				graf.drawRect(i.x+8, i.y+40, i.width, i.height);
 			}
 			if(detectStopLight(i)){
 				System.out.println("Stop light blob " + i);
@@ -92,9 +102,11 @@ public class SpeedController {
 	public void calculateDesiredSpeed(int wheelAngle, int manualSpeed){
 		double curveSteepness = 0; // Steering.getCurveSteepness();
 		
+		//Calls methods which tell us to stop, slow down, or maintain course
         int shouldStopSign = this.updateStopSign();
         int shouldStopLight = this.updateStopLight();
         
+        //Logic for determining if we need to be slowing down due to a roadsign/light, and why
 		if(shouldStopSign == 1 && shouldStopLight == 1){
 			this.desiredSpeed = Math.min(Math.max((1 - Math.abs((double)(wheelAngle)/90.0))*Constants.MAX_SPEED + manualSpeed, Constants.MIN_SPEED), Constants.MAX_SPEED);
         }

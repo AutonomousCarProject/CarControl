@@ -792,12 +792,18 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 
 					// Begin Speed Code
 
+					//Updates speed and determines what rate we should be traveling at.
 					speedControl.onUpdate(this.GasPedal, testSteering.getDegreeOffset(), this.manualSpeed, graf, dtest, blobsOn, overlayOn);
+					//Updates current speed to desired speed
 					AxLR8(true, speedControl.getDesiredSpeed());
+					
+					//Console Info
 					System.out.println(this.GasPedal);
 					System.out.println(this.SteerDegs);
 					System.out.println(speedControl.getStoppingAtLight());
 					System.out.println(speedControl.getStoppingAtSign());
+					
+					//Overlay that shows hitboxes for stoplights and stopsigns
 					if(overlayOn){
 						graf.setColor(Color.ORANGE);
 						 graf.drawRect(Constants.STOPLIGHT_MIN_X, Constants.STOPLIGHT_MIN_Y,
