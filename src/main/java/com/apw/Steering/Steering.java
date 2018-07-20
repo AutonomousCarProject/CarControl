@@ -1,11 +1,13 @@
-package com.apw.Steering;
+package Steering;
 
-import com.apw.apw3.DriverCons;
+import apw3.DriverCons;
+import apw3.TrakSim;
 
 public class Steering {
 
 	
 	public int startingPoint = 0;
+
 	
 	//767 is white
 
@@ -14,7 +16,7 @@ public class Steering {
 
 	private int screenWidth = 912;
 	private int cameraWidth = 640;
-	private int screenHeight = com.apw.apw3.DriverCons.D_ImHi;
+	private int screenHeight = DriverCons.D_ImHi;
 	public Point steerPoint = new Point(0, 0);
 
 	public Point[] leadingMidPoints = new Point[startingHeight + heightOfArea];
@@ -27,8 +29,21 @@ public class Steering {
 	Boolean found = false;
 	Boolean leftSideFound = false;
 	Boolean rightSideFound = false;
+	
+	private TrakSim theSim;
+	
+	private double integral, derivative, previousError;
+	private double kP = 0.65;
+	private double kI = 1;
+	private double kD = 1;
+	private boolean usePID = false;
+	
+	private double weight = 1;
+	
+	private long averageLuminance = 0;
+	
 
-	public Steering() {
+	public Steering(TrakSim theSim) {
 		for (int i = 0; i<heightOfArea; i++) {
 			leftPoints[i] = new Point(0, 0);
 			rightPoints[i] = new Point(0, 0);
@@ -37,6 +52,7 @@ public class Steering {
 		for (int i = 0; i<leadingMidPoints.length; i++) {
 			leadingMidPoints[i] = new Point(0, 0);
 		}
+		this.theSim = theSim;
 	}
 	
 	public Point[] findPoints(int[] pixels) {
@@ -44,20 +60,30 @@ public class Steering {
 		int leftSideTemp = 0;
 		int rightSideTemp = 0;
 		startingPoint = 0;
+		averageLuminance = 0;
+		Boolean first = true;
+		int count = 0;
+		//first before first, find average luminance
+		for (int i = cameraWidth * screenHeight - 1; i > startingHeight * cameraWidth; i--) {
+			averageLuminance = averageLuminance + pixels[i];
+			count++;
+		}
+		averageLuminance = (long) (averageLuminance/count * 1.5);
+		System.out.println("average luminance " + averageLuminance);
+		count = 0;
 		
 		//first, find where road starts on both sides
 		leftSideFound = false;
 		rightSideFound = false;
 		for (int i = screenHeight - 22; i>startingHeight + heightOfArea; i--) {
-			
 			for (int j = roadMiddle/2; j>=0; j--) {
-				if (pixels[(screenWidth * (i)) + j] == 16777215) {
+				if (pixels[(screenWidth * (i)) + j] >= averageLuminance) {
 					leftSideFound = true;
 					break;
 				}
 			}
 			for (int j = roadMiddle/2; j<cameraWidth; j++) {
-				if (pixels[(screenWidth * (i)) + j] == 16777215) {
+				if (pixels[(screenWidth * (i)) + j] >= averageLuminance) {
 					rightSideFound = true;
 					break;
 				}
@@ -69,34 +95,34 @@ public class Steering {
 				rightSideFound = false;
 				break;
 			}
+			
 			leftSideFound = false;
 			rightSideFound = false;
 		}
 		
 		//Next, calculate the roadpoint 
 		
-		int count = 0;
+		count = 0;
 		
 		for (int i = startingPoint; i > startingHeight + heightOfArea; i--) {
 			for (int j = roadMiddle/2; j>=0; j--) {
-				if (pixels[screenWidth * i + j] == 16777215) {
+				if (pixels[screenWidth * i + j]  >= averageLuminance) {
 					leftSideTemp = j;
 					break;
 				}
 			}
 			for (int j = roadMiddle/2; j<cameraWidth; j++) {
-				if (pixels[screenWidth * i + j] == 16777215) {
+				if (pixels[screenWidth * i + j]  >= averageLuminance) {
 					rightSideTemp = j;
 					break;
 				}
 			}
-			
-			leadingMidPoints[count].x = roadMiddle / 2;
+			leadingMidPoints[count].x = (int) ((double) roadMiddle / 2.0 * weight);
 			leadingMidPoints[count].y = i;
 			count++;
 			roadMiddle = leftSideTemp + rightSideTemp;
 		}
-		System.out.println("\n\n\n" + count + "\n\n\n");
+		int tempCount = count;
 		count = 0;
 		for (int i = startingHeight + heightOfArea; i>startingHeight; i--) {
 			//center to left
@@ -104,12 +130,12 @@ public class Steering {
 			leftPoints[count].y = i;
 			
 			for (int j = roadMiddle/2; j>=0; j--) {
-				if (pixels[screenWidth * i + j] == 16777215) {
+				if (pixels[screenWidth * i + j] >= averageLuminance) {
 					leftPoints[count].x = j;
 					found = true;
 					break;
 				}
-				
+
 			}
 			if (found == false) {
 				leftPoints[count].x = 0;
@@ -120,11 +146,12 @@ public class Steering {
 			found = false;
 			rightPoints[count].y = leftPoints[count].y;
 			for (int j = roadMiddle/2; j<cameraWidth; j++) {
-				if (pixels[screenWidth * i + j] == 16777215) {
+				if (pixels[screenWidth * i + j] >= averageLuminance) {
 					rightPoints[count].x = j;
 					found = true;
 					break;
 				}
+
 			}
 			if (found == false) {
 				rightPoints[count].x = cameraWidth;
@@ -140,14 +167,13 @@ public class Steering {
 	}
 	
 	public double curveSteepness(double turnAngle) {
-		return turnAngle/(45);
+		return Math.abs(turnAngle)/(45);
 	}
 
 
 	/*
 	find the average point from the midpoints array
 	 */
-
 	public void averageMidpoints() {
         double tempY = 0;
         double tempX = 0;
@@ -175,20 +201,31 @@ public class Steering {
     }
 
 
-    public int getDegreeOffset() {
+    public double getDegreeOffset() {
 	    int xOffset = origin.x - steerPoint.x;
 	    int yOffset = Math.abs(origin.y - steerPoint.y);
 
 	    int tempDeg = (int)((Math.atan2(-xOffset, yOffset)) * (180 / Math.PI));
 	    
-
-	    return (int)((Math.atan2(-xOffset, yOffset)) * (180 / Math.PI));
+	    
+	    return ((Math.atan2(-(usePID?myPID():xOffset), yOffset)) * (180 / Math.PI));
     }
     
-    //placeholder
-    public int getEstimatedSpeed() {
-    		return 5;
+    public double myPID() {
+ 
+    		int error = origin.x - steerPoint.x;
+    		
+    		integral += error * DriverCons.D_FrameTime;
+    		if (error == 0 || (Math.abs(error-previousError)==(Math.abs(error)+Math.abs(previousError)))) {
+    			integral = 0;
+    		}
+    		if (Math.abs(integral) > 100) {
+    			integral = 0;
+    		}
+
+    		derivative = (error - previousError)/DriverCons.D_FrameTime;
+    		previousError = error;
+    		return error*kP + integral*kI + derivative*kD;
+ 
     }
 }
-
-
