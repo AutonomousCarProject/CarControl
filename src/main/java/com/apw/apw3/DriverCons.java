@@ -51,7 +51,7 @@ public class DriverCons { // TrakSim constant parameters
             D_RampA = 300,     // Initial orient'n for car, c-wise degrees from north
             D_Zoom35 = 35,     // 35mm-equivalent focal length for "camera"
             D_BayTile = 1,     // Bayer8 tiling code (RG/GB) as defined by Pt.Grey
-            D_FrameTime = 200, // =5/fps, nominal frame rate for camera (must >= 20ms)
+            D_FrameTime = 50, // =5/fps, nominal frame rate for camera (must >= 20ms)
             D_nServoTests = 0, // number of times to run through test (1: no ESC)
             D_ServoMsgPos = 200 * 0x10000 + 0, // position of warning in image file,
             D_ServoMsgTL = 40 * 0x10001, D_ServoMsgSiz = 40 * 0x10000 + 80, // posn on screen
@@ -65,7 +65,7 @@ public class DriverCons { // TrakSim constant parameters
             D_SteerColo = 0xCC9900, // the color of the steering wheel in the image
             D_CreamWall = 0xFFFFCC, // (indoor) wall&door colors..
             D_DarkWall = 0x999966, D_BackWall = 0x66CC66, D_PilColo = 0x666666,
-            D_CarColo = 0xFF0099, D_ArtiColo = 0xFFCC00, // pink car color, amber a'fact
+            D_CarColo = 0x0000FF, D_ArtiColo = 0xFFCC00, // pink car color, amber a'fact
             D_Transprnt = 0xFEFEFE, // magical interior image color -> transparent
             D_Anim_Log = 0x50020,   // log artifact +5 for 1st 32 frames if NoisyMap=T
             D_TweakRx = 0,     // adjust TurnRadius if >0, Zoom35 if <0

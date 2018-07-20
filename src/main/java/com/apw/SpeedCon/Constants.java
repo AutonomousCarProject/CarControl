@@ -17,9 +17,9 @@ public class Constants {
 		//Stop Frames
 		DRIFT_TO_STOPSIGN_FRAMES = 15,	//Frames to drift forward after stopsign detected
 		WAIT_AT_STOPSIGN_FRAMES = 5,	//Frames to wait at stopsign once stopped
-		STOPSIGN_DRIFT_SPEED = 3,		//Speed at which the car pulls up to a stopsign
+		STOPSIGN_DRIFT_SPEED = 4,		//Speed at which the car pulls up to a stopsign
 		DRIFT_TO_STOPLIGHT_FRAMES = 15,	//Frames to drift forward after stoplight detected
-		STOPLIGHT_DRIFT_SPEED = 3,		//Speed at which the car pulls up to a stoplight
+		STOPLIGHT_DRIFT_SPEED = 4,		//Speed at which the car pulls up to a stoplight
 		
 		//Blobs
 		BLOB_HEIGHT = 18,				//Filtered height of a blob in pixels
