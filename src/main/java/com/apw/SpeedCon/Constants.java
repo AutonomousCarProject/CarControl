@@ -29,8 +29,8 @@ public class Constants {
 		STOPLIGHT_MAX_Y = 240,			//Filtered position of a blob in pixels
 		STOPLIGHT_MIN_X = 8,			//Filtered position of a blob in pixels
 		STOPLIGHT_MAX_X = 648,			//Filtered position of a blob in pixels
-		STOPSIGN_MIN_Y = 0,				//Filtered position of a blob in pixels
-		STOPSIGN_MAX_Y = 0,			//Filtered position of a blob in pixels
-		STOPSIGN_MIN_X = 0,				//Filtered position of a blob in pixels
-		STOPSIGN_MAX_X = 0;			//Filtered position of a blob in pixels
+		STOPSIGN_MIN_Y = 32,				//Filtered position of a blob in pixels
+		STOPSIGN_MAX_Y = 512,			//Filtered position of a blob in pixels
+		STOPSIGN_MIN_X = 480,				//Filtered position of a blob in pixels
+		STOPSIGN_MAX_X = 648;			//Filtered position of a blob in pixels
 }

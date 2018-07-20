@@ -65,7 +65,7 @@ public class DriverCons { // TrakSim constant parameters
             D_SteerColo = 0xCC9900, // the color of the steering wheel in the image
             D_CreamWall = 0xFFFFCC, // (indoor) wall&door colors..
             D_DarkWall = 0x999966, D_BackWall = 0x66CC66, D_PilColo = 0x666666,
-            D_CarColo = 0xFF0099, D_ArtiColo = 0xFFCC00, // pink car color, amber a'fact
+            D_CarColo = 0x0000FF, D_ArtiColo = 0xFFCC00, // pink car color, amber a'fact
             D_Transprnt = 0xFEFEFE, // magical interior image color -> transparent
             D_Anim_Log = 0x50020,   // log artifact +5 for 1st 32 frames if NoisyMap=T
             D_TweakRx = 0,     // adjust TurnRadius if >0, Zoom35 if <0
