@@ -47,13 +47,8 @@ public class SpeedController {
 		for(MovingBlob i : blobs){
 			
 			graf.setColor(java.awt.Color.BLUE);
-<<<<<<< HEAD
-			graf.drawRect(i.x, i.y, i.width, i.height);
-			
-			
-=======
 			graf.drawRect(i.x+8, i.y+40, i.width, i.height);;
->>>>>>> 835fbc9097e9e4e08289b3350d7c4f5dfff6ddc3
+
 			if(detectStopLight(i)){
 				System.out.println("Stop light blob " + i);
 				setStoppingAtSign();
