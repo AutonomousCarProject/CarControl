@@ -801,7 +801,7 @@ public class DrDemo extends JFrame implements MouseListener {
         if(DriverCons.D_PrimaryViewOn) {
             setVisible(true);
         }
-        //DriveTest.subMain(theSim, simVideo, this,2);
+        DriveTest.subMain(theSim, simVideo,2);
 
 
     }
