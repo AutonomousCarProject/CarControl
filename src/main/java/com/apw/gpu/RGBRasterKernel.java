@@ -56,8 +56,8 @@ public class RGBRasterKernel extends Kernel {
     @Override
     public void run() {
 
-        int rows = getGlobalId(1);
-        int cols = getGlobalId(0);
+        int rows = getGlobalId(0);
+        int cols = getGlobalId(1);
 
         int R = ((((int) bayer[(rows * ncols * 2 + cols) * 2                ]) & 0xFF));  //Top left (red)
         int G = ((((int) bayer[(rows * ncols * 2 + cols) * 2 + 1            ]) & 0xFF));  //Top right (green)

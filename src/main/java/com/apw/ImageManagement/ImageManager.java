@@ -59,8 +59,8 @@ public class ImageManager {
      * Formatted in 1D array of bytes*/
     public byte[] getMonochromeRaster() {
         if (processsor == Processsor.GPU) {
-            monoRasterKernel.setValues(picker.getPixels(), mono, nrows, ncols);
-            monoRasterKernel.execute(Range.create(nrows));
+            //monoRasterKernel.setValues(picker.getPixels(), mono, nrows, ncols);
+            monoRasterKernel.execute(Range.create2D(nrows, ncols));
             monoRasterKernel.dispose();
             return monoRasterKernel.getMono();
         } else {
@@ -80,10 +80,10 @@ public class ImageManager {
     public byte[] getSimpleColorRaster() {
         if (processsor == Processsor.GPU) {
             //simpleRasterKernel.setValues(picker.getPixels(), simple, nrows, ncols);
-            simpleRasterKernel.setExplicit(true);
-            simpleRasterKernel.put(picker.getPixels()).put(simple);
+            //simpleRasterKernel.setExplicit(true);
+            //simpleRasterKernel.put(picker.getPixels()).put(simple);
             System.out.println(Arrays.toString(simple).substring(0, 30));
-            simpleRasterKernel.execute(Range.create(nrows)).get(simpleRasterKernel.getSimple());
+            simpleRasterKernel.execute(Range.create2D(nrows, ncols));//.get(simpleRasterKernel.getSimple());
             simpleRasterKernel.dispose();
             System.out.println(Arrays.toString(simple).substring(0, 30));
             return simpleRasterKernel.getSimple();
@@ -96,8 +96,8 @@ public class ImageManager {
 
     public int[] getRGBRaster() {
         if (processsor == Processsor.GPU) {
-            rgbRasterKernel.setValues(picker.getPixels(), rgb, nrows, ncols);
-            rgbRasterKernel.execute(Range.create(nrows));
+            //rgbRasterKernel.setValues(picker.getPixels(), rgb, nrows, ncols);
+            rgbRasterKernel.execute(Range.create2D(nrows, ncols));
             rgbRasterKernel.dispose();
             return rgbRasterKernel.getRgb();
         } else {
