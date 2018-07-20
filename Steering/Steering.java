@@ -35,7 +35,9 @@ public class Steering {
 	private double kP = 0.65;
 	private double kI = 1;
 	private double kD = 1;
-	private boolean usePID = true;
+	private boolean usePID = false;
+	
+	private double weight = 1;
 
 	public Steering(TrakSim theSim) {
 		for (int i = 0; i<heightOfArea; i++) {
@@ -100,13 +102,12 @@ public class Steering {
 					break;
 				}
 			}
-			
-			leadingMidPoints[count].x = roadMiddle / 2;
+
+			leadingMidPoints[count].x = (int) ((double) roadMiddle / 2.0 * weight);
 			leadingMidPoints[count].y = i;
 			count++;
 			roadMiddle = leftSideTemp + rightSideTemp;
 		}
-
 		count = 0;
 		for (int i = startingHeight + heightOfArea; i>startingHeight; i--) {
 			//center to left
@@ -121,7 +122,7 @@ public class Steering {
 				}
 				
 			}
-			if (!found) {
+			if (found == false) {
 				leftPoints[count].x = 0;
 			}
 			
@@ -136,7 +137,7 @@ public class Steering {
 					break;
 				}
 			}
-			if (!found) {
+			if (found == false) {
 				rightPoints[count].x = cameraWidth;
 			}
 			
@@ -187,9 +188,11 @@ public class Steering {
     public int getDegreeOffset() {
 	    int xOffset = origin.x - steerPoint.x;
 	    int yOffset = Math.abs(origin.y - steerPoint.y);
-	    System.out.println("\n\n\n" + myPID() + " " + xOffset + "\n\n\n");
 
-	    return (int)Math.round((Math.atan2(-xOffset, yOffset)) * (180 / Math.PI));
+	    int tempDeg = (int)((Math.atan2(-xOffset, yOffset)) * (180 / Math.PI));
+	    
+	    System.out.println("\n\n\n" + myPID() + " " + xOffset + "\n\n\n");
+	    return (int)((Math.atan2(-(usePID?myPID():xOffset), yOffset)) * (180 / Math.PI));
     }
     
     public double myPID() {
@@ -210,4 +213,3 @@ public class Steering {
  
     }
 }
-
