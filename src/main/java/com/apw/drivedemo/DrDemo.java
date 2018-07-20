@@ -45,7 +45,7 @@ public class DrDemo extends JFrame implements MouseListener {
             ScrWi = TrakSim.WinWi,
             ScrFrTime = DriverCons.D_FrameTime, Scr2L = ScrWi * 2,
             CamFPS = FlyCamera.FrameRate_15 - 1, // CamTime = 528>>CamFPS, // cam frame in ms
-            SecondViewType = DriverCons.D_SecondViewType,
+            //SecondViewType = DriverCons.D_SecondViewType,
 
     DrawDash = DriverCons.D_DrawDash, CarColo = DriverCons.D_CarColo,
             AddColo = DriverCons.D_MarinBlue,
@@ -420,10 +420,8 @@ public class DrDemo extends JFrame implements MouseListener {
                                                 HandyOps.TF2Log(" g=", unPaused, HandyOps.TF2Log(" cv=", CameraView,
                                                         HandyOps.Dec2Log(" ns=", NoneStep, HandyOps.Dec2Log(" ", Calibrating,
                                                                 HandyOps.Dec2Log(" ", why,
-                                                                        HandyOps.PosTime((
-                                                                                " @ ")))))))))))))));
-    } //~mouseClicked
-
+                                                                        HandyOps.PosTime((" @ ")))))))))))))));
+    }   //MouseClicked
     /**
      * Exercise steering & ESC servos, but only if live camera.
      */
@@ -798,10 +796,11 @@ public class DrDemo extends JFrame implements MouseListener {
         setSize(ScrWi + 18, ScrHi + 40); // make it larger for insets to come
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         addMouseListener(this); // if 'implements MouseListen..'
-        setVisible(true);
-        if(SecondViewType!=0) {
-            DriveTest.subMain(theSim, simVideo, SecondViewType);
+        if(DriverCons.D_PrimaryViewOn) {
+            setVisible(true);
         }
+        DriveTest.subMain(theSim, simVideo, this,4);
+
 
     }
 } //~DrDemo (drivedemo) (DM) (SD)
