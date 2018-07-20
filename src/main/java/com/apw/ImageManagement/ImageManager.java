@@ -8,59 +8,53 @@ import com.apw.gpu.*;
 
 public class ImageManager {
 
-    enum Processsor {
-        CPU,
-        GPU
-    }
-
     int nrows, ncols;
     private ImagePicker picker;
     private byte mono[];
     private byte simple[];
     private int rgb[];
     private Processsor processsor;
-    private MonochromeRasterKernel  monoRasterKernel;
+    private MonochromeRasterKernel monoRasterKernel;
     private SimpleColorRasterKernel simpleColorRasterKernel;
-    private RGBRasterKernel         rgbRasterKernel;
-    private BlackWhiteRasterKernel  bwRasterKernel;
-    private MonoToRGBKernel         monoToRgbKernel;
-    private SimpleToRGBKernel       simpleToRgbKernel;
-    private BWToRGBKernel           bwToRgbKernel;
+    private RGBRasterKernel rgbRasterKernel;
+    private BlackWhiteRasterKernel bwRasterKernel;
+    private MonoToRGBKernel monoToRgbKernel;
+    private SimpleToRGBKernel simpleToRgbKernel;
+    private BWToRGBKernel bwToRgbKernel;
     /*Main*/
     public ImageManager(FlyCamera trakcam) {
         picker = new ImagePicker(trakcam, 30);
         nrows = picker.getNrows();
         ncols = picker.getNcols();
-        mono   = new byte[nrows * ncols];
+        mono = new byte[nrows * ncols];
         simple = new byte[nrows * ncols];
-        rgb    = new int [nrows * ncols];
-        monoRasterKernel        = new MonochromeRasterKernel (picker.getPixels(), mono,   nrows, ncols);
+        rgb = new int[nrows * ncols];
+        monoRasterKernel = new MonochromeRasterKernel(picker.getPixels(), mono, nrows, ncols);
         simpleColorRasterKernel = new SimpleColorRasterKernel(picker.getPixels(), simple, nrows, ncols);
-        rgbRasterKernel         = new RGBRasterKernel        (picker.getPixels(), rgb,    nrows, ncols);
-        bwRasterKernel          = new BlackWhiteRasterKernel (picker.getPixels(), mono,   nrows, ncols);
-        monoToRgbKernel         = new MonoToRGBKernel        (mono,               rgb,    mono  .length);
-        simpleToRgbKernel       = new SimpleToRGBKernel      (simple,             rgb,    simple.length);
-        bwToRgbKernel           = new BWToRGBKernel          (mono,               rgb,    mono  .length);
+        rgbRasterKernel = new RGBRasterKernel(picker.getPixels(), rgb, nrows, ncols);
+        bwRasterKernel = new BlackWhiteRasterKernel(picker.getPixels(), mono, nrows, ncols);
+        monoToRgbKernel = new MonoToRGBKernel(mono, rgb, mono.length);
+        simpleToRgbKernel = new SimpleToRGBKernel(simple, rgb, simple.length);
+        bwToRgbKernel = new BWToRGBKernel(mono, rgb, mono.length);
     }
 
-    public int getNrows(){
+    public int getNrows() {
         return nrows;
-    }
-
-    public int getNcols(){
-        return ncols;
     }
 
     public void setNrows(int nrows) {
         this.nrows = nrows;
     }
 
+    public int getNcols() {
+        return ncols;
+    }
+
     public void setNcols(int ncols) {
         this.ncols = ncols;
     }
 
-    public void runOnGpu(boolean value)
-    {
+    public void runOnGpu(boolean value) {
         if (value)
             processsor = Processsor.GPU;
         else
@@ -80,7 +74,7 @@ public class ImageManager {
         }
     }
 
-    public byte[] getBlackWhiteRaster(){
+    public byte[] getBlackWhiteRaster() {
         if (processsor == Processsor.GPU) {
             bwRasterKernel.execute(Range.create2D(nrows, ncols));
             bwRasterKernel.dispose();
@@ -119,10 +113,10 @@ public class ImageManager {
         } else {
             ImageManipulator.convertToRGBRaster(picker.getPixels(), rgb, nrows, ncols);
             return rgb;
-       }
+        }
     }
 
-    public int[] getSimpleRGBRaster(){
+    public int[] getSimpleRGBRaster() {
         if (processsor == Processsor.GPU) {
             simpleColorRasterKernel.execute(Range.create2D(nrows, ncols));
             simpleColorRasterKernel.dispose();
@@ -136,7 +130,7 @@ public class ImageManager {
         }
     }
 
-    public int[] getBWRGBRaster(){
+    public int[] getBWRGBRaster() {
         if (processsor == Processsor.GPU) {
             bwRasterKernel.execute(Range.create2D(nrows, ncols));
             bwRasterKernel.dispose();
@@ -150,7 +144,7 @@ public class ImageManager {
         }
     }
 
-    public int[] getMonoRGBRaster(){
+    public int[] getMonoRGBRaster() {
         if (processsor == Processsor.GPU) {
             monoRasterKernel.execute(Range.create(mono.length));
             monoRasterKernel.dispose();
@@ -162,5 +156,10 @@ public class ImageManager {
             ImageManipulator.convertMonotoRGB(mono, rgb, mono.length);
             return rgb;
         }
+    }
+
+    enum Processsor {
+        CPU,
+        GPU
     }
 }

@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface IMovingBlobReduction {
     List<MovingBlob> filterMovingBlobs(List<MovingBlob> blobs);
+
     List<MovingBlob> filterUnifiedBlobs(List<MovingBlob> blobs);
+
     List<MovingBlob> filterFilteredUnifiedBlobs(List<MovingBlob> blobs);
 }

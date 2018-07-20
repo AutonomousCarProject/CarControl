@@ -1,7 +1,7 @@
 package com.apw.pedestrians.blobfilter;
 
-import com.apw.pedestrians.blobtrack.MovingBlob;
 import com.apw.pedestrians.Constant;
+import com.apw.pedestrians.blobtrack.MovingBlob;
 
 import java.util.LinkedList;
 import java.util.List;
