@@ -102,7 +102,13 @@ public class DriveTest extends TimerTask {
 						System.arraycopy(simpleRGB, 0, Bdisplaypixels, 0, Bimagepixels.length);
 						break;
 				}
+<<<<<<< HEAD
 				System.out.println("Repainting");
+=======
+//ABCDE
+//				System.out.println("Repainting");
+
+>>>>>>> 835fbc9097e9e4e08289b3350d7c4f5dfff6ddc3
 				window.repaint();
 			}
 }

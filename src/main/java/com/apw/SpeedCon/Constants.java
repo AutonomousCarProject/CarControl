@@ -22,9 +22,9 @@ public class Constants {
 		STOPLIGHT_DRIFT_SPEED = 3,		//Speed at which the car pulls up to a stoplight
 		
 		//Blobs
-		BLOB_HEIGHT = 10,				//Filtered height of a blob in pixels
-		BLOB_WIDTH = 10,				//Filtered width of a blob in pixels
-		BLOB_AGE = 4,					//Filtered age of a blob in frames
+		BLOB_HEIGHT = 18,				//Filtered height of a blob in pixels
+		BLOB_WIDTH = 18,				//Filtered width of a blob in pixels
+		BLOB_AGE = -1,					//Filtered age of a blob in frames
 		STOPLIGHT_MIN_Y = 0,			//Filtered position of a blob in pixels
 		STOPLIGHT_MAX_Y = 240,			//Filtered position of a blob in pixels
 		STOPLIGHT_MIN_X = 8,			//Filtered position of a blob in pixels

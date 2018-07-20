@@ -47,14 +47,24 @@ public class SpeedController {
 		for(MovingBlob i : blobs){
 			
 			graf.setColor(java.awt.Color.BLUE);
+<<<<<<< HEAD
 			graf.drawRect(i.x, i.y, i.width, i.height);
 			
 			
+=======
+			graf.drawRect(i.x+8, i.y+40, i.width, i.height);;
+>>>>>>> 835fbc9097e9e4e08289b3350d7c4f5dfff6ddc3
 			if(detectStopLight(i)){
+				System.out.println("Stop light blob " + i);
 				setStoppingAtSign();
 			}
 			else if(detectStopSign(i)){
+				System.out.println("Stop sign blob " + i);
 				setStoppingAtLight();
+			}
+			else {
+				System.out.println("Blob " + i);
+				System.out.println("Blob " + i.color.getColor());
 			}
 		}
 		
@@ -235,7 +245,7 @@ public class SpeedController {
 	
 	// Checks a given blob for the properties of a stopsign (size, age, position, color)
 	public boolean detectStopSign(MovingBlob blob) {
-		if(blob.height > Constants.BLOB_HEIGHT && blob.width > Constants.BLOB_WIDTH && blob.age > Constants.BLOB_AGE && blob.x > Constants.STOPLIGHT_MIN_X && blob.x < Constants.STOPLIGHT_MAX_X && blob.y > Constants.STOPLIGHT_MIN_Y && blob.y < Constants.STOPLIGHT_MAX_Y && blob.color.getColor() == Color.RED) {
+		if(blob.age > Constants.BLOB_AGE && blob.height > Constants.BLOB_HEIGHT && blob.width > Constants.BLOB_WIDTH && blob.x > Constants.STOPLIGHT_MIN_X && blob.x < Constants.STOPLIGHT_MAX_X && blob.y > Constants.STOPLIGHT_MIN_Y && blob.y < Constants.STOPLIGHT_MAX_Y && blob.color.getColor() == Color.RED) {
 			return true;
 		} else {
 			return false;
@@ -244,7 +254,7 @@ public class SpeedController {
 	
 	// Checks a given blob for the properties of a stoplight (size, age, position, color)
 	public boolean detectStopLight(MovingBlob blob) {
-		if (blob.height > Constants.BLOB_HEIGHT && blob.width > Constants.BLOB_WIDTH && blob.age > Constants.BLOB_AGE && blob.x > Constants.STOPSIGN_MIN_X && blob.x < Constants.STOPSIGN_MAX_X && blob.y > Constants.STOPSIGN_MIN_Y && blob.y < Constants.STOPSIGN_MAX_Y && blob.color.getColor() == Color.RED) {
+		if (blob.age > Constants.BLOB_AGE && blob.height > Constants.BLOB_HEIGHT && blob.width > Constants.BLOB_WIDTH && blob.x > Constants.STOPSIGN_MIN_X && blob.x < Constants.STOPSIGN_MAX_X && blob.y > Constants.STOPSIGN_MIN_Y && blob.y < Constants.STOPSIGN_MAX_Y && blob.color.getColor() == Color.RED) {
 			return true;
 		}
 		else {
