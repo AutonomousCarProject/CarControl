@@ -28,6 +28,7 @@ import java.io.FileInputStream;
  */
 public class TrakSim {
 
+
     // fGratio cnvrts ESC steps to nominal velocity; fMinSpeed=4.0,MinESC=10
     // ..adjust multiplier so it's correct for your car: *1.0 => fGratio=0.4
     private static final double fMinSpeed = DriverCons.D_fMinSpeed,
@@ -41,6 +42,7 @@ public class TrakSim {
             NoisyMap = DriverCons.D_NoisyMap, Reversible = DriverCons.D_Reversible,
             UseTexTrak = DriverCons.D_UseTexTrak, Fax_Log = DriverCons.D_Fax_Log,
             ShoClikGrid = DriverCons.D_ShoClikGrid, GoodLog = true;
+
     private static final int Vramp = DriverCons.D_Vramp, // imported constants,
             ImHi = DriverCons.D_ImHi, ImWi = DriverCons.D_ImWi, // ..local names
             Hramp = DriverCons.D_Hramp, RampA = DriverCons.D_RampA,

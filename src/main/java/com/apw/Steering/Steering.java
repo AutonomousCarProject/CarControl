@@ -1,4 +1,6 @@
+
 package com.apw.Steering;
+
 
 public class Steering {
 
@@ -9,26 +11,30 @@ public class Steering {
 
     public int heightOfArea = 32;
     public int startingHeight = 272;
-    public Point steerPoint = new Point(0, 0);
-    public Point[] leadingMidPoints = new Point[startingHeight + heightOfArea];
-    public Point[] leftPoints = new Point[heightOfArea];
-    public Point[] rightPoints = new Point[heightOfArea];
-    public Point[] midPoints = new Point[heightOfArea];
-    Boolean found = false;
-    Boolean leftSideFound = false;
-    Boolean rightSideFound = false;
+
     private int screenWidth = 912;
     private int cameraWidth = 640;
     private int screenHeight = com.apw.apw3.DriverCons.D_ImHi;
-    Point origin = new Point(cameraWidth / 2, screenHeight);
+    public Point steerPoint = new Point(0, 0);
+
+    public Point[] leadingMidPoints = new Point[startingHeight + heightOfArea];
+    public Point[] leftPoints = new Point[heightOfArea];
+    public Point[] rightPoints = new Point[heightOfArea];
+
+    public Point[] midPoints = new Point[heightOfArea];
+    Point origin = new Point(cameraWidth/2, screenHeight);
+
+    Boolean found = false;
+    Boolean leftSideFound = false;
+    Boolean rightSideFound = false;
 
     public Steering() {
-        for (int i = 0; i < heightOfArea; i++) {
+        for (int i = 0; i<heightOfArea; i++) {
             leftPoints[i] = new Point(0, 0);
             rightPoints[i] = new Point(0, 0);
             midPoints[i] = new Point(0, 0);
         }
-        for (int i = 0; i < leadingMidPoints.length; i++) {
+        for (int i = 0; i<leadingMidPoints.length; i++) {
             leadingMidPoints[i] = new Point(0, 0);
         }
     }
@@ -42,16 +48,16 @@ public class Steering {
         //first, find where road starts on both sides
         leftSideFound = false;
         rightSideFound = false;
-        for (int i = screenHeight - 22; i > startingHeight + heightOfArea; i--) {
+        for (int i = screenHeight - 22; i>startingHeight + heightOfArea; i--) {
 
-            for (int j = roadMiddle / 2; j >= 0; j--) {
-                if (pixels[(screenWidth * (i)) + j] > 0xDDDDCC) {
+            for (int j = roadMiddle/2; j>=0; j--) {
+                if (pixels[(screenWidth * (i)) + j] == 16777215) {
                     leftSideFound = true;
                     break;
                 }
             }
-            for (int j = roadMiddle / 2; j < cameraWidth; j++) {
-                if (pixels[(screenWidth * (i)) + j] > 0xDDDDCC) {
+            for (int j = roadMiddle/2; j<cameraWidth; j++) {
+                if (pixels[(screenWidth * (i)) + j] == 16777215) {
                     rightSideFound = true;
                     break;
                 }
@@ -72,13 +78,13 @@ public class Steering {
         int count = 0;
 
         for (int i = startingPoint; i > startingHeight + heightOfArea; i--) {
-            for (int j = roadMiddle / 2; j >= 0; j--) {
+            for (int j = roadMiddle/2; j>=0; j--) {
                 if (pixels[screenWidth * i + j] == 16777215) {
                     leftSideTemp = j;
                     break;
                 }
             }
-            for (int j = roadMiddle / 2; j < cameraWidth; j++) {
+            for (int j = roadMiddle/2; j<cameraWidth; j++) {
                 if (pixels[screenWidth * i + j] == 16777215) {
                     rightSideTemp = j;
                     break;
@@ -91,15 +97,15 @@ public class Steering {
             roadMiddle = leftSideTemp + rightSideTemp;
         }
 
-//ABCDE		
+//ABCDE
 //		System.out.println(count);
         count = 0;
-        for (int i = startingHeight + heightOfArea; i > startingHeight; i--) {
+        for (int i = startingHeight + heightOfArea; i>startingHeight; i--) {
             //center to left
             found = false;
             leftPoints[count].y = i;
 
-            for (int j = roadMiddle / 2; j >= 0; j--) {
+            for (int j = roadMiddle/2; j>=0; j--) {
                 if (pixels[screenWidth * i + j] == 16777215) {
                     leftPoints[count].x = j;
                     found = true;
@@ -115,7 +121,7 @@ public class Steering {
             //center to right
             found = false;
             rightPoints[count].y = leftPoints[count].y;
-            for (int j = roadMiddle / 2; j < cameraWidth; j++) {
+            for (int j = roadMiddle/2; j<cameraWidth; j++) {
                 if (pixels[screenWidth * i + j] == 16777215) {
                     rightPoints[count].x = j;
                     found = true;
@@ -126,7 +132,7 @@ public class Steering {
                 rightPoints[count].x = cameraWidth;
             }
 
-            midPoints[count].x = roadMiddle / 2;
+            midPoints[count].x = roadMiddle/2;
             midPoints[count].y = (leftPoints[count].y);
             roadMiddle = (leftPoints[count].x + rightPoints[count].x);
             count++;
@@ -136,7 +142,7 @@ public class Steering {
     }
 
     public double curveSteepness(double turnAngle) {
-        return turnAngle / (45);
+        return turnAngle/(45);
     }
 
 
@@ -150,23 +156,23 @@ public class Steering {
         int tempCount = 0;
 
         // Sum the x's and the y's
-        for (int i = 0; i < startingPoint - (startingHeight + heightOfArea); i++) {
-            Point point = new Point(leadingMidPoints[i].x, leadingMidPoints[i].y);
+        for (int i = 0; i<startingPoint - (startingHeight + heightOfArea); i++) {
+            Point point = new Point (leadingMidPoints[i].x, leadingMidPoints[i].y);
             tempX += point.x;
             tempY += point.y;
             tempCount++;
         }
         if (tempCount == 0) {
-            for (int i = 0; i < midPoints.length; i++) {
-                Point point = new Point(midPoints[i].x, midPoints[i].y);
+            for (int i = 0; i<midPoints.length; i++) {
+                Point point = new Point (midPoints[i].x, midPoints[i].y);
                 tempX += point.x;
                 tempY += point.y;
                 tempCount++;
             }
         }
 
-        steerPoint.x = (int) (tempX / tempCount);
-        steerPoint.y = (int) (tempY / tempCount);
+        steerPoint.x = (int)(tempX / tempCount);
+        steerPoint.y = (int)(tempY / tempCount);
 
     }
 
@@ -175,10 +181,10 @@ public class Steering {
         int xOffset = origin.x - steerPoint.x;
         int yOffset = Math.abs(origin.y - steerPoint.y);
 
-        int tempDeg = (int) ((Math.atan2(-xOffset, yOffset)) * (180 / Math.PI));
+        int tempDeg = (int)((Math.atan2(-xOffset, yOffset)) * (180 / Math.PI));
 
 
-        return (int) ((Math.atan2(-xOffset, yOffset)) * (180 / Math.PI));
+        return (int)((Math.atan2(-xOffset, yOffset)) * (180 / Math.PI));
     }
 
     //placeholder
@@ -186,5 +192,3 @@ public class Steering {
         return 5;
     }
 }
-
-
