@@ -8,6 +8,8 @@ import com.apw.fakefirm.Arduino;
 import com.apw.fly2cam.FlyCamera;
 
 import javax.swing.*;
+
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.awt.image.DataBufferInt;
@@ -19,7 +21,7 @@ public class DriveTest extends TimerTask {
     public static final int FRAME_RATE_NUMBER = 4;	//4 corresponds to 30fps
     public static final int FPS = 30;
 
-    private JFrame window;
+    public JFrame window;
     private TrakSim sim;
 	private FlyCamera simcam;
 	private ImageManager imagemanager;
@@ -101,7 +103,6 @@ public class DriveTest extends TimerTask {
 						break;
 				}
 				System.out.println("Repainting");
-
 				window.repaint();
 			}
 }

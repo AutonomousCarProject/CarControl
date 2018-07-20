@@ -33,6 +33,7 @@ public class SpeedController {
 	//Also takes stopping into account
 	public void onUpdate(int gasAmount, int steerDegs, int manualSpeed, Graphics graf, DriveTest dtest){
 		dtest.run();
+		//dtest.window.paint(graf);
 		this.calculateEstimatedSpeed(gasAmount);
 		this.calculateDesiredSpeed(steerDegs, manualSpeed);
 		
@@ -42,10 +43,13 @@ public class SpeedController {
 		
 					//Uncomment when image management team fixes their code
 		ImageManager imageManager = dtest.getImgManager();
-		List<MovingBlob> blobs = pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), com.apw.apw3.DriverCons.D_ImWi);
+		List<MovingBlob> blobs = pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), 912);
 		for(MovingBlob i : blobs){
+			
 			graf.setColor(java.awt.Color.BLUE);
-			graf.drawRect(i.x, i.y, i.width, i.height);;
+			graf.drawRect(i.x, i.y, i.width, i.height);
+			
+			
 			if(detectStopLight(i)){
 				setStoppingAtSign();
 			}
