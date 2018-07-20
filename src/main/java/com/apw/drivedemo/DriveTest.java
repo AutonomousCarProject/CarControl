@@ -88,11 +88,11 @@ public class DriveTest extends TimerTask implements MouseListener {
 				finishInit();
         	}
         	public DriveTest(int viewType){
-				sim = new TrakSim();
 				if(DriverCons.D_LiveCam){
 					simcam = new FlyCamera();
 				}else {
 					simcam = new SimCamera();
+					sim = new TrakSim();
 				}
 				driveSys = new Arduino();
 				driveSys.pinMode(SteerPin, Arduino.SERVO);
