@@ -5,53 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f525b4a3-b0b1-4062-9d6e-80535089a8f9" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.classpath" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.3.1/fileChanges/last-build.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.3.1/fileContent/annotation-processors.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.3.1/fileContent/fileContent.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.3.1/fileHashes/fileHashes.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.3.1/fileHashes/fileHashes.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.3.1/fileHashes/resourceHashesCache.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.3.1/taskHistory/taskHistory.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.3.1/taskHistory/taskHistory.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.8.1/fileChanges/last-build.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.8.1/fileContent/annotation-processors.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.8.1/fileContent/fileContent.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.8.1/fileHashes/fileHashes.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.8.1/fileHashes/fileHashes.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.8.1/fileHashes/resourceHashesCache.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.8.1/taskHistory/taskHistory.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.8.1/taskHistory/taskHistory.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.8/fileChanges/last-build.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.8/fileHashes/fileHashes.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.8/fileHashes/fileHashes.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.9/fileChanges/last-build.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.9/fileContent/fileContent.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.9/fileHashes/fileHashes.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.9/fileHashes/fileHashes.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.9/taskHistory/taskHistory.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.9/taskHistory/taskHistory.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/vcsWorkingDirs/gc.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/Clayton.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_aparapi_aparapi_1_9_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_aparapi_aparapi_jni_1_4_1.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/CarControl_test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/CarControl_test.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.project" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/SpeedCon/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/SpeedCon/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/SpeedCon/Constants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/SpeedCon/SpeedController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/SpeedCon/SpeedController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/SpeedCon/SpeedFinder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/SpeedCon/SpeedFinder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/Steering/Steering.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/Steering/Steering.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/apw3/DriverCons.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/apw3/DriverCons.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/apw3/TrakSim.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/apw3/TrakSim.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/drivedemo/DrDemo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/drivedemo/DrDemo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/drivedemo/DriveTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/drivedemo/DriveTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/ImageManagement/ImageManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/ImageManagement/ImageManager.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/gpu/target/" />
@@ -87,50 +41,35 @@
       <file leaf-file-name="ImageManager.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/ImageManagement/ImageManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="706">
-              <caret line="135" column="37" lean-forward="true" selection-start-line="135" selection-start-column="37" selection-end-line="135" selection-end-column="37" />
+            <state relative-caret-position="1368">
+              <caret line="70" column="67" selection-start-line="70" selection-start-column="67" selection-end-line="70" selection-end-column="67" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SpeedController.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/SpeedCon/SpeedController.java">
+      <file leaf-file-name="BlackWhiteRasterKernel.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/gpu/BlackWhiteRasterKernel.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1752">
-              <caret line="82" column="37" selection-start-line="82" selection-start-column="37" selection-end-line="82" selection-end-column="37" />
+            <state relative-caret-position="384">
+              <caret line="34" column="9" lean-forward="true" selection-start-line="34" selection-start-column="9" selection-end-line="34" selection-end-column="9" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SpeedFinder.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/SpeedCon/SpeedFinder.java">
+      <file leaf-file-name="SimCamera.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/apw3/SimCamera.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="514">
-              <caret line="23" column="1" selection-start-line="23" selection-start-column="1" selection-end-line="23" selection-end-column="1" />
-              <folding>
-                <element signature="e#143#144#0" expanded="true" />
-                <element signature="e#209#210#0" expanded="true" />
-                <element signature="e#415#416#0" expanded="true" />
-                <element signature="e#463#464#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="360">
+              <caret line="27" selection-start-line="27" selection-end-line="27" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RGBRasterKernel.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/gpu/RGBRasterKernel.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1440">
-              <caret line="62" column="16" selection-start-line="62" selection-start-column="16" selection-end-line="62" selection-end-column="16" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DrDemo.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="DrDemo.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/drivedemo/DrDemo.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="466">
-              <caret line="1005" column="50" selection-start-line="1005" selection-start-column="50" selection-end-line="1005" selection-end-column="50" />
+            <state relative-caret-position="22560">
+              <caret line="1021" column="47" lean-forward="true" selection-start-line="1021" selection-start-column="47" selection-end-line="1021" selection-end-column="47" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#4434#4435#0" expanded="true" />
@@ -145,8 +84,8 @@
       <file leaf-file-name="DriveTest.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/drivedemo/DriveTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-480">
-              <caret line="25" column="29" lean-forward="true" selection-start-line="25" selection-start-column="29" selection-end-line="25" selection-end-column="29" />
+            <state relative-caret-position="1608">
+              <caret line="82" column="5" lean-forward="true" selection-start-line="82" selection-start-column="5" selection-end-line="82" selection-end-column="5" />
               <folding>
                 <element signature="e#1242#1243#0" expanded="true" />
                 <element signature="e#1277#1278#0" expanded="true" />
@@ -155,29 +94,50 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SimpleColorRasterKernel.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/gpu/SimpleColorRasterKernel.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="250">
-              <caret line="72" column="34" lean-forward="true" selection-start-line="72" selection-start-column="34" selection-end-line="72" selection-end-column="34" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SimpleToRGBKernel.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/gpu/SimpleToRGBKernel.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-158">
-              <caret line="17" column="23" lean-forward="true" selection-start-line="17" selection-start-column="23" selection-end-line="17" selection-end-column="23" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="DriverCons.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/apw3/DriverCons.java">
           <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-480">
+              <caret line="49" column="44" selection-start-line="49" selection-start-column="44" selection-end-line="49" selection-end-column="44" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Constant.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/pedestrians/Constant.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="48">
+              <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Constants.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/SpeedCon/Constants.java">
+          <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="634">
-              <caret line="46" lean-forward="true" selection-start-line="46" selection-end-line="46" />
+              <caret line="40" column="1" selection-start-line="40" selection-start-column="1" selection-end-line="40" selection-end-column="1" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TrakSim.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/apw3/TrakSim.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="408">
+              <caret line="5016" column="43" lean-forward="true" selection-start-line="5016" selection-start-column="43" selection-end-line="5016" selection-end-column="43" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Arduino.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/fakefirm/Arduino.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1286">
+              <caret line="117" column="37" lean-forward="true" selection-start-line="117" selection-start-column="37" selection-end-line="117" selection-end-column="37" />
             </state>
           </provider>
         </entry>
@@ -218,6 +178,7 @@
       <find>secondView</find>
       <find>imageManager</find>
       <find>imageManager =</find>
+      <find>fps</find>
     </findStrings>
     <replaceStrings>
       <replace>cols</replace>
@@ -637,7 +598,6 @@
         <option value="$PROJECT_DIR$/src/main/java/com/apw/gpu/BWToRGBKernel.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/gpu/MonoToRGBKernel.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/ImageManagement/ImageManipulator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/apw/ImageManagement/ImageManager.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/drivedemo/.gitignore" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/Steering/Steering.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/SpeedCon/Constants.java" />
@@ -650,6 +610,7 @@
         <option value="$PROJECT_DIR$/src/main/java/com/apw/gpu/SimpleToRGBKernel.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/drivedemo/DriveTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/drivedemo/DrDemo.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/apw/ImageManagement/ImageManager.java" />
       </list>
     </option>
   </component>
@@ -690,7 +651,7 @@
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
-    <navigator proportions="" version="1">
+    <navigator currentView="PackagesPane" proportions="" version="1">
       <hideEmptyPackages Scope="false" />
       <foldersAlwaysOnTop value="true" />
     </navigator>
@@ -735,6 +696,14 @@
               <item name="com" type="1f31426a:PackageElementNode" />
               <item name="apw" type="1f31426a:PackageElementNode" />
               <item name="drivedemo" type="1f31426a:PackageElementNode" />
+            </path>
+            <path>
+              <item name="CarControl" type="58d84e3e:PackageViewProjectNode" />
+              <item name="CarControl" type="eaaa3913:PackageViewModuleGroupNode" />
+              <item name="CarControl_main" type="616d4139:PackageViewModuleNode" />
+              <item name="com" type="1f31426a:PackageElementNode" />
+              <item name="apw" type="1f31426a:PackageElementNode" />
+              <item name="fakefirm" type="1f31426a:PackageElementNode" />
             </path>
             <path>
               <item name="CarControl" type="58d84e3e:PackageViewProjectNode" />
@@ -1117,7 +1086,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -1125,12 +1093,13 @@
       <window_info anchor="right" id="Palette&#9;" order="5" />
       <window_info anchor="bottom" id="Event Log" order="8" side_tool="true" weight="0.32905984" />
       <window_info anchor="right" id="Maven Projects" order="4" weight="0.3296875" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.32905984" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.32905984" />
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.23028392" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Designer" order="2" />
       <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.6837607" visible="true" weight="0.12708333" />
       <window_info anchor="bottom" id="Build" order="11" weight="0.32905984" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32905984" />
       <window_info anchor="right" id="Gradle" order="7" weight="0.3296875" />
       <window_info id="Structure" order="1" sideWeight="0.31623933" side_tool="true" weight="0.12708333" />
       <window_info id="UI Designer" order="4" />
@@ -1175,13 +1144,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/pedestrians/blobdetect/Blob.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="312">
-          <caret line="15" column="14" selection-start-line="15" selection-start-column="14" selection-end-line="15" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/fly2cam/Camera2File.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/pedestrians/blobtrack/MovingBlobDetection.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -1218,8 +1180,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/fakefirm/Arduino.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-90">
-          <caret line="153" column="24" lean-forward="true" selection-start-line="153" selection-start-column="24" selection-end-line="153" selection-end-column="24" />
+        <state relative-caret-position="-1286">
+          <caret line="117" column="37" lean-forward="true" selection-start-line="117" selection-start-column="37" selection-end-line="117" selection-end-column="37" />
         </state>
       </provider>
     </entry>
@@ -1339,13 +1301,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/gpu/BlackWhiteRasterKernel.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="96">
-          <caret line="4" column="3" selection-start-line="4" selection-start-column="3" selection-end-line="4" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/ImageManagement/ImageManipulator.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3360">
@@ -1360,17 +1315,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/apw3/SimCamera.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="27" selection-start-line="27" selection-end-line="27" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/drivedemo/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="196" column="18" lean-forward="true" selection-start-line="196" selection-start-column="18" selection-end-line="196" selection-end-column="18" />
+        <state relative-caret-position="-576">
+          <caret line="51" lean-forward="true" selection-start-line="51" selection-end-line="51" />
         </state>
       </provider>
     </entry>
@@ -1397,9 +1345,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/SpeedCon/.gitignore">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/SpeedCon/.gitignore" />
     <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/Steering/SteerControlCheck.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-782">
@@ -1407,41 +1353,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/SpeedCon/Constants.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="418">
-          <caret line="40" column="1" selection-start-line="40" selection-start-column="1" selection-end-line="40" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/apw3/TrakSim.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="22546">
-          <caret line="5495" lean-forward="true" selection-start-line="5495" selection-end-line="5495" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/apw3/DriverCons.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="634">
-          <caret line="46" lean-forward="true" selection-start-line="46" selection-end-line="46" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/gpu/SimpleColorRasterKernel.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="250">
           <caret line="72" column="34" lean-forward="true" selection-start-line="72" selection-start-column="34" selection-end-line="72" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/ImageManagement/ImageManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="706">
-          <caret line="135" column="37" lean-forward="true" selection-start-line="135" selection-start-column="37" selection-end-line="135" selection-end-column="37" />
         </state>
       </provider>
     </entry>
@@ -1493,10 +1408,59 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/drivedemo/DriveTest.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/gpu/BlackWhiteRasterKernel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="384">
+          <caret line="34" column="9" lean-forward="true" selection-start-line="34" selection-start-column="9" selection-end-line="34" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/ImageManagement/ImageManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1368">
+          <caret line="70" column="67" selection-start-line="70" selection-start-column="67" selection-end-line="70" selection-end-column="67" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/drivedemo/DrDemo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="22560">
+          <caret line="1021" column="47" lean-forward="true" selection-start-line="1021" selection-start-column="47" selection-end-line="1021" selection-end-column="47" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#4434#4435#0" expanded="true" />
+            <element signature="e#4468#4469#0" expanded="true" />
+            <element signature="e#35532#35533#0" expanded="true" />
+            <element signature="e#35572#35573#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/apw3/SimCamera.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="27" selection-start-line="27" selection-end-line="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/pedestrians/Constant.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="48">
+          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/apw3/DriverCons.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-480">
-          <caret line="25" column="29" lean-forward="true" selection-start-line="25" selection-start-column="29" selection-end-line="25" selection-end-column="29" />
+          <caret line="49" column="44" selection-start-line="49" selection-start-column="44" selection-end-line="49" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/drivedemo/DriveTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1608">
+          <caret line="82" column="5" lean-forward="true" selection-start-line="82" selection-start-column="5" selection-end-line="82" selection-end-column="5" />
           <folding>
             <element signature="e#1242#1243#0" expanded="true" />
             <element signature="e#1277#1278#0" expanded="true" />
@@ -1504,16 +1468,19 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/drivedemo/DrDemo.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/SpeedCon/Constants.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="466">
-          <caret line="1005" column="50" selection-start-line="1005" selection-start-column="50" selection-end-line="1005" selection-end-column="50" />
+        <state relative-caret-position="634">
+          <caret line="40" column="1" selection-start-line="40" selection-start-column="1" selection-end-line="40" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/apw3/TrakSim.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="5016" column="43" lean-forward="true" selection-start-line="5016" selection-start-column="43" selection-end-line="5016" selection-end-column="43" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4434#4435#0" expanded="true" />
-            <element signature="e#4468#4469#0" expanded="true" />
-            <element signature="e#35532#35533#0" expanded="true" />
-            <element signature="e#35572#35573#0" expanded="true" />
           </folding>
         </state>
       </provider>
