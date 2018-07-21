@@ -27,6 +27,14 @@ public class MonochromeRasterKernel extends Kernel {
         this.ncols = ncols;
     }
 
+    /**
+     * Sets all member variables of <code>MonochromeRasterKernel</code>.
+     *
+     * @param bayer Array of bayer arranged rgb colors
+     * @param mono  Monochrome copy of the bayer array
+     * @param nrows Number of rows to filter
+     * @param ncols Number of columns to filter
+     */
     public void setValues(byte[] bayer, byte[] mono, int nrows, int ncols) {
         this.bayer = bayer;
         this.mono = mono;
@@ -47,10 +55,9 @@ public class MonochromeRasterKernel extends Kernel {
     @Override
     public void run() {
 
-        // these might not be accurate
-        int rows = getGlobalId(1);
-        int cols = getGlobalId(0);
+        int rows = getGlobalId(0);
+        int cols = getGlobalId(1);
 
-        mono[rows * ncols + cols] = bayer[rows * ncols * 2 + cols * 2 + 1];
+        mono[rows * ncols + cols] = (byte) ((((int) bayer[(rows * ncols * 2 + cols) * 2 + 1]) & 0xFF)); //Use only top right (green)
     }
 }

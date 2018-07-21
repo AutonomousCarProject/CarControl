@@ -27,7 +27,7 @@ import java.io.FileInputStream;
  * The main TrakSim Car Simulator class..
  */
 public class TrakSim {
-    
+
      public boolean wasted = false;
 
     // fGratio cnvrts ESC steps to nominal velocity; fMinSpeed=4.0,MinESC=10
@@ -2376,7 +2376,8 @@ public class TrakSim {
      */
     public void DrawRedX() { // to show it crashed
         int rx;
-        System.out.println(HandyOps.Dec2Log(" (DrRedX) o", OpMode, ""));
+//ABCDE
+//        System.out.println(HandyOps.Dec2Log(" (DrRedX) o", OpMode, ""));
         for (rx = 0; rx <= 4; rx++) { // draw red (crashed) "X" in lower left corner..
             PokePixel(0xFF0000, ImHi - 8 + rx, 4 + rx);
             PokePixel(0xFF0000, ImHi - 8 + rx, 8 - rx);
@@ -2658,12 +2659,13 @@ public class TrakSim {
         if (prio == 3) {
        		wasted = true;
         }
-        System.out.println(HandyOps.Dec2Log(" (SimStep) o", mode,
-                HandyOps.Dec2Log("/", prio, HandyOps.IffyStr(prio == 3, " (Crashed)",
-                        HandyOps.IffyStr((nuly == 3) && (prio < 3), " ($$ CrashMe $$)",
-                                HandyOps.TF2Log(" Fx=", SimSpedFixt, HandyOps.TF2Log(" Tr=", SimInTrak,
-                                        HandyOps.IffyStr(unScaleStee, " (cal)", "")))))))
-        );
+//ABCDE
+//        System.out.println(HandyOps.Dec2Log(" (SimStep) o", mode,
+//                HandyOps.Dec2Log("/", prio, HandyOps.IffyStr(prio == 3, " (Crashed)",
+//                        HandyOps.IffyStr((nuly == 3) && (prio < 3), " ($$ CrashMe $$)",
+//                                HandyOps.TF2Log(" Fx=", SimSpedFixt, HandyOps.TF2Log(" Tr=", SimInTrak,
+//                                        HandyOps.IffyStr(unScaleStee, " (cal)", "")))))))
+//        );
         NuData++;
     } //~SimStep
 
@@ -3193,15 +3195,16 @@ public class TrakSim {
             why = 0;
             break;
         } //~while              // HandyOps.IffyStr(!logy,"",   // why =
-        if ((why > 0) || GoodLog) System.out.println(HandyOps.Dec2Log(" (ShoArt) ", why,
-                HandyOps.Flt2Log(" ", ZoomRatio * 256.0, HandyOps.Dec2Log("/256 ", whar,
-                        HandyOps.Dec2Log(" ", NumFax, HandyOps.Dec2Log(" ", lino,
-                                HandyOps.Dec2Log(" ", ImgWi, HandyOps.Dec2Log(" ", far,
-                                        HandyOps.Flt2Log(" ", fudge, HandyOps.Dec2Log(" o", OpMode,
-                                                HandyOps.TF2Log("/", StepOne, HandyOps.Fixt8th(" t=", RealTimeNow,
-                                                        HandyOps.Dec2Log("=", FakeRealTime, HandyOps.Fixt8th("-", FakeTimeBase,
-                                                                HandyOps.Flt2Log(" ", fox, "")
-                                                        ))))))))))))));
+//ABCDE
+//        if ((why > 0) || GoodLog) System.out.println(HandyOps.Dec2Log(" (ShoArt) ", why,
+//                HandyOps.Flt2Log(" ", ZoomRatio * 256.0, HandyOps.Dec2Log("/256 ", whar,
+//                        HandyOps.Dec2Log(" ", NumFax, HandyOps.Dec2Log(" ", lino,
+//                                HandyOps.Dec2Log(" ", ImgWi, HandyOps.Dec2Log(" ", far,
+//                                        HandyOps.Flt2Log(" ", fudge, HandyOps.Dec2Log(" o", OpMode,
+//                                                HandyOps.TF2Log("/", StepOne, HandyOps.Fixt8th(" t=", RealTimeNow,
+//                                                        HandyOps.Dec2Log("=", FakeRealTime, HandyOps.Fixt8th("-", FakeTimeBase,
+//                                                                HandyOps.Flt2Log(" ", fox, "")
+//                                                        ))))))))))))));
     } //~ShoArtifax
 
     /**
@@ -3543,12 +3546,13 @@ public class TrakSim {
                     HandyOps.Dec2Log(LefDash, FrameNo, HandyOps.IffyStr(LookFrame == 0, "",
                             HandyOps.Dec2Log(" (", LookFrame, ")"))));
         } //~if
-        System.out.println(HandyOps.Dec2Log("(..BF..) ", FrameNo, // (**frozen format**)
-                HandyOps.Dec2Log(" ", NuData, HandyOps.Int2Log(" ", ZooMapDim, " [ s="
-                        + HandyOps.Dec2Log(LefDash + HandyOps.IffyStr(OpMode == 3, "# ! ", "# / ")
-                        + myDash + " =g ] ", ImHi - DrawDash, HandyOps.Int2Log(" ", TripLine,
-                        HandyOps.Flt2Log(HandyOps.IffyStr(SimSpedFixt, " [Fx ", " [v="), Velocity,
-                                HandyOps.Dec2Log("] ", optn, HandyOps.PosTime(" @ ")))))))));
+//ABCDE
+//        System.out.println(HandyOps.Dec2Log("(..BF..) ", FrameNo, // (**frozen format**)
+//                HandyOps.Dec2Log(" ", NuData, HandyOps.Int2Log(" ", ZooMapDim, " [ s="
+//                        + HandyOps.Dec2Log(LefDash + HandyOps.IffyStr(OpMode == 3, "# ! ", "# / ")
+//                        + myDash + " =g ] ", ImHi - DrawDash, HandyOps.Int2Log(" ", TripLine,
+//                        HandyOps.Flt2Log(HandyOps.IffyStr(SimSpedFixt, " [Fx ", " [v="), Velocity,
+//                                HandyOps.Dec2Log("] ", optn, HandyOps.PosTime(" @ ")))))))));
         if (Log_Draw) OopsLog = " %";
         for (cx = 0; cx <= ImWi - 1; cx++) PrioRaster[cx] = 0;
         Vmap = MyMath.Trunc8(Vposn); // = current posn in park meters (2x map grid)
@@ -3889,11 +3893,12 @@ public class TrakSim {
                     info = theInx[Pmap];
                 if (OpMode < 3) if (info >= 0)
                     if (!SimSpedFixt) if ((info & 0x60000000) != 0x40000000) SimStep(6);
-                System.out.println(HandyOps.Dec2Log(HandyOps.IffyStr(OpMode == 3, "(DoSc $$) ",
-                        "(DoSc) "), DrawDash, HandyOps.Dec2Log(" ", Vmap,
-                        HandyOps.Dec2Log("/", Hmap, HandyOps.Hex2Log(" = ", info, 8,
-                                HandyOps.Dec2Log(" ", LookFrame, HandyOps.Dec2Log(" ", TripLine,
-                                        HandyOps.PosTime(" @ "))))))));
+//ABCDE
+//                System.out.println(HandyOps.Dec2Log(HandyOps.IffyStr(OpMode == 3, "(DoSc $$) ",
+//                        "(DoSc) "), DrawDash, HandyOps.Dec2Log(" ", Vmap,
+//                        HandyOps.Dec2Log("/", Hmap, HandyOps.Hex2Log(" = ", info, 8,
+//                                HandyOps.Dec2Log(" ", LookFrame, HandyOps.Dec2Log(" ", TripLine,
+//                                        HandyOps.PosTime(" @ "))))))));
                 //
                 // The car is at (Vposn,Hposn), facing (init'ly NW) -> Facing (Fa)
                 // The screen is ImWi pixels wide, which imaged at distance dx
@@ -4151,8 +4156,9 @@ public class TrakSim {
             if (OopsLog.length() == 2) OopsLog = "";
             OopsLog = OopsLog + HandyOps.PosTime(" @ ") + " @";
             myDash = myDash + " = ";
-            System.out.println(HandyOps.Dec2Log(" (BildFram) ", FrameNo, // why =
-                    HandyOps.Dec2Log(myDash, why, OopsLog)));
+//ABCDE
+//            System.out.println(HandyOps.Dec2Log(" (BildFram) ", FrameNo, // why =
+//                    HandyOps.Dec2Log(myDash, why, OopsLog)));
         }
     } //~BuildFrame
 
@@ -4784,11 +4790,12 @@ public class TrakSim {
                             HandyOps.Flt2Log("/", RtDeScaleSt, "} (Steer) +")));
             else if (pin == GasServo) msg = " (Speed) +";
             else msg = " (?) ";
-            System.out.println(HandyOps.Dec2Log("(SetServo) ", pin, HandyOps.Dec2Log(" = ",
-                    set2, HandyOps.Dec2Log(" #", FrameNo, HandyOps.Dec2Log(", ", prio,
-                            HandyOps.Flt2Log("=", centered, HandyOps.Dec2Log("=", info,
-                                    HandyOps.Dec2Log(msg, NuData, HandyOps.Dec2Log("/", why,
-                                            HandyOps.PosTime(" @ "))))))))));
+//ABCDE
+//            System.out.println(HandyOps.Dec2Log("(SetServo) ", pin, HandyOps.Dec2Log(" = ",
+//                    set2, HandyOps.Dec2Log(" #", FrameNo, HandyOps.Dec2Log(", ", prio,
+//                            HandyOps.Flt2Log("=", centered, HandyOps.Dec2Log("=", info,
+//                                    HandyOps.Dec2Log(msg, NuData, HandyOps.Dec2Log("/", why,
+//                                            HandyOps.PosTime(" @ "))))))))));
         }
     } //~SetServo
 

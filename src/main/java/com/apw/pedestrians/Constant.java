@@ -1,9 +1,9 @@
 package com.apw.pedestrians;
 
 public class Constant {
-	/*
-	 * Image
-	 */
+    /*
+     * Image
+     */
 
     //time that last frame was collected
     public static long LAST_FRAME_MILLIS = 0;

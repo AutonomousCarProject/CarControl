@@ -33,17 +33,17 @@ public class DriverCons { // TrakSim constant parameters
             D_FixedSpeed = false,    // ignore speed control, assume fMinSpeed
             D_StayInTrack = false,   // ignore steering control, stay centered in track
             D_ShoTrkTstPts = false, // T: show test points used to calc StayInTrack
-            D_ShoClikGrid = false,  // T: to see where to click to steer/accelerate
+            D_ShoClikGrid = true,  // T: to see where to click to steer/accelerate
             D_ShowMap = true,       // T: show the map next to the scene
             D_DoCloseUp = true,     // T: show close-up map if there is room
             D_RampServos = false,   // T: servos take time to arrive at setting
             D_TrakNoPix = false,    // T: draw track only, omit artifacts & trees
-            D_UseTexTrak = false,    // T: use text file to build track to drive
+            D_UseTexTrak = true,    // T: use text file to build track to drive
             D_Reversible = false,   // T: allow reverse (untested)
             D_StartInCalibrate = false, // T: use this to calibrate servo limits
             D_Log_Draw = false, D_Log_Log = false, D_Fax_Log = false,
             D_Mini_Log = false, D_NoisyMap = true,
-            D_DrawOnSides = true, D_DrawPredicted = true, D_DrawCurrent = true;
+            D_DrawOnSides = true, D_DrawPredicted = true, D_DrawCurrent = true; //Drive lines.
 
     public static final int
             D_SecondViewType = 3,   //0 = no view, 1 = RGB, 2 = monochrome, 3 = simplified
@@ -65,7 +65,7 @@ public class DriverCons { // TrakSim constant parameters
             D_SteerColo = 0xCC9900, // the color of the steering wheel in the image
             D_CreamWall = 0xFFFFCC, // (indoor) wall&door colors..
             D_DarkWall = 0x999966, D_BackWall = 0x66CC66, D_PilColo = 0x666666,
-            D_CarColo = 0xFF0099, D_ArtiColo = 0xFFCC00, // pink car color, amber a'fact
+            D_CarColo = 0x0000FF, D_ArtiColo = 0xFFCC00, // pink car color, amber a'fact
             D_Transprnt = 0xFEFEFE, // magical interior image color -> transparent
             D_Anim_Log = 0x50020,   // log artifact +5 for 1st 32 frames if NoisyMap=T
             D_TweakRx = 0,     // adjust TurnRadius if >0, Zoom35 if <0

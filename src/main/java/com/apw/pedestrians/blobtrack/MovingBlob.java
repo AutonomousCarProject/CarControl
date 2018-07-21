@@ -1,7 +1,7 @@
 package com.apw.pedestrians.blobtrack;
 
-import com.apw.pedestrians.blobdetect.Blob;
 import com.apw.pedestrians.Constant;
+import com.apw.pedestrians.blobdetect.Blob;
 
 public class MovingBlob extends Blob {
     // The X and Y components of the MovingBlob's velocity.

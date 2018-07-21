@@ -6,7 +6,7 @@ public class ImageManipulator {
 
         for (int r = 0; r < nrows; r++) {
             for (int c = 0; c < ncols; c++) {
-				
+
 				/*
 				//Averaging all colors
 				int total = bayer[r*ncols*2 + c*2] 		//Top left (
@@ -19,6 +19,29 @@ public class ImageManipulator {
         }
     }
 
+    public static void convertToBlackWhiteRaster(byte[] bayer, byte[] mono, int nrows, int ncols) {
+        for (int r = 0; r < nrows; r++) {
+            for (int c = 0; c < ncols; c++) {
+
+				/*
+				//Averaging all colors
+				int total = bayer[r*ncols*2 + c*2] 		//Top left (
+						+ bayer[r*ncols*2 + c*2+1] 		//Top right
+						+ bayer[(r+1)*ncols*2 + c*2]*2;	//Bottom left
+				mono[r*ncols + c] = (byte) (total >> 2);
+				*/
+                int R = ((((int) bayer[(r * ncols * 2 + c) * 2]) & 0xFF));                //Top left (red)
+                int G = ((((int) bayer[(r * ncols * 2 + c) * 2 + 1]) & 0xFF));            //Top right (green)
+                int B = (((int) bayer[(r * ncols * 2 + c) * 2 + 1 + 2 * ncols]) & 0xFF);            //Bottom right (blue)
+                int pix = R + G + B;
+                if (pix > 700) {
+                    mono[r * ncols + c] = 1;
+                } else {
+                    mono[r * ncols + c] = 0;
+                }
+            }
+        }
+    }
 
     public static void convertToSimpleColorRaster(byte[] bayer, byte[] simple, int nrows, int ncols) {
         /*
@@ -70,4 +93,49 @@ public class ImageManipulator {
 
         }
     }
+
+    public static void convertSimpleToRGB(byte[] simpleByte, int[] simpleRGB, int length) {
+        for (int i = 0; i < length; i++) {
+            switch (simpleByte[i]) {
+                case 0:
+                    simpleRGB[i] = 0xFF0000;
+                    break;
+                case 1:
+                    simpleRGB[i] = 0x00FF00;
+                    break;
+                case 2:
+                    simpleRGB[i] = 0x0000FF;
+                    break;
+                case 3:
+                    simpleRGB[i] = 0xFFFFFF;
+                    break;
+                case 4:
+                    simpleRGB[i] = 0x808080;
+                    break;
+                case 5:
+                    simpleRGB[i] = 0x000000;
+                    break;
+            }
+        }
+    }
+
+    public static void convertBWToRGB(byte[] simpleByte, int[] mono, int length) {
+        for (int i = 0; i < length; i++) {
+            switch (simpleByte[i]) {
+                case 0:
+                    mono[i] = 0x000000;
+                    break;
+                case 1:
+                    mono[i] = 0xFFFFFF;
+                    break;
+            }
+        }
+    }
+
+    public static void convertMonotoRGB(byte[] mono, int[] rgb, int length) {
+        for (int i = 0; i < length; i++) {
+            rgb[i] = (mono[i] << 16) + (mono[i] << 8) + mono[i];
+        }
+    }
+
 }

@@ -16,6 +16,11 @@
  */
 package com.apw.drivedemo;                                    // 2018 June 13
 
+import com.apw.ImageManagement.ImageManager;
+import com.apw.SpeedCon.Constants;
+import com.apw.SpeedCon.SpeedController;
+import com.apw.Steering.Point;
+import com.apw.Steering.Steering;
 import com.apw.apw3.*;
 import com.apw.fakefirm.Arduino;
 import com.apw.fly2cam.FlyCamera;
@@ -23,45 +28,23 @@ import com.apw.fly2cam.FlyCamera;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionEvent; // these all used by the mechanism..
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseEvent;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Insets; // not available at win creation
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.io.File;
 import java.io.IOException;
 
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
-import javax.swing.Timer;
-
-import com.apw.ImageManagement.ImageManager;
-import com.apw.SpeedCon.Constants;
-import com.apw.SpeedCon.SpeedController;
-import com.apw.Steering.Point;
 // import fly2cam.CameraBase;
-import com.apw.fly2cam.FlyCamera;
-import com.apw.fakefirm.Arduino;
-import com.apw.apw3.DriverCons;
-import com.apw.apw3.HandyOps;
-import com.apw.apw3.MyMath;
-import com.apw.apw3.TrakSim;
-import com.apw.apw3.SimCamera;
 
-public class DrDemo extends JFrame implements MouseListener,KeyListener {
-	
-	com.apw.Steering.Steering testSteering = new com.apw.Steering.Steering();
-	private SpeedController speedControl;
-	private ImageManager imageManager;
-	
-  private static final long serialVersionUID = 1L; // unneed but Java insists {
+public class DrDemo extends JFrame implements MouseListener, KeyListener {
+
+    private SpeedController speedControl;
+    private ImageManager imageManager;
+    private DriveTest dtest = new DriveTest();
+    private boolean overlayOn = Constants.DEFAULT_OVERLAY;
+    private boolean blobsOn = Constants.DEFAULT_BLOBS;
+
+    private static final long serialVersionUID = 1L; // unneed but Java insists {
 
   private static final int MinESCact = DriverCons.D_MinESCact,
       MaxESCact = DriverCons.D_MaxESCact, StartGas = MinESCact*9/4,
@@ -94,7 +77,9 @@ public class DrDemo extends JFrame implements MouseListener,KeyListener {
   private FlyCamera simVideo = null;
   private Arduino theServos = null;
   private TrakSim theSim = null;
-  private byte[] CamPix = null;
+    Steering testSteering = new Steering(theSim);
+
+    private byte[] CamPix = null;
   private boolean StepMe = false, SimSpedFixt = DriverCons.D_FixedSpeed,
     CamActive = false;
 
@@ -129,7 +114,7 @@ public class DrDemo extends JFrame implements MouseListener,KeyListener {
       if (theWindow != null) theWindow.repaint();}} //~PaintAction
 
   private PaintAction doOften = null;
-	
+
   private BufferedImage image;
 
 
@@ -615,7 +600,7 @@ public class DrDemo extends JFrame implements MouseListener,KeyListener {
         
         //Begin Speed Code
         
-        speedControl.onUpdate(this.GasPedal, testSteering.getDegreeOffset(), this.manualSpeed, graf);
+        speedControl.onUpdate(this.GasPedal, testSteering.getDegreeOffset(), this.manualSpeed, graf, dtest, blobsOn, overlayOn);
         AxLR8(true, speedControl.getDesiredSpeed());
         System.out.println(this.GasPedal);
         System.out.println(this.SteerDegs);
@@ -631,28 +616,34 @@ public class DrDemo extends JFrame implements MouseListener,KeyListener {
         
         //End Speed Code
 
-        
-        if (CanDraw) {
-          DrawDemo();
-          if (CameraView) theSim.DrawSteerWheel(SteerDegs,true,true);} //~if
-        DidFrame = fno;
-        ///� if (!CameraView) if (StartYourEngines>0) {
-        ///�   theSim.SimStep(0);
-        ///�   StartYourEngines = 0;
-        ///�   AxLR8(true,0);} //~if
-        if (DrawStuff) if (CanDraw) if (DimSave>0) if (SaveScrn != null)
-          theSim.SetMyScreen(SaveScrn,DimSave>>16,DimSave&0xFFFF,1);
-        theImag = Int2BufImg(thePixels,ScrWi,ScrHi);}} //~if
-    	catch (Exception ex) {theImag = null;}
-    	BusyPaint = false;
-    	
-	if (theSim.wasted == true) graf.drawImage(image, 320 - image.getWidth()/2, 240, this);
-	  
-    	Point[] hi = testSteering.findPoints(thePixels);
+                    if (CanDraw) {
+                        DrawDemo();
+                        if (CameraView)
+                            theSim.DrawSteerWheel(SteerDegs, true, true);
+                    } // ~if
+                    DidFrame = fno;
+                    /// � if (!CameraView) if (StartYourEngines>0) {
+                    /// � theSim.SimStep(0);
+                    /// � StartYourEngines = 0;
+                    /// � AxLR8(true,0);} //~if
+                    if (DrawStuff)
+                        if (CanDraw)
+                            if (DimSave > 0)
+                                if (SaveScrn != null)
+                                    theSim.SetMyScreen(SaveScrn, DimSave >> 16, DimSave & 0xFFFF, 1);
+                    theImag = Int2BufImg(thePixels, ScrWi, ScrHi);
+                }
+            } // ~if
+            catch (Exception ex) {
+                theImag = null;
+            }
+        BusyPaint = false;
+
+        Point[] hi = testSteering.findPoints(thePixels);
 
         // Steer between lines
         testSteering.averageMidpoints();
-        int tempDeg = testSteering.getDegreeOffset();
+        double tempDeg = testSteering.getDegreeOffset();
         theServos.servoWrite(SteerPin, (int)((tempDeg) + 90));
         
         graf.setColor(Color.RED);
@@ -684,128 +675,169 @@ public class DrDemo extends JFrame implements MouseListener,KeyListener {
         HandyOps.Dec2Log("x",ScrHi,HandyOps.Dec2Log(" = ",ScrPix,""))));
     SwingUtilities.invokeLater(runFrameLater);}
 
- /**
-  * This is the constructor, which sets everything up.
-  */
-  public DrDemo() { // outer class constructor..
-	 
-	  
-    int nx = ScrPix; // CamFPS = FlyCamera.FrameRate_15-1;
-    String sayso = "= " + ScrWi + "x" + ScrHi; // "(Cal8="
-    boolean dunit = false;
-    Timer titok;
-    FlyCamera myVid = null;
-    int[] myPix;
-    unPaused = !StartLive; // F=paused, so it requires user action to start
-    if (StartInCalibrate) Calibrating = 1;
-    else if (LiveCam) if (nServoTests>0) if (ScrFrTime>40)
-      if (ScrFrTime<555) ServoTestCount = nServoTests*8-4;
-    System.out.println(HandyOps.Dec2Log("(Cal8=",Calibrating,
-        HandyOps.Dec2Log(") pix ",ScrPix*4,sayso)));
-    simVideo = new SimCamera();
-      theServos = new Arduino();
-      theSim = new TrakSim();
-      if (LiveCam) theVideo = new FlyCamera();
-    ViDied = 0;
-    dunit = theServos.IsOpen();
-    myPix = new int[ScrPix]; // ScrPix = ImHi*WinWi
-    SimBytes = new byte[ScrPix*4];
-    thePixels = myPix;
-    while (nx>0) {
-      if (myPix==null) break;
-      nx--;
-      if (nx<0) break;
-      if (nx<myPix.length) myPix[nx] = 0x6699CC;} //~while // prefill with blue-gray
-    doOften = new PaintAction();
-    TickTock = new Timer(
-        ScrFrTime,doOften);
-    // reduce memory-manager burden by pre-allocating this..
-    theBuff = new BufferedImage(ScrWi,ScrHi, BufferedImage.TYPE_INT_RGB);
-    titok = TickTock;
-    myVid = simVideo;
-    if (!dunit) System.out.println("FakeFirmata failed to open "
-        + Arduino.CommPortNo);
-    else if (myVid==null) dunit = false;
-    else try {
-      dunit = myVid.Connect(CamFPS); // SteerPin = DriverCons.D_SteerServo = 9..
-      theServos.pinMode(SteerPin, Arduino.SERVO);
-      theServos.pinMode(GasPin, Arduino.SERVO); // GasPin=10
-    } catch (Exception ex) {dunit = false;}
-    if (LiveCam) if (dunit) while (true) { try {
-      myVid = theVideo;
-      dunit = false;
-      if (myVid==null) break;
-      dunit = myVid.Connect(CamFPS); // OK to fail true, cuz CamActive=false
-      if (!dunit) break;
-      CamTile = myVid.PixTile();
-      nx = myVid.Dimz();
-      CamTall = nx>>16;
-      CamWide = nx&0xFFF;
-      nx = CamTall*CamWide;
-      CamPix = new byte[nx*4];
-      if (CamTall==ScrHi) if (nx>1023) if (CamWide <= ScrWi)
-        if ((CamTile==1) || (CamTile==3)) CamActive = (CamPix != null);
-      } catch (Exception ex) {CamActive = false; dunit = false;}
-      break;} //~while // (LiveCam)
-    if (!dunit) {
-      System.out.println("Connect failed"); // only early retn
-      Stopit(-1);
-      return;} //~if
-    else if (titok != null) titok.start(); // too noisy in log
-    if (theSim.GetFacing() == 0.0) if (theSim.GetPosn(false) == theSim.GetPosn(true))
-      {}
-    AxLR8(true,0); // initialize stopped
-    SteerMe(true,0); // ..and straight ahead
-    if (Calibrating !=0) theSim.SimStep(0);
-    else if (StartLive) if (CamPix != null) if (theVideo != null)
-        if (theVideo.Live()) {
-      CameraView = true;
-      theSim.SimStep(0);} //~if
-    System.out.println("DrDemo " + sayso);
-    setTitle("DriveDemo Example"); // was: this.setTitle etc..
-    setSize(ScrWi+18,ScrHi+40); // make it larger for insets to come
-    setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE);
-    addMouseListener(this); // if 'implements MouseListen..'
-    addKeyListener(this);
-     try {                
-        image = ImageIO.read(new File("wasted.png"));
-     } catch (IOException ex) {
-          // handle exception...
-     }
-    setVisible(true);
-  
-	this.speedControl = new SpeedController();
-	this.imageManager = new ImageManager(simVideo);
-  }
+    /**
+     * This is the constructor, which sets everything up.
+     */
+    public DrDemo() { // outer class constructor..
 
-	@Override
-	public void keyTyped(KeyEvent e) {
-		
-	}
-	@Override
-	public void keyPressed(KeyEvent e) {
-		if(e.getKeyCode() == KeyEvent.VK_LEFT)
-			SteerMe(false, -5);
-		if(e.getKeyCode() == KeyEvent.VK_RIGHT)
-			SteerMe(false, 5);
-		if(e.getKeyCode() == KeyEvent.VK_UP)
-			manualSpeed += 1;
-		if(e.getKeyCode() == KeyEvent.VK_DOWN)
-			manualSpeed -= 1;
-		if(e.getKeyCode() == KeyEvent.VK_P){
-			speedControl.setStoppingAtSign();
-		}
-		if(e.getKeyCode() == KeyEvent.VK_O){
-			speedControl.setStoppingAtLight();
-		}
-		if(e.getKeyCode() == KeyEvent.VK_I){
-			speedControl.readyToGo();
-		}
-	}
-	
-	@Override
-	public void keyReleased(KeyEvent e) {
-		//SteerMe(true, 0);
-	}
+        int nx = ScrPix; // CamFPS = FlyCamera.FrameRate_15-1;
+        String sayso = "= " + ScrWi + "x" + ScrHi; // "(Cal8="
+        boolean dunit = false;
+        Timer titok;
+        FlyCamera myVid = null;
+        int[] myPix;
+        unPaused = !StartLive; // F=paused, so it requires user action to start
+        if (StartInCalibrate)
+            Calibrating = 1;
+        else if (LiveCam)
+            if (nServoTests > 0)
+                if (ScrFrTime > 40)
+                    if (ScrFrTime < 555)
+                        ServoTestCount = nServoTests * 8 - 4;
+        System.out.println(HandyOps.Dec2Log("(Cal8=", Calibrating, HandyOps.Dec2Log(") pix ", ScrPix * 4, sayso)));
+        simVideo = new SimCamera();
+        theServos = new Arduino();
+        theSim = new TrakSim();
+        if (LiveCam)
+            theVideo = new FlyCamera();
+        ViDied = 0;
+        dunit = theServos.IsOpen();
+        myPix = new int[ScrPix]; // ScrPix = ImHi*WinWi
+        SimBytes = new byte[ScrPix * 4];
+        thePixels = myPix;
+        while (nx > 0) {
+            if (myPix == null)
+                break;
+            nx--;
+            if (nx < 0)
+                break;
+            if (nx < myPix.length)
+                myPix[nx] = 0x6699CC;
+        } // ~while // prefill with blue-gray
+        doOften = new PaintAction();
+        TickTock = new Timer(ScrFrTime, doOften);
+        // reduce memory-manager burden by pre-allocating this..
+        theBuff = new BufferedImage(ScrWi, ScrHi, BufferedImage.TYPE_INT_RGB);
+        titok = TickTock;
+        myVid = simVideo;
+        if (!dunit)
+            System.out.println("FakeFirmata failed to open " + Arduino.CommPortNo);
+        else if (myVid == null)
+            dunit = false;
+        else
+            try {
+                dunit = myVid.Connect(CamFPS); // SteerPin = DriverCons.D_SteerServo = 9..
+                theServos.pinMode(SteerPin, Arduino.SERVO);
+                theServos.pinMode(GasPin, Arduino.SERVO); // GasPin=10
+            } catch (Exception ex) {
+                dunit = false;
+            }
+        if (LiveCam)
+            if (dunit)
+                while (true) {
+                    try {
+                        myVid = theVideo;
+                        dunit = false;
+                        if (myVid == null)
+                            break;
+                        dunit = myVid.Connect(CamFPS); // OK to fail true, cuz CamActive=false
+                        if (!dunit)
+                            break;
+                        CamTile = myVid.PixTile();
+                        nx = myVid.Dimz();
+                        CamTall = nx >> 16;
+                        CamWide = nx & 0xFFF;
+                        nx = CamTall * CamWide;
+                        CamPix = new byte[nx * 4];
+                        if (CamTall == ScrHi)
+                            if (nx > 1023)
+                                if (CamWide <= ScrWi)
+                                    if ((CamTile == 1) || (CamTile == 3))
+                                        CamActive = (CamPix != null);
+                    } catch (Exception ex) {
+                        CamActive = false;
+                        dunit = false;
+                    }
+                    break;
+                } // ~while // (LiveCam)
+        if (!dunit) {
+            System.out.println("Connect failed"); // only early retn
+            Stopit(-1);
+            return;
+        } // ~if
+        else if (titok != null)
+            titok.start(); // too noisy in log
+        if (theSim.GetFacing() == 0.0)
+            if (theSim.GetPosn(false) == theSim.GetPosn(true)) {
+            }
+        AxLR8(true, 0); // initialize stopped
+        SteerMe(true, 0); // ..and straight ahead
+        if (Calibrating != 0)
+            theSim.SimStep(0);
+        else if (StartLive)
+            if (CamPix != null)
+                if (theVideo != null)
+                    if (theVideo.Live()) {
+                        CameraView = true;
+                        theSim.SimStep(0);
+                    } // ~if
+        System.out.println("DrDemo " + sayso);
+        setTitle("DriveDemo Example"); // was: this.setTitle etc..
+        setSize(ScrWi + 18, ScrHi + 40); // make it larger for insets to come
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        addMouseListener(this); // if 'implements MouseListen..'
+        addKeyListener(this);
+        try {
+            image = ImageIO.read(new File("wasted.png"));
+        } catch (IOException ex) {
+            // handle exception...
+        }
+        setVisible(true);
+
+        this.speedControl = new SpeedController();
+        this.imageManager = dtest.getImgManager();
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_LEFT)
+            SteerMe(false, -5);
+        if (e.getKeyCode() == KeyEvent.VK_RIGHT)
+            SteerMe(false, 5);
+        if (e.getKeyCode() == KeyEvent.VK_UP)
+            manualSpeed += 1;
+        if (e.getKeyCode() == KeyEvent.VK_DOWN)
+            manualSpeed -= 1;
+        if (e.getKeyCode() == KeyEvent.VK_P) {
+            speedControl.setStoppingAtSign();
+        }
+        if (e.getKeyCode() == KeyEvent.VK_O) {
+            speedControl.setStoppingAtLight();
+        }
+        if (e.getKeyCode() == KeyEvent.VK_I) {
+            speedControl.readyToGo();
+        }
+        if (e.getKeyCode() == KeyEvent.VK_B) {
+            blobsOn = !blobsOn;
+        }
+        if (e.getKeyCode() == KeyEvent.VK_V){
+            overlayOn = !overlayOn;
+        }
+        if (e.getKeyCode() == KeyEvent.VK_G) {
+            imageManager.runOnGpu(true);
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_G) {
+            imageManager.runOnGpu(false);
+        }
+    }
 
 } //~DrDemo (drivedemo) (DM) (SD)
