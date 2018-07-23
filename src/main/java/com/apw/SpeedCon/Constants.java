@@ -7,8 +7,8 @@ public class Constants {
 	
 		public static final double 
 		//Speed
-		MAX_SPEED = 20,					//Car's maximum speed
-		MIN_SPEED = 10,					//Car's minimum speed
+		MAX_SPEED = 40,					//Car's maximum speed
+		MIN_SPEED = 20,					//Car's minimum speed
 		PIN_TO_METER_PER_SECOND = 0.4,	//Conversion for motor position to m/s. DO NOT TOUCH
 		
 		//Math
@@ -22,7 +22,7 @@ public class Constants {
 		DRIFT_TO_STOPSIGN_FRAMES = 15,	//Frames to drift forward after stopsign detected
 		WAIT_AT_STOPSIGN_FRAMES = 50,	//Frames to wait at stopsign once stopped
 		STOPSIGN_DRIFT_SPEED = 12,		//Speed at which the car pulls up to a stopsign
-		DRIFT_TO_STOPLIGHT_FRAMES = 15,	//Frames to drift forward after stoplight detected
+		DRIFT_TO_STOPLIGHT_FRAMES = 0,	//Frames to drift forward after stoplight detected
 		STOPLIGHT_DRIFT_SPEED = 12,		//Speed at which the car pulls up to a stoplight
 		WAIT_AFTER_STOPSIGN = 100,
 		
@@ -33,7 +33,7 @@ public class Constants {
 		STOPLIGHT_MIN_Y = 0,			//Filtered position of a blob in pixels
 		STOPLIGHT_MAX_Y = 240,			//Filtered position of a blob in pixels
 		STOPLIGHT_MIN_X = 8,			//Filtered position of a blob in pixels
-		STOPLIGHT_MAX_X = 648,			//Filtered position of a blob in pixels
+		STOPLIGHT_MAX_X = 630,			//Filtered position of a blob in pixels
 		STOPSIGN_MIN_Y = 32,			//Filtered position of a blob in pixels
 		STOPSIGN_MAX_Y = 512,			//Filtered position of a blob in pixels
 		STOPSIGN_MIN_X = 480,			//Filtered position of a blob in pixels
