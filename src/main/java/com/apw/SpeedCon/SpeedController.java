@@ -53,29 +53,35 @@ public class SpeedController {
 		//This part runs on-screen blobs thru a set of tests to figure out if they are
 		//relevant, and then what to do with them
 		ImageManager imageManager = dtest.getImgManager();
-		
 		List<MovingBlob> blobs = this.pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), 912);
 		for(MovingBlob i : blobs){
 			if(blobsOn){
 				if (i.color.getColor() == Color.BLACK) {
 					graf.setColor(java.awt.Color.BLACK);	
+					color = 0x000000;
 				}
 				else if (i.color.getColor() == Color.GREY) {
 					graf.setColor(java.awt.Color.GRAY);
+					color = 0xd3d3d3;
 				}
 				else if (i.color.getColor() == Color.WHITE) {
 					graf.setColor(java.awt.Color.WHITE);
+					color = 0xffffff;
 				}
 				else if (i.color.getColor() == Color.RED) {
 					graf.setColor(java.awt.Color.RED);
+					color = 0xff0000;
 				}
 				else if (i.color.getColor() == Color.GREEN) {
 					graf.setColor(java.awt.Color.GREEN);
+					color = 0x00ff00;
 				}
 				else if (i.color.getColor() == Color.BLUE) {
 					graf.setColor(java.awt.Color.BLUE);
+					color = 0x0000ff;
 				}
-				graf.drawRect(i.x+8, i.y+40, i.width, i.height);;
+				trackSim.DrawLine(color, i.y, i.x, i.y + i.height, i.x);
+				//graf.drawRect(i.x+8, i.y+40, i.width, i.height);;
 			}
 			if(detectRedLight(i)){
 				setStoppingAtLight();
