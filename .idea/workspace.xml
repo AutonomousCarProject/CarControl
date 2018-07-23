@@ -5,12 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f525b4a3-b0b1-4062-9d6e-80535089a8f9" name="Default" comment="Remove unnecessary files&#10;&#10;Some of these files were even ignored">
-      <change beforePath="$PROJECT_DIR$/.idea/modules/CarControl_main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/CarControl_main.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/CarControl_test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/CarControl_test.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CarControl.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImageProcessing.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TrakSim.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gradlew" beforeDir="false" afterPath="$PROJECT_DIR$/gradlew" afterDir="false" />
@@ -111,8 +106,8 @@
       <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="121">
-              <caret line="141" column="7" selection-start-line="141" selection-start-column="3" selection-end-line="141" selection-end-column="7" />
+            <state relative-caret-position="226">
+              <caret line="148" lean-forward="true" selection-start-line="148" selection-end-line="148" />
             </state>
           </provider>
         </entry>
@@ -604,11 +599,6 @@
               <item name="CarControl" type="b2602c69:ProjectViewProjectNode" />
               <item name="CarControl" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
             </path>
-            <path>
-              <item name="CarControl" type="b2602c69:ProjectViewProjectNode" />
-              <item name="CarControl" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name=".idea" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -914,7 +904,7 @@
       <option name="presentableId" value="Default" />
       <updated>1531772968576</updated>
       <workItem from="1532367767739" duration="1514000" />
-      <workItem from="1532380877947" duration="1147000" />
+      <workItem from="1532380877947" duration="1423000" />
     </task>
     <task id="LOCAL-00001" summary="Remove unnecessary files&#10;&#10;Some of these files were even ignored">
       <created>1532381906154</created>
@@ -923,14 +913,29 @@
       <option name="project" value="LOCAL" />
       <updated>1532381906154</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Remove .iml files from the root directory">
+      <created>1532382246432</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1532382246432</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Add .imls for consistency&#10;&#10;See .gitignore for details">
+      <created>1532382288231</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1532382288231</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2661000" />
+    <option name="totallyTimeSpent" value="2937000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1680" height="1027" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info anchor="right" id="Key Promoter X" order="3" />
       <window_info anchor="right" id="Palette" order="3" />
@@ -979,7 +984,9 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Remove unnecessary files&#10;&#10;Some of these files were even ignored" />
-    <option name="LAST_COMMIT_MESSAGE" value="Remove unnecessary files&#10;&#10;Some of these files were even ignored" />
+    <MESSAGE value="Remove .iml files from the root directory" />
+    <MESSAGE value="Add .imls for consistency&#10;&#10;See .gitignore for details" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add .imls for consistency&#10;&#10;See .gitignore for details" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1259,8 +1266,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="121">
-          <caret line="141" column="7" selection-start-line="141" selection-start-column="3" selection-end-line="141" selection-end-column="7" />
+        <state relative-caret-position="226">
+          <caret line="148" lean-forward="true" selection-start-line="148" selection-end-line="148" />
         </state>
       </provider>
     </entry>
