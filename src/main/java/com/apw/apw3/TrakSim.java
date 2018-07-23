@@ -3087,7 +3087,7 @@ public class TrakSim {
                         }
                     } //~if // (whar>0)
                     zx = 0;
-                    if (RoWiM == 0.0) {
+                    if(DoCloseUp)if (RoWiM == 0.0) {
                         zx = (rx - ImHaf) << 2; // ImHaf = ImHi/2
                         if (pint < 8) zx++; // car facing N/S (use H)
                         else if (pint < 82) zx = 0; // not square-on
@@ -3746,7 +3746,7 @@ public class TrakSim {
                     else colo = 0xFFFF;
                 } //~if // aiming for 3399FF in highest sky
                 else bitz = 0xFF00; // green // 0xFFFFCC99; // not dirt
-                if (DrawDash > 0) if (rx > ImHi - DrawDash) bitz = 0x333300; // dk.brown
+                if (DrawDash > 0) if (rx >= ImHi - DrawDash) bitz = 0x333300; // dk.brown
                 if (ZooMapDim == 0) dx = -1;
                 else dx = rx - (ZooMapBase >> 16); // <0 if above close-up view (in c-u pix)
                 // ZMD=32,32 ZSf=3 ZB=224,642 ZSc=16. ZW=0.2 ZT=8,16
@@ -3924,7 +3924,7 @@ public class TrakSim {
                 doit = 0;
                 rx = RangeRow[255] - 1; // at horizon, mid-screen
                 for (dx = 255; dx >= -ImHaf; dx += -1) {    // convert depth to raster line number..
-                    if (rx > ImHi - DrawDash) break; // normal exit at bottom of screen
+                    if (rx >= ImHi - DrawDash) break; // normal exit at bottom of screen
                     if (dx < 0) break;
                     robe = RangeRow[dx & 255]; // dx: nominal depth in park 25cm units
                     // far = far&0xFFFFFF|(robe<<24);
@@ -4144,7 +4144,7 @@ public class TrakSim {
                                                             HandyOps.Flt2Log(" ", VuEdge, HandyOps.Dec2Log(" ", NumFax,
                                                                     HandyOps.PosTime(" @ ")))))))))))))));
             // if (why != 8) break; // if scenery went bad, still do steering wheel..
-            DrawSteerWheel(ShoSteer, false, false);
+            if(DrawDash > 0) DrawSteerWheel(ShoSteer, false, false);
             why = 0;
             if (OpMode == 3) DrawRedX();
             if (SeePaintTopL > 0) SeeOnScrnPaint(SeePaintTopL >> 16, SeePaintTopL & 0xFFFF,

@@ -2,6 +2,8 @@ package com.apw.SpeedCon;
 
 import java.awt.Graphics;
 import java.util.*;
+
+import com.apw.apw3.SimCamera;
 import com.apw.pedestrians.blobtrack.*;
 import com.apw.pedestrians.image.Color;
 import com.apw.pedestrians.*;
@@ -41,7 +43,7 @@ public class SpeedController {
             cyclesUntilCanDetectStopsign--;
         }
         //This part updates the simple color window that opens up along with traksim
-        dtest.run();
+        dtest.subMain(trackSim, new SimCamera(), 3);
 
         //Right here we update our current calculated speed and find our current desired speed
         this.calculateEstimatedSpeed(gasAmount);
@@ -99,6 +101,53 @@ public class SpeedController {
 
 
     }
+
+    public void onUpdateSansGraphics(int gasAmount, double steerDegs, int manualSpeed, ImageManager imagemanager){
+        if (cyclesUntilCanDetectStopsign > 0){
+            cyclesUntilCanDetectStopsign--;
+        }
+        //This part updates the simple color window that opens up along with traksim
+
+
+        //Right here we update our current calculated speed and find our current desired speed
+        this.calculateEstimatedSpeed(gasAmount);
+        this.calculateDesiredSpeed(steerDegs, manualSpeed);
+
+        //This part runs on-screen blobs thru a set of tests to figure out if they are
+        //relevant, and then what to do with them
+        PedestrianDetector pedDetect = new PedestrianDetector();
+        ImageManager imageManager = imagemanager;
+        List<MovingBlob> blobs = pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), 912);
+
+        //We then:
+        //A. Display those blobs on screen as empty rectangular boxes of the correct color
+        //B. Test if those blobs are a useful roadsign/light
+        //C. Do whatever we need to do if so
+        //D. Write to the console what has happened
+        //We need all of the if statements to display the colors,
+        //as we need to convert from IPixel colors to Java.awt colors for display reasons
+
+        for(MovingBlob i : blobs){
+
+            if(detectStopLight(i)){
+                //System.out.println("Stop light blob " + i);
+                setStoppingAtLight();
+            }
+            else if(detectStopSign(i) && cyclesUntilCanDetectStopsign <= 0){
+                //System.out.println("Stop sign blob " + i);
+                cyclesUntilCanDetectStopsign = 100;
+                setStoppingAtSign();
+            }
+            else {
+                //System.out.println("Blob " + i);
+                //System.out.println("Blob " + i.color.getColor());
+            }
+        }
+
+
+    }
+
+
 
     //This figures out the speed that we want to be traveling at
     public void calculateDesiredSpeed(double wheelAngle, int manualSpeed){

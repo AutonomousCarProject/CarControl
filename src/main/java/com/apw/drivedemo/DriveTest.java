@@ -6,13 +6,16 @@ import com.apw.Steering.Point;
 import com.apw.Steering.SteerControlCheck;
 import com.apw.Steering.Steering;
 import com.apw.apw3.*;
+import com.apw.SpeedCon.SpeedController;
 
 import com.apw.fakefirm.Arduino;
 import com.apw.fly2cam.FlyCamera;
 
 import javax.swing.*;
 
-import java.awt.Graphics;
+import java.awt.*;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.awt.image.DataBufferInt;
@@ -47,6 +50,7 @@ public class DriveTest extends JFrame implements MouseListener {
 	private int[] imagePixels;
 	private int[] displayPixels;
 	private int[] emptyPixels;
+	private SpeedController speedControl;
 
 	//DrDemo Random Variables
 	private int Calibrating = 0;
@@ -227,7 +231,7 @@ public class DriveTest extends JFrame implements MouseListener {
 	public static void main(String[] args) {
 		//Creates the window and makes it update at the set frame rate
 		Timer displayTaskTimer = new Timer();
-		displayTaskTimer.scheduleAtFixedRate(new TimerRepaint(new DriveTest(3)	//IMPORTANT		set the viewType here
+		displayTaskTimer.scheduleAtFixedRate(new TimerRepaint(new DriveTest(1)	//IMPORTANT		set the viewType here
 		) {
 			@Override
 			public void run() {
@@ -236,15 +240,16 @@ public class DriveTest extends JFrame implements MouseListener {
 				window.repaint();
 			}
 		}, new Date(), 1000 / FPS);
-		displayTaskTimer.scheduleAtFixedRate(new TimerRepaint(new DriveTest(2,640,480)	//IMPORTANT		set the viewType here
+		/*displayTaskTimer.scheduleAtFixedRate(new TimerRepaint(new DriveTest(1,640,480)	//IMPORTANT		set the viewType here
 		) {
 			@Override
 			public void run() {
 				window.sim.SimStep(1);
-				//window.TestServos(); // (remove this from successive calls)
+				window.TestServos(); // (remove this from successive calls)
 				window.repaint();
 			}
 		}, new Date(), 1000 / FPS);
+		*/
 	} //~main
 
 	@Deprecated
@@ -516,7 +521,7 @@ public class DriveTest extends JFrame implements MouseListener {
 	 *
 	 */
 	private void TestServos() { // exercise steering & ESC servos
-		 //Graphics graf = new BufferedImage(nCols, nRows, BufferedImage.TYPE_INT_RGB).getGraphics();
+
 		 steerCode();
 		 speedCode();
 	} //~TestServos
@@ -550,8 +555,9 @@ public class DriveTest extends JFrame implements MouseListener {
 	 *
 	 */
 	private void initializeControl(){
-		testSteering = new Steering();
-		AxLR8(false,10);
+		testSteering = new Steering(sim);
+		//AxLR8(false,10);
+		speedControl = new SpeedController();
 	} //~initializeControl
 
 	/** Per frame code for controlling steering
@@ -560,7 +566,7 @@ public class DriveTest extends JFrame implements MouseListener {
 	private void steerCode(){
 		Point[] hi = testSteering.findPoints(imageManager.getRGBRaster());
 		testSteering.averageMidpoints();
-		int tempDeg = testSteering.getDegreeOffset();
+		double tempDeg = testSteering.getDegreeOffset();
 		driveSys.servoWrite(SteerPin, (int)((tempDeg) + 90));
 
 	} //~steerCode
@@ -569,6 +575,11 @@ public class DriveTest extends JFrame implements MouseListener {
 	 *
 	 */
 	private void speedCode(){
-		
+		speedControl.onUpdateSansGraphics(GasPedal, testSteering.getDegreeOffset(), 0, imageManager);
+		AxLR8(true, speedControl.getDesiredSpeed());
 	} //~speedCode
+
+	public ImageManager getImgManager(){
+		return imageManager;
+	}
 }
