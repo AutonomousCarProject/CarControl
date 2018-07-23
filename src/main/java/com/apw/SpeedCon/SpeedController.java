@@ -27,11 +27,13 @@ public class SpeedController {
 	
 	
 	private SpeedFinder speedFinder;
+	private PedestrianDetector pedDetect;
 	
 	TrakSim trackSim = new TrakSim();
 	
 	public SpeedController(){
 		this.speedFinder = new SpeedFinder();
+		this.pedDetect = new PedestrianDetector();
 	}
 	
 	//A method to be called every frame. Calculates desired speed and actual speed
@@ -40,6 +42,9 @@ public class SpeedController {
 		if (cyclesUntilCanDetectStopsign > 0){
 			cyclesUntilCanDetectStopsign--;
 		}
+		com.apw.pedestrians.Constant.LAST_FRAME_MILLIS = com.apw.pedestrians.Constant.CURRENT_FRAME_MILLIS;
+		com.apw.pedestrians.Constant.CURRENT_FRAME_MILLIS = System.currentTimeMillis();
+		com.apw.pedestrians.Constant.TIME_DIFFERENCE = com.apw.pedestrians.Constant.CURRENT_FRAME_MILLIS - com.apw.pedestrians.Constant.LAST_FRAME_MILLIS;
 		dtest.run();
 		//dtest.window.paint(graf);
 		this.calculateEstimatedSpeed(gasAmount);
@@ -47,9 +52,9 @@ public class SpeedController {
 		
 		//This part runs on-screen blobs thru a set of tests to figure out if they are
 		//relevant, and then what to do with them
-		PedestrianDetector pedDetect = new PedestrianDetector();
 		ImageManager imageManager = dtest.getImgManager();
-		List<MovingBlob> blobs = pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), 912);
+		
+		List<MovingBlob> blobs = this.pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), 912);
 		for(MovingBlob i : blobs){
 			if(blobsOn){
 				if (i.color.getColor() == Color.BLACK) {
@@ -73,24 +78,19 @@ public class SpeedController {
 				graf.drawRect(i.x+8, i.y+40, i.width, i.height);;
 			}
 			if(detectRedLight(i)){
-				System.out.println("Red light blob " + i);
 				setStoppingAtLight();
 			}
 			else if (detectYellowLight(i)) {
-				System.out.println("Yellow light blob " + i);
 			}
 			else if (detectGreenLight(i)) {
-				System.out.println("Green light blob " + i);
 				readyToGo();
 			}
 			else if(detectStopSign(i) && cyclesUntilCanDetectStopsign <= 0){
-				System.out.println("Stop sign blob " + i);
 				cyclesUntilCanDetectStopsign = 100;
 				setStoppingAtSign();
 			}
 			else {
-				System.out.println("Blob " + i);
-				System.out.println("Blob " + i.color.getColor());
+
 			}
 		}
 		

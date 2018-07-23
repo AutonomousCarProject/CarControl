@@ -2872,7 +2872,7 @@ public class TrakSim {
             TmpI = (whar << 16) + whar;
             break;
         } //~for                // GoodLog = true, logy = Fax_Log = T..
-        if (GoodLog) if (logy) System.out.println(HandyOps.Dec2Log("(Anim8) ", anim,
+        if (GoodLog) if (logy);/* System.out.println(HandyOps.Dec2Log("(Anim8) ", anim,
                 HandyOps.Int2Log(HandyOps.IffyStr(uppy, " =^= ", " =#= "), locn,
                         HandyOps.Dec2Log(" ", whar, HandyOps.Dec2Log(" = ", why,  // why =
                                 HandyOps.Dec2Log(" #", FrameNo, HandyOps.IffyStr(anim == 0, "",
@@ -2885,7 +2885,7 @@ public class TrakSim {
                                                                                         HandyOps.Int2Log(" ", here, HandyOps.Dec2Log(" o", OpMode,
                                                                                                 HandyOps.TF2Log("/", StepOne, HandyOps.Dec2Log(" ", xTrLiteTime,
                                                                                                         " ---> " + HandyOps.ArrayDumpLine(ActivAnima, 0, 36)
-                                                                                                                + aLine))))))))))))))))))))));
+                                                                                                                + aLine))))))))))))))))))))));*/
         return locn;
     } //~Animatron
 

@@ -795,10 +795,7 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 
 					speedControl.onUpdate(this.GasPedal, testSteering.getDegreeOffset(), this.manualSpeed, graf, dtest, blobsOn, overlayOn);
 					AxLR8(true, speedControl.getDesiredSpeed());
-					System.out.println(this.GasPedal);
-					System.out.println(this.SteerDegs);
-					System.out.println(speedControl.getStoppingAtLight());
-					System.out.println(speedControl.getStoppingAtSign());
+
 					if(overlayOn){
 						graf.setColor(Color.ORANGE);
 						 graf.drawRect(Constants.STOPLIGHT_MIN_X, Constants.STOPLIGHT_MIN_Y,
@@ -809,6 +806,8 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 						 Constants.STOPSIGN_MAX_X-Constants.STOPSIGN_MIN_X,
 						 Constants.STOPSIGN_MAX_Y-Constants.STOPSIGN_MIN_Y);
 					}
+					
+					
 
 					TestServos(); // (replace this with your own code)
 
