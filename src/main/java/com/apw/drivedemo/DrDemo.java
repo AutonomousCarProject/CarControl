@@ -806,7 +806,7 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 						 Constants.STOPSIGN_MAX_Y-Constants.STOPSIGN_MIN_Y);
 					}
 					
-					TestServos(); // (replace this with your own code)
+					//TestServos(); // (replace this with your own code)
 
 					// End Speed Code
 

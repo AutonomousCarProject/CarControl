@@ -80,14 +80,14 @@ public class SpeedController {
 					graf.setColor(java.awt.Color.BLUE);
 					color = 0x0000ff;
 				}
-				for(MovingBlob b:blobs){
-					int velocity = (int)(100*Math.sqrt(b.velocityX*b.velocityX + b.velocityY*b.velocityY));
-					int color = (velocity << 16) + (velocity << 8) + velocity;
-					this.trackSim.DrawLine(color, b.y, b.x, b.y+b.height, b.x);
-					this.trackSim.DrawLine(color, b.y, b.x, b.y, b.x+b.width);
-					this.trackSim.DrawLine(color, b.y+b.height, b.x, b.y+b.height, b.x+b.width);
-					this.trackSim.DrawLine(color, b.y, b.x+b.width, b.y+b.height, b.x+b.width);
-				}
+				
+				int velocity = (int)(100*Math.sqrt(i.velocityX*i.velocityX + i.velocityY*i.velocityY));
+				//int color = (velocity << 16) + (velocity << 8) + velocity;
+				this.trackSim.DrawLine(color, i.y, i.x, i.y+i.height, i.x);
+				this.trackSim.DrawLine(color, i.y, i.x, i.y, i.x+i.width);
+				this.trackSim.DrawLine(color, i.y+i.height, i.x, i.y+i.height, i.x+i.width);
+				this.trackSim.DrawLine(color, i.y, i.x+i.width, i.y+i.height, i.x+i.width);
+
 			}
 			if(detectRedLight(i)){
 				setStoppingAtLight();
