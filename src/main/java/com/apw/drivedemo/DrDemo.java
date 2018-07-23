@@ -59,6 +59,7 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 	private DriveTest dtest = new DriveTest();
 	private boolean overlayOn = Constants.DEFAULT_OVERLAY;
 	private boolean blobsOn = Constants.DEFAULT_BLOBS;
+	private boolean writeBlobsToConsole = Constants.DEFAULT_WRITE_BLOBS_TO_CONSOLE;
 
 	private static final long serialVersionUID = 1L; // unneed but Java insists {
 
@@ -186,7 +187,7 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 											HandyOps.Dec2Log(" ", tile, HandyOps.Dec2Log(" ", ViDied, "")))))))))));
 			if (whom != 0)
 				if (myVid != null)
-					System.out.println(myVid.toString());
+					//System.out.println(myVid.toString());
 			return false;
 		} // ~if
 		if (!alive)
@@ -1028,6 +1029,9 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 		}
 		if (e.getKeyCode() == KeyEvent.VK_V){
 			overlayOn = !overlayOn;
+		}
+		if (e.getKeyCode() == KeyEvent.VK_C){
+			writeBlobsToConsole = !writeBlobsToConsole;
 		}
 	}
 

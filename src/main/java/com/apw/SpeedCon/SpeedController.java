@@ -19,7 +19,6 @@ public class SpeedController {
 	private boolean stoppedAtLight;
 	private boolean readyToGo;
 	private boolean emergencyStop;
-	private int color;
 	private int cyclesToStopAtSign = Constants.DRIFT_TO_STOPSIGN_FRAMES;
 	private int cyclesToGo;
 	private int cyclesToStopAtLight = Constants.DRIFT_TO_STOPLIGHT_FRAMES;
@@ -84,12 +83,20 @@ public class SpeedController {
 					this.trackSim.DrawLine(color, b.y, b.x+b.width, b.y+b.height, b.x+b.width);
 				}
 			}
-			if(detectRedLight(i)){
+			/* Returns an int value corresponding to the color of the light we are looking at
+			 * 0 - No light
+			 * 1 - Red Light
+			 * 2 - Yellow Light
+			 * 3 - Green Light
+			 * */
+			int currLight = detectLight(i, blobs);
+			
+			if(currLight == 1){
 				setStoppingAtLight();
 			}
-			else if (detectYellowLight(i)) {
+			else if (currLight == 2) {
 			}
-			else if (detectGreenLight(i)) {
+			else if (currLight == 3) {
 				readyToGo();
 			}
 			else if(detectStopSign(i) && cyclesUntilCanDetectStopsign <= 0){
@@ -102,6 +109,17 @@ public class SpeedController {
 		}
 		
 		
+	}
+	
+	private boolean detectBlobInBlob(MovingBlob outsideBlob, MovingBlob insideBlob){
+		int maxX = outsideBlob.x + outsideBlob.width;
+		int minX = outsideBlob.x;
+		int maxY = outsideBlob.y + outsideBlob.height;
+		int minY = outsideBlob.y;
+		if(insideBlob.x < minX || insideBlob.x + insideBlob.width > maxX || insideBlob.y < minY || insideBlob.y + insideBlob.height > maxY){
+			return false;
+		}
+		return true;
 	}
 	
 	//This figures out the speed that we want to be traveling at
@@ -312,6 +330,50 @@ public class SpeedController {
 		}
 		else {
 			return false;
+		}
+	}
+	
+	/* Returns an int value corresponding to the color of the light we are looking at
+	 * 0 - No light
+	 * 1 - Red Light
+	 * 2 - Yellow Light
+	 * 3 - Green Light
+	 * */
+	
+	public int detectLight(MovingBlob blob, List<MovingBlob> bloblist){
+		int lightColor = 0;
+		boolean outputLight = false;
+		//Figure out the color of our blob
+		if (blob.age > Constants.BLOB_AGE && blob.height > Constants.BLOB_HEIGHT && blob.width > Constants.BLOB_WIDTH && blob.x > Constants.STOPLIGHT_MIN_X && blob.x < Constants.STOPLIGHT_MAX_X && blob.y > Constants.STOPLIGHT_MIN_Y && blob.y < Constants.STOPLIGHT_MAX_Y && blob.color.getColor() == Color.RED) {
+			//Found a red light
+			lightColor = 1;
+		}
+		else if (blob.age > Constants.BLOB_AGE && blob.height > Constants.BLOB_HEIGHT && blob.width > Constants.BLOB_WIDTH && blob.x > Constants.STOPLIGHT_MIN_X && blob.x < Constants.STOPLIGHT_MAX_X && blob.y > Constants.STOPLIGHT_MIN_Y && blob.y < Constants.STOPLIGHT_MAX_Y && blob.color.getColor() == Color.RED) {
+			//Found a yellow light
+			lightColor = 2;
+		}
+		else if (blob.age > Constants.BLOB_AGE && blob.height > Constants.BLOB_HEIGHT && blob.width > Constants.BLOB_WIDTH && blob.x > Constants.STOPLIGHT_MIN_X && blob.x < Constants.STOPLIGHT_MAX_X && blob.y > Constants.STOPLIGHT_MIN_Y && blob.y < Constants.STOPLIGHT_MAX_Y && blob.color.getColor() == Color.GREEN) {
+			//Found a green light
+			lightColor = 3;
+		}
+		else{
+			//Didn't find a light
+			return 0;
+		}
+		//If we made it here, we know that we have a light
+		//Therefore, we need to check if that light is inside of a black blob, aka the lamp
+		for(MovingBlob b : bloblist){
+			if(blob.color.getColor() == Color.BLACK){
+				if(detectBlobInBlob(blob, b)){
+					outputLight = true;
+				}
+			}
+		}
+		if(outputLight){
+			return lightColor;
+		}
+		else{
+			return 0;
 		}
 	}
 }

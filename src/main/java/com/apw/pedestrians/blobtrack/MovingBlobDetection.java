@@ -329,7 +329,7 @@ public class MovingBlobDetection implements IMovingBlobDetection {
             this.movingBlobs.add(new MovingBlob(blob));
         }
         
-    	System.out.println(movingBlobs.get(0));
+    	//System.out.println(movingBlobs.get(0));
     }
 
     private void matchBlob(MovingBlob movingBlob, Blob newBlob) {
