@@ -10,101 +10,96 @@ import com.apw.apw3.TrakSim;
 import com.apw.drivedemo.DriveTest;
 
 public class SpeedController {
-
-    private double currentEstimatedSpeed;
-    private double desiredSpeed;
-    private boolean stoppingAtSign;
-    private boolean stoppedAtSign;
-    private boolean stoppingAtLight;
-    private boolean stoppedAtLight;
-    private boolean readyToGo;
-    private boolean emergencyStop;
-    private int color;
-    private int cyclesToStopAtSign = Constants.DRIFT_TO_STOPSIGN_FRAMES;
-    private int cyclesToGo;
-    private int cyclesToStopAtLight = Constants.DRIFT_TO_STOPLIGHT_FRAMES;
-    private int cyclesUntilCanDetectStopsign = Constants.WAIT_AFTER_STOPSIGN;
-
-
-    private SpeedFinder speedFinder;
-
-    TrakSim trackSim = new TrakSim();
-
-    public SpeedController(){
-        this.speedFinder = new SpeedFinder();
-    }
-
-    //A method to be called every frame. Calculates desired speed and actual speed
-    //Also takes stopping into account
-    public void onUpdate(int gasAmount, double steerDegs, int manualSpeed, Graphics graf, DriveTest dtest, boolean blobsOn, boolean overlayOn){
-        if (cyclesUntilCanDetectStopsign > 0){
-            cyclesUntilCanDetectStopsign--;
-        }
-        //This part updates the simple color window that opens up along with traksim
-        dtest.run();
-
-        //Right here we update our current calculated speed and find our current desired speed
-        this.calculateEstimatedSpeed(gasAmount);
-        this.calculateDesiredSpeed(steerDegs, manualSpeed);
-
-        //This part runs on-screen blobs thru a set of tests to figure out if they are
-        //relevant, and then what to do with them
-        PedestrianDetector pedDetect = new PedestrianDetector();
-        ImageManager imageManager = dtest.getImgManager();
-        List<MovingBlob> blobs = pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), 912);
-
-        //We then:
-        //A. Display those blobs on screen as empty rectangular boxes of the correct color
-        //B. Test if those blobs are a useful roadsign/light
-        //C. Do whatever we need to do if so
-        //D. Write to the console what has happened
-        //We need all of the if statements to display the colors,
-        //as we need to convert from IPixel colors to Java.awt colors for display reasons
-        for(MovingBlob i : blobs){
-            if(blobsOn){
-                if (i.color.getColor() == Color.BLACK) {
-                    graf.setColor(java.awt.Color.BLACK);
-                }
-                else if (i.color.getColor() == Color.GREY) {
-                    graf.setColor(java.awt.Color.GRAY);
-                }
-                else if (i.color.getColor() == Color.WHITE) {
-                    graf.setColor(java.awt.Color.WHITE);
-                }
-                else if (i.color.getColor() == Color.RED) {
-                    graf.setColor(java.awt.Color.RED);
-                }
-                else if (i.color.getColor() == Color.GREEN) {
-                    graf.setColor(java.awt.Color.GREEN);
-                }
-                else if (i.color.getColor() == Color.BLUE) {
-                    graf.setColor(java.awt.Color.BLUE);
-                }
-                graf.drawRect(i.x+8, i.y+40, i.width, i.height);
-            }
-            if(detectStopLight(i)){
-                System.out.println("Stop light blob " + i);
-                setStoppingAtLight();
-            }
-            else if(detectStopSign(i) && cyclesUntilCanDetectStopsign <= 0){
-                System.out.println("Stop sign blob " + i);
-                cyclesUntilCanDetectStopsign = 100;
-                setStoppingAtSign();
-            }
-            else {
-                System.out.println("Blob " + i);
-                System.out.println("Blob " + i.color.getColor());
-            }
-        }
-
-
-    }
-
-    //This figures out the speed that we want to be traveling at
-    public void calculateDesiredSpeed(double wheelAngle, int manualSpeed){
-        double curveSteepness = 0; // Steering.getCurveSteepness();
-
-        //Calls methods which tell us to stop, slow down, or maintain course
+	
+	private double currentEstimatedSpeed;
+	private double desiredSpeed;
+	private boolean stoppingAtSign;
+	private boolean stoppedAtSign;
+	private boolean stoppingAtLight;
+	private boolean stoppedAtLight;
+	private boolean readyToGo;
+	private boolean emergencyStop;
+	private int color;
+	private int cyclesToStopAtSign = Constants.DRIFT_TO_STOPSIGN_FRAMES;
+	private int cyclesToGo;
+	private int cyclesToStopAtLight = Constants.DRIFT_TO_STOPLIGHT_FRAMES;
+	private int cyclesUntilCanDetectStopsign = Constants.WAIT_AFTER_STOPSIGN;
+	
+	
+	private SpeedFinder speedFinder;
+	
+	TrakSim trackSim = new TrakSim();
+	
+	public SpeedController(){
+		this.speedFinder = new SpeedFinder();
+	}
+	
+	//A method to be called every frame. Calculates desired speed and actual speed
+	//Also takes stopping into account
+	public void onUpdate(int gasAmount, int steerDegs, int manualSpeed, Graphics graf, DriveTest dtest, boolean blobsOn, boolean overlayOn){
+		if (cyclesUntilCanDetectStopsign > 0){
+			cyclesUntilCanDetectStopsign--;
+		}
+		dtest.run();
+		//dtest.window.paint(graf);
+		this.calculateEstimatedSpeed(gasAmount);
+		this.calculateDesiredSpeed(steerDegs, manualSpeed);
+		
+		//This part runs on-screen blobs thru a set of tests to figure out if they are
+		//relevant, and then what to do with them
+		PedestrianDetector pedDetect = new PedestrianDetector();
+		ImageManager imageManager = dtest.getImgManager();
+		List<MovingBlob> blobs = pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), 912);
+		for(MovingBlob i : blobs){
+			if(blobsOn){
+				if (i.color.getColor() == Color.BLACK) {
+					graf.setColor(java.awt.Color.BLACK);	
+				}
+				else if (i.color.getColor() == Color.GREY) {
+					graf.setColor(java.awt.Color.GRAY);
+				}
+				else if (i.color.getColor() == Color.WHITE) {
+					graf.setColor(java.awt.Color.WHITE);
+				}
+				else if (i.color.getColor() == Color.RED) {
+					graf.setColor(java.awt.Color.RED);
+				}
+				else if (i.color.getColor() == Color.GREEN) {
+					graf.setColor(java.awt.Color.GREEN);
+				}
+				else if (i.color.getColor() == Color.BLUE) {
+					graf.setColor(java.awt.Color.BLUE);
+				}
+				graf.drawRect(i.x+8, i.y+40, i.width, i.height);;
+			}
+			if(detectRedLight(i)){
+				System.out.println("Red light blob " + i);
+				setStoppingAtLight();
+			}
+			else if (detectYellowLight(i)) {
+				System.out.println("Yellow light blob " + i);
+			}
+			else if (detectGreenLight(i)) {
+				System.out.println("Green light blob " + i);
+				readyToGo();
+			}
+			else if(detectStopSign(i) && cyclesUntilCanDetectStopsign <= 0){
+				System.out.println("Stop sign blob " + i);
+				cyclesUntilCanDetectStopsign = 100;
+				setStoppingAtSign();
+			}
+			else {
+				System.out.println("Blob " + i);
+				System.out.println("Blob " + i.color.getColor());
+			}
+		}
+		
+		
+	}
+	
+	//This figures out the speed that we want to be traveling at
+	public void calculateDesiredSpeed(int wheelAngle, int manualSpeed){
+		double curveSteepness = 0; // Steering.getCurveSteepness();
         int shouldStopSign = this.updateStopSign();
         int shouldStopLight = this.updateStopLight();
 
@@ -269,27 +264,47 @@ public class SpeedController {
     }
 
     // End Of Brake Rate Math
-
-    public int getDesiredSpeed(){
-        return (int)desiredSpeed;
-    }
-
-    // Checks a given blob for the properties of a stopsign (size, age, position, color)
-    public boolean detectStopSign(MovingBlob blob) {
-        if(blob.age > Constants.BLOB_AGE && blob.height > Constants.BLOB_HEIGHT && blob.width > Constants.BLOB_WIDTH && blob.x > Constants.STOPSIGN_MIN_X && blob.x < Constants.STOPSIGN_MAX_X && blob.y > Constants.STOPSIGN_MIN_Y && blob.y < Constants.STOPSIGN_MAX_Y && blob.color.getColor() == Color.RED) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    // Checks a given blob for the properties of a stoplight (size, age, position, color)
-    public boolean detectStopLight(MovingBlob blob) {
-        if (blob.age > Constants.BLOB_AGE && blob.height > Constants.BLOB_HEIGHT && blob.width > Constants.BLOB_WIDTH && blob.x > Constants.STOPLIGHT_MIN_X && blob.x < Constants.STOPLIGHT_MAX_X && blob.y > Constants.STOPLIGHT_MIN_Y && blob.y < Constants.STOPLIGHT_MAX_Y && blob.color.getColor() == Color.RED) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
+    
+	public int getDesiredSpeed(){
+		return (int)desiredSpeed;
+	}
+	
+	// Checks a given blob for the properties of a stopsign (size, age, position, color)
+	public boolean detectStopSign(MovingBlob blob) {
+		if(blob.age > Constants.BLOB_AGE && blob.height > Constants.BLOB_HEIGHT && blob.width > Constants.BLOB_WIDTH && blob.x > Constants.STOPSIGN_MIN_X && blob.x < Constants.STOPSIGN_MAX_X && blob.y > Constants.STOPSIGN_MIN_Y && blob.y < Constants.STOPSIGN_MAX_Y && blob.color.getColor() == Color.RED) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	// Checks a given blob for the properties of a stoplight (size, age, position, color)
+	public boolean detectRedLight(MovingBlob blob) {
+		if (blob.age > Constants.BLOB_AGE && blob.height > Constants.BLOB_HEIGHT && blob.width > Constants.BLOB_WIDTH && blob.x > Constants.STOPLIGHT_MIN_X && blob.x < Constants.STOPLIGHT_MAX_X && blob.y > Constants.STOPLIGHT_MIN_Y && blob.y < Constants.STOPLIGHT_MAX_Y && blob.color.getColor() == Color.RED) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
+	// Checks a given blob for the properties of a stoplight (size, age, position, color)
+	public boolean detectYellowLight(MovingBlob blob) {
+		if (blob.age > Constants.BLOB_AGE && blob.height > Constants.BLOB_HEIGHT && blob.width > Constants.BLOB_WIDTH && blob.x > Constants.STOPLIGHT_MIN_X && blob.x < Constants.STOPLIGHT_MAX_X && blob.y > Constants.STOPLIGHT_MIN_Y && blob.y < Constants.STOPLIGHT_MAX_Y && blob.color.getColor() == Color.RED) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
+	// Checks a given blob for the properties of a stoplight (size, age, position, color)
+	public boolean detectGreenLight(MovingBlob blob) {
+		if (blob.age > Constants.BLOB_AGE && blob.height > Constants.BLOB_HEIGHT && blob.width > Constants.BLOB_WIDTH && blob.x > Constants.STOPLIGHT_MIN_X && blob.x < Constants.STOPLIGHT_MAX_X && blob.y > Constants.STOPLIGHT_MIN_Y && blob.y < Constants.STOPLIGHT_MAX_Y && blob.color.getColor() == Color.GREEN) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 }
