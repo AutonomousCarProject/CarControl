@@ -32,7 +32,7 @@ public class DriverCons { // TrakSim constant parameters
             D_LiveCam = false,       // F: omit connecting to FlyCamera
             D_StartLive = false,    // T: start in live camera if possible
             D_FixedSpeed = true,    // ignore speed control, assume fMinSpeed
-            D_StayInTrack = true,   // ignore steering control, stay centered in track
+            D_StayInTrack = false,   // ignore steering control, stay centered in track
             D_ShoTrkTstPts = false, // T: show test points used to calc StayInTrack
             D_ShoClikGrid = true,  // T: to see where to click to steer/accelerate
             D_ShowMap = true,       // T: show the map next to the scene
@@ -47,6 +47,7 @@ public class DriverCons { // TrakSim constant parameters
             D_DrawOnSides = true, D_DrawPredicted = true, D_DrawCurrent = true; //Drive lines.
 
     public static final int
+
             D_Vramp = 68, D_Hramp = 172, // Initial pos'n for car, meters from NW
             D_RampA = 300,     // Initial orient'n for car, c-wise degrees from north
             D_Zoom35 = 35,     // 35mm-equivalent focal length for "camera"
