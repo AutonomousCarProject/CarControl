@@ -793,6 +793,7 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
             // handle exception...
         }
         setVisible(true);
+        DriveTest.subMain(theSim, simVideo,2);
 
         this.speedControl = new SpeedController();
         this.imageManager = dtest.getImgManager();
