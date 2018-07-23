@@ -1,6 +1,50 @@
 # Autonomous Car Project
 Speed, steering, and object detection for an autonomous RC car
 
+## Main Components
+
+Stuff required for the car to drive, majority of the program.
+
+* Image processing.
+* Speed control.
+* Pedestrian & other obstacle detecion.
+* Steering.
+
+## Non-Esentials
+
+Stuff we would like to complete.    
+
+* GPU parallelization.
+* Arduino driver rewrite.
+* Raspberry Pi.
+* Website.
+* TrakSim replacement.
+
+# Hardware
+This project is mostly focused on the software side of the problem but we are running it on real hardware
+
+* RC Car
+* Onboard SBC - LattePanda (insert specific version here).
+* Arduino integrated with LP to control servos.
+* Frontmounted camera - FLIR Firefly Camera.
+
+# TrakSim
+Standalone driving simulation to test code without the required hardware
+
+## Components
+
+* APW3
+    * TrakSim and its supporting classes, as well as an exmple track to run it with.
+* DriveDemo
+    * A program designed to demonstrate how to use both TrakSim and the servo & camera interfaces simulated by TrakSim.
+* Fly2Cam
+    * A minor revision of the Java interface to the JNI (C-coded) DLL which accesses the Pt.Grey Chameleon3 or FireFly camera driver DLLs. FlyCamera.dll is included here.
+* noJSSC
+    * A non-functional (stub) plug-compatible substitute for the JSSCAPI, which may be used in its place when running TrakSim in stand-alone mode on any computer.
+* FakeFirm
+    * A Java clone of the C# API released by LP for driving digital outputs and servos that diverts a copy of the servo commands to TrakSim.
+
+
 ## Running
 Setup the included Gradle project and make sure to include the [Aparapi](http://aparapi.com/) library.
 
@@ -29,41 +73,6 @@ Compile and run DrDemo.java in the `com.apw.drivedemo` package, this should open
     * Unpressed: GPU Optimizations off.
 
 
-## Main Components
-
-Stuff required for the car to drive.
-
-* Image processing.
-* Speed control.
-* Pedestrian & other obstacle detecion.
-* Steering.
-
-## Non-Esentials
-
-Stuff we would like to complete.    
-
-* GPU parallelization.
-* Arduino driver rewrite.
-* Raspberry Pi.
-* Website.
-* TrakSim replacement.
-
-# TrakSim
-Standalone driving simulation to test code without the required hardware
-
-## Components
-
-* APW3
-    * TrakSim and its supporting classes, as well as an exmple track to run it with.
-* DriveDemo
-    * A program designed to demonstrate how to use both TrakSim and the servo & camera interfaces simulated by TrakSim.
-* Fly2Cam
-    * A minor revision of the Java interface to the JNI (C-coded) DLL which accesses the Pt.Grey Chameleon3 or FireFly camera driver DLLs. FlyCamera.dll is included here.
-* noJSSC
-    * A non-functional (stub) plug-compatible substitute for the JSSCAPI, which may be used in its place when running TrakSim in stand-alone mode on any computer.
-* FakeFirm
-    * A Java clone of the C# API released by LP for driving digital outputs and servos that diverts a copy of the servo commands to TrakSim.
-
 ### Track
 
 TrakSim was originally designed to simulate the PatsAcres go-kart track, but now has a "Build Map" function so you can design your own track layouts using a (somewhat crude) text specification file described [here](http://www.ittybittycomputers.com/APW2/TrackSim/BuildMap.htm).
@@ -76,20 +85,13 @@ Traksim was written by Tom Pittman and is extensively documented on his website,
 
 or contact Tom at TPittman@IttyBittyComputers.com
 
-# Hardware
-This project is mostly focused on the software side of the problem but we are running it on real hardware
-
-* RC Car
-* Onboard SBC - LattePanda (insert specific version here).
-* Arduino integrated with LP to control servos.
-* Frontmounted camera - FLIR Firefly Camera.
-
 # Dependencies
 
 * [Aparapi](http://aparapi.com/) - Open-source framework for executing native Java code on the GPU through OpenCL.
 * [Fly2Cam](http://www.ittybittycomputers.com/APW2/TrackSim/Fly2cam.htm) - Tom explains it better [here](http://www.ittybittycomputers.com/APW2/TrackSim/Fly2cam.htm).
 * [JSSC](https://code.google.com/archive/p/java-simple-serial-connector/) - Java Simple Serial Connector.
 * [Firmata](https://www.arduino.cc/en/Reference/Firmata) - The Arduino Firmata library implements the Firmata protocol for communicating with software on the host computer.
+
 
 # About
 
