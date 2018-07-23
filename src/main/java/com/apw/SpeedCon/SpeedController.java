@@ -19,26 +19,22 @@ public class SpeedController {
 	private boolean stoppedAtLight;
 	private boolean readyToGo;
 	private boolean emergencyStop;
-	private int color;
+	int color;
 	private int cyclesToStopAtSign = Constants.DRIFT_TO_STOPSIGN_FRAMES;
 	private int cyclesToGo;
 	private int cyclesToStopAtLight = Constants.DRIFT_TO_STOPLIGHT_FRAMES;
 	private int cyclesUntilCanDetectStopsign = Constants.WAIT_AFTER_STOPSIGN;
-	
-	
-	private SpeedFinder speedFinder;
 	private PedestrianDetector pedDetect;
 	
 	TrakSim trackSim = new TrakSim();
 	
 	public SpeedController(){
-		this.speedFinder = new SpeedFinder();
 		this.pedDetect = new PedestrianDetector();
 	}
 	
 	//A method to be called every frame. Calculates desired speed and actual speed
 	//Also takes stopping into account
-	public void onUpdate(int gasAmount, int steerDegs, int manualSpeed, Graphics graf, DriveTest dtest, boolean blobsOn, boolean overlayOn){
+	public void onUpdate(int gasAmount, int steerDegs, int manualSpeed, Graphics graf, DriveTest dtest){
 		if (cyclesUntilCanDetectStopsign > 0){
 			cyclesUntilCanDetectStopsign--;
 		}
@@ -53,32 +49,27 @@ public class SpeedController {
 		//This part runs on-screen blobs thru a set of tests to figure out if they are
 		//relevant, and then what to do with them
 		ImageManager imageManager = dtest.getImgManager();
+
 		List<MovingBlob> blobs = this.pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), 912);
 		for(MovingBlob i : blobs){
-			if(blobsOn){
+			if(Settings.blobsOn){
 				if (i.color.getColor() == Color.BLACK) {
 					graf.setColor(java.awt.Color.BLACK);	
-					color = 0x000000;
 				}
 				else if (i.color.getColor() == Color.GREY) {
 					graf.setColor(java.awt.Color.GRAY);
-					color = 0xd3d3d3;
 				}
 				else if (i.color.getColor() == Color.WHITE) {
 					graf.setColor(java.awt.Color.WHITE);
-					color = 0xffffff;
 				}
 				else if (i.color.getColor() == Color.RED) {
 					graf.setColor(java.awt.Color.RED);
-					color = 0xff0000;
 				}
 				else if (i.color.getColor() == Color.GREEN) {
 					graf.setColor(java.awt.Color.GREEN);
-					color = 0x00ff00;
 				}
 				else if (i.color.getColor() == Color.BLUE) {
 					graf.setColor(java.awt.Color.BLUE);
-					color = 0x0000ff;
 				}
 				
 				int velocity = (int)(100*Math.sqrt(i.velocityX*i.velocityX + i.velocityY*i.velocityY));
@@ -89,12 +80,20 @@ public class SpeedController {
 				this.trackSim.DrawLine(color, i.y, i.x+i.width, i.y+i.height, i.x+i.width);
 
 			}
-			if(detectRedLight(i)){
+			/* Returns an int value corresponding to the color of the light we are looking at
+			 * 0 - No light
+			 * 1 - Red Light
+			 * 2 - Yellow Light
+			 * 3 - Green Light
+			 * */
+			int currLight = detectLight(i, blobs);
+			
+			if(currLight == 1){
 				setStoppingAtLight();
 			}
-			else if (detectYellowLight(i)) {
+			else if (currLight == 2) {
 			}
-			else if (detectGreenLight(i)) {
+			else if (currLight == 3) {
 				readyToGo();
 			}
 			else if(detectStopSign(i) && cyclesUntilCanDetectStopsign <= 0){
@@ -107,6 +106,17 @@ public class SpeedController {
 		}
 		
 		
+	}
+	
+	private boolean detectBlobInBlob(MovingBlob outsideBlob, MovingBlob insideBlob){
+		int maxX = outsideBlob.x + outsideBlob.width;
+		int minX = outsideBlob.x;
+		int maxY = outsideBlob.y + outsideBlob.height;
+		int minY = outsideBlob.y;
+		if(insideBlob.x < minX || insideBlob.x + insideBlob.width > maxX || insideBlob.y < minY || insideBlob.y + insideBlob.height > maxY){
+			return false;
+		}
+		return true;
 	}
 	
 	//This figures out the speed that we want to be traveling at
@@ -254,13 +264,13 @@ public class SpeedController {
     double calcStopDist(double targetStopDist, double speed)
     {
         return Math.pow(speed, 2) / (Constants.FRICT * Constants.GRAV * 2);
-    }
+      }
 
-    //The amount of time that is needed to stop at the given speed.
-    double getStopTime(double dist, double speed)
-    {
-        return dist / speed;
-    }
+      //The amount of time that is needed to stop at the given speed.
+      double getStopTime(double dist, double speed)
+      {
+          return dist / speed;
+      }
 
     //The rate at which the speed must go down by, linear
     double calcStopRate(double speed, double time)
@@ -279,22 +289,7 @@ public class SpeedController {
     
 	public int getDesiredSpeed(){
 		return (int)desiredSpeed;
-    }
-    
-
-    //Sets desired speed based on a meter per second
-    public void setSpeed(double mPerSec){
-
-        this.desiredSpeed = mPerSec * Constants.PIN_TO_METER_PER_SECOND;
-
-    }
-
-    //Returns speed in meters per second
-    public double getMSec(){
-
-        return getEstimatedSpeed() / 0.4;
-
-    }
+	}
 	
 	// Checks a given blob for the properties of a stopsign (size, age, position, color)
 	public boolean detectStopSign(MovingBlob blob) {
@@ -333,23 +328,52 @@ public class SpeedController {
 		else {
 			return false;
 		}
-    }
-    
-
-        //Will decrease speed to keep blob below a certain size
-        public void followObjects(MovingBlob blob){
-
-
-            if(blob.height > Constants.MAX_OBJECT_HEIGHT)
-            {
-                double heightDiff = Constants.MAX_OBJECT_HEIGHT - blob.height;
-                setSpeed( (heightDiff * 0.5) / getMSec());
-            }
-            else if(blob.width > Constants.MAX_OBJECT_WIDTH)
-            {
-                double widthDiff = Constants.MAX_OBJECT_WIDTH - blob.width;
-                setSpeed( getMSec() - (widthDiff * 0.5) / getMSec());
-            }
-    
-        }
+	}
+	
+	/* Returns an int value corresponding to the color of the light we are looking at
+	 * 0 - No light
+	 * 1 - Red Light
+	 * 2 - Yellow Light
+	 * 3 - Green Light
+	 * */
+	
+	public int detectLight(MovingBlob blob, List<MovingBlob> bloblist){
+		int lightColor = 0;
+		boolean outputLight = false;
+		//Figure out the color of our blob
+		if (blob.age > Constants.BLOB_AGE && blob.height > Constants.BLOB_HEIGHT && blob.width > Constants.BLOB_WIDTH && blob.x > Constants.STOPLIGHT_MIN_X && blob.x < Constants.STOPLIGHT_MAX_X && blob.y > Constants.STOPLIGHT_MIN_Y && blob.y < Constants.STOPLIGHT_MAX_Y && blob.color.getColor() == Color.RED) {
+			//Found a red light
+			lightColor = 1;
+		}
+		else if (blob.age > Constants.BLOB_AGE && blob.height > Constants.BLOB_HEIGHT && blob.width > Constants.BLOB_WIDTH && blob.x > Constants.STOPLIGHT_MIN_X && blob.x < Constants.STOPLIGHT_MAX_X && blob.y > Constants.STOPLIGHT_MIN_Y && blob.y < Constants.STOPLIGHT_MAX_Y && blob.color.getColor() == Color.RED) {
+			//Found a yellow light
+			lightColor = 2;
+		}
+		else if (blob.age > Constants.BLOB_AGE && blob.height > Constants.BLOB_HEIGHT && blob.width > Constants.BLOB_WIDTH && blob.x > Constants.STOPLIGHT_MIN_X && blob.x < Constants.STOPLIGHT_MAX_X && blob.y > Constants.STOPLIGHT_MIN_Y && blob.y < Constants.STOPLIGHT_MAX_Y && blob.color.getColor() == Color.GREEN) {
+			//Found a green light
+			lightColor = 3;
+		}
+		else{
+			//Didn't find a light
+			return 0;
+		}
+		//If we made it here, we know that we have a light
+		//Therefore, we need to check if that light is inside of a black blob, aka the lamp
+		System.out.println("Found a light: " + lightColor);
+		outputLight = true;
+		for(MovingBlob b : bloblist){
+			if(blob.color.getColor() == Color.BLACK){
+				
+				if(detectBlobInBlob(blob, b)){
+					
+				}
+			}
+		}
+		if(outputLight){
+			return lightColor;
+		}
+		else{
+			return 0;
+		}
+	}
 }

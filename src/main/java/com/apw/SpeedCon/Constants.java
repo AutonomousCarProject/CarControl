@@ -2,8 +2,10 @@ package com.apw.SpeedCon;
 
 public class Constants {
 		public static final boolean
+		
 		DEFAULT_OVERLAY = false,
-		DEFAULT_BLOBS = false;
+		DEFAULT_BLOBS = false,
+		DEFAULT_WRITE_BLOBS_TO_CONSOLE = false;
 	
 		public static final double 
 		//Speed
