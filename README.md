@@ -4,16 +4,15 @@ Speed, steering, and object detection for an autonomous RC car
 ## Running
 Setup the included Gradle project and make sure to include the [Aparapi](http://aparapi.com/) library.
 
-Compile and run DrDemo.java in the `com.apw.drivedemo` package, this should open two windows DriveTest & DrDemo.
-
-
-![TrakSim](https://user-images.githubusercontent.com/3460531/43101980-af2225f8-8e7e-11e8-96f1-87fb08727a8e.png)
+Compile and run DrDemo.java in the `com.apw.drivedemo` package, this should open TrakSim in two windows: DriveTest & DrDemo.
 
 ## Using TrakSim
 
 * <span style="color:#FF4F69">**[1]**</span> - Clicking anywhere on the minimap in the top right will move the car to your click location.
 * <span style="color:#FF4F69">**[2]**</span> - Clicking anywhere on the map in the bottom right will turn your car to the angle from the car to your click.
 * <span style="color:#FF4F69">**[3]**</span> - Clicking on the bottom middle of the window on the small brownish bar will start driving.
+
+![TrakSim](https://user-images.githubusercontent.com/3460531/43101980-af2225f8-8e7e-11e8-96f1-87fb08727a8e.png)
 
 ### Keybinds
 * **UP** - Increase manual speed by 1.
