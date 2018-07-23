@@ -10,6 +10,8 @@ public class Constants {
 		MAX_SPEED = 40,					//Car's maximum speed
 		MIN_SPEED = 20,					//Car's minimum speed
 		PIN_TO_METER_PER_SECOND = 0.4,	//Conversion for motor position to m/s. DO NOT TOUCH
+		MAX_OBJECT_WIDTH = 320,			//Maximum width in pixels of object height before car slows
+		MAX_OBJECT_HEIGHT = 200,		//Maximum height of in pixels of an object before car slows
 		
 		//Math
 		GRAV = 9.80665,					//Average gravitational acceleration

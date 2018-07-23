@@ -279,7 +279,22 @@ public class SpeedController {
     
 	public int getDesiredSpeed(){
 		return (int)desiredSpeed;
-	}
+    }
+    
+
+    //Sets desired speed based on a meter per second
+    public void setSpeed(double mPerSec){
+
+        this.desiredSpeed = mPerSec * Constants.PIN_TO_METER_PER_SECOND;
+
+    }
+
+    //Returns speed in meters per second
+    public double getMSec(){
+
+        return getEstimatedSpeed() / 0.4;
+
+    }
 	
 	// Checks a given blob for the properties of a stopsign (size, age, position, color)
 	public boolean detectStopSign(MovingBlob blob) {
@@ -318,5 +333,23 @@ public class SpeedController {
 		else {
 			return false;
 		}
-	}
+    }
+    
+
+        //Will decrease speed to keep blob below a certain size
+        public void followObjects(MovingBlob blob){
+
+
+            if(blob.height > Constants.MAX_OBJECT_HEIGHT)
+            {
+                double heightDiff = Constants.MAX_OBJECT_HEIGHT - blob.height;
+                setSpeed( (heightDiff * 0.5) / getMSec());
+            }
+            else if(blob.width > Constants.MAX_OBJECT_WIDTH)
+            {
+                double widthDiff = Constants.MAX_OBJECT_WIDTH - blob.width;
+                setSpeed( getMSec() - (widthDiff * 0.5) / getMSec());
+            }
+    
+        }
 }
