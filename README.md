@@ -84,6 +84,13 @@ This project is mostly focused on the software side of the problem but we are ru
 * Arduino integrated with LP to control servos.
 * Frontmounted camera - FLIR Firefly Camera.
 
+# Dependencies
+
+* Aparapi - Open-source framework for executing native Java code on the GPU through OpenCL.
+* Fly2Cam - Tom explains it better [here](http://www.ittybittycomputers.com/APW2/TrackSim/Fly2cam.htm).
+* JSSC - Java Simple Serial Connector.
+* Firmata - The Arduino Firmata library implements the Firmata protocol for communicating with software on the host computer.
+
 # About
 
 This project was created and is maintained by a group of highschool students in Portland, Oregon.
