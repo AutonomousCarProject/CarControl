@@ -25,14 +25,15 @@ public class SpeedController {
 	private int cyclesToStopAtLight = Constants.DRIFT_TO_STOPLIGHT_FRAMES;
 	private int cyclesUntilCanDetectStopsign = Constants.WAIT_AFTER_STOPSIGN;
 	
+
 	
-	private SpeedFinder speedFinder;
+	
+	
 	private PedestrianDetector pedDetect;
 	
 	TrakSim trackSim = new TrakSim();
 	
 	public SpeedController(){
-		this.speedFinder = new SpeedFinder();
 		this.pedDetect = new PedestrianDetector();
 	}
 	
