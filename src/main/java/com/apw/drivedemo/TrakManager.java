@@ -69,6 +69,9 @@ public class TrakManager extends TimerTask {
     public ImageManager getImageManager(){
         return imageManager;
     }
+    public TrakSim getSim(){
+        return sim;
+    }
     @Override
     public void run() {
         sim.SimStep(1);
