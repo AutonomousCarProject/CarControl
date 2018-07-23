@@ -789,7 +789,6 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 
 					/// ** If you have self-driving code, you could put it here **///
 					// TestServos(); // (replace this with your own code)
-
 					
 					// Begin Speed Code
 
@@ -807,11 +806,7 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 						 Constants.STOPSIGN_MAX_Y-Constants.STOPSIGN_MIN_Y);
 					}
 					
-					
-
 					TestServos(); // (replace this with your own code)
-
-					
 
 					// End Speed Code
 
