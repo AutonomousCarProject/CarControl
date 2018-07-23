@@ -28,6 +28,7 @@ import java.io.FileInputStream;
  */
 public class TrakSim {
 
+     public boolean wasted = false;
 
     // fGratio cnvrts ESC steps to nominal velocity; fMinSpeed=4.0,MinESC=10
     // ..adjust multiplier so it's correct for your car: *1.0 => fGratio=0.4
@@ -2655,6 +2656,9 @@ public class TrakSim {
             StepOne = (nuly == 1);
             NextFrUpdate = 0;
         } //~if // in mode=2 this is when to update image
+        if (prio == 3) {
+       		wasted = true;
+        }
 //ABCDE
 //        System.out.println(HandyOps.Dec2Log(" (SimStep) o", mode,
 //                HandyOps.Dec2Log("/", prio, HandyOps.IffyStr(prio == 3, " (Crashed)",
@@ -4152,7 +4156,7 @@ public class TrakSim {
             if (OopsLog.length() == 2) OopsLog = "";
             OopsLog = OopsLog + HandyOps.PosTime(" @ ") + " @";
             myDash = myDash + " = ";
-//ABCDE            
+//ABCDE
 //            System.out.println(HandyOps.Dec2Log(" (BildFram) ", FrameNo, // why =
 //                    HandyOps.Dec2Log(myDash, why, OopsLog)));
         }
@@ -4859,6 +4863,7 @@ public class TrakSim {
      * @param seen True to draw the red "X" on the screen
      */
     public void CrashMe(boolean seen) { // caller logs
+        wasted = true;
         SimStep(3);
         if (seen) DrawRedX();
         NuData++;

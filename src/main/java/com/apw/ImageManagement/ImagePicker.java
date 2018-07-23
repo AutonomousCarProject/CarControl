@@ -1,8 +1,6 @@
 package com.apw.ImageManagement;
 
 
-import com.apw.apw3.SimCamera;
-
 import com.apw.fly2cam.FlyCamera;
 
 import java.util.Date;
