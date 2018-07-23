@@ -9,6 +9,17 @@ import java.util.List;
 
 public class CameraCalibration {
 
+	/*
+
+	Camera Calibration is used to find the focal length and then distance of an object.
+	To use, you need to create a square the size of testBlobWidthHeight at the distance testBlobDistance, then begine calibration which takes a picure
+	and measures the the square thus filling needed variables. After calibration, you can find the distance of an object
+	if you know its real world size along with picture information.
+
+	*/
+
+
+
 	private PedestrianDetector pedDetect;
 	private ImageManager imageManager;
 
@@ -26,6 +37,7 @@ public class CameraCalibration {
 		relativeWorldScale = 8;
 		signWidth = 750/relativeWorldScale;
 
+		//Searches for a blue blob
 		List<MovingBlob> blobs = this.pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), 912);
 		for(MovingBlob i : blobs)
 		{
