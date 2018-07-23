@@ -17,6 +17,7 @@
 package com.apw.drivedemo;                                    // 2018 June 13
 
 import com.apw.ImageManagement.ImageManager;
+import com.apw.Steering.Steering;
 import com.apw.apw3.*;
 import com.apw.fakefirm.Arduino;
 import com.apw.fly2cam.FlyCamera;
@@ -36,8 +37,8 @@ import java.awt.image.DataBufferInt;
 // import fly2cam.CameraBase;
 
 public class DrDemo extends JFrame implements MouseListener {
-    
-    com.apw.Steering.Steering testSteering = new com.apw.Steering.Steering();
+
+    Steering testSteering;
     
     private static final long serialVersionUID = 1L; // unneed but Java insists {
     private static final int MinESCact = DriverCons.D_MinESCact,
@@ -672,7 +673,7 @@ public class DrDemo extends JFrame implements MouseListener {
 
     // Steer between lines
     testSteering.averageMidpoints();
-    int tempDeg = testSteering.getDegreeOffset();
+    int tempDeg = (int) testSteering.getDegreeOffset();
     theServos.servoWrite(SteerPin, (int)((tempDeg) + 90));
     
     graf.setColor(Color.RED);
@@ -802,6 +803,7 @@ public class DrDemo extends JFrame implements MouseListener {
         if(DriverCons.D_PrimaryViewOn) {
             setVisible(true);
         }
+        testSteering = new Steering(theSim);
         DriveTest.init();
         DriveTest.autoDriveTest(DriveTest.createDriveTest(2));
 

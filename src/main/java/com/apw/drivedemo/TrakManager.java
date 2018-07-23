@@ -144,7 +144,7 @@ public class TrakManager extends TimerTask {
      *
      */
     private void initializeControl(){
-        testSteering = new Steering();
+        testSteering = new Steering(sim);
         AxLR8(false,10);
     } //~initializeControl
 
@@ -154,7 +154,7 @@ public class TrakManager extends TimerTask {
     private void steerCode(){
         Point[] hi = testSteering.findPoints(imageManager.getRGBRaster());
         testSteering.averageMidpoints();
-        int tempDeg = testSteering.getDegreeOffset();
+        double tempDeg = testSteering.getDegreeOffset();
         driveSys.servoWrite(SteerPin, (int)((tempDeg) + 90));
 
     } //~steerCode

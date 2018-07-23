@@ -41,7 +41,9 @@ public class SpeedController {
             cyclesUntilCanDetectStopsign--;
         }
         //This part updates the simple color window that opens up along with traksim
-        dtest.run();
+        //dtest.run();
+        trackSim.SimStep(1);
+        dtest.repaint();
 
         //Right here we update our current calculated speed and find our current desired speed
         this.calculateEstimatedSpeed(gasAmount);
@@ -50,7 +52,7 @@ public class SpeedController {
         //This part runs on-screen blobs thru a set of tests to figure out if they are
         //relevant, and then what to do with them
         PedestrianDetector pedDetect = new PedestrianDetector();
-        ImageManager imageManager = dtest.getImgManager();
+        ImageManager imageManager = dtest.imageManager;
         List<MovingBlob> blobs = pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), 912);
 
         //We then:
