@@ -86,10 +86,10 @@ This project is mostly focused on the software side of the problem but we are ru
 
 # Dependencies
 
-* Aparapi - Open-source framework for executing native Java code on the GPU through OpenCL.
-* Fly2Cam - Tom explains it better [here](http://www.ittybittycomputers.com/APW2/TrackSim/Fly2cam.htm).
-* JSSC - Java Simple Serial Connector.
-* Firmata - The Arduino Firmata library implements the Firmata protocol for communicating with software on the host computer.
+* [Aparapi](http://aparapi.com/) - Open-source framework for executing native Java code on the GPU through OpenCL.
+* [Fly2Cam](http://www.ittybittycomputers.com/APW2/TrackSim/Fly2cam.htm) - Tom explains it better [here](http://www.ittybittycomputers.com/APW2/TrackSim/Fly2cam.htm).
+* [JSSC](https://code.google.com/archive/p/java-simple-serial-connector/) - Java Simple Serial Connector.
+* [Firmata](https://www.arduino.cc/en/Reference/Firmata) - The Arduino Firmata library implements the Firmata protocol for communicating with software on the host computer.
 
 # About
 
