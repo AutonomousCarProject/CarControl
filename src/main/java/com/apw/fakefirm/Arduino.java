@@ -132,7 +132,8 @@ public class Arduino { // Adapted to Java from arduino.cs ... (FakeFirmata)
      */
     public void servoWrite(int pin, int angle) {
         byte[] msg = new byte[3];
-        if (SpeakEasy) System.out.println("F%%F/servoWrite +" + pin + " = " + angle);
+//ABCDE
+//        if (SpeakEasy) System.out.println("F%%F/servoWrite +" + pin + " = " + angle);
         msg[0] = (byte) (ANALOG_MESSAGE | (pin & 0x0F));
         msg[1] = (byte) (angle & 0x7F);
         msg[2] = (byte) (angle >> 7);

@@ -6,19 +6,20 @@ import com.apw.Steering.Point;
 import com.apw.Steering.SteerControlCheck;
 import com.apw.Steering.Steering;
 import com.apw.apw3.*;
+
 import com.apw.fakefirm.Arduino;
 import com.apw.fly2cam.FlyCamera;
 
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.awt.image.DataBufferInt;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
+
 
 public class DriveTest extends JFrame implements MouseListener {
 

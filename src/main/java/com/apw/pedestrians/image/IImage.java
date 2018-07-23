@@ -1,6 +1,5 @@
 package com.apw.pedestrians.image;
 
-public interface IImage
-{
+public interface IImage {
     IPixel[][] getImage();
 }
