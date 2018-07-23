@@ -108,14 +108,8 @@ public class SpeedController {
 		
 	}
 	
-	private boolean detectBlobInBlob(MovingBlob outsideBlob, MovingBlob insideBlob){
-		int maxX = outsideBlob.x + outsideBlob.width;
-		int minX = outsideBlob.x;
-		int maxY = outsideBlob.y + outsideBlob.height;
-		int minY = outsideBlob.y;
-		if(insideBlob.x < minX || insideBlob.x + insideBlob.width > maxX || insideBlob.y < minY || insideBlob.y + insideBlob.height > maxY){
-			return false;
-		}
+	private boolean detectBlobOverlappingBlob(MovingBlob outsideBlob, MovingBlob insideBlob){
+		if((insideBlob.x < outsideBlob.x+outsideBlob.width && insideBlob.width + insideBlob.x > outsideBlob.x)  ||  (insideBlob.y < outsideBlob.y+outsideBlob.height && insideBlob.height + insideBlob.y > outsideBlob.y))
 		return true;
 	}
 	
@@ -361,14 +355,15 @@ public class SpeedController {
 		//Therefore, we need to check if that light is inside of a black blob, aka the lamp
 		System.out.println("Found a light: " + lightColor);
 		outputLight = true;
+		int overlaps = 0;
 		for(MovingBlob b : bloblist){
 			if(blob.color.getColor() == Color.BLACK){
-				
-				if(detectBlobInBlob(blob, b)){
-					
+				if(detectBlobOverlappingBlob(blob, b)){
+					overlaps++;
 				}
 			}
 		}
+		System.out.println("Overlaps: "+overlaps);
 		if(outputLight){
 			return lightColor;
 		}
