@@ -8,12 +8,18 @@ apply plugin: 'maven'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-repositories {
-        
-     maven { url "http://repo.maven.apache.org/maven2" }
+allprojects {
+    repositories {
+        mavenCentral()
+        maven { url "http://repo.maven.apache.org/maven2" }
+        maven { url 'https://jitpack.io' }
+    }
 }
+
 dependencies {
     compile group: 'com.aparapi', name: 'aparapi', version:'1.9.0'
     compile group: 'com.aparapi', name: 'aparapi-jni', version:'1.4.1'
+    implementation 'com.github.AutonomousCarProject:raspivid-j:0.1.0'
+    implementation 'org.bidib.com.pi4j:pi4j-distribution:1.2.M1'
 }
 version '1.0-SNAPSHOT'
