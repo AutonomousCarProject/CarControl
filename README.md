@@ -20,13 +20,21 @@ Stuff we would like to complete.
 * Website.
 * TrakSim replacement.
 
-# Hardware
+## Hardware
 This project is mostly focused on the software side of the problem but we are running it on real hardware
 
 * RC Car
 * Onboard SBC - LattePanda (insert specific version here).
 * Arduino integrated with LP to control servos.
 * Frontmounted camera - FLIR Firefly Camera.
+
+## Dependencies
+
+* [Aparapi](http://aparapi.com/) - Open-source framework for executing native Java code on the GPU through OpenCL.
+* [Fly2Cam](http://www.ittybittycomputers.com/APW2/TrackSim/Fly2cam.htm) - Tom explains it better [here](http://www.ittybittycomputers.com/APW2/TrackSim/Fly2cam.htm).
+* [JSSC](https://code.google.com/archive/p/java-simple-serial-connector/) - Java Simple Serial Connector.
+* [Firmata](https://www.arduino.cc/en/Reference/Firmata) - The Arduino Firmata library implements the Firmata protocol for communicating with software on the host computer.
+
 
 # TrakSim
 Standalone driving simulation to test code without the required hardware
@@ -84,14 +92,6 @@ Traksim was written by Tom Pittman and is extensively documented on his website,
 [TrakSim docs & explanations](http://www.ittybittycomputers.com/APW2/TrackSim/)
 
 or contact Tom at TPittman@IttyBittyComputers.com
-
-# Dependencies
-
-* [Aparapi](http://aparapi.com/) - Open-source framework for executing native Java code on the GPU through OpenCL.
-* [Fly2Cam](http://www.ittybittycomputers.com/APW2/TrackSim/Fly2cam.htm) - Tom explains it better [here](http://www.ittybittycomputers.com/APW2/TrackSim/Fly2cam.htm).
-* [JSSC](https://code.google.com/archive/p/java-simple-serial-connector/) - Java Simple Serial Connector.
-* [Firmata](https://www.arduino.cc/en/Reference/Firmata) - The Arduino Firmata library implements the Firmata protocol for communicating with software on the host computer.
-
 
 # About
 
