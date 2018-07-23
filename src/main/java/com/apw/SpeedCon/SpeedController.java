@@ -358,10 +358,13 @@ public class SpeedController {
 		}
 		//If we made it here, we know that we have a light
 		//Therefore, we need to check if that light is inside of a black blob, aka the lamp
+		System.out.println("Found a light: " + lightColor);
+		outputLight = true;
 		for(MovingBlob b : bloblist){
 			if(blob.color.getColor() == Color.BLACK){
+				
 				if(detectBlobInBlob(blob, b)){
-					outputLight = true;
+					
 				}
 			}
 		}
