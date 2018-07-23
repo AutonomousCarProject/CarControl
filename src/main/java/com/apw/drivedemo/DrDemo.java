@@ -40,6 +40,7 @@ import javax.swing.Timer;
 
 import com.apw.ImageManagement.ImageManager;
 import com.apw.SpeedCon.Constants;
+import com.apw.SpeedCon.Settings;
 import com.apw.SpeedCon.SpeedController;
 import com.apw.Steering.Point;
 // import fly2cam.CameraBase;
@@ -57,9 +58,7 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 	private SpeedController speedControl;
 	private ImageManager imageManager;
 	private DriveTest dtest = new DriveTest();
-	private boolean overlayOn = Constants.DEFAULT_OVERLAY;
-	private boolean blobsOn = Constants.DEFAULT_BLOBS;
-	private boolean writeBlobsToConsole = Constants.DEFAULT_WRITE_BLOBS_TO_CONSOLE;
+	
 
 	private static final long serialVersionUID = 1L; // unneed but Java insists {
 
@@ -794,10 +793,10 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 					
 					// Begin Speed Code
 
-					speedControl.onUpdate(this.GasPedal, testSteering.getDegreeOffset(), this.manualSpeed, graf, dtest, blobsOn, overlayOn);
+					speedControl.onUpdate(this.GasPedal, testSteering.getDegreeOffset(), this.manualSpeed, graf, dtest);
 					AxLR8(true, speedControl.getDesiredSpeed());
 
-					if(overlayOn){
+					if(Settings.overlayOn){
 						graf.setColor(Color.ORANGE);
 						 graf.drawRect(Constants.STOPLIGHT_MIN_X, Constants.STOPLIGHT_MIN_Y,
 						 Constants.STOPLIGHT_MAX_X-Constants.STOPLIGHT_MIN_X,
@@ -1025,13 +1024,13 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 			speedControl.readyToGo();
 		}
 		if (e.getKeyCode() == KeyEvent.VK_B) {
-			blobsOn = !blobsOn;
+			Settings.blobsOn ^= true;
 		}
 		if (e.getKeyCode() == KeyEvent.VK_V){
-			overlayOn = !overlayOn;
+			Settings.overlayOn ^= true;
 		}
 		if (e.getKeyCode() == KeyEvent.VK_C){
-			writeBlobsToConsole = !writeBlobsToConsole;
+			Settings.writeBlobsToConsole ^= true;
 		}
 	}
 

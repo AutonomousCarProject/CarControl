@@ -23,21 +23,17 @@ public class SpeedController {
 	private int cyclesToGo;
 	private int cyclesToStopAtLight = Constants.DRIFT_TO_STOPLIGHT_FRAMES;
 	private int cyclesUntilCanDetectStopsign = Constants.WAIT_AFTER_STOPSIGN;
-	
-	
-	private SpeedFinder speedFinder;
 	private PedestrianDetector pedDetect;
 	
 	TrakSim trackSim = new TrakSim();
 	
 	public SpeedController(){
-		this.speedFinder = new SpeedFinder();
 		this.pedDetect = new PedestrianDetector();
 	}
 	
 	//A method to be called every frame. Calculates desired speed and actual speed
 	//Also takes stopping into account
-	public void onUpdate(int gasAmount, int steerDegs, int manualSpeed, Graphics graf, DriveTest dtest, boolean blobsOn, boolean overlayOn){
+	public void onUpdate(int gasAmount, int steerDegs, int manualSpeed, Graphics graf, DriveTest dtest){
 		if (cyclesUntilCanDetectStopsign > 0){
 			cyclesUntilCanDetectStopsign--;
 		}
@@ -52,10 +48,10 @@ public class SpeedController {
 		//This part runs on-screen blobs thru a set of tests to figure out if they are
 		//relevant, and then what to do with them
 		ImageManager imageManager = dtest.getImgManager();
-		
+
 		List<MovingBlob> blobs = this.pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), 912);
 		for(MovingBlob i : blobs){
-			if(blobsOn){
+			if(Settings.blobsOn){
 				if (i.color.getColor() == Color.BLACK) {
 					graf.setColor(java.awt.Color.BLACK);	
 				}
@@ -267,13 +263,13 @@ public class SpeedController {
     double calcStopDist(double targetStopDist, double speed)
     {
         return Math.pow(speed, 2) / (Constants.FRICT * Constants.GRAV * 2);
-    }
+      }
 
-    //The amount of time that is needed to stop at the given speed.
-    double getStopTime(double dist, double speed)
-    {
-        return dist / speed;
-    }
+      //The amount of time that is needed to stop at the given speed.
+      double getStopTime(double dist, double speed)
+      {
+          return dist / speed;
+      }
 
     //The rate at which the speed must go down by, linear
     double calcStopRate(double speed, double time)
