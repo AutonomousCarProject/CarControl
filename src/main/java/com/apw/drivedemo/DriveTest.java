@@ -1,6 +1,7 @@
 package com.apw.drivedemo;
 
 import com.apw.ImageManagement.ImageManager;
+import com.apw.ImageManagement.ImageManipulator;
 import com.apw.Steering.Point;
 import com.apw.Steering.SteerControlCheck;
 import com.apw.Steering.Steering;
@@ -35,7 +36,7 @@ public class DriveTest extends JFrame implements MouseListener {
     private TrakSim sim;
 	private FlyCamera camSys;
 	private ImageManager imageManager;
-	private int nRows, nCols;
+	private int nRows, nCols, width, height;
 	private Arduino driveSys;
 	private BufferedImage displayImage;
 	private BufferedImage bufferImage;
@@ -45,6 +46,7 @@ public class DriveTest extends JFrame implements MouseListener {
 	private int viewType;
 	private int[] imagePixels;
 	private int[] displayPixels;
+	private int[] emptyPixels;
 
 	//DrDemo Random Variables
 	private int Calibrating = 0;
@@ -103,6 +105,9 @@ public class DriveTest extends JFrame implements MouseListener {
        	this.camSys=camSys;
     	this.viewType = viewType;
 
+		//Check for window setting
+		width=-1;
+
     	finishInit();
 	} //~DriveTest
 
@@ -130,6 +135,41 @@ public class DriveTest extends JFrame implements MouseListener {
 		//Set window Type
 		this.viewType = viewType;
 
+		//Check for window setting
+		width=-1;
+
+		finishInit();
+	} //~DriveTest
+
+
+	/** Size Choosing Constructor
+	 *
+	 * @param viewType 1 = RGB, 2 = Monochrome, 3 = 7 Color Simplified, 4 = Only Black and White
+	 */
+	public DriveTest(int viewType, int width, int height){
+		super();
+
+		//Initialize Camera
+		if(DriverCons.D_LiveCam){
+			camSys = new FlyCamera();
+		}else {
+			camSys = new SimCamera();
+			sim = new TrakSim();
+		}
+		camSys.Connect(FRAME_RATE_NUMBER);
+
+		//Initialize Arduino
+		driveSys = new Arduino();
+		driveSys.pinMode(SteerPin, Arduino.SERVO);
+		driveSys.pinMode(GasPin, Arduino.SERVO);
+
+		//Set window Type
+		this.viewType = viewType;
+
+		//Set window size variables
+		this.width = width;
+		this.height = height;
+
 		finishInit();
 	} //~DriveTest
 
@@ -142,13 +182,22 @@ public class DriveTest extends JFrame implements MouseListener {
 		nRows = imageManager.getNrows();
 		nCols = imageManager.getNcols();
 
+		//Initialize window width and height to default if not set
+		if(width==-1){
+			width=nCols;
+			height=nRows;
+		}
+
 		//Initialize both images for use in window
-		displayImage = new BufferedImage(nCols, nRows, BufferedImage.TYPE_INT_RGB);
-		bufferImage = new BufferedImage(nCols, nRows, BufferedImage.TYPE_INT_RGB);
+		displayImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+		bufferImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
 		//Set window properties
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setSize(nCols, nRows);
+		this.setSize(width, height);
+
+		//extra array for window resizing
+		emptyPixels = new int[width*height];
 
 		//Create objects for use in window
 		displayicon = new ImageIcon(displayImage);
@@ -187,6 +236,15 @@ public class DriveTest extends JFrame implements MouseListener {
 				window.repaint();
 			}
 		}, new Date(), 1000 / FPS);
+		displayTaskTimer.scheduleAtFixedRate(new TimerRepaint(new DriveTest(2,640,480)	//IMPORTANT		set the viewType here
+		) {
+			@Override
+			public void run() {
+				window.sim.SimStep(1);
+				//window.TestServos(); // (remove this from successive calls)
+				window.repaint();
+			}
+		}, new Date(), 1000 / FPS);
 	} //~main
 
 	@Deprecated
@@ -203,7 +261,7 @@ public class DriveTest extends JFrame implements MouseListener {
 			@Override
 			public void run() {
 				window.sim.SimStep(1);
-				window.TestServos(); // (replace this with your own code)
+				//window.TestServos(); // (Uses DrDemo Steering Code instead)
 				window.repaint();
 			}
 		}, new Date(), 1000 / FPS);
@@ -238,8 +296,12 @@ public class DriveTest extends JFrame implements MouseListener {
 		}
 
 		//Copies TrakSim image onto the buffer
+		if(width!=nCols||height!=nRows)
+		ImageManipulator.limitTo(emptyPixels,imagePixels,nCols,nRows,width,height,false);
+		else
+			emptyPixels = imagePixels;
 		displayPixels = ((DataBufferInt) bufferImage.getRaster().getDataBuffer()).getData();
-		System.arraycopy(imagePixels, 0, displayPixels, 0, imagePixels.length);
+		System.arraycopy(emptyPixels, 0, displayPixels, 0, emptyPixels.length);
 
 		//Replaces the buffer
 		tempImage=displayImage;

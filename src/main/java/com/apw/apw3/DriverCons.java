@@ -28,6 +28,7 @@ package com.apw.apw3;                                       // 2018 June 12
 public class DriverCons { // TrakSim constant parameters
 
     public static final boolean // options & diagnostic switches..
+            D_PrimaryViewOn = true,    // T: make the main window open up
             D_LiveCam = false,       // F: omit connecting to FlyCamera
             D_StartLive = false,    // T: start in live camera if possible
             D_FixedSpeed = true,    // ignore speed control, assume fMinSpeed

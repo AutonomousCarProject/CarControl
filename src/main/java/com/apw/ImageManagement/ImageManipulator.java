@@ -146,4 +146,23 @@ public class ImageManipulator {
         }
     }
 
+
+	public static void limitTo(int[] output, int[] input, int ncols, int nrows, int width, int height, boolean bayer) {
+		//if(bayer){
+		//	width*=2;
+		//	height*=2;
+		//}
+		for (int r = 0; r < height; r++) {
+			for (int c = 0; c < width; c++) {
+				//System.out.println(r*width+c);
+				output[width*r+c]=input[r*ncols+c];
+			}
+
+		}
+
+	}
+
+
+
 }
+
