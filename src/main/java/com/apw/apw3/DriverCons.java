@@ -48,7 +48,7 @@ public class DriverCons { // TrakSim constant parameters
     public static final int
             D_SecondViewType = 3,   //0 = no view, 1 = RGB, 2 = monochrome, 3 = simplified
             D_Vramp = 68, D_Hramp = 172, // Initial pos'n for car, meters from NW
-            D_RampA = 300,     // Initial orient'n for car, c-wise degrees from north
+            D_RampA = 140,     // Initial orient'n for car, c-wise degrees from north
             D_Zoom35 = 35,     // 35mm-equivalent focal length for "camera"
             D_BayTile = 1,     // Bayer8 tiling code (RG/GB) as defined by Pt.Grey
             D_FrameTime = 50, // =5/fps, nominal frame rate for camera (must >= 20ms)

@@ -109,8 +109,12 @@ public class SpeedController {
 	}
 	
 	private boolean detectBlobOverlappingBlob(MovingBlob outsideBlob, MovingBlob insideBlob){
-		if((insideBlob.x < outsideBlob.x+outsideBlob.width && insideBlob.width + insideBlob.x > outsideBlob.x)  ||  (insideBlob.y < outsideBlob.y+outsideBlob.height && insideBlob.height + insideBlob.y > outsideBlob.y))
-		return true;
+		if((insideBlob.x < outsideBlob.x+outsideBlob.width && insideBlob.width + insideBlob.x > outsideBlob.x)  ||  (insideBlob.y < outsideBlob.y+outsideBlob.height && insideBlob.height + insideBlob.y > outsideBlob.y)) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 	
 	//This figures out the speed that we want to be traveling at
