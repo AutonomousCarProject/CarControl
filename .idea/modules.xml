@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/CarControl.iml" filepath="$PROJECT_DIR$/CarControl.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/CarControl.iml" filepath="$PROJECT_DIR$/.idea/modules/CarControl.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/CarControl_main.iml" filepath="$PROJECT_DIR$/.idea/modules/CarControl_main.iml" group="CarControl" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/CarControl_test.iml" filepath="$PROJECT_DIR$/.idea/modules/CarControl_test.iml" group="CarControl" />
     </modules>
   </component>
 </project>
