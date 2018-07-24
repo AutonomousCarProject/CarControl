@@ -40,7 +40,7 @@ public class SpeedController {
 	
 	//A method to be called every frame. Calculates desired speed and actual speed
 	//Also takes stopping into account
-<<<<<<< HEAD
+
 	public void onUpdate(int gasAmount, double steerDegs, int manualSpeed, Graphics graf, ImageManager imagemanager, boolean blobsOn, boolean overlayOn){
 		if (cyclesUntilCanDetectStopsign > 0){
 			cyclesUntilCanDetectStopsign--;

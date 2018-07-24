@@ -44,7 +44,7 @@ public class Steering {
 	private long averageLuminance = 0;
 	
 
-	public Steering(TrakSim theSim) {
+	public Steering() {
 		for (int i = 0; i<heightOfArea; i++) {
 			leftPoints[i] = new Point(0, 0);
 			rightPoints[i] = new Point(0, 0);

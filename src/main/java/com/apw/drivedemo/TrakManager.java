@@ -149,7 +149,7 @@ public class TrakManager extends TimerTask {
      *
      */
     private void initializeControl(){
-        testSteering = new Steering(sim);
+        testSteering = new Steering();
         speedControl = new SpeedController();
         AxLR8(false,10);
     } //~initializeControl

@@ -45,7 +45,7 @@ public class DriveTest extends JFrame {
     public static void main(String[] args){
         //Timer displayTaskTimer = new Timer();
         TrakManager starter = new TrakManager();
-        init(new Timer(),starter.getImageManager(), new Steering(starter.getSim()));
+        init(new Timer(),starter.getImageManager(), new Steering());
         displayTaskTimer.scheduleAtFixedRate(starter, new Date(), 1000 / FPS);
         autoDriveTest( new DriveTest(1));
         //displayTaskTimer.scheduleAtFixedRate(new TimerRepaint(createDriveTest(3)), new Date(), 1000 / FPS);
@@ -58,7 +58,7 @@ public class DriveTest extends JFrame {
     public static void init(){
         displayTaskTimer = new Timer();
         imageManager = new ImageManager(new SimCamera());
-        testSteering = new Steering(new TrakSim());
+        testSteering = new Steering();
     }
     public static DriveTest autoDriveTest(DriveTest dtest){
         try{

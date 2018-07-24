@@ -27,10 +27,7 @@ import com.apw.pedestrians.blobtrack.MovingBlob;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 
@@ -785,11 +782,11 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 
 					//Steer between lines
 					testSteering.averageMidpoints();
-					int tempDeg = testSteering.getDegreeOffset();
+					double tempDeg = testSteering.getDegreeOffset();
 					theServos.servoWrite(SteerPin, (int) ((tempDeg) + 90));
 					
 					//Set speed based on max, min, arrow keys, degree offset, and signs
-					speedControl.onUpdate(this.GasPedal, testSteering.getDegreeOffset(), this.manualSpeed, graf, dtest);
+					speedControl.onUpdate(this.GasPedal, testSteering.getDegreeOffset(), this.manualSpeed, graf, imageManager, true, true);
 					AxLR8(true, speedControl.getNextSpeed());
 
 					if(Settings.overlayOn){
