@@ -25,15 +25,17 @@ public class SpeedController {
 	private int cyclesToStopAtLight = Constants.DRIFT_TO_STOPLIGHT_FRAMES;
 	private int cyclesUntilCanDetectStopsign = Constants.WAIT_AFTER_STOPSIGN;
 	
-	
 	private SpeedFinder speedFinder;
 	private PedestrianDetector pedDetect;
+	
+	private List<MovingBlob> currentBlobs;
 	
 	TrakSim trackSim = new TrakSim();
 	
 	public SpeedController(){
 		this.speedFinder = new SpeedFinder();
 		this.pedDetect = new PedestrianDetector();
+		this.currentBlobs = new ArrayList<MovingBlob>();
 	}
 	
 	//A method to be called every frame. Calculates desired speed and actual speed
@@ -56,34 +58,6 @@ public class SpeedController {
 		
 		List<MovingBlob> blobs = this.pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), 912);
 		for(MovingBlob i : blobs){
-			if(blobsOn){
-				if (i.color.getColor() == Color.BLACK) {
-					graf.setColor(java.awt.Color.BLACK);	
-				}
-				else if (i.color.getColor() == Color.GREY) {
-					graf.setColor(java.awt.Color.GRAY);
-				}
-				else if (i.color.getColor() == Color.WHITE) {
-					graf.setColor(java.awt.Color.WHITE);
-				}
-				else if (i.color.getColor() == Color.RED) {
-					graf.setColor(java.awt.Color.RED);
-				}
-				else if (i.color.getColor() == Color.GREEN) {
-					graf.setColor(java.awt.Color.GREEN);
-				}
-				else if (i.color.getColor() == Color.BLUE) {
-					graf.setColor(java.awt.Color.BLUE);
-				}
-				for(MovingBlob b:blobs){
-					int velocity = (int)(100*Math.sqrt(b.velocityX*b.velocityX + b.velocityY*b.velocityY));
-					int color = (velocity << 16) + (velocity << 8) + velocity;
-					this.trackSim.DrawLine(color, b.y, b.x, b.y+b.height, b.x);
-					this.trackSim.DrawLine(color, b.y, b.x, b.y, b.x+b.width);
-					this.trackSim.DrawLine(color, b.y+b.height, b.x, b.y+b.height, b.x+b.width);
-					this.trackSim.DrawLine(color, b.y, b.x+b.width, b.y+b.height, b.x+b.width);
-				}
-			}
 			if(detectRedLight(i)){
 				setStoppingAtLight();
 			}
@@ -96,12 +70,10 @@ public class SpeedController {
 				cyclesUntilCanDetectStopsign = 100;
 				setStoppingAtSign();
 			}
-			else {
-
-			}
+			else{}
 		}
 		
-		
+		this.currentBlobs = blobs;	
 	}
 	
 	//This figures out the speed that we want to be traveling at
@@ -313,5 +285,9 @@ public class SpeedController {
 		else {
 			return false;
 		}
+	}
+	
+	public List<MovingBlob> getBlobs(){
+		return this.currentBlobs;
 	}
 }
