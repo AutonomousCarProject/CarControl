@@ -30,18 +30,18 @@ public class PedestrianDetector {
     this.blobFilter = blobFilter;
   }
 
-    public List<MovingBlob> getAllBlobs(byte[] colors, int width) {
-        int height = colors.length / width;
-        IPixel[][] image = new IPixel[height][width];
-        for (int i = 0; i < colors.length; i++) {
-            int row = i / width;
-            int col = i % width;
-            image[row][col] = getPixel(colors[i]);
-        }
-
-        List<Blob> knownBlobs = blobDetection.getBlobs(() -> image);
-        return movingBlobDetection.getMovingBlobs(knownBlobs);
+  public List<MovingBlob> getAllBlobs(byte[] colors, int width) {
+    int height = colors.length / width;
+    IPixel[][] image = new IPixel[height][width];
+    for (int i = 0; i < colors.length; i++) {
+      int row = i / width;
+      int col = i % width;
+      image[row][col] = getPixel(colors[i]);
     }
+
+    List<Blob> knownBlobs = blobDetection.getBlobs(() -> image);
+    return movingBlobDetection.getMovingBlobs(knownBlobs);
+  }
 
   public List<MovingBlob> detect(byte[] colors, int width) {
     final List<MovingBlob> fmovingBlobs = blobFilter.filterMovingBlobs(getAllBlobs(colors, width));

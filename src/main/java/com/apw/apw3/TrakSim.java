@@ -17,8 +17,8 @@
 package com.apw.apw3;                                       // 2018 June 13
 
 
-import com.apw.pwm.fakefirm.Arduino;
-import com.apw.pwm.fakefirm.SimHookBase;
+import com.apw.fakefirm.Arduino;
+import com.apw.fakefirm.SimHookBase;
 import java.io.File;
 import java.io.FileInputStream;
 
@@ -3449,55 +3449,108 @@ public class TrakSim {
     }
   } //~DrawSteerWheel
 
-    /**
-     * Draws a rectangular grid on the screen according to the specification
-     * array given to NewGridTbl.
-     */
-    public void DrawGrid() { // to show where to click..
-        if(true)
-            return;
-        //*
-        // private final int[] Grid_Locns = {6,12,16,18,26,28,  0,16,80,126,228,240,
-        //   0,20,300,320,  0,320,  0,45,91,137,182,228,274,320, 0,320,  0,20,300,320};
-        int here, thar, whar, nx, prio, fini, lft, rit,
-                tops, info = 0, next = 0, botm = ImHi - 1;
-        int[] grids = GridLocTable;
-        if (grids == null) return;
-        if (grids.length < 4) return;
-        thar = grids[1]; // (end of) 1st group, vert'l divisions
-        whar = grids[0]; // (next) top of vert'l group
-        fini = whar - 1; // end of index
-        if (fini <= 0) return;
-        if (whar >= thar) return;
-        if (whar > 0) if (whar < grids.length) next = grids[whar];
-        rit = thar;
-        for (here = 2; here <= fini; here++) {
-            if (grids == null) break;
-            whar++;
-            tops = next;
-            next = botm;
-            if (whar < thar) if (whar > 0) if (whar < grids.length)
-                next = grids[whar];
-            if (tops >= botm) break;
-            if (next > botm) next = botm;
-            if (tops >= next) continue;
-            if (tops > 0) for (nx = 0; nx <= ImWi - 1; nx++) if ((nx & 8) == 0) PokePixel(0xFF0000, tops, nx);
-            if (grids == null) break;
-            lft = rit;
-            if (here > 0) if (here < grids.length) rit = grids[here];
-            prio = 0;
-            while (lft < rit) {
-                if (grids == null) break;
-                if (lft > 0) if (lft < grids.length) info = grids[lft];
-                if (prio > 0) if (prio < info) for (nx = tops; nx <= next - 1; nx++)
-                    if (((nx - tops) & 8) == 0) PokePixel(0xFF0000, nx, prio);
-                prio = info;
-                if (prio > ImWi - 2) break;
-                lft++;
-            }
+  /**
+   * Draws a rectangular grid on the screen according to the specification
+   * array given to NewGridTbl.
+   */
+  public void DrawGrid() { // to show where to click..
+    if (true) {
+      return;
+    }
+    //*
+    // private final int[] Grid_Locns = {6,12,16,18,26,28,  0,16,80,126,228,240,
+    //   0,20,300,320,  0,320,  0,45,91,137,182,228,274,320, 0,320,  0,20,300,320};
+    int here, thar, whar, nx, prio, fini, lft, rit,
+        tops, info = 0, next = 0, botm = ImHi - 1;
+    int[] grids = GridLocTable;
+    if (grids == null) {
+      return;
+    }
+    if (grids.length < 4) {
+      return;
+    }
+    thar = grids[1]; // (end of) 1st group, vert'l divisions
+    whar = grids[0]; // (next) top of vert'l group
+    fini = whar - 1; // end of index
+    if (fini <= 0) {
+      return;
+    }
+    if (whar >= thar) {
+      return;
+    }
+    if (whar > 0) {
+      if (whar < grids.length) {
+        next = grids[whar];
+      }
+    }
+    rit = thar;
+    for (here = 2; here <= fini; here++) {
+      if (grids == null) {
+        break;
+      }
+      whar++;
+      tops = next;
+      next = botm;
+      if (whar < thar) {
+        if (whar > 0) {
+          if (whar < grids.length) {
+            next = grids[whar];
+          }
         }
-        //*/
-    } //~DrawGrid
+      }
+      if (tops >= botm) {
+        break;
+      }
+      if (next > botm) {
+        next = botm;
+      }
+      if (tops >= next) {
+        continue;
+      }
+      if (tops > 0) {
+        for (nx = 0; nx <= ImWi - 1; nx++) {
+          if ((nx & 8) == 0) {
+            PokePixel(0xFF0000, tops, nx);
+          }
+        }
+      }
+      if (grids == null) {
+        break;
+      }
+      lft = rit;
+      if (here > 0) {
+        if (here < grids.length) {
+          rit = grids[here];
+        }
+      }
+      prio = 0;
+      while (lft < rit) {
+        if (grids == null) {
+          break;
+        }
+        if (lft > 0) {
+          if (lft < grids.length) {
+            info = grids[lft];
+          }
+        }
+        if (prio > 0) {
+          if (prio < info) {
+            for (nx = tops; nx <= next - 1; nx++) {
+              if (((nx - tops) & 8) == 0) {
+                PokePixel(0xFF0000, nx, prio);
+              }
+            }
+          }
+        }
+        prio = info;
+        if (prio > ImWi - 2) {
+          break;
+        }
+        lft++;
+      }
+    }
+    //*/
+  } //~DrawGrid
 
   /**
    * Converts a click location on the window to a row&column number
@@ -4059,326 +4112,521 @@ public class TrakSim {
           TmpI = (whar << 16) + whar;
           break;
         } //~for                // GoodLog = true, logy = Fax_Log = T..
-        if (GoodLog) if (logy);/* System.out.println(HandyOps.Dec2Log("(Anim8) ", anim,
+        if (GoodLog) {
+          if (logy) {
+            /* System.out.println(HandyOps.Dec2Log("(Anim8) ", anim,
                 HandyOps.Int2Log(HandyOps.IffyStr(uppy, " =^= ", " =#= "), locn,
                         HandyOps.Dec2Log(" ", whar, HandyOps.Dec2Log(" = ", why,  // why =
                                 HandyOps.Dec2Log(" #", FrameNo, HandyOps.IffyStr(anim == 0, "",
                                         HandyOps.Int2Log(" k=", kx, HandyOps.Int2Log(" z=", zx,
-                                                HandyOps.Int2Log(" n=", nx, HandyOps.Int2Log("/", TimeBaseSeq,
-                                                        HandyOps.Fixt8th(" t=", RealTimeNow, HandyOps.Dec2Log("/", FakeRealTime,
+                                                HandyOps.Int2Log(" n=", nx, HandyOps.Int2Log("/",
+                                                 TimeBaseSeq,
+                                                        HandyOps.Fixt8th(" t=", RealTimeNow,
+                                                        HandyOps.Dec2Log("/", FakeRealTime,
                                                                 HandyOps.TF2Log(" ", ClockTimed,
-                                                                        HandyOps.Int2Log(" -> ", TmpI, HandyOps.IffyStr(TmpI == 0, aLine,
-                                                                                HandyOps.Int2Log("\n    ", seen, HandyOps.TF2Log(" ", skipper,
-                                                                                        HandyOps.Int2Log(" ", here, HandyOps.Dec2Log(" o", OpMode,
+                                                                        HandyOps.Int2Log(" -> ",
+                                                                        TmpI, HandyOps.IffyStr
+                                                                        (TmpI == 0, aLine,
+                                                                                HandyOps.Int2Log
+                                                                                ("\n    ", seen,
+                                                                                HandyOps.TF2Log("
+                                                                                 ", skipper,
+                                                                                        HandyOps
+                                                                                        .Int2Log
+                                                                                        (" ",
+                                                                                        here,
+                                                                                        HandyOps
+                                                                                        .Dec2Log
+                                                                                        (" o",
+                                                                                        OpMode,
                                                                                                 HandyOps.TF2Log("/", StepOne, HandyOps.Dec2Log(" ", xTrLiteTime,
                                                                                                         " ---> " + HandyOps.ArrayDumpLine(ActivAnima, 0, 36)
                                                                                                                 + aLine))))))))))))))))))))));*/
+          }
+        }
         return locn;
-    } //~Animatron
+      } //~Animatron
 
-    private void ShoArtifax() { // sort by distance, then display far-to-near..
+      private void ShoArtifax () { // sort by distance, then display far-to-near..
         double fudge = 6.0; // (patch as needed)
         final int RmapMsk = 1023; // final boolean Fax_Log = true;
         final double fImMid = (double) ImMid, // ImMid = ImWi/2 // zx50 = 28
-                ZoomRatio = (50 * 64.0) / (Zoom35 * fImMid);
+            ZoomRatio = (50 * 64.0) / (Zoom35 * fImMid);
         boolean doit = (OpMode == 2) || StepOne, logz, logy = Fax_Log; // T: detailed log
         int Vbase = (int) Math.round(Vposn * 4.0), Hbase = (int) Math.round(Hposn * 4.0),
-                pint = (int) Math.round(Facing), whar = ArtBase, here, Pmap, oops,
-                tall, wide, nx, yx, zx, dx = 0, seen = 0, pixn = 0, ImgWi = 0,
-                Vx = 0, Hx = 0, rx = 0, cx = 0, lxx = 0, far = 0, anim = 0, ppm = 0,
-                tops = 0, lino = 0, whom = 0, locn = 0, info = 0, why = 0;
+            pint = (int) Math.round(Facing), whar = ArtBase, here, Pmap, oops,
+            tall, wide, nx, yx, zx, dx = 0, seen = 0, pixn = 0, ImgWi = 0,
+            Vx = 0, Hx = 0, rx = 0, cx = 0, lxx = 0, far = 0, anim = 0, ppm = 0,
+            tops = 0, lino = 0, whom = 0, locn = 0, info = 0, why = 0;
         String aLine = "";
         double step = 0.0, Vat = 0.0, Hat = 0.0, aim = 0.0, RoWiM = 0.0, fox = 0.0;
         int[] theImgs = TrakImages;
         int[] theInx = MapIndex;
         int[] myFax = theFax;
         while (true) {
-            why++; // why = 1
-            if (NumFax <= 0) break; // calc'd by InitIndx
-            why++; // why = 2
-            if (theInx == null) break;
-            PreViewAim = 0;
-            PreViewLoc = 0;
-            far = theInx.length;
-            ImgWi = MyMath.SgnExt(theInx[0]);
-            if (theInx.length > 4) dx = theInx[2];
-            why++; // why = 3
-            if (ImgWi < 64) break;
-            if ((ImgWi & 15) != 0) break;
-            why++; // why = 4
-            if (myFax == null) break;
-            why++; // why = 5
-            if (theImgs == null) break;
-            why++; // why = 6
-            if (VuEdge == 0.0) break;
-            why++; // why = 7
-            if (TrakNoPix) break;
-            why++; // why = 8
-            fox = ZoomRatio * fudge;
-            lxx = theImgs.length;
-            if (RealTimeBase != 0) if (doit) { // RTN in seconds/8..
-                if (StepOne) RealTimeNow = (FakeRealTime / 125 - FakeTimeBase);
-                else RealTimeNow = HandyOps.TimeSecs(true) / 125 - RealTimeBase;
-            } //~if
-            while (pint > 360) pint = pint - 360; // normalize range for later use
-            while (pint < 0) pint = pint + 360;
-            if (dx == 0) yx = 11;
-            else yx = dx + 2;
-            if (false)
-                System.out.println("An8 =-=" + HandyOps.ArrayDumpLine(theInx, yx, 5));
-            for (nx = NumFax - 1; nx >= 0; nx += -1) { // calc in-view, distance
-                why++; // why = 9
-                here = whar; // whar = nx*4+ArtBase;
-                whar = whar + 4;
-                if (here < 0) break;
-                why++; // why = 10
-                if (here > theInx.length - 8) break; // can't
-                why++; // why = 11
-                locn = theInx[here]; // locn in 25cm units; anim = locn>>28
-                info = theInx[here + 1]; // range of view, view angle in degrees
-                yx = theInx[here + 4]; // look-ahead for alternate view
-                seen = locn;
-                anim = (locn >> 28) & 15; // is this in view angle?..
-                if (anim < 4) if (info != 0) if (ViewAngle(locn, info) < 0) {
-                    if (((yx - locn) & 0x0FFFFFFF) == 0) continue;
-                    locn = -1; // last one not visi, hide it
-                    anim = 0;
-                } //~if
-                if (anim != 0) {
-                    locn = Animatron(here, locn, logy); // (see StopInfo)
-                    if (TmpI > 0) {
-                        whar = TmpI & 0xFFFF; // next up
-                        here = TmpI >> 16;
-                    }
-                } //~if // here -> actual data
-                why = 8;
-                if (locn == 0) break; // (normal exit); <0: obj del'd by Animatro
-                RoWiM = 0.0;
-                step = 0.0;
-                aim = 0.0;
-                cx = 0;
-                dx = 0;
-                Vx = 0;
-                Hx = 0;
-                if (locn > 0) if (locn != whom) { // duplicate locn = alt view
-                    whom = locn;
-                    info = locn - (Vbase << 16) - Hbase; // (for log) V/Hbase in 25cm units
-                    Vx = (locn >> 16) - Vbase; // position of artifact, relative to car
-                    Hx = (locn & 0xFFF) - Hbase; // ..measured in half-meters (50cm)
-                    aim = MyMath.aTan0(MyMath.Fix2flt(Hx, 0), -MyMath.Fix2flt(Vx, 0));
-                    aim = aim - Facing; // aim is angle of deviation from center-view
-                    while (aim > 180.0) aim = aim - 360.0;
-                    while (aim + 180.0 < 0.0) aim = aim + 360.0;
-                    Vx = Vx * Vx; // (includes 4 bits of fractional square meters)
-                    Hx = Hx * Hx;
-                    if (aim > VuEdge) dx = -8; // not in view
-                    else if (aim + VuEdge >= 0.0) { // dx = radial distance, cx = pix H-posn..
-                        step = Math.sqrt(MyMath.Fix2flt(Vx + Hx, 4)) * 4.0;
-                        if (false) if ((aim > 5.0) || (aim + 5.0 < 0.0)) {
-                            MyMath.Angle2cart(aim); // off-center, adjust distance..
-                            step = step / MyMath.Cose;
-                        } //~if
-                        dx = (int) Math.round(step);
-                        cx = MyMath.iMax((int) Math.round(aim * fImMid / VuEdge + fImMid), 0);
-                    } //~if
-                    else dx = -8;
-                    if (lino > myFax.length - 2) break; // (can't)
-                    myFax[lino] = here;
-                    myFax[lino + 1] = (dx << 16) + cx; // dx in 25cm units, cx in pixels
-                    lino = lino + 2;
-                } //~if
-                if (Mini_Log) if (logy) System.out.println(HandyOps.Dec2Log("  (;;) ", nx,
-                        HandyOps.Dec2Log(" +", lino, HandyOps.Dec2Log(" = ", here,
-                                HandyOps.Dec2Log(" ", dx, HandyOps.Dec2Log("/", cx,
-                                        HandyOps.Int2Log(" => ", locn, HandyOps.Int2Log(" ", info,
-                                                HandyOps.Dec2Log(" ", Vx, HandyOps.Dec2Log("/", Hx,
-                                                        HandyOps.Flt2Log(" ", aim, HandyOps.Flt2Log(" = ", step,
-                                                                HandyOps.Int2Log(" ", seen, "")))))))))))));
-            } //~for // (calc in-view)
-            if (why > 8) break;
-            if (Mini_Log) if (logy) aLine = "  (sort) "
-                    + HandyOps.ArrayDumpLine(myFax, lino, 9) + "\n   .... ";
-            why = 12;
-            whar = lino - 2;
-            if (whar > 0) for (nx = whar; nx >= 2; nx += -2)
-                for (lino = 2; lino <= nx; lino += 2) { // sort..
-                    if (lino < 2) break;
-                    if (lino > myFax.length - 2) break; // (can't)
-                    Vx = myFax[lino - 1];
-                    Hx = myFax[lino + 1];
-                    if (Vx <= Hx) continue; // bubble sort is good enough for few arts..
-                    myFax[lino - 1] = Hx;
-                    myFax[lino + 1] = Vx;
-                    info = myFax[lino];
-                    oops = myFax[lino - 2];
-                    if (Mini_Log) if (logy) aLine = aLine + HandyOps.Dec2Log(" ", lino,
-                            HandyOps.Int2Log(":", info, HandyOps.Int2Log("`", Hx,
-                                    HandyOps.Int2Log("/", oops, HandyOps.Int2Log("`", Vx, "")))));
-                    myFax[lino - 2] = info;
-                    myFax[lino] = oops;
-                } //~for
-            if (Mini_Log) if (logy) System.out.println(aLine + "\n     => "
-                    + HandyOps.ArrayDumpLine(myFax, whar + 2, 8));
-            why++; // why = 13
-            for (nx = whar; nx >= 0; nx += -2) { // draw them (no cont, 4brk @ front)..
-                oops = 0;
-                why++; // why = 14
-                if (nx > myFax.length - 2) break; // (can't)
-                whar = myFax[nx];
-                dx = myFax[nx + 1];
-                why++; // why = 15
-                if (dx < 0) {
-                    oops = 2048;
-                    dx = 0;
-                } //~if
-                why = 13;
-                cx = dx & 0xFFFF;
-                dx = dx >> 16; // in 25cm units, max 1.4K
-                rx = MyMath.iMin(dx, 255); // RR[] indexed by park 25cm units..
-                rx = RangeRow[rx & 255]; // convert distance to screen row (MkRngTb)
-                Pmap = 0;
-                tall = 0;
-                wide = 0;
-                yx = 0; // >0 is a good ref
-                if (whar > 0) if (whar < theInx.length - 8) {
-                    yx++; // >0 is a good ref
-                    locn = theInx[whar];
-                    anim = locn >> 28; // logged only
-                    locn = locn & 0x0FFFFFFF;
-                    Pmap = theInx[whar + 2]; // image offset & ppm (pix/meter)
-                    tall = theInx[whar + 3];
-                } //~if // [anim &] image H & W
-                if (Mini_Log) if (logy) aLine = "  (::)" + HandyOps.Dec2Log(" ", nx,
-                        HandyOps.Dec2Log(" = ", dx, HandyOps.Dec2Log(" => ", rx,
-                                HandyOps.Dec2Log("/", cx, HandyOps.Dec2Log(" @ ", whar,
-                                        HandyOps.Dec2Log(" #", anim, HandyOps.Dec2Log(" o", OpMode,
-                                                HandyOps.IffyStr(oops > 0, " (<0)", ""))))))));
-                if (whar > 0) { //                                             (ShoArtifx)
-                    if (oops == 0) if (((anim - 1) & 31) > 3) // can't crash into traffic lights
-                        if (dx < 7) SimStep(5); // should also crash if grazes corner (CrashMe)
-                    if (ShowMap) { // map coord in meters, cell center..
-                        info = ZoomMapCoord(true, MyMath.Fix2flt(locn >> 16, 2),
-                                MyMath.Fix2flt(locn & 0xFFF, 2));
-                        zx = info & 0xFFF;
-                        info = info >> 16;
-                        if (info > 0) { // put amber dot there in close-up map..
-                            PokePixel(ArtiColo, info, zx + 1);
-                            PokePixel(ArtiColo, info, zx);
-                            info++;
-                            PokePixel(ArtiColo, info, zx + 1);
-                            PokePixel(ArtiColo, info, zx);
-                        }
-                    } //~if // (whar>0)
-                    zx = 0;
-
-                    if(DoCloseUp) if (RoWiM == 0.0) {
-
-                        zx = (rx - ImHaf) << 2; // ImHaf = ImHi/2
-                        if (pint < 8) zx++; // car facing N/S (use H)
-                        else if (pint < 82) zx = 0; // not square-on
-                        else if (pint < 98) {
-                        } // car facing E/W (use V)
-                        else if (pint < 172) zx = 0;
-                        else if (pint < 188) zx++;
-                        else if (pint < 262) zx = 0;
-                        else if (pint < 278) {
-                        } else if (pint < 352) zx = 0;
-                        else zx++;
-                    } //~if // (RoWiM=0) // (RM[] in grid=2m)..
-                    if (zx > 0) RoWiM = fImMid / MyMath.fAbs(RasterMap[(zx + 2) & RmapMsk]
-                            - RasterMap[zx & RmapMsk]);
-                    if (Mini_Log) if (logy)
-                        System.out.println(HandyOps.Dec2Log("   (``) ", oops,
-                                HandyOps.Flt2Log(" (", fImMid, HandyOps.Flt2Log("/", VuEdge,
-                                        HandyOps.Dec2Log(") @ ", whar, HandyOps.Int2Log(" => ", locn,
-                                                HandyOps.Int2Log(" ", tall, HandyOps.Int2Log(" -> ", Pmap,
-                                                        HandyOps.Hex2Log("/x", Pmap, 5, HandyOps.Dec2Log(" ", Hx,
-                                                                HandyOps.Dec2Log(" : ", Vx, HandyOps.IffyStr(RoWiM == 0.0, "",
-                                                                        HandyOps.Flt2Log(" p/m=", RoWiM, "")))))))))))));
-                    // whar = whar-ppm;
-                    Vx = 0;
-                    Vat = 0.0;
-                    Hat = 0.0;
-                    if (tall > 0) while (true) {
-                        ppm = (Pmap >> 24) & 255; // SS ppm = 44
-                        Pmap = Pmap & 0x00FFFFFF;
-                        wide = -MyMath.SgnExt(tall);
-                        tall = tall >> 16;
-                        // anim = tall>>12; // logged only (also test for unreasonableness)
-                        tall = tall & 255;                   // ImMid = ImWi/2..
-                        tops = Pmap - (tall - 1) * ImgWi - wide;   // dx = dist in 25cm units..
-                        // ZoomRatio = (50*64.0)/(Zoom35*fImMid) = 3200/(35*160) = 20/35
-                        // [dx=13] (3x1m dist) st = f*(13*44=572*20/35)/1024 = 5720/(280*64)..
-                        step = MyMath.Fix2flt(dx * ppm, 10) * fox;  // ..fox=ZR*2; st=20*2/64 =5/8
-                        Vat = 0.0;                 // step = fractional im.pix per scr.pix
-                        if (ppm == 0) oops = oops | 64;
-                        if (wide <= 0) oops = oops | 32;
-                        if (tall <= 0) oops = oops | 16;
-                        if (tops < 0) oops = oops + 8;
-                        if (Pmap + wide >= lxx) oops = oops + 4;
-                        if (step > 64.0) oops = oops + 2;
-                        if (step < 0.01) oops++;
-                        tall = MyMath.Trunc8(MyMath.Fix2flt(tall, 0) / step) + 1; // + V-rows
-                        zx = MyMath.Trunc8(MyMath.Fix2flt(wide, 0) / step) + 1; // + H-cols/2
-                        cx = cx - 1 - zx; // off left end of image on screen
-                        Hat = MyMath.Fix2flt(Pmap, 0) - MyMath.Fix2flt(zx, 0) * step + 0.5;
-                        if (zx < 0) {
-                            oops = oops | 128;
-                            zx = 0;
-                        } //~if
-                        for (zx = zx + zx; zx >= 0; zx += -1) { // outer loop is horizontal..
-                            cx++;                // if (oops>0) log only, then exit
-                            Vx = MyMath.Trunc8(Hat);
-                            Hat = Hat + step;
-                            Vat = 0.0;
-                            if (cx >= ImWi) oops = oops | 256; // off right end
-                            else if (cx + ImWi < 0) oops = oops | 512; // off left end
-                            else if (cx < 0) oops = oops | 0x1000; // kill inner loop, but not outer
-                            if ((oops == 0) || Mini_Log && logy) for (dx = 0; dx <= tall + 12; dx++) {
-                                yx = rx + 2 - dx;                       // do this column up..
-                                if (yx < 0) oops = oops | 0x2000; // off top of screen
-                                if (Vx < tops) oops = oops | 0x4000; // (miscalc: off top of img)
-                                info = 0;
-                                if (Vx > 0) if (Vx < theImgs.length) info = theImgs[Vx];
-                                if (Mini_Log) if (logy) {
-                                    logz = ((dx & 15) == 0);
-                                    if (yx == TripLine) logz = true;
-                                    else if (oops == 0) if (dx > 3) if (dx + 5 < tall) if (info < 0)
-                                        logz = false;
-                                    if (logz) System.out.println(HandyOps.Dec2Log("  _ _ ", dx,
-                                            HandyOps.Dec2Log("/", zx, HandyOps.Dec2Log(" ", rx,
-                                                    HandyOps.Dec2Log(" ", yx, HandyOps.Dec2Log("/", cx,
-                                                            HandyOps.Dec2Log(" @ ", Vx, HandyOps.Flt2Log(" ", Vat * 16.0,
-                                                                    HandyOps.Hex2Log(" x", oops, 4,
-                                                                            HandyOps.IffyStr(yx >= ImHi - DrawDash, " = ^",
-                                                                                    HandyOps.IffyStr(info < 0, " = _",
-                                                                                            HandyOps.Colo2Log(" = ", info, ""))))))))))));
-                                } //~if
-                                if (oops != 0) break; // otherwise commit..
-                                if (info >= 0) if (yx < ImHi - DrawDash) PokePixel(info, yx, cx);
-                                Vat = Vat + step;
-                                while (Vat >= 1.0) {
-                                    Vx = Vx - ImgWi;
-                                    Vat = Vat - 1.0;
-                                }
-                            } //~for // dx (this column up)
-                            if ((oops & 0xFFF) != 0) break;
-                            oops = 0;
-                        } //~for // zx (outer loop is horizontal)
-                        break;
-                    } //~while // (tall>0)
-                    if (Mini_Log) if (logy) aLine = aLine + HandyOps.Dec2Log(" ++ ", anim,
-                            HandyOps.Dec2Log(" ", tall, HandyOps.Dec2Log("/", wide,
-                                    HandyOps.Dec2Log(" *", ppm, HandyOps.Dec2Log(" @ ", Pmap,
-                                            HandyOps.Dec2Log(" ", ImgWi, HandyOps.Dec2Log(" ", tops,
-                                                    HandyOps.Flt2Log(" st=", step * 16.0, "/16"))))))));
-                } //~if //  (::)
-                if (Mini_Log) if (aLine != "") System.out.println(aLine);
-                if (OpMode == 3) break;
-            } //~for // nx (draw them)
-            if (why > 13) break;
-            why = 0;
+          why++; // why = 1
+          if (NumFax <= 0) {
+            break; // calc'd by InitIndx
+          }
+          why++; // why = 2
+          if (theInx == null) {
             break;
+          }
+          PreViewAim = 0;
+          PreViewLoc = 0;
+          far = theInx.length;
+          ImgWi = MyMath.SgnExt(theInx[0]);
+          if (theInx.length > 4) {
+            dx = theInx[2];
+          }
+          why++; // why = 3
+          if (ImgWi < 64) {
+            break;
+          }
+          if ((ImgWi & 15) != 0) {
+            break;
+          }
+          why++; // why = 4
+          if (myFax == null) {
+            break;
+          }
+          why++; // why = 5
+          if (theImgs == null) {
+            break;
+          }
+          why++; // why = 6
+          if (VuEdge == 0.0) {
+            break;
+          }
+          why++; // why = 7
+          if (TrakNoPix) {
+            break;
+          }
+          why++; // why = 8
+          fox = ZoomRatio * fudge;
+          lxx = theImgs.length;
+          if (RealTimeBase != 0) {
+            if (doit) { // RTN in seconds/8..
+              if (StepOne) {
+                RealTimeNow = (FakeRealTime / 125 - FakeTimeBase);
+              } else {
+                RealTimeNow = HandyOps.TimeSecs(true) / 125 - RealTimeBase;
+              }
+            } //~if
+          }
+          while (pint > 360) {
+            pint = pint - 360; // normalize range for later use
+          }
+          while (pint < 0) {
+            pint = pint + 360;
+          }
+          if (dx == 0) {
+            yx = 11;
+          } else {
+            yx = dx + 2;
+          }
+          if (false) {
+            System.out.println("An8 =-=" + HandyOps.ArrayDumpLine(theInx, yx, 5));
+          }
+          for (nx = NumFax - 1; nx >= 0; nx += -1) { // calc in-view, distance
+            why++; // why = 9
+            here = whar; // whar = nx*4+ArtBase;
+            whar = whar + 4;
+            if (here < 0) {
+              break;
+            }
+            why++; // why = 10
+            if (here > theInx.length - 8) {
+              break; // can't
+            }
+            why++; // why = 11
+            locn = theInx[here]; // locn in 25cm units; anim = locn>>28
+            info = theInx[here + 1]; // range of view, view angle in degrees
+            yx = theInx[here + 4]; // look-ahead for alternate view
+            seen = locn;
+            anim = (locn >> 28) & 15; // is this in view angle?..
+            if (anim < 4) {
+              if (info != 0) {
+                if (ViewAngle(locn, info) < 0) {
+                  if (((yx - locn) & 0x0FFFFFFF) == 0) {
+                    continue;
+                  }
+                  locn = -1; // last one not visi, hide it
+                  anim = 0;
+                } //~if
+              }
+            }
+            if (anim != 0) {
+              locn = Animatron(here, locn, logy); // (see StopInfo)
+              if (TmpI > 0) {
+                whar = TmpI & 0xFFFF; // next up
+                here = TmpI >> 16;
+              }
+            } //~if // here -> actual data
+            why = 8;
+            if (locn == 0) {
+              break; // (normal exit); <0: obj del'd by Animatro
+            }
+            RoWiM = 0.0;
+            step = 0.0;
+            aim = 0.0;
+            cx = 0;
+            dx = 0;
+            Vx = 0;
+            Hx = 0;
+            if (locn > 0) {
+              if (locn != whom) { // duplicate locn = alt view
+                whom = locn;
+                info = locn - (Vbase << 16) - Hbase; // (for log) V/Hbase in 25cm units
+                Vx = (locn >> 16) - Vbase; // position of artifact, relative to car
+                Hx = (locn & 0xFFF) - Hbase; // ..measured in half-meters (50cm)
+                aim = MyMath.aTan0(MyMath.Fix2flt(Hx, 0), -MyMath.Fix2flt(Vx, 0));
+                aim = aim - Facing; // aim is angle of deviation from center-view
+                while (aim > 180.0) {
+                  aim = aim - 360.0;
+                }
+                while (aim + 180.0 < 0.0) {
+                  aim = aim + 360.0;
+                }
+                Vx = Vx * Vx; // (includes 4 bits of fractional square meters)
+                Hx = Hx * Hx;
+                if (aim > VuEdge) {
+                  dx = -8; // not in view
+                } else if (aim + VuEdge >= 0.0) { // dx = radial distance, cx = pix H-posn..
+                  step = Math.sqrt(MyMath.Fix2flt(Vx + Hx, 4)) * 4.0;
+                  if (false) {
+                    if ((aim > 5.0) || (aim + 5.0 < 0.0)) {
+                      MyMath.Angle2cart(aim); // off-center, adjust distance..
+                      step = step / MyMath.Cose;
+                    } //~if
+                  }
+                  dx = (int) Math.round(step);
+                  cx = MyMath.iMax((int) Math.round(aim * fImMid / VuEdge + fImMid), 0);
+                } //~if
+                else {
+                  dx = -8;
+                }
+                if (lino > myFax.length - 2) {
+                  break; // (can't)
+                }
+                myFax[lino] = here;
+                myFax[lino + 1] = (dx << 16) + cx; // dx in 25cm units, cx in pixels
+                lino = lino + 2;
+              } //~if
+            }
+            if (Mini_Log) {
+              if (logy) {
+                System.out.println(HandyOps.Dec2Log("  (;;) ", nx,
+                    HandyOps.Dec2Log(" +", lino, HandyOps.Dec2Log(" = ", here,
+                        HandyOps.Dec2Log(" ", dx, HandyOps.Dec2Log("/", cx,
+                            HandyOps.Int2Log(" => ", locn, HandyOps.Int2Log(" ", info,
+                                HandyOps.Dec2Log(" ", Vx, HandyOps.Dec2Log("/", Hx,
+                                    HandyOps.Flt2Log(" ", aim, HandyOps.Flt2Log(" = ", step,
+                                        HandyOps.Int2Log(" ", seen, "")))))))))))));
+              }
+            }
+          } //~for // (calc in-view)
+          if (why > 8) {
+            break;
+          }
+          if (Mini_Log) {
+            if (logy) {
+              aLine = "  (sort) "
+                  + HandyOps.ArrayDumpLine(myFax, lino, 9) + "\n   .... ";
+            }
+          }
+          why = 12;
+          whar = lino - 2;
+          if (whar > 0) {
+            for (nx = whar; nx >= 2; nx += -2) {
+              for (lino = 2; lino <= nx; lino += 2) { // sort..
+                if (lino < 2) {
+                  break;
+                }
+                if (lino > myFax.length - 2) {
+                  break; // (can't)
+                }
+                Vx = myFax[lino - 1];
+                Hx = myFax[lino + 1];
+                if (Vx <= Hx) {
+                  continue; // bubble sort is good enough for few arts..
+                }
+                myFax[lino - 1] = Hx;
+                myFax[lino + 1] = Vx;
+                info = myFax[lino];
+                oops = myFax[lino - 2];
+                if (Mini_Log) {
+                  if (logy) {
+                    aLine = aLine + HandyOps.Dec2Log(" ", lino,
+                        HandyOps.Int2Log(":", info, HandyOps.Int2Log("`", Hx,
+                            HandyOps.Int2Log("/", oops, HandyOps.Int2Log("`", Vx, "")))));
+                  }
+                }
+                myFax[lino - 2] = info;
+                myFax[lino] = oops;
+              } //~for
+            }
+          }
+          if (Mini_Log) {
+            if (logy) {
+              System.out.println(aLine + "\n     => "
+                  + HandyOps.ArrayDumpLine(myFax, whar + 2, 8));
+            }
+          }
+          why++; // why = 13
+          for (nx = whar; nx >= 0; nx += -2) { // draw them (no cont, 4brk @ front)..
+            oops = 0;
+            why++; // why = 14
+            if (nx > myFax.length - 2) {
+              break; // (can't)
+            }
+            whar = myFax[nx];
+            dx = myFax[nx + 1];
+            why++; // why = 15
+            if (dx < 0) {
+              oops = 2048;
+              dx = 0;
+            } //~if
+            why = 13;
+            cx = dx & 0xFFFF;
+            dx = dx >> 16; // in 25cm units, max 1.4K
+            rx = MyMath.iMin(dx, 255); // RR[] indexed by park 25cm units..
+            rx = RangeRow[rx & 255]; // convert distance to screen row (MkRngTb)
+            Pmap = 0;
+            tall = 0;
+            wide = 0;
+            yx = 0; // >0 is a good ref
+            if (whar > 0) {
+              if (whar < theInx.length - 8) {
+                yx++; // >0 is a good ref
+                locn = theInx[whar];
+                anim = locn >> 28; // logged only
+                locn = locn & 0x0FFFFFFF;
+                Pmap = theInx[whar + 2]; // image offset & ppm (pix/meter)
+                tall = theInx[whar + 3];
+              } //~if // [anim &] image H & W
+            }
+            if (Mini_Log) {
+              if (logy) {
+                aLine = "  (::)" + HandyOps.Dec2Log(" ", nx,
+                    HandyOps.Dec2Log(" = ", dx, HandyOps.Dec2Log(" => ", rx,
+                        HandyOps.Dec2Log("/", cx, HandyOps.Dec2Log(" @ ", whar,
+                            HandyOps.Dec2Log(" #", anim, HandyOps.Dec2Log(" o", OpMode,
+                                HandyOps.IffyStr(oops > 0, " (<0)", ""))))))));
+              }
+            }
+            if (whar > 0) { //                                             (ShoArtifx)
+              if (oops == 0) {
+                if (((anim - 1) & 31) > 3) // can't crash into traffic lights
+                {
+                  if (dx < 7) {
+                    SimStep(5); // should also crash if grazes corner (CrashMe)
+                  }
+                }
+              }
+              if (ShowMap) { // map coord in meters, cell center..
+                info = ZoomMapCoord(true, MyMath.Fix2flt(locn >> 16, 2),
+                    MyMath.Fix2flt(locn & 0xFFF, 2));
+                zx = info & 0xFFF;
+                info = info >> 16;
+                if (info > 0) { // put amber dot there in close-up map..
+                  PokePixel(ArtiColo, info, zx + 1);
+                  PokePixel(ArtiColo, info, zx);
+                  info++;
+                  PokePixel(ArtiColo, info, zx + 1);
+                  PokePixel(ArtiColo, info, zx);
+                }
+              } //~if // (whar>0)
+              zx = 0;
+
+              if (DoCloseUp) {
+                if (RoWiM == 0.0) {
+
+                  zx = (rx - ImHaf) << 2; // ImHaf = ImHi/2
+                  if (pint < 8) {
+                    zx++; // car facing N/S (use H)
+                  } else if (pint < 82) {
+                    zx = 0; // not square-on
+                  } else if (pint < 98) {
+                  } // car facing E/W (use V)
+                  else if (pint < 172) {
+                    zx = 0;
+                  } else if (pint < 188) {
+                    zx++;
+                  } else if (pint < 262) {
+                    zx = 0;
+                  } else if (pint < 278) {
+                  } else if (pint < 352) {
+                    zx = 0;
+                  } else {
+                    zx++;
+                  }
+                } //~if // (RoWiM=0) // (RM[] in grid=2m)..
+              }
+              if (zx > 0) {
+                RoWiM = fImMid / MyMath.fAbs(RasterMap[(zx + 2) & RmapMsk]
+                    - RasterMap[zx & RmapMsk]);
+              }
+              if (Mini_Log) {
+                if (logy) {
+                  System.out.println(HandyOps.Dec2Log("   (``) ", oops,
+                      HandyOps.Flt2Log(" (", fImMid, HandyOps.Flt2Log("/", VuEdge,
+                          HandyOps.Dec2Log(") @ ", whar, HandyOps.Int2Log(" => ", locn,
+                              HandyOps.Int2Log(" ", tall, HandyOps.Int2Log(" -> ", Pmap,
+                                  HandyOps.Hex2Log("/x", Pmap, 5, HandyOps.Dec2Log(" ", Hx,
+                                      HandyOps.Dec2Log(" : ", Vx, HandyOps.IffyStr(RoWiM == 0.0, "",
+                                          HandyOps.Flt2Log(" p/m=", RoWiM, "")))))))))))));
+                }
+              }
+              // whar = whar-ppm;
+              Vx = 0;
+              Vat = 0.0;
+              Hat = 0.0;
+              if (tall > 0) {
+                while (true) {
+                  ppm = (Pmap >> 24) & 255; // SS ppm = 44
+                  Pmap = Pmap & 0x00FFFFFF;
+                  wide = -MyMath.SgnExt(tall);
+                  tall = tall >> 16;
+                  // anim = tall>>12; // logged only (also test for unreasonableness)
+                  tall = tall & 255;                   // ImMid = ImWi/2..
+                  tops = Pmap - (tall - 1) * ImgWi - wide;   // dx = dist in 25cm units..
+                  // ZoomRatio = (50*64.0)/(Zoom35*fImMid) = 3200/(35*160) = 20/35
+                  // [dx=13] (3x1m dist) st = f*(13*44=572*20/35)/1024 = 5720/(280*64)..
+                  step = MyMath.Fix2flt(dx * ppm, 10) * fox;  // ..fox=ZR*2; st=20*2/64 =5/8
+                  Vat = 0.0;                 // step = fractional im.pix per scr.pix
+                  if (ppm == 0) {
+                    oops = oops | 64;
+                  }
+                  if (wide <= 0) {
+                    oops = oops | 32;
+                  }
+                  if (tall <= 0) {
+                    oops = oops | 16;
+                  }
+                  if (tops < 0) {
+                    oops = oops + 8;
+                  }
+                  if (Pmap + wide >= lxx) {
+                    oops = oops + 4;
+                  }
+                  if (step > 64.0) {
+                    oops = oops + 2;
+                  }
+                  if (step < 0.01) {
+                    oops++;
+                  }
+                  tall = MyMath.Trunc8(MyMath.Fix2flt(tall, 0) / step) + 1; // + V-rows
+                  zx = MyMath.Trunc8(MyMath.Fix2flt(wide, 0) / step) + 1; // + H-cols/2
+                  cx = cx - 1 - zx; // off left end of image on screen
+                  Hat = MyMath.Fix2flt(Pmap, 0) - MyMath.Fix2flt(zx, 0) * step + 0.5;
+                  if (zx < 0) {
+                    oops = oops | 128;
+                    zx = 0;
+                  } //~if
+                  for (zx = zx + zx; zx >= 0; zx += -1) { // outer loop is horizontal..
+                    cx++;                // if (oops>0) log only, then exit
+                    Vx = MyMath.Trunc8(Hat);
+                    Hat = Hat + step;
+                    Vat = 0.0;
+                    if (cx >= ImWi) {
+                      oops = oops | 256; // off right end
+                    } else if (cx + ImWi < 0) {
+                      oops = oops | 512; // off left end
+                    } else if (cx < 0) {
+                      oops = oops | 0x1000; // kill inner loop, but not outer
+                    }
+                    if ((oops == 0) || Mini_Log && logy) {
+                      for (dx = 0; dx <= tall + 12; dx++) {
+                        yx = rx + 2 - dx;                       // do this column up..
+                        if (yx < 0) {
+                          oops = oops | 0x2000; // off top of screen
+                        }
+                        if (Vx < tops) {
+                          oops = oops | 0x4000; // (miscalc: off top of img)
+                        }
+                        info = 0;
+                        if (Vx > 0) {
+                          if (Vx < theImgs.length) {
+                            info = theImgs[Vx];
+                          }
+                        }
+                        if (Mini_Log) {
+                          if (logy) {
+                            logz = ((dx & 15) == 0);
+                            if (yx == TripLine) {
+                              logz = true;
+                            } else if (oops == 0) {
+                              if (dx > 3) {
+                                if (dx + 5 < tall) {
+                                  if (info < 0) {
+                                    logz = false;
+                                  }
+                                }
+                              }
+                            }
+                            if (logz) {
+                              System.out.println(HandyOps.Dec2Log("  _ _ ", dx,
+                                  HandyOps.Dec2Log("/", zx, HandyOps.Dec2Log(" ", rx,
+                                      HandyOps.Dec2Log(" ", yx, HandyOps.Dec2Log("/", cx,
+                                          HandyOps
+                                              .Dec2Log(" @ ", Vx, HandyOps.Flt2Log(" ", Vat * 16.0,
+                                                  HandyOps.Hex2Log(" x", oops, 4,
+                                                      HandyOps
+                                                          .IffyStr(yx >= ImHi - DrawDash, " = ^",
+                                                              HandyOps.IffyStr(info < 0, " = _",
+                                                                  HandyOps.Colo2Log(" = ", info,
+                                                                      ""))))))))))));
+                            }
+                          } //~if
+                        }
+                        if (oops != 0) {
+                          break; // otherwise commit..
+                        }
+                        if (info >= 0) {
+                          if (yx < ImHi - DrawDash) {
+                            PokePixel(info, yx, cx);
+                          }
+                        }
+                        Vat = Vat + step;
+                        while (Vat >= 1.0) {
+                          Vx = Vx - ImgWi;
+                          Vat = Vat - 1.0;
+                        }
+                      } //~for // dx (this column up)
+                    }
+                    if ((oops & 0xFFF) != 0) {
+                      break;
+                    }
+                    oops = 0;
+                  } //~for // zx (outer loop is horizontal)
+                  break;
+                } //~while // (tall>0)
+              }
+              if (Mini_Log) {
+                if (logy) {
+                  aLine = aLine + HandyOps.Dec2Log(" ++ ", anim,
+                      HandyOps.Dec2Log(" ", tall, HandyOps.Dec2Log("/", wide,
+                          HandyOps.Dec2Log(" *", ppm, HandyOps.Dec2Log(" @ ", Pmap,
+                              HandyOps.Dec2Log(" ", ImgWi, HandyOps.Dec2Log(" ", tops,
+                                  HandyOps.Flt2Log(" st=", step * 16.0, "/16"))))))));
+                }
+              }
+            } //~if //  (::)
+            if (Mini_Log) {
+              if (aLine != "") {
+                System.out.println(aLine);
+              }
+            }
+            if (OpMode == 3) {
+              break;
+            }
+          } //~for // nx (draw them)
+          if (why > 13) {
+            break;
+          }
+          why = 0;
+          break;
         } //~while              // HandyOps.IffyStr(!logy,"",   // why =
 //ABCDE
 //        if ((why > 0) || GoodLog) System.out.println(HandyOps.Dec2Log(" (ShoArt) ", why,
@@ -5115,454 +5363,747 @@ public class TrakSim {
 // ZMD=32,32 ZSf=3 ZB=224,642 ZSc=16. ZW=0.2 ZT=8,16
 // (car) +1 90. +D 0./1. +W 1./0. CT=23,29 Vc=0./0. Tc=22.9/25.1 Lc=28.9/33.1 0
 //   .. 1,4 8,31 ZT=8,31 23./29. 23./29.
-            if (Mini_Log) if (!logy) System.out.println(HandyOps.Dec2Log("// (car) #", FrameNo,
-                    HandyOps.Flt2Log(" ", Facing, HandyOps.Flt2Log(" +D ", Vstp,
-                            HandyOps.Flt2Log("/", Hstp, HandyOps.Flt2Log(" +W ", Vinc,
-                                    HandyOps.Flt2Log("/", Hinc, HandyOps.Int2Log(" CT=", CarTest,
-                                            HandyOps.Int2Log(" [", Left_X, HandyOps.Int2Log("/", Rite_X,
-                                                    HandyOps.PosTime("] @ ")))))))))));
-            // seen = false; // if (DoScenery) {
-            if (theInx == null) break; // why = 2
-            why++; // why = 3
-            if (theInx.length < 8) break;
-            PxWi = ImageWide; // theInx[0]&0xFFFF; // width of images frame
-            // iBase = theInx[3]; // map dimensions (unneed, fixed at 256x200)
-            // eBase = theInx[2]; // 1st edge spec (obsolete, now in index)
-            // MapIxBase = theInx[2]; // front of 2x2m map (InitIndx got it)
-            tBase = theInx[1]; // front of texture map
-            step = (0xFF00 - 0x3300) / (ImHaf >> 1);
-            why = 4;
-            if (TopCloseView == 0) kx = MapHy;
-            else if (TopCloseView <= MapHy) kx = TopCloseView - 1;
-            else kx = MapHy;
-            for (rx = ImHi - 1; rx >= 0; rx += -1) { // fill defaults..................................
-                logy = false;
-                if (rx > 0) if (rx == TripLine) logy = Log_Draw || GoodLog; // GoodLog=T
-                // if (rx<4) logy = Log_Draw; else
-                // if (rx>ImHi-5) logy = Log_Draw;
-                // else if (rx>ImHaf+2) logy = false;
-                // else if (rx>ImHaf-8) logy = Log_Draw;
-                // else if ((rx&15)==0) logy = Log_Draw;
-                if (InWalls) bitz = 0xCC9966; // darkened wall color, in case overshot
-                else if (rx < ImHaf) { // outdoor sky..
-                    bitz = 0xFFFFFF - ((colo >> 1) & 0xFF00) - ((colo & 0xFF00) << 8);
-                    zx = colo + step;
-                    if (zx < 0xFF00) colo = zx;
-                    else colo = 0xFFFF;
-                } //~if // aiming for 3399FF in highest sky
-                else bitz = 0xFF00; // green // 0xFFFFCC99; // not dirt
-                if (DrawDash > 0) if (rx >= ImHi - DrawDash) bitz = 0x333300; // dk.brown
-                if (ZooMapDim == 0) dx = -1;
-                else dx = rx - (ZooMapBase >> 16); // <0 if above close-up view (in c-u pix)
-                // ZMD=32,32 ZSf=3 ZB=224,642 ZSc=16. ZW=0.2 ZT=8,16
-                if (dx >= 0) { // meters, close-up res..
-                    Vat = MyMath.Fix2flt(dx + (ZooMapTopL >> (16 - ZooMapShf)), ZooMapShf);
-                    // ZooMapShf cvts c-u(pix) <-> meters; Vat is pk meters, close-up res
-                    if (optn > 1) if (Vat + 1.6 > Vposn) if (Vat - 1.6 < Vposn) logy = Log_Draw;
-                } //~if
-                if (logy) System.out.println(HandyOps.Dec2Log("   (BF..) ", rx,
-                        HandyOps.Colo2Log(" ", bitz, HandyOps.Hex2Log(" ", colo, 8,
-                                HandyOps.Dec2Log(" ", WinWi, HandyOps.Dec2Log(" ", kx,
-                                        HandyOps.Dec2Log("=", MapHy, HandyOps.Dec2Log("/", MapWy,
-                                                HandyOps.Dec2Log(" ", dx, HandyOps.Dec2Log("/", nx,
-                                                        HandyOps.TF2Log(" ", InWalls, HandyOps.PosTime(" @ "))))))))))));
-                for (cx = WinWi - 1; cx >= 0; cx += -1) {
-                    info = 0; // default black separator, letterbox around map(s)
-                    if (logy) info = 0x0000FF; // (TripLine)
-                    zx = cx - 2 - ImWi;
-                    deep = 0.0;
-                    far = 0;
-                    if (logy) if (rx == zx) far = 0x80000000;
-                    if (cx < ImWi) {
-                        if (logy) if ((rx == cx) || (cx < 4) || (cx > ImWi - 3))
-                            System.out.println(HandyOps.Dec2Log("   ..  .. ", rx,
-                                    HandyOps.Dec2Log("/", cx, HandyOps.Colo2Log(" => ", bitz,
-                                            HandyOps.Colo2Log("/", info, "")))));
-                        info = bitz;
-                    } //~if
-                    else if (ShowMap) if (zx >= 0) {
-                        if (logy) if (far == 0) if (zx < 4) far = 0x80000000; // ||(cx>WinWi-8)
-                        if (rx < kx) { // map shown 1 pix = 1m
-                            if (WhitLnSz > 0.0)
-                                deep = 1.4; // 1m pixels, allow extra for diagonal white line
-                            Vat = MyMath.Fix2flt(rx, 0);
-                            Hat = MyMath.Fix2flt(zx, 0); // in park meters
-                            if (zx < MapWy) // zx = (rx>>1)*HalfMap+(zx>>1)+MapIxBase;
-                                if (logy) if (far == 0) if (zx > MapWy - 4) far = 0x80000000;
-                        } //~if
-                        else if (dx >= 0) {     // ZMTL is in close-up pix coords..
-                            Hat = MyMath.Fix2flt(zx + ((ZooMapTopL & 0xFFF) << ZooMapShf),
-                                    ZooMapShf); // in park meters, close-up resolution
-                            deep = ZooMapWhLn;
-                        } //~if // ZooMapShf cvts c-u(pix) <-> meters
-                        else zx = -1;
-                        if (logy) if (far == 0) {
-                            // if ((zx&15)==0) far = 0x80000000; else
-                            if (optn > 1) if (Vat + 1.6 > Vposn) if (Vat - 1.6 < Vposn)
-                                if (Hat + 1.6 > Hposn) if (Hat - 1.6 < Hposn) far = 0x80000000;
-                        } //~if
-                        if (far < 0) System.out.println(HandyOps.Dec2Log("   . .. . ", rx,
-                                HandyOps.Flt2Log(" ", Vat, HandyOps.Flt2Log("/", Hat,
-                                        HandyOps.Dec2Log(" ", zx, HandyOps.Flt2Log(" ", deep, ""))))));
-                        if (zx >= 0) info = MyMath.iMax(MapColor(far + 6, Vat, Hat, deep), 0);
-                    } //~if
-                    if (myPix == null) break;                       // (in side map)
-                    thar--;
-                    if (thar < 0) break;
-                    if (thar < myPix.length)
-                        myPix[thar] = info;
+      if (Mini_Log) {
+        if (!logy) {
+          System.out.println(HandyOps.Dec2Log("// (car) #", FrameNo,
+              HandyOps.Flt2Log(" ", Facing, HandyOps.Flt2Log(" +D ", Vstp,
+                  HandyOps.Flt2Log("/", Hstp, HandyOps.Flt2Log(" +W ", Vinc,
+                      HandyOps.Flt2Log("/", Hinc, HandyOps.Int2Log(" CT=", CarTest,
+                          HandyOps.Int2Log(" [", Left_X, HandyOps.Int2Log("/", Rite_X,
+                              HandyOps.PosTime("] @ ")))))))))));
+        }
+      }
+      // seen = false; // if (DoScenery) {
+      if (theInx == null) {
+        break; // why = 2
+      }
+      why++; // why = 3
+      if (theInx.length < 8) {
+        break;
+      }
+      PxWi = ImageWide; // theInx[0]&0xFFFF; // width of images frame
+      // iBase = theInx[3]; // map dimensions (unneed, fixed at 256x200)
+      // eBase = theInx[2]; // 1st edge spec (obsolete, now in index)
+      // MapIxBase = theInx[2]; // front of 2x2m map (InitIndx got it)
+      tBase = theInx[1]; // front of texture map
+      step = (0xFF00 - 0x3300) / (ImHaf >> 1);
+      why = 4;
+      if (TopCloseView == 0) {
+        kx = MapHy;
+      } else if (TopCloseView <= MapHy) {
+        kx = TopCloseView - 1;
+      } else {
+        kx = MapHy;
+      }
+      for (rx = ImHi - 1; rx >= 0; rx += -1) { // fill defaults..................................
+        logy = false;
+        if (rx > 0) {
+          if (rx == TripLine) {
+            logy = Log_Draw || GoodLog; // GoodLog=T
+          }
+        }
+        // if (rx<4) logy = Log_Draw; else
+        // if (rx>ImHi-5) logy = Log_Draw;
+        // else if (rx>ImHaf+2) logy = false;
+        // else if (rx>ImHaf-8) logy = Log_Draw;
+        // else if ((rx&15)==0) logy = Log_Draw;
+        if (InWalls) {
+          bitz = 0xCC9966; // darkened wall color, in case overshot
+        } else if (rx < ImHaf) { // outdoor sky..
+          bitz = 0xFFFFFF - ((colo >> 1) & 0xFF00) - ((colo & 0xFF00) << 8);
+          zx = colo + step;
+          if (zx < 0xFF00) {
+            colo = zx;
+          } else {
+            colo = 0xFFFF;
+          }
+        } //~if // aiming for 3399FF in highest sky
+        else {
+          bitz = 0xFF00; // green // 0xFFFFCC99; // not dirt
+        }
+        if (DrawDash > 0) {
+          if (rx >= ImHi - DrawDash) {
+            bitz = 0x333300; // dk.brown
+          }
+        }
+        if (ZooMapDim == 0) {
+          dx = -1;
+        } else {
+          dx = rx - (ZooMapBase >> 16); // <0 if above close-up view (in c-u pix)
+        }
+        // ZMD=32,32 ZSf=3 ZB=224,642 ZSc=16. ZW=0.2 ZT=8,16
+        if (dx >= 0) { // meters, close-up res..
+          Vat = MyMath.Fix2flt(dx + (ZooMapTopL >> (16 - ZooMapShf)), ZooMapShf);
+          // ZooMapShf cvts c-u(pix) <-> meters; Vat is pk meters, close-up res
+          if (optn > 1) {
+            if (Vat + 1.6 > Vposn) {
+              if (Vat - 1.6 < Vposn) {
+                logy = Log_Draw;
+              }
+            }
+          }
+        } //~if
+        if (logy) {
+          System.out.println(HandyOps.Dec2Log("   (BF..) ", rx,
+              HandyOps.Colo2Log(" ", bitz, HandyOps.Hex2Log(" ", colo, 8,
+                  HandyOps.Dec2Log(" ", WinWi, HandyOps.Dec2Log(" ", kx,
+                      HandyOps.Dec2Log("=", MapHy, HandyOps.Dec2Log("/", MapWy,
+                          HandyOps.Dec2Log(" ", dx, HandyOps.Dec2Log("/", nx,
+                              HandyOps.TF2Log(" ", InWalls, HandyOps.PosTime(" @ "))))))))))));
+        }
+        for (cx = WinWi - 1; cx >= 0; cx += -1) {
+          info = 0; // default black separator, letterbox around map(s)
+          if (logy) {
+            info = 0x0000FF; // (TripLine)
+          }
+          zx = cx - 2 - ImWi;
+          deep = 0.0;
+          far = 0;
+          if (logy) {
+            if (rx == zx) {
+              far = 0x80000000;
+            }
+          }
+          if (cx < ImWi) {
+            if (logy) {
+              if ((rx == cx) || (cx < 4) || (cx > ImWi - 3)) {
+                System.out.println(HandyOps.Dec2Log("   ..  .. ", rx,
+                    HandyOps.Dec2Log("/", cx, HandyOps.Colo2Log(" => ", bitz,
+                        HandyOps.Colo2Log("/", info, "")))));
+              }
+            }
+            info = bitz;
+          } //~if
+          else if (ShowMap) {
+            if (zx >= 0) {
+              if (logy) {
+                if (far == 0) {
+                  if (zx < 4) {
+                    far = 0x80000000; // ||(cx>WinWi-8)
+                  }
                 }
-            } //~for //~for (cx) (rx: fill defaults)
-            far = 0;
-            if (ShowMap) { // add trail of breadcrumbs...................
-                thar = MyMath.iMin(nCrumbs - 1, Crummy);
-                for (thar = thar; thar >= 0; thar += -1) {
-                    info = BreadCrumbs[thar & Crummy];
-                    if (info == 0) continue;
-                    rx = info >> 16;
-                    if (TopCloseView > 0) if (rx >= TopCloseView) continue;
-                    cx = (info & 0xFFF) + ImWi + 2;
-                    if (PeekPixel(rx, cx) != CarColo) // car avatar already there
-                        PokePixel(ArtiColo, rx, cx);
-                } //~for
-                if (ShoTrkTstPts) { // show stay-in-track points as small blue "x"s..
-                    if (Left_X != 0) {
-                        rx = Left_X >> 16;
-                        cx = Left_X & 0xFFF;
-                        PokePixel(MarinBlue, rx, cx);
-                        PokePixel(MarinBlue, rx - 1, cx - 1);
-                        PokePixel(MarinBlue, rx - 1, cx + 1);
-                        PokePixel(MarinBlue, rx + 1, cx - 1);
-                        PokePixel(MarinBlue, rx + 1, cx + 1);
-                    } //~if
-                    if (Rite_X != 0) {
-                        rx = Rite_X >> 16;
-                        cx = Rite_X & 0xFFF;
-                        PokePixel(MarinBlue, rx, cx);
-                        PokePixel(MarinBlue, rx - 1, cx - 1);
-                        PokePixel(MarinBlue, rx - 1, cx + 1);
-                        PokePixel(MarinBlue, rx + 1, cx - 1);
-                        PokePixel(MarinBlue, rx + 1, cx + 1);
+              }
+              if (rx < kx) { // map shown 1 pix = 1m
+                if (WhitLnSz > 0.0) {
+                  deep = 1.4; // 1m pixels, allow extra for diagonal white line
+                }
+                Vat = MyMath.Fix2flt(rx, 0);
+                Hat = MyMath.Fix2flt(zx, 0); // in park meters
+                if (zx < MapWy) // zx = (rx>>1)*HalfMap+(zx>>1)+MapIxBase;
+                {
+                  if (logy) {
+                    if (far == 0) {
+                      if (zx > MapWy - 4) {
+                        far = 0x80000000;
+                      }
                     }
-                } //~if
-                zx = MyMath.iMin(kx + 8, MapTall - 8); // MapHy
-                for (thar = 0; thar <= zx; thar += 8) { // some yellow tics..
-                    PokePixel(0xFFFF00, thar, ImWi + 2);          // ..along the top & left..
-                    if (thar == 0) continue;
-                    if ((thar & 31) != 0) continue;
-                    PokePixel(0xFFFF00, thar, ImWi + 1);
-                    PokePixel(0xFFFF00, thar, ImWi);
-                } //~for
-                zx = MyMath.iMin(MapWy + 8, MapWide - 8);
-                for (thar = 8; thar <= zx; thar += 8) {
-                    cx = thar + ImWi + 2;
-                    PokePixel(0xFFFF00, 0, cx);
-                    if ((thar & 31) != 0) continue;
-                    PokePixel(0xFFFF00, 1, cx);
-                    PokePixel(0xFFFF00, 2, cx);
-                } //~for
-                info = ZoomMapCoord(true, Vposn, Hposn);
-                rx = info >> 16;
-                cx = info & 0xFFF;    // car avatar sb already there..
-                if (info > 0) if (PeekPixel(rx, cx) == CarColo) {
-                    DrawLine(MarinBlue, rx - 1, cx, rx + 1, cx);
-                    DrawLine(MarinBlue, rx, cx - 1, rx, cx + 1);
+                  }
                 }
-            } //~if // (info) (ShowMap)
-            if (DrawDash > 0) { // DrawDash=12 to draw it
-                if (ShoClikGrid) DrawGrid();
-                LabelScene(myDash, ImHi - 4, ImWi - 8, -1);
-                myDash = HandyOps.Flt2Log(" ", Velocity * dFtime, " "); // (5/fps) dFtime=5
-                LabelScene(myDash, ImHi - 4, myDash.length() * 2 + SteerMid, 0xFF9999);
-                info = -1;
-                if (StepOne) info = 0x66FFFF; // cyan for 1-step
-                else if (OpMode == 2) info = 0x66FF00; // green for real-time
-                else if (OpMode > 2) info = 0xFF0099; // red for crashed
-                LabelScene(LefDash, ImHi - 4, -12, info);
-                LefDash = HandyOps.Fixt8th(" ", RealTimeNow, " ");
-                LabelScene(LefDash, SceneTall - 4, LefDash.length() * 2 + ImMid, 0xFF9900);
-                myDash = myDash + " t=" + LefDash;
-            } //~if // (DrawDash>0)
-            // Vmap = MyMath.Trunc8(Vposn); // = current posn in park meters (2x grid)
-            // Hmap = MyMath.Trunc8(Hposn);
-            info = -1;
-            if (Vmap > 3) if (Hmap > 3) if (Vmap < MapTall - 4) if (Hmap < MapWide - 4) info = 0;
-            if (info != 0) {
-                if (OpMode < 3) System.out.println(HandyOps.Dec2Log("** Crashed ** ", Vmap,
-                        HandyOps.Dec2Log("/", Hmap, "")));
-                SimStep(4);
-            } //~if // (CrashMe)
-            else { // if (DoScenery) // draw scenery back-to-front....................
-                Pmap = (Vmap >> 1) * HalfMap + (Hmap >> 1) + MapIxBase;
-                if (Pmap > 0) if (theInx != null) if (Pmap < theInx.length)
-                    info = theInx[Pmap];
-                if (OpMode < 3) if (info >= 0)
-                    if (!SimSpedFixt) if ((info & 0x60000000) != 0x40000000) SimStep(6);
+              } //~if
+              else if (dx >= 0) {     // ZMTL is in close-up pix coords..
+                Hat = MyMath.Fix2flt(zx + ((ZooMapTopL & 0xFFF) << ZooMapShf),
+                    ZooMapShf); // in park meters, close-up resolution
+                deep = ZooMapWhLn;
+              } //~if // ZooMapShf cvts c-u(pix) <-> meters
+              else {
+                zx = -1;
+              }
+              if (logy) {
+                if (far == 0) {
+                  // if ((zx&15)==0) far = 0x80000000; else
+                  if (optn > 1) {
+                    if (Vat + 1.6 > Vposn) {
+                      if (Vat - 1.6 < Vposn) {
+                        if (Hat + 1.6 > Hposn) {
+                          if (Hat - 1.6 < Hposn) {
+                            far = 0x80000000;
+                          }
+                        }
+                      }
+                    }
+                  }
+                } //~if
+              }
+              if (far < 0) {
+                System.out.println(HandyOps.Dec2Log("   . .. . ", rx,
+                    HandyOps.Flt2Log(" ", Vat, HandyOps.Flt2Log("/", Hat,
+                        HandyOps.Dec2Log(" ", zx, HandyOps.Flt2Log(" ", deep, ""))))));
+              }
+              if (zx >= 0) {
+                info = MyMath.iMax(MapColor(far + 6, Vat, Hat, deep), 0);
+              }
+            } //~if
+          }
+          if (myPix == null) {
+            break;                       // (in side map)
+          }
+          thar--;
+          if (thar < 0) {
+            break;
+          }
+          if (thar < myPix.length) {
+            myPix[thar] = info;
+          }
+        }
+      } //~for //~for (cx) (rx: fill defaults)
+      far = 0;
+      if (ShowMap) { // add trail of breadcrumbs...................
+        thar = MyMath.iMin(nCrumbs - 1, Crummy);
+        for (thar = thar; thar >= 0; thar += -1) {
+          info = BreadCrumbs[thar & Crummy];
+          if (info == 0) {
+            continue;
+          }
+          rx = info >> 16;
+          if (TopCloseView > 0) {
+            if (rx >= TopCloseView) {
+              continue;
+            }
+          }
+          cx = (info & 0xFFF) + ImWi + 2;
+          if (PeekPixel(rx, cx) != CarColo) // car avatar already there
+          {
+            PokePixel(ArtiColo, rx, cx);
+          }
+        } //~for
+        if (ShoTrkTstPts) { // show stay-in-track points as small blue "x"s..
+          if (Left_X != 0) {
+            rx = Left_X >> 16;
+            cx = Left_X & 0xFFF;
+            PokePixel(MarinBlue, rx, cx);
+            PokePixel(MarinBlue, rx - 1, cx - 1);
+            PokePixel(MarinBlue, rx - 1, cx + 1);
+            PokePixel(MarinBlue, rx + 1, cx - 1);
+            PokePixel(MarinBlue, rx + 1, cx + 1);
+          } //~if
+          if (Rite_X != 0) {
+            rx = Rite_X >> 16;
+            cx = Rite_X & 0xFFF;
+            PokePixel(MarinBlue, rx, cx);
+            PokePixel(MarinBlue, rx - 1, cx - 1);
+            PokePixel(MarinBlue, rx - 1, cx + 1);
+            PokePixel(MarinBlue, rx + 1, cx - 1);
+            PokePixel(MarinBlue, rx + 1, cx + 1);
+          }
+        } //~if
+        zx = MyMath.iMin(kx + 8, MapTall - 8); // MapHy
+        for (thar = 0; thar <= zx; thar += 8) { // some yellow tics..
+          PokePixel(0xFFFF00, thar, ImWi + 2);          // ..along the top & left..
+          if (thar == 0) {
+            continue;
+          }
+          if ((thar & 31) != 0) {
+            continue;
+          }
+          PokePixel(0xFFFF00, thar, ImWi + 1);
+          PokePixel(0xFFFF00, thar, ImWi);
+        } //~for
+        zx = MyMath.iMin(MapWy + 8, MapWide - 8);
+        for (thar = 8; thar <= zx; thar += 8) {
+          cx = thar + ImWi + 2;
+          PokePixel(0xFFFF00, 0, cx);
+          if ((thar & 31) != 0) {
+            continue;
+          }
+          PokePixel(0xFFFF00, 1, cx);
+          PokePixel(0xFFFF00, 2, cx);
+        } //~for
+        info = ZoomMapCoord(true, Vposn, Hposn);
+        rx = info >> 16;
+        cx = info & 0xFFF;    // car avatar sb already there..
+        if (info > 0) {
+          if (PeekPixel(rx, cx) == CarColo) {
+            DrawLine(MarinBlue, rx - 1, cx, rx + 1, cx);
+            DrawLine(MarinBlue, rx, cx - 1, rx, cx + 1);
+          }
+        }
+      } //~if // (info) (ShowMap)
+      if (DrawDash > 0) { // DrawDash=12 to draw it
+        if (ShoClikGrid) {
+          DrawGrid();
+        }
+        LabelScene(myDash, ImHi - 4, ImWi - 8, -1);
+        myDash = HandyOps.Flt2Log(" ", Velocity * dFtime, " "); // (5/fps) dFtime=5
+        LabelScene(myDash, ImHi - 4, myDash.length() * 2 + SteerMid, 0xFF9999);
+        info = -1;
+        if (StepOne) {
+          info = 0x66FFFF; // cyan for 1-step
+        } else if (OpMode == 2) {
+          info = 0x66FF00; // green for real-time
+        } else if (OpMode > 2) {
+          info = 0xFF0099; // red for crashed
+        }
+        LabelScene(LefDash, ImHi - 4, -12, info);
+        LefDash = HandyOps.Fixt8th(" ", RealTimeNow, " ");
+        LabelScene(LefDash, SceneTall - 4, LefDash.length() * 2 + ImMid, 0xFF9900);
+        myDash = myDash + " t=" + LefDash;
+      } //~if // (DrawDash>0)
+      // Vmap = MyMath.Trunc8(Vposn); // = current posn in park meters (2x grid)
+      // Hmap = MyMath.Trunc8(Hposn);
+      info = -1;
+      if (Vmap > 3) {
+        if (Hmap > 3) {
+          if (Vmap < MapTall - 4) {
+            if (Hmap < MapWide - 4) {
+              info = 0;
+            }
+          }
+        }
+      }
+      if (info != 0) {
+        if (OpMode < 3) {
+          System.out.println(HandyOps.Dec2Log("** Crashed ** ", Vmap,
+              HandyOps.Dec2Log("/", Hmap, "")));
+        }
+        SimStep(4);
+      } //~if // (CrashMe)
+      else { // if (DoScenery) // draw scenery back-to-front....................
+        Pmap = (Vmap >> 1) * HalfMap + (Hmap >> 1) + MapIxBase;
+        if (Pmap > 0) {
+          if (theInx != null) {
+            if (Pmap < theInx.length) {
+              info = theInx[Pmap];
+            }
+          }
+        }
+        if (OpMode < 3) {
+          if (info >= 0) {
+            if (!SimSpedFixt) {
+              if ((info & 0x60000000) != 0x40000000) {
+                SimStep(6);
+              }
+            }
+          }
+        }
 //ABCDE
 //                System.out.println(HandyOps.Dec2Log(HandyOps.IffyStr(OpMode == 3, "(DoSc $$) ",
 //                        "(DoSc) "), DrawDash, HandyOps.Dec2Log(" ", Vmap,
 //                        HandyOps.Dec2Log("/", Hmap, HandyOps.Hex2Log(" = ", info, 8,
 //                                HandyOps.Dec2Log(" ", LookFrame, HandyOps.Dec2Log(" ", TripLine,
 //                                        HandyOps.PosTime(" @ "))))))));
-                //
-                // The car is at (Vposn,Hposn), facing (init'ly NW) -> Facing (Fa)
-                // The screen is ImWi pixels wide, which imaged at distance dx
-                //   is dx/fZoom meters wide, and the map position of the left edge
-                //   of the image plane at distance dx is -90 degrees to the left
-                //   (=Fc-90 in degrees C-wise from North) to map point Vat/Hat
-                //   ¥ = (VIc-dx*cos(Lp)/(2*fZoom),HIc+dx*sin(Lp)/(2*fZoom)).
-                // Stepping from the left, each pixel adds dx*cos(Lp)/(ImWi*fZoom)
-                //   to V and subtracts dx*sin(Lp)/(ImWi*fZoom) from H.
-                // We calculate Vbase = -cos(Fa)-cos(Lp)/(2*fZoom) and Hbase sim'ly,
-                //   then each row, add dx (=deep)*Vbase to Vposn for the V part of Lx;
-                //   and step Vstp = dx*cos(Lp)/(ImWi*fZoom) and Hstp sim'ly.
-                //
-                // MyMath.Angle2cart(Facing); // angles are in degrees, not radians
-                // Hstp = MyMath.Sine; // sin grows to right, step E to edge
-                // Vstp = -MyMath.Cose; // cos shrinks down (sin^2+cos^2 = 1m) step S
-                // MyMath.Angle2cart(Facing-90.0); // this now points left-to-right,
-                // Vinc = MyMath.Cose; // for stepping across the view screen
-                // Hinc = -MyMath.Sine;
-                // deep = 256.0;
-                // Vbase = Vstp*256.0; // about double the park width (in 2m grid locs),
-                // Hbase = Hstp*256.0; // so guaranteed to be outside the park
-                doit = 0;
-                rx = RangeRow[255] - 1; // at horizon, mid-screen
-                for (dx = 255; dx >= -ImHaf; dx += -1) {    // convert depth to raster line number..
-                    if (rx >= ImHi - DrawDash) break; // normal exit at bottom of screen
-                    if (dx < 0) break;
-                    robe = RangeRow[dx & 255]; // dx: nominal depth in park 25cm units
-                    // far = far&0xFFFFFF|(robe<<24);
-                    // if (Vscale>0) robe = (robe-ImHaf)*Vscale+ImHaf;
-                    if (robe <= rx) continue;
-                    step = ImWi;     // 8x cont, 4x brk..
-                    while (rx < robe) {
-                        rx++;
-                        far = 1;
-                        if (rx == TripLine) {
-                            if (LookFrame == 0) far = far | 0x80000000;
-                            System.out.println(HandyOps.Dec2Log("---TripLin=", TripLine,
-                                    HandyOps.Dec2Log("/", LookFrame, "---")));
-                            seen = false;
-                        }
-                        cx = rx - ImHaf; // RowRange is bottom half of screen only // ImHaf=240
-                        if (cx >= ImHaf - DrawDash) break;
-                        doit = RowRange[cx];
-                        deep = ((double) doit) * 0.03125; // RR: m*16 (6cm), deep: 2m
-                        Vbase = deep * Vstp + Vposn * 0.5; // current center of the view at this dx,
-                        Hbase = deep * Hstp + Hposn * 0.5; // ..in grid coords (2m)
-                        ftmp = deep * 0.125 * WiZoom; // WiZoom = Dzoom*32/FltWi = 16/(ImWi*fZoom)
-                        Vpx = Vinc * ftmp; // step size across image (in grid/pix)..
-                        Hpx = Hinc * ftmp; // .. = {deep/(ImWi/2)/zoom}*(sin|cos)
-                        Voffm = Vpx * fHafIm; // fHafIm = ((double)FltWi)/2+1.0 (+1 for extra +Vpx)
-                        Hoffm = Hpx * fHafIm;
-                        Vat = Vbase - Voffm; // start here at left edge of screen (in grid=2m)
-                        Hat = Hbase - Hoffm;
-                        Voffm = Vbase + Voffm; // (end here, for bounds check)
-                        Hoffm = Hbase + Hoffm;
-                        cx = cx << 2;
-                        if (DoCloseUp) if (ShowMap) if (ZooMapDim != 0) if (cx >= 0)
-                            if (RasterMap != null) if (cx < RasterMap.length - 4) {
-                                RasterMap[cx + 3] = Hoffm; // right end of raster (in grid=2m)
-                                RasterMap[cx + 2] = Voffm;
-                                RasterMap[cx + 1] = Hat;   // left end
-                                RasterMap[cx] = Vat;
-                            } //~if
-                        if (InWalls) { // calc shade for distant walls..
-                            cx = 0;
-                            doit = doit >> 3; // = distance in half-meters (=deep*4)
-                            if (doit > 63) Darken = 0x3F3F3F;
-                            else if (doit > 0) { // ZoomPix=ImWi*50/Zoom35.. ¥ I don't believe this ¥¥
-                                cx = ZoomPix * 2 / doit; // = pix/meter (12cm @ 1:8), = baseboard
-                                Darken = doit * 0x10101;
-                            } //~if
-                            else Darken = 0;
-                            Wally = (cx << 24) + CreamWall;
-                        } //~if // (InWalls) ..near-white cream
-                        else doit = 0;
-                        thar = rx * WinWi - 1;
-                        if (CheckerBd == 0) if (solidGry) if (rx > ImHaf + 32) {
-                            if (Log_Draw) if (optn > 1)
-                                OopsLog = OopsLog + HandyOps.Dec2Log(" Sr", rx, "");
-                            for (cx = 0; cx <= ImWi - 1; cx++) {
-                                thar++;
-                                if (myPix != null) if (thar > 0) if (thar < myPix.length)
-                                    myPix[thar] = PavColo;
-                            } //~for
-                            continue;
-                        } //~if // (solidGry)
-                        if (ShowMap) {
-                            if (Mtrk != 0) if (ZooMapDim != 0) { // find view trapezoid corners
-                                if (LwL == 0) {
-                                    LwL = ZoomMapCoord(true, Vat + Vat, Hat + Hat);
-                                    if (LwL != 0) seen = false;
-                                } //~if
-                                if (RwL == 0) {
-                                    RwL = ZoomMapCoord(true, Voffm + Voffm, Hoffm + Hoffm);
-                                    if (RwL != 0) seen = false;
-                                }
-                            } //~if // (Mtrk)
-                            if (rx == ImHi - 2 - DrawDash) { // DrawDash=12
-                                if (ZooMapDim != 0) { // draw view trapezoid..
-                                    zx = ZoomMapCoord(false, MyMath.Fix2flt(rx, 0), 1.0); // sb = Lww
-                                    Lww = ZoomMapCoord(true, Vat + Vat, Hat + Hat); // should be visible
-                                    Rww = ZoomMapCoord(true, Voffm + Voffm, Hoffm + Hoffm);
-                                    if (LwL > 0) if (Lww > 0)
-                                        DrawLine(MarinBlue + Tintx, Lww >> 16, Lww & 0xFFF, LwL >> 16, LwL & 0xFFF);
-                                    if (RwL > 0) if (Rww > 0)
-                                        DrawLine(MarinBlue + Tintx, Rww >> 16, Rww & 0xFFF, RwL >> 16, RwL & 0xFFF);
-                                    if (Lww > 0) if (Rww > 0) // MarinBlue=0x0099FF
-                                        DrawLine(MarinBlue + Tintx, Lww >> 16, Lww & 0xFFF, Rww >> 16, Rww & 0xFFF);
-                                } //~if
-                                zx = MyMath.Trunc8(Vat + Vat);
-                                cx = MyMath.Trunc8(Voffm + Voffm);
-                                if (TopCloseView > 0) {
-                                    if (zx >= TopCloseView) cx = 0;
-                                    else if (cx >= TopCloseView) cx = 0;
-                                } //~if
-                                if (cx > 0) DrawLine(MarinBlue + Tintx * 2, zx,
-                                        MyMath.Trunc8(Hat + Hat) + ImWi + 2, cx,
-                                        MyMath.Trunc8(Hoffm + Hoffm) + ImWi + 2);
-                            }
-                        } //~if // (DrawDash) (ShowMap)
-                        if (VuEdge == 0.0) if (Mtrk != 0) {
-                            VuEdge = MyMath.aTan0(Hoffm + Hoffm - Hposn, Vposn - Voffm - Voffm) - Facing;
-                            while (VuEdge > 180.0) VuEdge = VuEdge - 360.0;
-                            while (VuEdge + 180.0 < 0.0) VuEdge = VuEdge + 360.0;
-                            if (VuEdge < 0.0) VuEdge = -VuEdge;
-                            seen = false;
-                        } //~if
-                        cx = 0; // log bounds check..
-                        if (MyMath.fMin(Vat, Voffm) > GridTall) cx = 8;
-                        else if (MyMath.fMax(Vat, Voffm) < 0.0) cx = 4;
-                        if (MyMath.fMin(Hat, Hoffm) > GridWide) cx = cx + 2;
-                        else if (MyMath.fMax(Hat, Hoffm) < 0.0) cx++;
-                        if (cx != 0) seen = false;
-                        // if (TrakNoPix) if (rx<ImHaf+4) cx = cx|16;
-                        seen = true; // if (TrakNoPix) if (rx<ImHaf+4) cont_inue;
-                        solidGry = true;
-                        info = 0;
-                        if ((cx & 15) == 0) for (cx = 0; cx <= ImWi - 1; cx++) { // .. repeat until off right..
-                            bitz = PrioRaster[cx];
-                            thar++;
-                            Vat = Vat + Vpx;
-                            Hat = Hat + Hpx;
-                            if (WhitLnSz > 0) ftmp = Vpx + Hpx;
-                            else ftmp = 0.0;
-                            info = 0;
-                            if (Vat < 0.0) info++;
-                            if (Hat < 0.0) info++;
-                            if (Vat >= GridTall) info++;
-                            if (Hat >= GridWide) info++;
-                            if (info > 0) { // often outside park at first, so..
-                                solidGry = false;
-                                step--;
-                                if (Log_Draw) if (optn > 1) if (step > 0) if (step < 3) {
-                                    aWord = " Or" + rx;
-                                    OopsLog = OopsLog + aWord;
-                                } //~if // (step)
-                                continue;
-                            } //~if // (often outside park)
-                            // Vmap = MyMath.Trunc8(Vat+Vat);
-                            // Hmap = MyMath.Trunc8(Hat+Hat);             // TripLine: far<0
-                            colo = MapColor(far, Vat + Vat, Hat + Hat, ftmp); // ODD(far)
-                            PrioRaster[cx] = TmpI;
-                            if (colo == 0) {
-                            } // continue;                     // (BuildFrame)
-                            else if ((colo & -4) == -4) { // indoor (white) wall..
-                                yx = colo;
-                                kx = Wally >> 24;
-                                here = thar;
-                                if (colo == -4) {
-                                    if (PilasterCo == 0) info = DarkWall;
-                                    else info = PilasterCo;
-                                    kx = 0;
-                                } //~if
-                                else if ((colo & 1) == 0) { // what about BackWall?
-                                    info = DarkWall; // shadowy gray-tan
-                                    kx = 0;
-                                } //~if // might be door, so no baseboard
-                                else info = CreamWall; // ..near-white cream
-                                if (Wally == 0) if (colo != -4) Wally = info; // seen a wall
-                                info = info - Darken;
-                                for (zx = rx; zx >= 0; zx += -1) {
-                                    colo = info; // darken baseboard edge..
-                                    kx--;
-                                    if (kx == 0) if ((((colo & 0xCCCCCC) + 0xCCCCCC) & 0x1111110)
-                                            == 0x1111110) colo = colo - 0x333333;
-                                    if (here > 0) if (myPix != null) if (here < myPix.length)
-                                        myPix[here] = colo;
-                                    if (TmpI == bitz) if (kx < 0) break; // already did this wall
-                                    if (GoodLog || Log_Draw) if (zx > 0) if (zx == TripLine)
-                                        System.out.println(HandyOps.Dec2Log("  (wall) ", kx,
-                                                HandyOps.Dec2Log(" ", zx, HandyOps.Dec2Log(" ", rx,
-                                                        HandyOps.Dec2Log("/", cx, HandyOps.Colo2Log(" = ", colo,
-                                                                HandyOps.Dec2Log(" ", yx, HandyOps.Int2Log(" ", Wally,
-                                                                        HandyOps.Int2Log(" ", far, "")))))))));
-                                    here = here - WinWi;
-                                } //~for
-                                continue;
-                            } //~if // colo = yx;} //~if // (wall in indoor track)
-                            if (colo < 0) continue; // (obsolete) artifact
-                            if (Mtrk == 0) {
-                                Mtrk = rx;
-                                seen = false;
-                            } //~if
-                            if (PavColo != GrasColo) if (WhitLnSz > 0.0) {
-                                zx = 0;
-                                if (cx > 0) zx = PeekPixel(rx, cx - 1);
-                                if ((colo == PavColo) || (colo == PavDk)) {
-                                    // if (Mtrk==0) Mtrk = cx;
-                                    if (zx == GrasColo) colo = 0xEEEEEE; // grass next to paved..
-                                    else if (zx == GrasDk) colo = 0xEEEEEE;
-                                    zx = PeekPixel(rx - 1, cx); // if grass above paved..
-                                    if (zx == GrasColo) colo = 0xEEEEEE; // ..near-white to replace gray
-                                    else if (zx == GrasDk) colo = 0xEEEEEE;
-                                } //~if // (PavColo)
-                                // else if (chekt>0) colo = PavDk;
-                                else if ((colo == GrasColo) || (colo == GrasDk)) {
-                                    if (zx == PavColo) colo = 0xEEEEEE; // paved next to grass..
-                                    else if (zx == PavDk) colo = 0xEEEEEE;
-                                    // else if (chekt>0) colo = GrasDk; // dk.grn
-                                    solidGry = false;
-                                } //~if // (GrasColo)
-                                else solidGry = false;
-                            } //~if
-                            else solidGry = false;
-                            if (rx == TripLine) { // show TripLine in blue..
-                                if (((colo + 1) & 255) == 0) colo = colo & 0x7F7F77;
-                                else colo = colo | 255;
-                            } //~if
-                            if (colo > 0) if (thar > 0) if (myPix != null) if (thar < myPix.length)
-                                myPix[thar] = colo;
-                        }
+        //
+        // The car is at (Vposn,Hposn), facing (init'ly NW) -> Facing (Fa)
+        // The screen is ImWi pixels wide, which imaged at distance dx
+        //   is dx/fZoom meters wide, and the map position of the left edge
+        //   of the image plane at distance dx is -90 degrees to the left
+        //   (=Fc-90 in degrees C-wise from North) to map point Vat/Hat
+        //   ¥ = (VIc-dx*cos(Lp)/(2*fZoom),HIc+dx*sin(Lp)/(2*fZoom)).
+        // Stepping from the left, each pixel adds dx*cos(Lp)/(ImWi*fZoom)
+        //   to V and subtracts dx*sin(Lp)/(ImWi*fZoom) from H.
+        // We calculate Vbase = -cos(Fa)-cos(Lp)/(2*fZoom) and Hbase sim'ly,
+        //   then each row, add dx (=deep)*Vbase to Vposn for the V part of Lx;
+        //   and step Vstp = dx*cos(Lp)/(ImWi*fZoom) and Hstp sim'ly.
+        //
+        // MyMath.Angle2cart(Facing); // angles are in degrees, not radians
+        // Hstp = MyMath.Sine; // sin grows to right, step E to edge
+        // Vstp = -MyMath.Cose; // cos shrinks down (sin^2+cos^2 = 1m) step S
+        // MyMath.Angle2cart(Facing-90.0); // this now points left-to-right,
+        // Vinc = MyMath.Cose; // for stepping across the view screen
+        // Hinc = -MyMath.Sine;
+        // deep = 256.0;
+        // Vbase = Vstp*256.0; // about double the park width (in 2m grid locs),
+        // Hbase = Hstp*256.0; // so guaranteed to be outside the park
+        doit = 0;
+        rx = RangeRow[255] - 1; // at horizon, mid-screen
+        for (dx = 255; dx >= -ImHaf; dx += -1) {    // convert depth to raster line number..
+          if (rx >= ImHi - DrawDash) {
+            break; // normal exit at bottom of screen
+          }
+          if (dx < 0) {
+            break;
+          }
+          robe = RangeRow[dx & 255]; // dx: nominal depth in park 25cm units
+          // far = far&0xFFFFFF|(robe<<24);
+          // if (Vscale>0) robe = (robe-ImHaf)*Vscale+ImHaf;
+          if (robe <= rx) {
+            continue;
+          }
+          step = ImWi;     // 8x cont, 4x brk..
+          while (rx < robe) {
+            rx++;
+            far = 1;
+            if (rx == TripLine) {
+              if (LookFrame == 0) {
+                far = far | 0x80000000;
+              }
+              System.out.println(HandyOps.Dec2Log("---TripLin=", TripLine,
+                  HandyOps.Dec2Log("/", LookFrame, "---")));
+              seen = false;
+            }
+            cx = rx - ImHaf; // RowRange is bottom half of screen only // ImHaf=240
+            if (cx >= ImHaf - DrawDash) {
+              break;
+            }
+            doit = RowRange[cx];
+            deep = ((double) doit) * 0.03125; // RR: m*16 (6cm), deep: 2m
+            Vbase = deep * Vstp + Vposn * 0.5; // current center of the view at this dx,
+            Hbase = deep * Hstp + Hposn * 0.5; // ..in grid coords (2m)
+            ftmp = deep * 0.125 * WiZoom; // WiZoom = Dzoom*32/FltWi = 16/(ImWi*fZoom)
+            Vpx = Vinc * ftmp; // step size across image (in grid/pix)..
+            Hpx = Hinc * ftmp; // .. = {deep/(ImWi/2)/zoom}*(sin|cos)
+            Voffm = Vpx * fHafIm; // fHafIm = ((double)FltWi)/2+1.0 (+1 for extra +Vpx)
+            Hoffm = Hpx * fHafIm;
+            Vat = Vbase - Voffm; // start here at left edge of screen (in grid=2m)
+            Hat = Hbase - Hoffm;
+            Voffm = Vbase + Voffm; // (end here, for bounds check)
+            Hoffm = Hbase + Hoffm;
+            cx = cx << 2;
+            if (DoCloseUp) {
+              if (ShowMap) {
+                if (ZooMapDim != 0) {
+                  if (cx >= 0) {
+                    if (RasterMap != null) {
+                      if (cx < RasterMap.length - 4) {
+                        RasterMap[cx + 3] = Hoffm; // right end of raster (in grid=2m)
+                        RasterMap[cx + 2] = Voffm;
+                        RasterMap[cx + 1] = Hat;   // left end
+                        RasterMap[cx] = Vat;
+                      } //~if
                     }
                   }
                 }
-            } //~for(cx)~while(rx)~for(dx)~else
-            if (!TrakNoPix) if (TrakImages != null) if (NumFax > 0) ShoArtifax();
-            if (Mini_Log) System.out.println(HandyOps.Dec2Log(" (StWh) ", rx,
-                    HandyOps.Dec2Log(" ", ShoSteer, HandyOps.Dec2Log("/", SteerWhee,
-                            HandyOps.Int2Log(" [", Lww, HandyOps.Int2Log("/", Rww, // botm scrn corners
-                                    HandyOps.Int2Log(" ", LwL, HandyOps.Int2Log("/", RwL, // blu top scrn edges
-                                            HandyOps.Dec2Log("] ", TopCloseView, HandyOps.Int2Log(" ", ZooMapTopL,
-                                                    HandyOps.Int2Log(" ", far, HandyOps.TF2Log(" ", TrakImages != null,
-                                                            HandyOps.Flt2Log(" ", VuEdge, HandyOps.Dec2Log(" ", NumFax,
-                                                                    HandyOps.PosTime(" @ ")))))))))))))));
-            // if (why != 8) break; // if scenery went bad, still do steering wheel..
+              }
+            }
+            if (InWalls) { // calc shade for distant walls..
+              cx = 0;
+              doit = doit >> 3; // = distance in half-meters (=deep*4)
+              if (doit > 63) {
+                Darken = 0x3F3F3F;
+              } else if (doit > 0) { // ZoomPix=ImWi*50/Zoom35.. ¥ I don't believe this ¥¥
+                cx = ZoomPix * 2 / doit; // = pix/meter (12cm @ 1:8), = baseboard
+                Darken = doit * 0x10101;
+              } //~if
+              else {
+                Darken = 0;
+              }
+              Wally = (cx << 24) + CreamWall;
+            } //~if // (InWalls) ..near-white cream
+            else {
+              doit = 0;
+            }
+            thar = rx * WinWi - 1;
+            if (CheckerBd == 0) {
+              if (solidGry) {
+                if (rx > ImHaf + 32) {
+                  if (Log_Draw) {
+                    if (optn > 1) {
+                      OopsLog = OopsLog + HandyOps.Dec2Log(" Sr", rx, "");
+                    }
+                  }
+                  for (cx = 0; cx <= ImWi - 1; cx++) {
+                    thar++;
+                    if (myPix != null) {
+                      if (thar > 0) {
+                        if (thar < myPix.length) {
+                          myPix[thar] = PavColo;
+                        }
+                      }
+                    }
+                  } //~for
+                  continue;
+                } //~if // (solidGry)
+              }
+            }
+            if (ShowMap) {
+              if (Mtrk != 0) {
+                if (ZooMapDim != 0) { // find view trapezoid corners
+                  if (LwL == 0) {
+                    LwL = ZoomMapCoord(true, Vat + Vat, Hat + Hat);
+                    if (LwL != 0) {
+                      seen = false;
+                    }
+                  } //~if
+                  if (RwL == 0) {
+                    RwL = ZoomMapCoord(true, Voffm + Voffm, Hoffm + Hoffm);
+                    if (RwL != 0) {
+                      seen = false;
+                    }
+                  }
+                } //~if // (Mtrk)
+              }
+              if (rx == ImHi - 2 - DrawDash) { // DrawDash=12
+                if (ZooMapDim != 0) { // draw view trapezoid..
+                  zx = ZoomMapCoord(false, MyMath.Fix2flt(rx, 0), 1.0); // sb = Lww
+                  Lww = ZoomMapCoord(true, Vat + Vat, Hat + Hat); // should be visible
+                  Rww = ZoomMapCoord(true, Voffm + Voffm, Hoffm + Hoffm);
+                  if (LwL > 0) {
+                    if (Lww > 0) {
+                      DrawLine(MarinBlue + Tintx, Lww >> 16, Lww & 0xFFF, LwL >> 16, LwL & 0xFFF);
+                    }
+                  }
+                  if (RwL > 0) {
+                    if (Rww > 0) {
+                      DrawLine(MarinBlue + Tintx, Rww >> 16, Rww & 0xFFF, RwL >> 16, RwL & 0xFFF);
+                    }
+                  }
+                  if (Lww > 0) {
+                    if (Rww > 0) // MarinBlue=0x0099FF
+                    {
+                      DrawLine(MarinBlue + Tintx, Lww >> 16, Lww & 0xFFF, Rww >> 16, Rww & 0xFFF);
+                    }
+                  }
+                } //~if
+                zx = MyMath.Trunc8(Vat + Vat);
+                cx = MyMath.Trunc8(Voffm + Voffm);
+                if (TopCloseView > 0) {
+                  if (zx >= TopCloseView) {
+                    cx = 0;
+                  } else if (cx >= TopCloseView) {
+                    cx = 0;
+                  }
+                } //~if
+                if (cx > 0) {
+                  DrawLine(MarinBlue + Tintx * 2, zx,
+                      MyMath.Trunc8(Hat + Hat) + ImWi + 2, cx,
+                      MyMath.Trunc8(Hoffm + Hoffm) + ImWi + 2);
+                }
+              }
+            } //~if // (DrawDash) (ShowMap)
+            if (VuEdge == 0.0) {
+              if (Mtrk != 0) {
+                VuEdge = MyMath.aTan0(Hoffm + Hoffm - Hposn, Vposn - Voffm - Voffm) - Facing;
+                while (VuEdge > 180.0) {
+                  VuEdge = VuEdge - 360.0;
+                }
+                while (VuEdge + 180.0 < 0.0) {
+                  VuEdge = VuEdge + 360.0;
+                }
+                if (VuEdge < 0.0) {
+                  VuEdge = -VuEdge;
+                }
+                seen = false;
+              } //~if
+            }
+            cx = 0; // log bounds check..
+            if (MyMath.fMin(Vat, Voffm) > GridTall) {
+              cx = 8;
+            } else if (MyMath.fMax(Vat, Voffm) < 0.0) {
+              cx = 4;
+            }
+            if (MyMath.fMin(Hat, Hoffm) > GridWide) {
+              cx = cx + 2;
+            } else if (MyMath.fMax(Hat, Hoffm) < 0.0) {
+              cx++;
+            }
+            if (cx != 0) {
+              seen = false;
+            }
+            // if (TrakNoPix) if (rx<ImHaf+4) cx = cx|16;
+            seen = true; // if (TrakNoPix) if (rx<ImHaf+4) cont_inue;
+            solidGry = true;
+            info = 0;
+            if ((cx & 15) == 0) {
+              for (cx = 0; cx <= ImWi - 1; cx++) { // .. repeat until off right..
+                bitz = PrioRaster[cx];
+                thar++;
+                Vat = Vat + Vpx;
+                Hat = Hat + Hpx;
+                if (WhitLnSz > 0) {
+                  ftmp = Vpx + Hpx;
+                } else {
+                  ftmp = 0.0;
+                }
+                info = 0;
+                if (Vat < 0.0) {
+                  info++;
+                }
+                if (Hat < 0.0) {
+                  info++;
+                }
+                if (Vat >= GridTall) {
+                  info++;
+                }
+                if (Hat >= GridWide) {
+                  info++;
+                }
+                if (info > 0) { // often outside park at first, so..
+                  solidGry = false;
+                  step--;
+                  if (Log_Draw) {
+                    if (optn > 1) {
+                      if (step > 0) {
+                        if (step < 3) {
+                          aWord = " Or" + rx;
+                          OopsLog = OopsLog + aWord;
+                        } //~if // (step)
+                      }
+                    }
+                  }
+                  continue;
+                } //~if // (often outside park)
+                // Vmap = MyMath.Trunc8(Vat+Vat);
+                // Hmap = MyMath.Trunc8(Hat+Hat);             // TripLine: far<0
+                colo = MapColor(far, Vat + Vat, Hat + Hat, ftmp); // ODD(far)
+                PrioRaster[cx] = TmpI;
+                if (colo == 0) {
+                } // continue;                     // (BuildFrame)
+                else if ((colo & -4) == -4) { // indoor (white) wall..
+                  yx = colo;
+                  kx = Wally >> 24;
+                  here = thar;
+                  if (colo == -4) {
+                    if (PilasterCo == 0) {
+                      info = DarkWall;
+                    } else {
+                      info = PilasterCo;
+                    }
+                    kx = 0;
+                  } //~if
+                  else if ((colo & 1) == 0) { // what about BackWall?
+                    info = DarkWall; // shadowy gray-tan
+                    kx = 0;
+                  } //~if // might be door, so no baseboard
+                  else {
+                    info = CreamWall; // ..near-white cream
+                  }
+                  if (Wally == 0) {
+                    if (colo != -4) {
+                      Wally = info; // seen a wall
+                    }
+                  }
+                  info = info - Darken;
+                  for (zx = rx; zx >= 0; zx += -1) {
+                    colo = info; // darken baseboard edge..
+                    kx--;
+                    if (kx == 0) {
+                      if ((((colo & 0xCCCCCC) + 0xCCCCCC) & 0x1111110)
+                          == 0x1111110) {
+                        colo = colo - 0x333333;
+                      }
+                    }
+                    if (here > 0) {
+                      if (myPix != null) {
+                        if (here < myPix.length) {
+                          myPix[here] = colo;
+                        }
+                      }
+                    }
+                    if (TmpI == bitz) {
+                      if (kx < 0) {
+                        break; // already did this wall
+                      }
+                    }
+                    if (GoodLog || Log_Draw) {
+                      if (zx > 0) {
+                        if (zx == TripLine) {
+                          System.out.println(HandyOps.Dec2Log("  (wall) ", kx,
+                              HandyOps.Dec2Log(" ", zx, HandyOps.Dec2Log(" ", rx,
+                                  HandyOps.Dec2Log("/", cx, HandyOps.Colo2Log(" = ", colo,
+                                      HandyOps.Dec2Log(" ", yx, HandyOps.Int2Log(" ", Wally,
+                                          HandyOps.Int2Log(" ", far, "")))))))));
+                        }
+                      }
+                    }
+                    here = here - WinWi;
+                  } //~for
+                  continue;
+                } //~if // colo = yx;} //~if // (wall in indoor track)
+                if (colo < 0) {
+                  continue; // (obsolete) artifact
+                }
+                if (Mtrk == 0) {
+                  Mtrk = rx;
+                  seen = false;
+                } //~if
+                if (PavColo != GrasColo) {
+                  if (WhitLnSz > 0.0) {
+                    zx = 0;
+                    if (cx > 0) {
+                      zx = PeekPixel(rx, cx - 1);
+                    }
+                    if ((colo == PavColo) || (colo == PavDk)) {
+                      // if (Mtrk==0) Mtrk = cx;
+                      if (zx == GrasColo) {
+                        colo = 0xEEEEEE; // grass next to paved..
+                      } else if (zx == GrasDk) {
+                        colo = 0xEEEEEE;
+                      }
+                      zx = PeekPixel(rx - 1, cx); // if grass above paved..
+                      if (zx == GrasColo) {
+                        colo = 0xEEEEEE; // ..near-white to replace gray
+                      } else if (zx == GrasDk) {
+                        colo = 0xEEEEEE;
+                      }
+                    } //~if // (PavColo)
+                    // else if (chekt>0) colo = PavDk;
+                    else if ((colo == GrasColo) || (colo == GrasDk)) {
+                      if (zx == PavColo) {
+                        colo = 0xEEEEEE; // paved next to grass..
+                      } else if (zx == PavDk) {
+                        colo = 0xEEEEEE;
+                      }
+                      // else if (chekt>0) colo = GrasDk; // dk.grn
+                      solidGry = false;
+                    } //~if // (GrasColo)
+                    else {
+                      solidGry = false;
+                    }
+                  } //~if
+                  else {
+                    solidGry = false;
+                  }
+                }
+                if (rx == TripLine) { // show TripLine in blue..
+                  if (((colo + 1) & 255) == 0) {
+                    colo = colo & 0x7F7F77;
+                  } else {
+                    colo = colo | 255;
+                  }
+                } //~if
+                if (colo > 0) {
+                  if (thar > 0) {
+                    if (myPix != null) {
+                      if (thar < myPix.length) {
+                        myPix[thar] = colo;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    } //~for(cx)~while(rx)~for(dx)~else
+        if (!TrakNoPix) {
+          if (TrakImages != null) {
+            if (NumFax > 0) {
+              ShoArtifax();
+            }
+          }
+        }
+        if (Mini_Log) {
+          System.out.println(HandyOps.Dec2Log(" (StWh) ", rx,
+              HandyOps.Dec2Log(" ", ShoSteer, HandyOps.Dec2Log("/", SteerWhee,
+                  HandyOps.Int2Log(" [", Lww, HandyOps.Int2Log("/", Rww, // botm scrn corners
+                      HandyOps.Int2Log(" ", LwL, HandyOps.Int2Log("/", RwL, // blu top scrn edges
+                          HandyOps.Dec2Log("] ", TopCloseView, HandyOps.Int2Log(" ", ZooMapTopL,
+                              HandyOps.Int2Log(" ", far, HandyOps.TF2Log(" ", TrakImages != null,
+                                  HandyOps.Flt2Log(" ", VuEdge, HandyOps.Dec2Log(" ", NumFax,
+                                      HandyOps.PosTime(" @ ")))))))))))))));
+        }
+        // if (why != 8) break; // if scenery went bad, still do steering wheel..
 
-            if (DrawDash > 0) DrawSteerWheel(ShoSteer, false, false);
-            why = 0;
-            if (OpMode == 3) DrawRedX();
-            if (SeePaintTopL > 0) SeeOnScrnPaint(SeePaintTopL >> 16, SeePaintTopL & 0xFFFF,
-                    SeePaintSize >> 16, SeePaintSize & 0xFFFF, SeePaintImgP, MarinBlue);
-            why--; // why = -1
-            break;
-        } //~while // (once through)
-        if (GoodLog) {
-            if (OopsLog.length() == 2) OopsLog = "";
-            OopsLog = OopsLog + HandyOps.PosTime(" @ ") + " @";
-            myDash = myDash + " = ";
+        if (DrawDash > 0) {
+          DrawSteerWheel(ShoSteer, false, false);
+        }
+        why = 0;
+        if (OpMode == 3) {
+          DrawRedX();
+        }
+        if (SeePaintTopL > 0) {
+          SeeOnScrnPaint(SeePaintTopL >> 16, SeePaintTopL & 0xFFFF,
+              SeePaintSize >> 16, SeePaintSize & 0xFFFF, SeePaintImgP, MarinBlue);
+        }
+        why--; // why = -1
+        break;
+      } //~while // (once through)
+      if (GoodLog) {
+        if (OopsLog.length() == 2) {
+          OopsLog = "";
+        }
+        OopsLog = OopsLog + HandyOps.PosTime(" @ ") + " @";
+        myDash = myDash + " = ";
 //ABCDE
 //            System.out.println(HandyOps.Dec2Log(" (BildFram) ", FrameNo, // why =
 //                    HandyOps.Dec2Log(myDash, why, OopsLog)));

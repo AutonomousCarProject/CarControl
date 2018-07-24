@@ -4,7 +4,6 @@ import com.aparapi.Range;
 import com.apw.imagemanagement.ImageManipulator;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Arrays;
 
 public class ImageProcessing {
 
@@ -25,8 +24,8 @@ public class ImageProcessing {
       System.out.printf("%.2fms%n", kernel.getAccumulatedExecutionTime());
     }
 
-        System.out.printf("%.2fms%n", kernel.getAccumulatedExecutionTime());
-        //System.out.println(Arrays.toString(kernel.getSimple()));
+    System.out.printf("%.2fms%n", kernel.getAccumulatedExecutionTime());
+    //System.out.println(Arrays.toString(kernel.getSimple()));
 
     Instant start = Instant.now();
 

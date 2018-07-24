@@ -3,10 +3,8 @@
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
     <output-test url="file://$MODULE_DIR$/../../out/test/classes" />
     <exclude-output />
-    <content url="file://$MODULE_DIR$/../../src/test">
-      <sourceFolder url="file://$MODULE_DIR$/../../src/test/resources" type="java-test-resource" />
-    </content>
-    <orderEntry type="jdk" jdkName="1.8" jdkType="JavaSDK" />
+    <content url="file://$MODULE_DIR$/../../src/test" />
+    <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="CarControl_main" />
     <orderEntry type="library" name="Gradle: com.aparapi:aparapi:1.9.0" level="project" />

@@ -1,4 +1,4 @@
-package com.apw.pwm.fakefirm;                                       // 2017 November 30
+package com.apw.fakefirm;                                       // 2017 November 30
 
 public interface UpdateListener {
 

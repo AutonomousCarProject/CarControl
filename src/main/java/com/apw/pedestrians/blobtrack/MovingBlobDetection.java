@@ -1,10 +1,9 @@
 package com.apw.pedestrians.blobtrack;
 
 
-import com.apw.pedestrians.blobdetect.Blob;
-import com.apw.SpeedCon.Settings;
 import com.apw.pedestrians.Constant;
 import com.apw.pedestrians.blobdetect.Blob;
+import com.apw.speedcon.Settings;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -298,61 +297,61 @@ public class MovingBlobDetection implements IMovingBlobDetection {
     }
   }
 
-    private void updateMovingBlobs(List<Blob> blobList) {
-        //set of unmatched movingblobs (all are unmatched at start of frame)
-        HashSet<MovingBlob> movingBlobSet = new HashSet<>(getMovingBlobs());
-        //set of unmatched blobs
-        HashSet<Blob> blobSet = new HashSet<>(blobList);
-        //queue with shortest distance pairs of movingblobs and blobs in front
-        PriorityQueue<BlobPair> queue = new PriorityQueue<>();
-        for (Blob blob : blobList) {
-            for (MovingBlob movingBlob : this.movingBlobs) {
-                //creates pairs in queue of blobs & moving blobs with same color within 100 pixels
-                movingBlob.updatePredictedPosition();
-                if (blob.color.getColor() == movingBlob.color.getColor()) {
-                    float distanceX = Math.abs(movingBlob.predictedX - (blob.x + blob.width / 2));
-                    float distanceY = Math.abs(movingBlob.predictedY - (blob.y + blob.height / 2));
-                    float distance = (float) Math.sqrt(distanceX * distanceX + distanceY * distanceY);
-                    float widthChange = Math.abs(movingBlob.width - blob.width);
-                    float heightChange = Math.abs(movingBlob.height - blob.height);
-                    if (distanceX <= distanceLimitX && distanceY <= distanceLimitY &&
-                            widthChange <= widthChangeLimit && heightChange <= heightChangeLimit) {
-                        queue.add(new BlobPair(distance, blob, movingBlob));
-                    }
-                }
-            }
+  private void updateMovingBlobs(List<Blob> blobList) {
+    //set of unmatched movingblobs (all are unmatched at start of frame)
+    HashSet<MovingBlob> movingBlobSet = new HashSet<>(getMovingBlobs());
+    //set of unmatched blobs
+    HashSet<Blob> blobSet = new HashSet<>(blobList);
+    //queue with shortest distance pairs of movingblobs and blobs in front
+    PriorityQueue<BlobPair> queue = new PriorityQueue<>();
+    for (Blob blob : blobList) {
+      for (MovingBlob movingBlob : this.movingBlobs) {
+        //creates pairs in queue of blobs & moving blobs with same color within 100 pixels
+        movingBlob.updatePredictedPosition();
+        if (blob.color.getColor() == movingBlob.color.getColor()) {
+          float distanceX = Math.abs(movingBlob.predictedX - (blob.x + blob.width / 2));
+          float distanceY = Math.abs(movingBlob.predictedY - (blob.y + blob.height / 2));
+          float distance = (float) Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+          float widthChange = Math.abs(movingBlob.width - blob.width);
+          float heightChange = Math.abs(movingBlob.height - blob.height);
+          if (distanceX <= distanceLimitX && distanceY <= distanceLimitY &&
+              widthChange <= widthChangeLimit && heightChange <= heightChangeLimit) {
+            queue.add(new BlobPair(distance, blob, movingBlob));
+          }
         }
-        //matches closest pairs until it runs out of movingBlobs, blobs, or pairs
-        while (!movingBlobSet.isEmpty() && !blobSet.isEmpty() && !queue.isEmpty()) {
-            //finds shortest pair in queue
-            BlobPair pair = queue.peek();
-            //checks if neither blobs are matched already
-            if (movingBlobSet.contains(pair.oldBlob) && blobSet.contains(pair.newBlob)) {
-                //matches blobs and updates sets and queue
-                matchBlob(pair.oldBlob, pair.newBlob);
-                movingBlobSet.remove(pair.oldBlob);
-                blobSet.remove(pair.newBlob);
-                queue.remove();
-            } else {
-                //if either blob is matched, removes pair from queue
-                queue.remove();
-            }
-        }
-        //updates unmatched MovingBlobs
-        for (MovingBlob movingBlob : movingBlobSet) {
-            updateUnmatched(movingBlob);
-        }
-
-        //creates new MovingBlobs for unmatched blobs
-        for (Blob blob : blobSet) {
-            this.movingBlobs.add(new MovingBlob(blob));
-        }
-
-        if(Settings.writeBlobsToConsole){
-        	System.out.println(movingBlobs.get(0));
-        }
-
+      }
     }
+    //matches closest pairs until it runs out of movingBlobs, blobs, or pairs
+    while (!movingBlobSet.isEmpty() && !blobSet.isEmpty() && !queue.isEmpty()) {
+      //finds shortest pair in queue
+      BlobPair pair = queue.peek();
+      //checks if neither blobs are matched already
+      if (movingBlobSet.contains(pair.oldBlob) && blobSet.contains(pair.newBlob)) {
+        //matches blobs and updates sets and queue
+        matchBlob(pair.oldBlob, pair.newBlob);
+        movingBlobSet.remove(pair.oldBlob);
+        blobSet.remove(pair.newBlob);
+        queue.remove();
+      } else {
+        //if either blob is matched, removes pair from queue
+        queue.remove();
+      }
+    }
+    //updates unmatched MovingBlobs
+    for (MovingBlob movingBlob : movingBlobSet) {
+      updateUnmatched(movingBlob);
+    }
+
+    //creates new MovingBlobs for unmatched blobs
+    for (Blob blob : blobSet) {
+      this.movingBlobs.add(new MovingBlob(blob));
+    }
+
+    if (Settings.writeBlobsToConsole) {
+      System.out.println(movingBlobs.get(0));
+    }
+
+  }
 
   private void matchBlob(MovingBlob movingBlob, Blob newBlob) {
     //update information based on new position

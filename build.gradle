@@ -1,8 +1,5 @@
-plugins {
-    id 'java'
-}
-
 apply plugin: 'java'
+apply plugin: 'cpp'
 apply plugin: 'maven'
 
 sourceCompatibility = 1.8
@@ -26,7 +23,8 @@ dependencies {
 sourceSets {
     main {
         java {
-            srcDirs = ['src/']
+            srcDirs = ['src/main/java']
         }
+        // TODO add CPP files
     }
 }
