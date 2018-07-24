@@ -101,6 +101,14 @@ This project was created and is maintained by a group of highschool students in 
 
 You are welcome to submit issues and pull requests if you so desire (you probably dont).
 
+# IC
+
+[Travis](https://travis-ci.org).
+
+# Style Guide
+
+[Google Java Style Guide](https://google.github.io/styleguide/javaguide.html), enforced by [Google Java Formatter](https://github.com/google/google-java-format) with [google-java-format-gradle-plugin](https://github.com/sherter/google-java-format-gradle-plugin).
+
 # Liscense
 
 None.
