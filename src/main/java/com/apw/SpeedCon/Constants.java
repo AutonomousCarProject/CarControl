@@ -29,6 +29,8 @@ public class Constants {
 		DRIFT_TO_STOPLIGHT_FRAMES = 0,	//Frames to drift forward after stoplight detected
 		STOPLIGHT_DRIFT_SPEED = 12,		//Speed at which the car pulls up to a stoplight
 		WAIT_AFTER_STOPSIGN = 100,		//Time between finding a stopsign and finding a stopsign again
+		MIN_SPEED_INCREMENT = 1,		//Min increment amount between current and next frame speed
+		MAX_SPEED_INCREMENT = 10,		//Max increment amount between current and next frame speed
 		
 		//Blob Filters
 		BLOB_HEIGHT = 5,				//Filtered height of a blob in pixels
