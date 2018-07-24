@@ -1,6 +1,6 @@
-package com.apw.Steering;
+package com.apw.steering;
 
-import com.apw.ImageManagement.ImageManager;
+import com.apw.imagemanagement.ImageManager;
 
 public class SteerControlCheck {
 

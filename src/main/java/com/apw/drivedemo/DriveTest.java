@@ -1,10 +1,9 @@
 package com.apw.drivedemo;
 
-import com.apw.ImageManagement.ImageManager;
-import com.apw.ImageManagement.ImageManipulator;
-import com.apw.Steering.Point;
-import com.apw.Steering.SteerControlCheck;
-import com.apw.Steering.Steering;
+import com.apw.imagemanagement.ImageManager;
+import com.apw.imagemanagement.ImageManipulator;
+import com.apw.steering.Point;
+import com.apw.steering.Steering;
 import com.apw.apw3.*;
 
 import com.apw.fakefirm.Arduino;
@@ -14,11 +13,9 @@ import javax.swing.*;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
 import java.awt.image.DataBufferInt;
 import java.util.Date;
 import java.util.Timer;
-import java.util.TimerTask;
 
 
 public class DriveTest extends JFrame implements MouseListener {
@@ -29,7 +26,7 @@ public class DriveTest extends JFrame implements MouseListener {
 	public static final int FRAME_RATE_NUMBER = 4;	//4 corresponds to 30fps
     public static final int FPS = 15;
 
-    //Steering and Camera Systems
+    //steering and Camera Systems
     private Steering testSteering;
     
     //internal variables
@@ -261,7 +258,7 @@ public class DriveTest extends JFrame implements MouseListener {
 			@Override
 			public void run() {
 				window.sim.SimStep(1);
-				//window.TestServos(); // (Uses DrDemo Steering Code instead)
+				//window.TestServos(); // (Uses DrDemo steering Code instead)
 				window.repaint();
 			}
 		}, new Date(), 1000 / FPS);
@@ -512,7 +509,7 @@ public class DriveTest extends JFrame implements MouseListener {
 
 	//CONTROL
 
-	/** Steering and Speed control on each frame
+	/** steering and Speed control on each frame
 	 *
 	 */
 	private void TestServos() { // exercise steering & ESC servos

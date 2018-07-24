@@ -11,16 +11,16 @@
  *
  * FakeFirmata is designed to work with JSSC (Java Simple Serial Connector),
  * but if you are developing your self-driving code on some computer other
- * than LattePanda, you can substitute package noJSSC, which has the same
+ * than LattePanda, you can substitute package nojssc, which has the same
  * APIs (as used by FakeFirmata) but does nothing.
  */
 package com.apw.drivedemo;                                    // 2018 June 13
 
-import com.apw.ImageManagement.ImageManager;
-import com.apw.SpeedCon.Constants;
-import com.apw.SpeedCon.SpeedController;
-import com.apw.Steering.Point;
-import com.apw.Steering.Steering;
+import com.apw.imagemanagement.ImageManager;
+import com.apw.speedcon.Constants;
+import com.apw.speedcon.SpeedController;
+import com.apw.steering.Point;
+import com.apw.steering.Steering;
 import com.apw.apw3.*;
 import com.apw.fakefirm.Arduino;
 import com.apw.fly2cam.FlyCamera;

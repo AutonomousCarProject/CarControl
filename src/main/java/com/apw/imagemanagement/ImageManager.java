@@ -1,13 +1,10 @@
 /*ImageManager: Retrieves and preprocesses images from the camera and displays feed onscreen*/
 
-package com.apw.ImageManagement;
+package com.apw.imagemanagement;
 
 import com.aparapi.Range;
 import com.apw.fly2cam.FlyCamera;
 import com.apw.gpu.*;
-
-import java.lang.invoke.LambdaMetafactory;
-import java.util.Arrays;
 
 public class ImageManager {
 

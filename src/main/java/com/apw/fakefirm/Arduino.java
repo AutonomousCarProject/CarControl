@@ -16,7 +16,7 @@ package com.apw.fakefirm;                                     // 2018 February 1
 // import nojssc.SerialPort; // use this instead for working with TrackSim
 //                           // ..on a computer with no serial port.
 
-import com.apw.noJSSC.SerialPort;
+import com.apw.nojssc.SerialPort;
 
 public class Arduino { // Adapted to Java from arduino.cs ... (FakeFirmata)
     // (subclass this to add input capability)

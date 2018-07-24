@@ -1,4 +1,4 @@
-package com.apw.SpeedCon;
+package com.apw.speedcon;
 
 public class Constants {
 		public static final boolean

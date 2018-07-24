@@ -1,11 +1,11 @@
-package com.apw.SpeedCon;
+package com.apw.speedcon;
 
 import java.awt.Graphics;
 import java.util.*;
 import com.apw.pedestrians.blobtrack.*;
 import com.apw.pedestrians.image.Color;
 import com.apw.pedestrians.*;
-import com.apw.ImageManagement.*;
+import com.apw.imagemanagement.*;
 import com.apw.apw3.TrakSim;
 import com.apw.drivedemo.DriveTest;
 
@@ -99,7 +99,7 @@ public class SpeedController {
 	
 	//This figures out the speed that we want to be traveling at
 	public void calculateDesiredSpeed(int wheelAngle, int manualSpeed){
-		double curveSteepness = 0; // Steering.getCurveSteepness();
+		double curveSteepness = 0; // steering.getCurveSteepness();
         int shouldStopSign = this.updateStopSign();
         int shouldStopLight = this.updateStopLight();
 
@@ -135,7 +135,7 @@ public class SpeedController {
     }
 
     //To be called every frame. Checks if we need to be stopping at a stopsign
-    //By modifying constants in the Constants.java in SpeedCon, you can adjust how the stopping behaves
+    //By modifying constants in the Constants.java in speedcon, you can adjust how the stopping behaves
     //Can be triggered by pressing 'P'
     public int updateStopSign(){
         if(stoppingAtSign){
@@ -164,7 +164,7 @@ public class SpeedController {
     }
 
     //To be called every frame. Checks if we need to be stopping at a stoplight
-    //By modifying constants in the Constants.java in SpeedCon, you can adjust how the stopping behaves
+    //By modifying constants in the Constants.java in speedcon, you can adjust how the stopping behaves
     //Can be triggered by pressing 'O', and released by pressing 'I'
     public int updateStopLight(){
         if(stoppingAtLight){

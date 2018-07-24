@@ -11,7 +11,7 @@
  *
  * FakeFirmata is designed to work with JSSC (Java Simple Serial Connector),
  * but if you are developing your self-driving code on some computer other
- * than LattePanda, you can substitute package noJSSC, which has the same
+ * than LattePanda, you can substitute package nojssc, which has the same
  * APIs (as used by FakeFirmata) but does nothing.
  */
 package com.apw.apw3;                                       // 2018 June 13

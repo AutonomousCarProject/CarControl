@@ -3,7 +3,7 @@
  * FakeFirmata is designed to work with JSSC (Java Simple Serial Connector),
  * but when using TrakSim, all you need are stubs with the same API.
  */
-package com.apw.noJSSC;                                 // 2018 May 11
+package com.apw.nojssc;                                 // 2018 May 11
 
 /**
  * This class has the same name & API as JSSC but does nothing.
