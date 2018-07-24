@@ -2,6 +2,8 @@ package com.apw.SpeedCon;
 
 import java.awt.Graphics;
 import java.util.*;
+
+import com.apw.apw3.SimCamera;
 import com.apw.pedestrians.blobtrack.*;
 import com.apw.pedestrians.image.Color;
 import com.apw.pedestrians.*;
@@ -53,7 +55,9 @@ public class SpeedController {
 		//relevant, and then what to do with them
 		ImageManager imageManager = dtest.getImgManager();
 
+
 		List<MovingBlob> blobs = this.pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), 912);
+
 
 		for(MovingBlob i : blobs){
 			/* Returns an int value corresponding to the color of the light we are looking at
@@ -94,6 +98,7 @@ public class SpeedController {
 	//This figures out the speed that we want to be traveling at
 	public void calculateDesiredSpeed(double wheelAngle, int manualSpeed){
 		double curveSteepness = 0; // Steering.getCurveSteepness();
+
         int shouldStopSign = this.updateStopSign();
         int shouldStopLight = this.updateStopLight();
 

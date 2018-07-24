@@ -32,14 +32,14 @@ public class DriverCons { // TrakSim constant parameters
             D_LiveCam = false,       // F: omit connecting to FlyCamera
             D_StartLive = false,    // T: start in live camera if possible
             D_FixedSpeed = true,    // ignore speed control, assume fMinSpeed
-            D_StayInTrack = true,   // ignore steering control, stay centered in track
+            D_StayInTrack = false,   // ignore steering control, stay centered in track
             D_ShoTrkTstPts = false, // T: show test points used to calc StayInTrack
             D_ShoClikGrid = true,  // T: to see where to click to steer/accelerate
             D_ShowMap = true,       // T: show the map next to the scene
             D_DoCloseUp = true,     // T: show close-up map if there is room
             D_RampServos = false,   // T: servos take time to arrive at setting
             D_TrakNoPix = false,    // T: draw track only, omit artifacts & trees
-            D_UseTexTrak = true,    // T: use text file to build track to drive
+            D_UseTexTrak = false,    // T: use text file to build track to drive
             D_Reversible = false,   // T: allow reverse (untested)
             D_StartInCalibrate = false, // T: use this to calibrate servo limits
             D_Log_Draw = false, D_Log_Log = false, D_Fax_Log = false,
@@ -47,7 +47,7 @@ public class DriverCons { // TrakSim constant parameters
             D_DrawOnSides = true, D_DrawPredicted = true, D_DrawCurrent = true; //Drive lines.
 
     public static final int
-            D_SecondViewType = 3,   //0 = no view, 1 = RGB, 2 = monochrome, 3 = simplified
+
             D_Vramp = 68, D_Hramp = 172, // Initial pos'n for car, meters from NW
             D_RampA = 140,     // Initial orient'n for car, c-wise degrees from north
             D_Zoom35 = 35,     // 35mm-equivalent focal length for "camera"
