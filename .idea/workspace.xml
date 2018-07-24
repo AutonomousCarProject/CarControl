@@ -52,8 +52,8 @@
       <file leaf-file-name="Arduino.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/fakefirm/Arduino.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="107">
-              <caret line="20" column="11" selection-start-line="20" selection-start-column="11" selection-end-line="20" selection-end-column="11" />
+            <state relative-caret-position="30">
+              <caret line="14" selection-end-line="14" />
             </state>
           </provider>
         </entry>
@@ -522,7 +522,7 @@
   <component name="NodePackageJsonFileManager">
     <packageJsonPaths />
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="y" value="23" />
     <option name="width" value="1680" />
     <option name="height" value="1027" />
@@ -562,11 +562,6 @@
             <path>
               <item name="CarControl" type="b2602c69:ProjectViewProjectNode" />
               <item name="CarControl" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-            </path>
-            <path>
-              <item name="CarControl" type="b2602c69:ProjectViewProjectNode" />
-              <item name="CarControl" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name=".idea" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -712,6 +707,7 @@
       <recent name="groovy.util.GroovyTestCase" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
       <recent name="C:\JavaProjects\ACPW\CarControl\gpu\src\main\opencl\com\apw" />
       <recent name="C:\JavaProjects\ACPW\CarControl\gpu\src\main\java\com\apw" />
     </key>
@@ -910,14 +906,37 @@
       <option name="project" value="LOCAL" />
       <updated>1532425126490</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Add Google code style to project">
+      <created>1532425351048</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1532425351048</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Remove ignored files">
+      <created>1532425416384</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1532425416384</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="3449000" />
+    <option name="totallyTimeSpent" value="3732000" />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1680" height="1027" extended-state="0" />
+    <frame x="0" y="23" width="1680" height="1027" extended-state="6" />
     <layout>
       <window_info anchor="right" id="Key Promoter X" order="3" />
       <window_info anchor="right" id="Palette" order="3" />
@@ -932,13 +951,13 @@
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info id="UI Designer" order="4" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32903227" />
       <window_info anchor="right" id="Palette&#9;" order="5" />
       <window_info id="Image Layers" order="2" />
       <window_info anchor="right" id="Capture Analysis" order="3" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32905984" />
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.23028392" />
-      <window_info anchor="bottom" id="Terminal" order="7" weight="0.32903227" />
+      <window_info anchor="bottom" id="Terminal" order="7" visible="true" weight="0.32903227" />
       <window_info anchor="bottom" id="Run with VisualVM" order="7" />
       <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.6837607" visible="true" weight="0.12942614" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32903227" />
@@ -992,12 +1011,14 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
-    <MESSAGE value="Remove unnecessary files&#10;&#10;Some of these files were even ignored" />
     <MESSAGE value="Remove .iml files from the root directory" />
     <MESSAGE value="Add .imls for consistency&#10;&#10;See .gitignore for details" />
     <MESSAGE value="Package names -&gt; lower case" />
     <MESSAGE value="Reformat code to conform to Google style guide&#10;&#10;Is the blame dead? Yes. Should that not have happened anyways? Also yes. See kids, this is what happens when you code without any concern for style." />
-    <option name="LAST_COMMIT_MESSAGE" value="Reformat code to conform to Google style guide&#10;&#10;Is the blame dead? Yes. Should that not have happened anyways? Also yes. See kids, this is what happens when you code without any concern for style." />
+    <MESSAGE value="Add Google code style to project" />
+    <MESSAGE value="Remove ignored files" />
+    <MESSAGE value="Remove unnecessary files&#10;&#10;Some of these files were even ignored" />
+    <option name="LAST_COMMIT_MESSAGE" value="Remove unnecessary files&#10;&#10;Some of these files were even ignored" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
@@ -1008,7 +1029,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/src.zip!/java/awt/image/Raster.java" />
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/src.zip!/java/awt/Insets.java" />
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/src.zip!/java/awt/image/BufferedImage.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/pedestrians/blobdetect/BlobDetection.java">
@@ -1268,10 +1288,13 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/gitattributes.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/fakefirm/Arduino.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="107">
-          <caret line="20" column="11" selection-start-line="20" selection-start-column="11" selection-end-line="20" selection-end-column="11" />
+        <state relative-caret-position="30">
+          <caret line="14" selection-end-line="14" />
         </state>
       </provider>
     </entry>
