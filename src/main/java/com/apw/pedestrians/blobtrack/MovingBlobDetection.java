@@ -1,10 +1,8 @@
 package com.apw.pedestrians.blobtrack;
 
-<<<<<<< HEAD
-=======
+
 import com.apw.pedestrians.blobdetect.Blob;
 import com.apw.SpeedCon.Settings;
->>>>>>> origin/speed
 import com.apw.pedestrians.Constant;
 import com.apw.pedestrians.blobdetect.Blob;
 

@@ -38,11 +38,7 @@ public class SpeedController {
 	
 	//A method to be called every frame. Calculates desired speed and actual speed
 	//Also takes stopping into account
-<<<<<<< HEAD
-	public void onUpdate(int gasAmount, double steerDegs, int manualSpeed, Graphics graf, DriveTest dtest, boolean blobsOn, boolean overlayOn){
-=======
 	public void onUpdate(int gasAmount, int steerDegs, int manualSpeed, Graphics graf, DriveTest dtest){
->>>>>>> origin/speed
 		if (cyclesUntilCanDetectStopsign > 0){
 			cyclesUntilCanDetectStopsign--;
 		}
@@ -58,11 +54,8 @@ public class SpeedController {
 		//relevant, and then what to do with them
 		ImageManager imageManager = dtest.getImgManager();
 
-<<<<<<< HEAD
-        List<MovingBlob> blobs = pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), 912);
-=======
 		List<MovingBlob> blobs = this.pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), 912);
->>>>>>> origin/speed
+
 		for(MovingBlob i : blobs){
 			/* Returns an int value corresponding to the color of the light we are looking at
 			 * 0 - No light
@@ -121,128 +114,6 @@ public class SpeedController {
         else if (shouldStopLight == 0){
             this.desiredSpeed = 0;
         }
-<<<<<<< HEAD
-        if (this.emergencyStop){
-            this.desiredSpeed = 0;
-        }
-    }
-
-    //Returns the estimated speed IN METERS PER SECOND
-    public double getEstimatedSpeed(){
-        return currentEstimatedSpeed*Constants.PIN_TO_METER_PER_SECOND;
-    }
-
-    //Updates the estimated speed
-    public void calculateEstimatedSpeed(int gasAmount){
-        currentEstimatedSpeed = gasAmount;
-    }
-
-    //To be called every frame. Checks if we need to be stopping at a stopsign
-    //By modifying constants in the Constants.java in SpeedCon, you can adjust how the stopping behaves
-    //Can be triggered by pressing 'P'
-    public int updateStopSign(){
-        if(stoppingAtSign){
-            if(cyclesToStopAtSign <= 0){
-                cyclesToStopAtSign = Constants.DRIFT_TO_STOPSIGN_FRAMES;
-                stoppedAtSign = true;
-                stoppingAtSign = false;
-                cyclesToGo = Constants.WAIT_AT_STOPSIGN_FRAMES;
-            }
-            else{
-                cyclesToStopAtSign--;
-                return -1;
-            }
-        }
-        if(stoppedAtSign){
-            if(cyclesToGo <= 0){
-                cyclesToGo = Constants.WAIT_AT_STOPSIGN_FRAMES;
-                stoppedAtSign = false;
-            }
-            else{
-                cyclesToGo--;
-                return 0;
-            }
-        }
-        return 1;
-    }
-
-    //To be called every frame. Checks if we need to be stopping at a stoplight
-    //By modifying constants in the Constants.java in SpeedCon, you can adjust how the stopping behaves
-    //Can be triggered by pressing 'O', and released by pressing 'I'
-    public int updateStopLight(){
-        if(stoppingAtLight){
-            if(cyclesToStopAtLight <= 0){
-                cyclesToStopAtLight = Constants.DRIFT_TO_STOPLIGHT_FRAMES;
-                stoppedAtLight = true;
-                stoppingAtLight = false;
-                readyToGo = false;
-            }
-            else{
-                cyclesToStopAtLight--;
-                return -1;
-            }
-        }
-        if(stoppedAtLight){
-            if(readyToGo){
-                stoppedAtLight = false;
-                readyToGo = false;
-            }
-            else{
-                return 0;
-            }
-        }
-        return 1;
-    }
-
-    //Triggered by pressing 'O', this tells us that we have a green light
-    public void readyToGo(){
-        readyToGo = true;
-    }
-
-    //Tells you if we are stopping at a sign currently
-    public boolean getStoppingAtSign(){
-        return stoppingAtSign;
-    }
-
-    //Tells you if we are stopping at a light currently
-    public boolean getStoppingAtLight(){
-        return stoppingAtLight;
-    }
-
-    //Tells us that we have detected a stopsign, and need to stop
-    public void setStoppingAtSign(){
-        stoppingAtSign = true;
-        cyclesToStopAtSign = Constants.DRIFT_TO_STOPSIGN_FRAMES;
-    }
-
-    //Tells us that we have seen a red light, and need to stop
-    public void setStoppingAtLight(){
-        stoppingAtLight = true;
-        cyclesToStopAtLight = Constants.DRIFT_TO_STOPLIGHT_FRAMES;
-    }
-
-    //Getting and setting our emergency stop boolean
-    public boolean getEmergencyStop(){
-        return emergencyStop;
-    }
-
-    public void setEmergencyStop(boolean emer){
-        this.emergencyStop = emer;
-    }
-
-    //This returns our distance from an object. Currently non-functional
-    public  double getDistance(double focalLength, double realObjHeight, double cameraFrameHeight, double objectPixelHeight, double sensorHeight) {
-
-        return (focalLength * realObjHeight * cameraFrameHeight )
-                / ( objectPixelHeight * sensorHeight);
-
-    }
-
-
-    //Break Rate Math
-
-    //The total distance it will take to stop
-=======
 		if (this.emergencyStop){
 			this.desiredSpeed = 0;
 		}
@@ -376,7 +247,6 @@ public class SpeedController {
 	//Break Rate Math
 	
 	//The total distance it will take to stop
->>>>>>> origin/speed
     double calcStopDist(double targetStopDist, double speed)
     {
         return Math.pow(speed, 2) / (Constants.FRICT * Constants.GRAV * 2);
