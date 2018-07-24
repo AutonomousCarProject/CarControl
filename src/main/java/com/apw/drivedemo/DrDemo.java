@@ -134,7 +134,7 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
     System.out.println(
         HandyOps.Dec2Log("(Cal8=", Calibrating, HandyOps.Dec2Log(") pix ", ScrPix * 4, sayso)));
     simVideo = new SimCamera();
-    theServos = new ArduinoPWM();
+    theServos = ArduinoPWM.getInstance();
     theSim = new TrakSim();
     if (LiveCam) {
       theVideo = new FlyCamera();

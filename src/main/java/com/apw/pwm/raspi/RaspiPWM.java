@@ -4,6 +4,17 @@ import com.apw.pwm.PWMController;
 
 public class RaspiPWM implements PWMController {
 
+  private static final RaspiPWM theController = new RaspiPWM();
+
+  private RaspiPWM() {
+
+  }
+
+  // Implicit override
+  public static RaspiPWM getInstance() {
+    return theController;
+  }
+
   @Override
   public boolean IsOpen() {
     return false;

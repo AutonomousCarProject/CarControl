@@ -22,6 +22,8 @@ public class ArduinoPWM implements
     com.apw.pwm.PWMController { // Adapted to Java from arduino.cs ... (FakeFirmata)
   // (subclass this to add input capability)
 
+  private static final ArduinoPWM theController = new ArduinoPWM();
+
   public static final String CommPortNo = "COM3";
   public static final int MAX_DATA_BYTES = 16, // =64 in LattePanda's ArduinoPWM.cs
       MDB_msk = MAX_DATA_BYTES - 1;
@@ -53,11 +55,16 @@ public class ArduinoPWM implements
   protected
   SerialPort surrealPort;
 
-  public ArduinoPWM() { // outer class constructor..
+  private ArduinoPWM() { // outer class constructor..
     surrealPort = new SerialPort(CommPortNo);
     System.out.println("new ArduinoPWM " + CommPortNo + " " + (surrealPort != null));
     digitalOutputData = new int[MAX_DATA_BYTES];
     Open();
+  }
+
+  // Implicit override
+  public static ArduinoPWM getInstance() {
+    return theController;
   }
 
   /**

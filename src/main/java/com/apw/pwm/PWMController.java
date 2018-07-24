@@ -1,6 +1,19 @@
 package com.apw.pwm;
 
+/**
+ * Members must conform to a singleton pattern.
+ */
 public interface PWMController {
+
+  /**
+   * Singleton accessor. This method must be overriden by the member.
+   *
+   * @return The single instance of the PWMController.
+   */
+  static PWMController getInstance() {
+    System.err.println("Error: singleton accessor was not overriden by member.")
+    return null;
+  }
 
   /**
    * Current status of the FakeFirmata library, =true if successfully open.
