@@ -19,13 +19,12 @@ public class SpeedController {
 	private boolean stoppedAtLight;
 	private boolean readyToGo;
 	private boolean emergencyStop;
-	private int color;
+	int color;
 	private int cyclesToStopAtSign = Constants.DRIFT_TO_STOPSIGN_FRAMES;
 	private int cyclesToGo;
 	private int cyclesToStopAtLight = Constants.DRIFT_TO_STOPLIGHT_FRAMES;
 	private int cyclesUntilCanDetectStopsign = Constants.WAIT_AFTER_STOPSIGN;
-	
-	private SpeedFinder speedFinder;
+
 	private PedestrianDetector pedDetect;
 	
 	private List<MovingBlob> currentBlobs;
@@ -33,14 +32,13 @@ public class SpeedController {
 	TrakSim trackSim = new TrakSim();
 	
 	public SpeedController(){
-		this.speedFinder = new SpeedFinder();
 		this.pedDetect = new PedestrianDetector();
 		this.currentBlobs = new ArrayList<MovingBlob>();
 	}
 	
 	//A method to be called every frame. Calculates desired speed and actual speed
 	//Also takes stopping into account
-	public void onUpdate(int gasAmount, int steerDegs, int manualSpeed, Graphics graf, DriveTest dtest, boolean blobsOn, boolean overlayOn){
+	public void onUpdate(int gasAmount, int steerDegs, int manualSpeed, Graphics graf, DriveTest dtest){
 		if (cyclesUntilCanDetectStopsign > 0){
 			cyclesUntilCanDetectStopsign--;
 		}
@@ -55,15 +53,23 @@ public class SpeedController {
 		//This part runs on-screen blobs thru a set of tests to figure out if they are
 		//relevant, and then what to do with them
 		ImageManager imageManager = dtest.getImgManager();
-		
+
 		List<MovingBlob> blobs = this.pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), 912);
 		for(MovingBlob i : blobs){
-			if(detectRedLight(i)){
+			/* Returns an int value corresponding to the color of the light we are looking at
+			 * 0 - No light
+			 * 1 - Red Light
+			 * 2 - Yellow Light
+			 * 3 - Green Light
+			 * */
+			int currLight = detectLight(i, blobs);
+			
+			if(currLight == 1){
 				setStoppingAtLight();
 			}
-			else if (detectYellowLight(i)) {
+			else if (currLight == 2) {
 			}
-			else if (detectGreenLight(i)) {
+			else if (currLight == 3) {
 				readyToGo();
 			}
 			else if(detectStopSign(i) && cyclesUntilCanDetectStopsign <= 0){
@@ -74,6 +80,12 @@ public class SpeedController {
 		}
 		
 		this.currentBlobs = blobs;	
+	}
+	
+	private boolean detectBlobOverlappingBlob(MovingBlob outsideBlob, MovingBlob insideBlob){
+		if((insideBlob.x < outsideBlob.x+outsideBlob.width && insideBlob.width + insideBlob.x > outsideBlob.x)  ||  (insideBlob.y < outsideBlob.y+outsideBlob.height && insideBlob.height + insideBlob.y > outsideBlob.y))
+		return true;
+		return false;
 	}
 	
 	//This figures out the speed that we want to be traveling at
@@ -221,13 +233,13 @@ public class SpeedController {
     double calcStopDist(double targetStopDist, double speed)
     {
         return Math.pow(speed, 2) / (Constants.FRICT * Constants.GRAV * 2);
-    }
+      }
 
-    //The amount of time that is needed to stop at the given speed.
-    double getStopTime(double dist, double speed)
-    {
-        return dist / speed;
-    }
+      //The amount of time that is needed to stop at the given speed.
+      double getStopTime(double dist, double speed)
+      {
+          return dist / speed;
+      }
 
     //The rate at which the speed must go down by, linear
     double calcStopRate(double speed, double time)
@@ -287,7 +299,56 @@ public class SpeedController {
 		}
 	}
 	
+
 	public List<MovingBlob> getBlobs(){
 		return this.currentBlobs;
+	}
+	
+	/* Returns an int value corresponding to the color of the light we are looking at
+	 * 0 - No light
+	 * 1 - Red Light
+	 * 2 - Yellow Light
+	 * 3 - Green Light
+	 * */
+	
+	public int detectLight(MovingBlob blob, List<MovingBlob> bloblist){
+		int lightColor = 0;
+		boolean outputLight = false;
+		//Figure out the color of our blob
+		if (blob.age > Constants.BLOB_AGE && blob.height > Constants.BLOB_HEIGHT && blob.width > Constants.BLOB_WIDTH && blob.x > Constants.STOPLIGHT_MIN_X && blob.x < Constants.STOPLIGHT_MAX_X && blob.y > Constants.STOPLIGHT_MIN_Y && blob.y < Constants.STOPLIGHT_MAX_Y && blob.color.getColor() == Color.RED) {
+			//Found a red light
+			lightColor = 1;
+		}
+		else if (blob.age > Constants.BLOB_AGE && blob.height > Constants.BLOB_HEIGHT && blob.width > Constants.BLOB_WIDTH && blob.x > Constants.STOPLIGHT_MIN_X && blob.x < Constants.STOPLIGHT_MAX_X && blob.y > Constants.STOPLIGHT_MIN_Y && blob.y < Constants.STOPLIGHT_MAX_Y && blob.color.getColor() == Color.RED) {
+			//Found a yellow light
+			lightColor = 2;
+		}
+		else if (blob.age > Constants.BLOB_AGE && blob.height > Constants.BLOB_HEIGHT && blob.width > Constants.BLOB_WIDTH && blob.x > Constants.STOPLIGHT_MIN_X && blob.x < Constants.STOPLIGHT_MAX_X && blob.y > Constants.STOPLIGHT_MIN_Y && blob.y < Constants.STOPLIGHT_MAX_Y && blob.color.getColor() == Color.GREEN) {
+			//Found a green light
+			lightColor = 3;
+		}
+		else{
+			//Didn't find a light
+			return 0;
+		}
+		//If we made it here, we know that we have a light
+		//Therefore, we need to check if that light is inside of a black blob, aka the lamp
+		System.out.println("Found a light: " + lightColor);
+		outputLight = true;
+		int overlaps = 0;
+		for(MovingBlob b : bloblist){
+			if(blob.color.getColor() == Color.BLACK){
+				if(detectBlobOverlappingBlob(blob, b)){
+					overlaps++;
+				}
+			}
+		}
+		System.out.println("Overlaps: "+overlaps);
+		if(outputLight){
+			return lightColor;
+		}
+		else{
+			return 0;
+		}	
 	}
 }
