@@ -203,3 +203,4 @@ src/main/resources/
 
 # Visual Studio
 .vs
+.vscode

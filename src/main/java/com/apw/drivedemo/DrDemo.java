@@ -777,51 +777,48 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 					if ((StartYourEngines == 0) || (NoneStep < 0))
 						fno = DidFrame;
 
-					/// ** If you have self-driving code, you could put it here **///
-					// TestServos(); // (replace this with your own code)
+					/* User created code starts here */
 
+					TestServos(); //Runs TestServos D_nServoTests number of times  
 					
-					// Begin Speed Code
-					
-
-					TestServos(); // (replace this with your own code)
-
-					
-
-					// End Speed Code
-					
+					//Find Lines
 					Point[] hi = testSteering.findPoints(thePixels);
 
-					// Steer between lines
+					//Steer between lines
 					testSteering.averageMidpoints();
 					int tempDeg = testSteering.getDegreeOffset();
 					theServos.servoWrite(SteerPin, (int) ((tempDeg) + 90));
 					
+					//Set speed based on max, min, arrow keys, degree offset, and signs
 					speedControl.onUpdate(this.GasPedal, testSteering.getDegreeOffset(), this.manualSpeed, graf, dtest);
 					AxLR8(true, speedControl.getNextSpeed());
 
 					if(Settings.overlayOn){
-						graf.setColor(Color.ORANGE);
-						 graf.drawRect(Constants.STOPLIGHT_MIN_X, Constants.STOPLIGHT_MIN_Y,
-						 Constants.STOPLIGHT_MAX_X-Constants.STOPLIGHT_MIN_X,
-						 Constants.STOPLIGHT_MAX_Y-Constants.STOPLIGHT_MIN_Y);
-						graf.setColor(Color.PINK);
-						 graf.drawRect(Constants.STOPSIGN_MIN_X, Constants.STOPSIGN_MIN_Y,
-						 Constants.STOPSIGN_MAX_X-Constants.STOPSIGN_MIN_X,
-						 Constants.STOPSIGN_MAX_Y-Constants.STOPSIGN_MIN_Y);
+						int color = 0xffa500;
+						this.theSim.DrawLine(color, Constants.STOPLIGHT_MIN_Y, Constants.STOPLIGHT_MIN_X, Constants.STOPLIGHT_MIN_Y, Constants.STOPLIGHT_MAX_X);
+						this.theSim.DrawLine(color, Constants.STOPLIGHT_MIN_Y, Constants.STOPLIGHT_MAX_X, Constants.STOPLIGHT_MAX_Y, Constants.STOPLIGHT_MAX_X);
+						this.theSim.DrawLine(color, Constants.STOPLIGHT_MAX_Y, Constants.STOPLIGHT_MAX_X, Constants.STOPLIGHT_MAX_Y, Constants.STOPLIGHT_MIN_X);
+						this.theSim.DrawLine(color, Constants.STOPLIGHT_MAX_Y, Constants.STOPLIGHT_MIN_X, Constants.STOPLIGHT_MIN_Y, Constants.STOPLIGHT_MIN_X);
+						color = 0xff69b4;
+						this.theSim.DrawLine(color, Constants.STOPSIGN_MIN_Y, Constants.STOPSIGN_MIN_X, Constants.STOPSIGN_MIN_Y, Constants.STOPSIGN_MAX_X);
+						this.theSim.DrawLine(color, Constants.STOPSIGN_MIN_Y, Constants.STOPSIGN_MAX_X, Constants.STOPSIGN_MAX_Y, Constants.STOPSIGN_MAX_X);
+						this.theSim.DrawLine(color, Constants.STOPSIGN_MAX_Y, Constants.STOPSIGN_MAX_X, Constants.STOPSIGN_MAX_Y, Constants.STOPSIGN_MIN_X);
+						this.theSim.DrawLine(color, Constants.STOPSIGN_MAX_Y, Constants.STOPSIGN_MIN_X, Constants.STOPSIGN_MIN_Y, Constants.STOPSIGN_MIN_X);
 					}
 					
-					for(MovingBlob b:this.speedControl.getBlobs()){
-						int velocity = (int)(100*Math.sqrt(b.velocityX*b.velocityX + b.velocityY*b.velocityY));
-						int color = (velocity << 16) + (velocity << 8) + velocity;
-						this.theSim.DrawLine(color, b.y, b.x, b.y+b.height, b.x);
-						this.theSim.DrawLine(color, b.y, b.x, b.y, b.x+b.width);
-						this.theSim.DrawLine(color, b.y+b.height, b.x, b.y+b.height, b.x+b.width);
-						this.theSim.DrawLine(color, b.y, b.x+b.width, b.y+b.height, b.x+b.width);
+					//Overlay detected blobs
+					if (Settings.blobsOn) {
+						for(MovingBlob b:this.speedControl.getBlobs()){
+							int velocity = (int)(100*Math.sqrt(b.velocityX*b.velocityX + b.velocityY*b.velocityY));
+							int color = (velocity << 16) + (velocity << 8) + velocity;
+							this.theSim.DrawLine(color, b.y, b.x, b.y+b.height, b.x);
+							this.theSim.DrawLine(color, b.y, b.x, b.y, b.x+b.width);
+							this.theSim.DrawLine(color, b.y+b.height, b.x, b.y+b.height, b.x+b.width);
+							this.theSim.DrawLine(color, b.y, b.x+b.width, b.y+b.height, b.x+b.width);
+						}
 					}
 					
-
-					// graf.fillRect(100, testSteering.startingPoint, 1, 1);
+					//Draw leading points
 					if (DriverCons.D_DrawCurrent == true) {
 						for (int i = 0; i < testSteering.startingPoint
 								- (testSteering.startingHeight + testSteering.heightOfArea); i++) {
@@ -831,6 +828,7 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 						}
 					}
 
+					//Draw predicted points and detected lines
 					for (int i = 0; i < hi.length; i++) {
 						if (DriverCons.D_DrawPredicted == true) {
 							this.theSim.RectFill(255, hi[i].y + edges.top, hi[i].x, hi[i].y + edges.top + 5, hi[i].x + 5);
@@ -845,7 +843,9 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 							this.theSim.RectFill(16776960, yR, xR, yR + 5, xR + 5);
 						}
 					}
-
+					
+					/* User created code ends here */
+					
 					if (CanDraw) {
 						DrawDemo();
 						if (CameraView)
@@ -1008,32 +1008,26 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {        
-		if (e.getKeyCode() == KeyEvent.VK_LEFT)
+		if (e.getKeyCode() == KeyEvent.VK_LEFT) //Left arrow key decrements steering angle by 5
 			SteerMe(false, -5);
-		if (e.getKeyCode() == KeyEvent.VK_RIGHT)
+		if (e.getKeyCode() == KeyEvent.VK_RIGHT) //Right arrow key increments steering angle by 5
 			SteerMe(false, 5);
-		if (e.getKeyCode() == KeyEvent.VK_UP)
+		if (e.getKeyCode() == KeyEvent.VK_UP) //Up arrow key increments speed by 1
 			AxLR8(false,1);
-		if (e.getKeyCode() == KeyEvent.VK_DOWN)
+		if (e.getKeyCode() == KeyEvent.VK_DOWN) //Down arrow key decrements speed by 1
 			AxLR8(false,-1);
-		if (e.getKeyCode() == KeyEvent.VK_P) {
+		if (e.getKeyCode() == KeyEvent.VK_P) //P simulates a detected stopsign
 			speedControl.setStoppingAtSign();
-		}
-		if (e.getKeyCode() == KeyEvent.VK_O) {
+		if (e.getKeyCode() == KeyEvent.VK_O) //O simulates a detected redlight
 			speedControl.setStoppingAtLight();
-		}
-		if (e.getKeyCode() == KeyEvent.VK_I) {
+		if (e.getKeyCode() == KeyEvent.VK_I) //I simulates a detected greenlight
 			speedControl.readyToGo();
-		}
-		if (e.getKeyCode() == KeyEvent.VK_B) {
+		if (e.getKeyCode() == KeyEvent.VK_B) //B toggles blob rectangle overlays
 			Settings.blobsOn ^= true;
-		}
-		if (e.getKeyCode() == KeyEvent.VK_V){
+		if (e.getKeyCode() == KeyEvent.VK_V) //V toggles detection boundry overlays
 			Settings.overlayOn ^= true;
-		}
-		if (e.getKeyCode() == KeyEvent.VK_C){
+		if (e.getKeyCode() == KeyEvent.VK_C) //C toggles writting detected blob information to console
 			Settings.writeBlobsToConsole ^= true;
-		}
 	}
 
 	@Override
