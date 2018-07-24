@@ -809,7 +809,7 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 					theServos.servoWrite(SteerPin, (int) ((tempDeg) + 90));
 					
 					speedControl.onUpdate(this.GasPedal, testSteering.getDegreeOffset(), this.manualSpeed, graf, dtest);
-					AxLR8(true, speedControl.getDesiredSpeed());
+					AxLR8(true, speedControl.getNextSpeed());
 
 					if(Settings.overlayOn){
 						graf.setColor(Color.ORANGE);

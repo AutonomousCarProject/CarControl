@@ -118,6 +118,19 @@ public class SpeedController {
 		}
 	}
 	
+	public int getNextSpeed(){
+		double distance = this.desiredSpeed - this.currentEstimatedSpeed;
+		if(Math.abs(distance) < Constants.MIN_SPEED_INCREMENT){
+			return (int)this.desiredSpeed;
+		}
+		else if (distance < 0){
+			return (int)(this.currentEstimatedSpeed - Constants.MIN_SPEED_INCREMENT);
+		}
+		else{
+			return (int)(this.currentEstimatedSpeed + Constants.MIN_SPEED_INCREMENT);
+		}
+	}
+	
 	//Returns the estimated speed IN METERS PER SECOND
 	public double getEstimatedSpeed(){
 		return currentEstimatedSpeed*Constants.PIN_TO_METER_PER_SECOND; 
@@ -271,37 +284,6 @@ public class SpeedController {
 			return false;
 		}
 	}
-	
-	// Checks a given blob for the properties of a stoplight (size, age, position, color)
-	public boolean detectRedLight(MovingBlob blob) {
-		if (blob.age > Constants.BLOB_AGE && blob.height > Constants.BLOB_HEIGHT && blob.width > Constants.BLOB_WIDTH && blob.x > Constants.STOPLIGHT_MIN_X && blob.x < Constants.STOPLIGHT_MAX_X && blob.y > Constants.STOPLIGHT_MIN_Y && blob.y < Constants.STOPLIGHT_MAX_Y && blob.color.getColor() == Color.RED) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-	
-	// Checks a given blob for the properties of a stoplight (size, age, position, color)
-	public boolean detectYellowLight(MovingBlob blob) {
-		if (blob.age > Constants.BLOB_AGE && blob.height > Constants.BLOB_HEIGHT && blob.width > Constants.BLOB_WIDTH && blob.x > Constants.STOPLIGHT_MIN_X && blob.x < Constants.STOPLIGHT_MAX_X && blob.y > Constants.STOPLIGHT_MIN_Y && blob.y < Constants.STOPLIGHT_MAX_Y && blob.color.getColor() == Color.RED) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-	
-	// Checks a given blob for the properties of a stoplight (size, age, position, color)
-	public boolean detectGreenLight(MovingBlob blob) {
-		if (blob.age > Constants.BLOB_AGE && blob.height > Constants.BLOB_HEIGHT && blob.width > Constants.BLOB_WIDTH && blob.x > Constants.STOPLIGHT_MIN_X && blob.x < Constants.STOPLIGHT_MAX_X && blob.y > Constants.STOPLIGHT_MIN_Y && blob.y < Constants.STOPLIGHT_MAX_Y && blob.color.getColor() == Color.GREEN) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-	
 
 	public List<MovingBlob> getBlobs(){
 		return this.currentBlobs;
