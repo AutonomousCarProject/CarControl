@@ -19,22 +19,22 @@ package com.apw.fakefirm;                             // 2018 February 10
  */
 public class SimHookBase { // override to drive simulator
 
-    public SimHookBase() {
-        System.out.println("new SimHookBase");
-    }
+  public SimHookBase() {
+    System.out.println("new SimHookBase");
+  }
 
-    /**
-     * Override this method to see the data being sent to the Arduino.
-     *
-     * @param msg a byte array (typically 2 or 3 bytes long) with the MIDI
-     *            coded message for the Arduino running Firmata.
-     * @param lxx the number of bytes to consider (the msg parameter array
-     *            may be longer than actual data being sent)
-     */
-    public void SendBytes(byte[] msg, int lxx) {
-    }
+  /**
+   * Override this method to see the data being sent to the Arduino.
+   *
+   * @param msg a byte array (typically 2 or 3 bytes long) with the MIDI
+   * coded message for the Arduino running Firmata.
+   * @param lxx the number of bytes to consider (the msg parameter array
+   * may be longer than actual data being sent)
+   */
+  public void SendBytes(byte[] msg, int lxx) {
+  }
 
-    public String toString() {
-        return "(SimHookBase)";
-    } //~toString
+  public String toString() {
+    return "(SimHookBase)";
+  } //~toString
 } //~SimHookBase // (SB)
