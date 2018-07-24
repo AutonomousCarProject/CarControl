@@ -81,7 +81,7 @@ public class DriveTest extends JFrame {
     public static void init(){                                                              //Assigns variables
         displayTaskTimer = new Timer();
         imageManager = new ImageManager(new SimCamera());
-        testSteering = new Steering(new TrakSim());
+        testSteering = new Steering();
     }
 
     /** Makes the given DriveTest refresh its image automatically

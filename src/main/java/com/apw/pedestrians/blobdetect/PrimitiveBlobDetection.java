@@ -1,7 +1,7 @@
 package com.apw.pedestrians.blobdetect;
 
-import com.aparapi.Kernel;
-import com.aparapi.Range;
+//import com.aparapi.Kernel;
+//import com.aparapi.Range;
 import com.apw.pedestrians.image.Color;
 import com.apw.pedestrians.image.IImage;
 import com.apw.pedestrians.image.IPixel;
@@ -47,9 +47,10 @@ public class PrimitiveBlobDetection implements IBlobDetection {
             }
         }
 
-        Range rowRange = Range.create(pixels.length);
+       // Range rowRange = Range.create(pixels.length);
 
         // check the pixel to the right
+        /*
         Kernel rightCheckKernel = new Kernel() {
             @Override
             public void run() {
@@ -89,7 +90,8 @@ public class PrimitiveBlobDetection implements IBlobDetection {
         };
         rightCheckKernel.execute(rowRange);
         rightCheckKernel.dispose();
-
+        */
+        /*
         Kernel bottomCheckKernel = new Kernel() {
             @Override
             public void run() {
@@ -152,14 +154,16 @@ public class PrimitiveBlobDetection implements IBlobDetection {
                             bips[tlBip1 + BIP_TOP] = bips[tlBip2 + BIP_TOP];
                             bips[tlBip1 + BIP_LEFT] = bips[tlBip2 + BIP_LEFT];
                         }
-                        */
+                        *//*
                     }
                 }
             }
         };
+        */
+        /*
         bottomCheckKernel.execute(rowRange);
         bottomCheckKernel.dispose();
-
+        */
         //eliminates blobs that are too large or too small or grey
         for (int i = 0; i < bips.length; i += BIP_NUMFIELDS) {
             if (bips[i + BIP_TYPE] == BIP_TYPE_VALUE) {
@@ -196,5 +200,7 @@ public class PrimitiveBlobDetection implements IBlobDetection {
             blob.color = new Pixel(bipColor);
             return blob;
         }
+
     }
+
 }

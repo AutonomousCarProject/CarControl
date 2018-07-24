@@ -2,7 +2,7 @@
 
 package com.apw.ImageManagement;
 
-import com.aparapi.Range;
+//import com.aparapi.Range;
 import com.apw.fly2cam.FlyCamera;
 
 
