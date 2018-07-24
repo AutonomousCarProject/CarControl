@@ -2,6 +2,7 @@ package com.apw.drivedemo;
 
 import com.apw.ImageManagement.ImageManager;
 import com.apw.ImageManagement.ImageManipulator;
+import com.apw.SpeedCon.SpeedController;
 import com.apw.Steering.Point;
 import com.apw.Steering.Steering;
 import com.apw.apw3.DriverCons;
@@ -9,6 +10,8 @@ import com.apw.apw3.SimCamera;
 import com.apw.apw3.TrakSim;
 import com.apw.drivedemo.TimerRepaint;
 import com.apw.drivedemo.TrakManager;
+import com.apw.pedestrians.PedestrianDetector;
+import com.apw.pedestrians.blobtrack.MovingBlob;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,6 +19,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.util.Date;
+import java.util.List;
 import java.util.Timer;
 
 public class DriveTest extends JFrame {
@@ -31,6 +35,7 @@ public class DriveTest extends JFrame {
     private int ncols, nrows;
     private BufferedImage displayImage, bufferImage, tempImage;
     private int[] displayPixels, imagePixels, emptyPixels;
+    private byte[] limitArray;
     private ImageIcon displayicon;
     private JLabel displaylabel;
     private Insets edges;
@@ -40,7 +45,8 @@ public class DriveTest extends JFrame {
         TrakManager starter = new TrakManager();
         init(new Timer(),starter.getImageManager(), new Steering(starter.getSim()));
         displayTaskTimer.scheduleAtFixedRate(starter, new Date(), 1000 / FPS);
-        autoDriveTest(createDriveTest(3));
+        autoDriveTest( new DriveTest(5));
+        autoDriveTest( new DriveTest(2));
         //displayTaskTimer.scheduleAtFixedRate(new TimerRepaint(createDriveTest(3)), new Date(), 1000 / FPS);
     }
     public static void init(Timer refreshTimer, ImageManager imageMng, Steering steerSys) {
@@ -53,15 +59,6 @@ public class DriveTest extends JFrame {
         imageManager = new ImageManager(new SimCamera());
         testSteering = new Steering(new TrakSim());
     }
-    public static DriveTest createDriveTest(){
-        return new DriveTest();
-    }
-    public static DriveTest createDriveTest(int viewType){
-        return new DriveTest(viewType);
-    }
-    public static DriveTest createDriveTest(int viewType, int width, int height){
-        return new DriveTest(viewType,width,height);
-    }
     public static DriveTest autoDriveTest(DriveTest dtest){
         try{
             displayTaskTimer.scheduleAtFixedRate(new TimerRepaint(dtest), new Date(), 1000 / FPS);
@@ -70,7 +67,7 @@ public class DriveTest extends JFrame {
         }
         return dtest;
     }
-    private DriveTest(){
+    public DriveTest(){
         viewType=1;
         ncols=imageManager.getNcols();
         nrows=imageManager.getNrows();
@@ -78,7 +75,7 @@ public class DriveTest extends JFrame {
         height=nrows;
         finishInit();
     }
-    private DriveTest(int viewType){
+    public DriveTest(int viewType){
         this.viewType=viewType;
         ncols=imageManager.getNcols();
         nrows=imageManager.getNrows();
@@ -86,7 +83,7 @@ public class DriveTest extends JFrame {
         height=nrows;
         finishInit();
     }
-    private DriveTest(int viewType, int width, int height){
+    public DriveTest(int viewType, int width, int height){
         this.viewType=viewType;
         ncols=imageManager.getNcols();
         nrows=imageManager.getNrows();
@@ -129,6 +126,8 @@ public class DriveTest extends JFrame {
             case 4:
                 imagePixels = imageManager.getBWRGBRaster();
                 break;
+            case 5:
+                imagePixels = imageManager.getMonoRGB2Raster();
         }
 
         //Copies TrakSim image onto the buffer
@@ -191,7 +190,37 @@ public class DriveTest extends JFrame {
      * @param graf the graphics to edit
      */
     private void speedPaint(Graphics graf){
+        PedestrianDetector pedDetect = new PedestrianDetector();
+        int vEdit = (getHeight()-480)/2+10;
+        limitArray = new byte[640*480];
+        ImageManipulator.limitTo(limitArray,imageManager.getSimpleColorRaster(),ncols,nrows,640,480,false);
+        List<MovingBlob> blobs = pedDetect.getAllBlobs(limitArray, 640);
 
+        //We then:
+        //A. Display those blobs on screen as empty rectangular boxes of the correct color
+        //B. Test if those blobs are a useful roadsign/light
+        //C. Do whatever we need to do if so
+        //D. Write to the console what has happened
+        //We need all of the if statements to display the colors,
+        //as we need to convert from IPixel colors to Java.awt colors for display reasons
+        for(MovingBlob i : blobs) {
+            if (true) {
+                if (i.color.getColor() == com.apw.pedestrians.image.Color.BLACK) {
+                    graf.setColor(java.awt.Color.BLACK);
+                } else if (i.color.getColor() == com.apw.pedestrians.image.Color.GREY) {
+                    graf.setColor(java.awt.Color.GRAY);
+                } else if (i.color.getColor() == com.apw.pedestrians.image.Color.WHITE) {
+                    graf.setColor(java.awt.Color.WHITE);
+                } else if (i.color.getColor() == com.apw.pedestrians.image.Color.RED) {
+                    graf.setColor(java.awt.Color.RED);
+                } else if (i.color.getColor() == com.apw.pedestrians.image.Color.GREEN) {
+                    graf.setColor(java.awt.Color.GREEN);
+                } else if (i.color.getColor() == com.apw.pedestrians.image.Color.BLUE) {
+                    graf.setColor(java.awt.Color.BLUE);
+                }
+                graf.drawRect(i.x + 8, i.y + 40+vEdit, i.width, i.height);
+            }
+        }
     } //~speedPaint
 
 }

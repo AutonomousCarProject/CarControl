@@ -2462,6 +2462,9 @@ public class TrakSim {
      * array given to NewGridTbl.
      */
     public void DrawGrid() { // to show where to click..
+        if(true)
+            return;
+        //*
         // private final int[] Grid_Locns = {6,12,16,18,26,28,  0,16,80,126,228,240,
         //   0,20,300,320,  0,320,  0,45,91,137,182,228,274,320, 0,320,  0,20,300,320};
         int here, thar, whar, nx, prio, fini, lft, rit,
@@ -2501,6 +2504,7 @@ public class TrakSim {
                 lft++;
             }
         }
+        //*/
     } //~DrawGrid
 
     /**

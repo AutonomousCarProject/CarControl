@@ -19,7 +19,30 @@ public class ImageManipulator {
         }
     }
 
-    public static void convertToBlackWhiteRaster(byte[] bayer, byte[] mono, int nrows, int ncols) {
+	public static void convertToMonochrome2Raster(byte[] bayer, byte[] mono, int nrows, int ncols) {
+
+		for (int r = 0; r < nrows; r++) {
+			for (int c = 0; c < ncols; c++) {
+
+				/*
+				//Averaging all colors
+				int total = bayer[r*ncols*2 + c*2] 		//Top left (
+						+ bayer[r*ncols*2 + c*2+1] 		//Top right
+						+ bayer[(r+1)*ncols*2 + c*2]*2;	//Bottom left
+				mono[r*ncols + c] = (byte) (total >> 2);
+				*/
+				int R = ((((int)bayer[(r*ncols*2 + c)*2]) & 0xFF));				//Top left (red)
+				int G = ((((int)bayer[(r*ncols*2 + c)*2 +1])&0xFF)); 			//Top right (green)
+				int B = (((int)bayer[(r*ncols*2 + c)*2 + 1+2*ncols])&0xFF);			//Bottom right (blue)
+				//double Y = R *  .299000 + G *  .587000 + B *  .114000;
+				double Y = (R+G+B)/3;
+				mono[r * ncols + c] = (byte) Y;            //Use only top right (green)
+			}
+		}
+	}
+
+
+	public static void convertToBlackWhiteRaster(byte[] bayer, byte[] mono, int nrows, int ncols) {
         for (int r = 0; r < nrows; r++) {
             for (int c = 0; c < ncols; c++) {
 
@@ -148,6 +171,20 @@ public class ImageManipulator {
 
 
 	public static void limitTo(int[] output, int[] input, int ncols, int nrows, int width, int height, boolean bayer) {
+		//if(bayer){
+		//	width*=2;
+		//	height*=2;
+		//}
+		for (int r = 0; r < height; r++) {
+			for (int c = 0; c < width; c++) {
+				//System.out.println(r*width+c);
+				output[width*r+c]=input[r*ncols+c];
+			}
+
+		}
+
+	}
+	public static void limitTo(byte[] output, byte[] input, int ncols, int nrows, int width, int height, boolean bayer) {
 		//if(bayer){
 		//	width*=2;
 		//	height*=2;

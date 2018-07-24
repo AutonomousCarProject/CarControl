@@ -639,7 +639,7 @@ public class DrDemo extends JFrame implements MouseListener {
                         if (!ShoClikGrid) { // otherwise TrakSim did it..
                             nx = 0;
                             if (Calibrating != 0) nx++;
-                            else nx++;
+                            //else nx++;
                             if (nx > 0) theSim.DrawGrid();
                         }
                     } //~if
@@ -805,7 +805,7 @@ public class DrDemo extends JFrame implements MouseListener {
         }
         testSteering = new Steering(theSim);
         DriveTest.init();
-        DriveTest.autoDriveTest(DriveTest.createDriveTest(2));
+        DriveTest.autoDriveTest(new DriveTest(2));
 
 
     }
