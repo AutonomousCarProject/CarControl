@@ -2,12 +2,11 @@ package com.apw.drivedemo;
 
 import com.apw.ImageManagement.ImageManager;
 import com.apw.ImageManagement.ImageManipulator;
+import com.apw.SpeedCon.Settings;
 import com.apw.SpeedCon.SpeedController;
 import com.apw.Steering.Point;
 import com.apw.Steering.Steering;
-import com.apw.apw3.DriverCons;
-import com.apw.apw3.SimCamera;
-import com.apw.apw3.TrakSim;
+import com.apw.apw3.*;
 import com.apw.drivedemo.TimerRepaint;
 import com.apw.drivedemo.TrakManager;
 import com.apw.pedestrians.PedestrianDetector;
@@ -16,13 +15,17 @@ import com.apw.pedestrians.blobtrack.MovingBlob;
 import javax.swing.*;
 import java.awt.*;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 
-public class DriveTest extends JFrame {
+public class DriveTest extends JFrame implements KeyListener, MouseListener {
 
     //VARIABLES
 
@@ -32,8 +35,10 @@ public class DriveTest extends JFrame {
     //Universal window variables
     public static ImageManager imageManager;                        //Object to get camera images and change them
     public static Timer displayTaskTimer;                           //Object used to control window updates
-
+    
+    
     //Universal control variables
+    public static TrakManager starter;
     public static Steering testSteering;                            //Object to control the steering
 
     //Internal variables
@@ -47,6 +52,11 @@ public class DriveTest extends JFrame {
     private JLabel displaylabel;                                    //How the image is linked to the window
     private Insets edges;                                           //Object used for steering drawing
 
+    //DrDemo mouse variables
+    private static final int  ImgWi = DriverCons.D_ImWi;
+    private static final boolean  StartLive = DriverCons.D_StartLive;
+    private static int NoneStep = 0;
+
     /**Main Method
      * Starts DriveTest as well as traksim
      *
@@ -55,10 +65,10 @@ public class DriveTest extends JFrame {
      * @param args
      */
     public static void main(String[] args){
-        TrakManager starter = new TrakManager();                                         //Creates a TrakManager object, which will run TrakSim at a constant Framerate
+        starter = new TrakManager();                                         //Creates a TrakManager object, which will run TrakSim at a constant Framerate
         init(new Timer(),starter.getImageManager(), new Steering());     //Initializes DriveTest
         displayTaskTimer.scheduleAtFixedRate(starter, new Date(), 1000 / FPS);    //Initializes TrakManager at FPS frames per second
-        autoDriveTest( new DriveTest(3));                                       //Format to create a new DriveTest window that updates automatically
+        autoDriveTest( new DriveTest(3),100);                                       //Format to create a new DriveTest window that updates automatically
     }
 
     /** Method that initializes DriveTest (Will run automatically if not ran manually)
@@ -170,6 +180,8 @@ public class DriveTest extends JFrame {
         displaylabel = new JLabel();                                                    //How the image is linked to the window
         displaylabel.setIcon(displayicon);                                              //Attaches the ImageIcon to the JLabel
         add(displaylabel);                                                              //Attaches the JLabel to the window
+        addMouseListener(this);
+        addKeyListener(this);
         setVisible(true);                                                               //Makes the window visible
         System.out.println("--------------" + width + " " + height);                    //Sends a message to the console of the window size
     }
@@ -299,4 +311,244 @@ public class DriveTest extends JFrame {
         }
     } //~speedPaint
 
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_LEFT) //Left arrow key decrements steering angle by 5
+            starter.SteerMe(false, -5);
+        if (e.getKeyCode() == KeyEvent.VK_RIGHT) //Right arrow key increments steering angle by 5
+            starter.SteerMe(false, 5);
+        if (e.getKeyCode() == KeyEvent.VK_UP) //Up arrow key increments speed by 1
+            starter.AxLR8(false,1);
+        if (e.getKeyCode() == KeyEvent.VK_DOWN) //Down arrow key decrements speed by 1
+            starter.AxLR8(false,-1);
+        if (e.getKeyCode() == KeyEvent.VK_P) //P simulates a detected stopsign
+            starter.speedControl.setStoppingAtSign();
+        if (e.getKeyCode() == KeyEvent.VK_O) //O simulates a detected redlight
+            starter.speedControl.setStoppingAtLight();
+        if (e.getKeyCode() == KeyEvent.VK_I) //I simulates a detected greenlight
+            starter.speedControl.readyToGo();
+        if (e.getKeyCode() == KeyEvent.VK_B) //B toggles blob rectangle overlays
+            Settings.blobsOn ^= true;
+        if (e.getKeyCode() == KeyEvent.VK_V) //V toggles detection boundry overlays
+            Settings.overlayOn ^= true;
+        if (e.getKeyCode() == KeyEvent.VK_C) //C toggles writting detected blob information to console
+            Settings.writeBlobsToConsole ^= true;
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        // SteerMe(true, 0);
+    }
+    @Override
+    public void mouseExited(MouseEvent evt) {
+    }
+
+    @Override
+    public void mousePressed(MouseEvent evt) {
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent evt) {
+    }
+
+    /**
+     * Recognize a mouse rollover into the top left corner of the screen from
+     * outside the window, so to start up self-driving software (or whatever).
+     */
+    @Override
+    public void mouseEntered(MouseEvent evt) { // (in DrDemo)
+        /*
+        Insets edges = getInsets();
+        int nx = 0, Vx = 0, Hx = 0, why = 0;
+        while (true) {
+            why++; // why = 1
+            if (!StartLive)
+                return; // don't even log
+            why++; // why = 2
+            if (starter.Calibrating != 0)
+                break;
+            why++; // why = 3
+            //if (!CameraView)
+            //    break;
+            if (evt != null)
+                if (edges != null) {
+                    Hx = evt.getX() - edges.left;
+                    Vx = evt.getY() - edges.top;
+                } // ~if
+            why++; // why = 4
+            if (Hx > ImgWi)
+                break;
+            nx = starter.sim.GridBlock(Vx, Hx); // find which screen chunk it came in..
+            why++; // why = 5
+            if (nx != 0x10001)
+                break; // top left corner only (from outside win)..
+            NoneStep = 0; // continuous
+            starter.sim.SimStep(0);
+            unPaused = true; // start it running..
+            why++; // why = 6
+            if (StartYourEngines > 0)
+                break;
+            if (ContinuousMode)
+                starter.sim.SimStep(2);
+            StartYourEngines++;
+            DidFrame = 0;
+            if (SimSpedFixt)
+                AxLR8(true, StartGas);
+            else if (DarkState < 2)
+                DarkState = 2;
+            // You can use (DarkState >= 2) to start your self-driving software,
+            // ..or else insert code here to do that..
+            why = 0;
+            break;
+        } // ~while
+        System.out.println(HandyOps.Dec2Log("(DrDemo) Got MousEnt = ", why,
+                HandyOps.Dec2Log(" @ ", Vx,
+                        HandyOps.Dec2Log(",", Hx, HandyOps.Int2Log(": ", nx, HandyOps.Dec2Log(" ", StartYourEngines,
+                                HandyOps.TF2Log(" g=", unPaused, HandyOps.TF2Log(" cv=", CameraView, HandyOps.Dec2Log(
+                                        " ns=", NoneStep,
+                                        HandyOps.Dec2Log(" ", starter.Calibrating, HandyOps.PosTime(((" @ ")))))))))))));
+                                        //*/
+    } // ~mouseEntered
+
+    /**
+     * Accepts clicks on screen image to control operation
+     */
+    @Override
+    public void mouseClicked(MouseEvent evt) { // (in DrDemo)
+        Insets edges = getInsets();
+        int kx = 0, nx = 0, zx = 0, Vx = 0, Hx = 0, why = 0;
+        boolean didit = false;
+        if (evt != null)
+            if (edges != null) { // we only implement/o'ride this one
+                Hx = evt.getX() - edges.left;
+                Vx = evt.getY() - edges.top;
+            } // ~if
+        if (Hx < ImgWi) {
+            why = starter.sim.GridBlock(Vx, Hx); // find which screen chunk it's in..
+            zx = why & 0xFF;
+            nx = why >> 16;
+            if (nx < 3) { // top half, switch to camera view..
+                didit = ((nx | zx) == 1); // top left corner simulates covering lens..
+                if (didit)
+                    starter.sim.DarkFlash(); // unseen if switches to live cam
+                //CameraView = (theVideo != null) && (CamPix != null);
+                /*
+                if (CameraView) {
+                    starter.sim.SimStep(0);
+                    if (starter.Calibrating > 0)
+                        SteerMe(true, 0);
+                    else if (starter.Calibrating < 0)
+                        AxLR8(true, 0); // stop
+                    else if (didit) { // if click top-left, stop so ESC can recover..
+                        AxLR8(true, 0);
+                        unPaused = false;
+                        StartYourEngines = 0;
+                    } // ~if
+                    starter.Calibrating = 0;
+                } // ~if
+                //*/
+                //DidFrame = 0;
+                //unPaused = CameraView && (nx == 1);
+            } // ~if // top edge runs // (nx<3)
+            else if (nx == 3) { // middle region, manual steer/calibrate..
+                if (starter.Calibrating < 0) {
+                    if (zx == 4)
+                        starter.AxLR8(true, 0);
+                    //else
+                        //starter.AxLR8(false, Grid_Moves[zx & 7]);
+                } // ~if
+                else if (zx == 4)
+                    starter.SteerMe(true, 0); // Grid_Moves={0,-32,-8,-1,0,1,8,32,..
+                else
+                    //starter.SteerMe(false, Grid_Moves[zx & 7]);
+                starter.sim.FreshImage();
+            } // ~if
+            else if (starter.Calibrating > 0) {
+                starter.SteerMe(true, 0); // straight ahead
+                starter.Calibrating = -1;
+            } // ~if
+            else if (starter.Calibrating < 0) {
+                starter.AxLR8(true, 0); // stop
+                starter.Calibrating = 0;
+                starter.sim.SimStep(1);
+                starter.StartYourEngines = 0;
+            } // ~if
+            else if (nx == 5) { // bottom, switch to sim view..
+                //CameraView = false;
+                //DidFrame = 0;
+                if (starter.sim.IsCrashed())
+                    starter.sim.SimStep(0); // clear crashed mode
+                if (zx == 2)
+                    NoneStep = 1; // left half: 1-step
+                else
+                    NoneStep = 0; // right half: continuous
+                //if (ContinuousMode)
+                //    starter.sim.SimStep(2);
+                //else
+                //    starter.sim.SimStep(1);
+                //unPaused = ((zx > 1) && (zx < 4));
+            } // ~if // corners: DrDemo not control speed
+            else if (nx == 4) { // low half..
+                if (zx < 2)
+                    starter.Stopit(0); // low half, left edge, kill it politely
+                //else if (!CameraView) // otherwise toggle pause..
+                    //unPaused = !unPaused;
+            }
+        } // ~if
+        /*
+        else if (ShowMap) {
+            zx = starter.sim.GetMapSize(); // MapHy,MapWy = size of full map
+           nx = Hx - 2 - ImgWi;
+            if ((Vx < (zx >> 16)) && (nx < (zx & 0xFFF)))
+                starter.sim.SetStart(Vx, nx, MyMath.Trunc8(starter.sim.GetFacing()));
+            else
+                zx = starter.sim.ZoomMap2true(true, Vx, Hx); // sets facing to -> click
+            unPaused = false; // pause if click on map
+            starter.sim.FreshImage();
+        } // ~if
+
+        if (starter.Calibrating == 0) {
+            why = 256;
+            if (!unPaused) { // pause it..
+                why--; // why = 255
+                if (StartYourEngines > 0)
+                    starter.sim.SimStep(0);
+                StartYourEngines = 0;
+                AxLR8(true, 0);
+            } // ~if
+            else if (StartYourEngines == 0) { // start..
+                why++; // why = 257
+                if (ContinuousMode)
+                    starter.sim.SimStep(2);
+                // else starter.sim.SimStep(1);
+                StartYourEngines++;
+                DidFrame = 0;
+                if (SimSpedFixt && (ServoTestCount == 0))
+                    AxLR8(true, StartGas);
+                else if (DarkState < 2)
+                    DarkState = 2;
+            }
+        } // ~if
+        //*/
+        System.out.println(HandyOps.Dec2Log("(DrDemo) Got click @ ", Vx,
+                HandyOps.Dec2Log(",", Hx, HandyOps.Dec2Log(": ", nx, HandyOps.Dec2Log("/", zx,
+                        HandyOps.Dec2Log(" +", kx, HandyOps.Dec2Log(" ", 0, HandyOps.TF2Log(" s=", true,
+                                HandyOps.TF2Log(" g=", true, HandyOps.TF2Log(" cv=", true,
+                                        HandyOps.Dec2Log(" ns=", NoneStep, HandyOps.Dec2Log(" ", starter.Calibrating,
+                                                HandyOps.Dec2Log(" ", why, HandyOps.PosTime((" @ ")))))))))))))));
+    } // ~mouseClicked
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }

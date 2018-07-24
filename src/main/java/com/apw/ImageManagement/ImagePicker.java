@@ -14,7 +14,6 @@ public class ImagePicker extends TimerTask {
 
     private FlyCamera cam;
     private int fps;
-    private byte[] pixels1, pixels2;
     private byte[] pixels;
     private int nrows, ncols;
 
@@ -22,7 +21,6 @@ public class ImagePicker extends TimerTask {
         //Keep camera ref and fps
         this.cam = cam;
         this.fps = fps;
-
         //Get number of pixels
         nrows = cam.Dimz() >> 16;
         ncols = cam.Dimz() << 16 >> 16;
@@ -43,11 +41,13 @@ public class ImagePicker extends TimerTask {
     }
 
     public byte[] getPixels() {
+        //cam.NextFrame(pixels);
         return pixels;
     }
 
     @Override
     public void run() {
         cam.NextFrame(pixels);
+
     }
 }

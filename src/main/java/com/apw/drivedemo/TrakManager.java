@@ -20,22 +20,22 @@ public class TrakManager extends TimerTask {
     public static final int FRAME_RATE_NUMBER = 4;	//4 corresponds to 30fps
 
     //DrDemo Necessary Variables
-    private int Calibrating = 0;
+    protected int Calibrating = 0;
     private int SteerDegs = 0;
     private int GasPedal = 0;
     private static final int SteerPin = DriverCons.D_SteerServo, GasPin = DriverCons.D_GasServo;
     private static final double LefScaleSt = ((double) DriverCons.D_LeftSteer) / 90.0,
             RitScaleSt = ((double) DriverCons.D_RiteSteer) / 90.0;
-    private static int StartYourEngines = 0;
+    protected static int StartYourEngines = 0;
     private boolean StepMe = false;
 
 
-    private TrakSim sim;
+    protected TrakSim sim;
     private FlyCamera camSys;
     private Arduino driveSys;
     private Steering testSteering;
     private ImageManager imageManager;
-    private SpeedController speedControl;
+    protected SpeedController speedControl;
     private int ncols, nrows;
 
     public TrakManager(){
@@ -84,7 +84,7 @@ public class TrakManager extends TimerTask {
     } //~TestServos
 
 
-    private void Stopit(int why) { // gotta turn the camera & JSSC off..
+    public void Stopit(int why) { // gotta turn the camera & JSSC off..
         //FlyCamera myVid = theVideo;
         try {
             AxLR8(true, 0);
