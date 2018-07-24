@@ -16,6 +16,23 @@ public class CameraCalibration {
 	and measures the the square thus filling needed variables. After calibration, you can find the distance of an object
 	if you know its real world size along with picture information.
 
+	-----
+	How to calibrate camera to find object distance
+
+	1) Draw a blue square the size of testBlobWidth. This needs to be a preset size and defined in CameraCalibration as the varible is not given a value.
+	
+	2) Move the square to the distance testBlobDistance away from the camera. This also needs to be defined in the code.
+
+	3) Run the method calibrateCamera, which will get the square that you wrote.
+
+	4) With the square, other methods are ran and should fill out enough data to test a stop sign.
+	-----
+
+	After Calibration is complete
+
+	To find the distance, run distanceToObj with the known real world width of the object (make sure to scale), 
+	focal length (which should be set by calibrateCamera), and object pixel width (the width of the blob you're testing in this case a red sign)
+
 	*/
 
 
@@ -37,6 +54,14 @@ public class CameraCalibration {
 		relativeWorldScale = 8;
 		signWidth = 750/relativeWorldScale;
 
+
+
+	}
+
+	
+	void calibrateCamera()
+	{
+
 		//Searches for a blue blob
 		List<MovingBlob> blobs = this.pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), 912);
 		for(MovingBlob i : blobs)
@@ -52,7 +77,7 @@ public class CameraCalibration {
 
 	}
 
-	
+
 	void findFocalLength(MovingBlob blob)
 	{
 		cameraFocalLength = (blob.width * testBlobDistance) /testBlobWidthHeight;
