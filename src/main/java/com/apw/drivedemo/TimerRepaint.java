@@ -11,6 +11,7 @@ public class TimerRepaint extends TimerTask {
 
     @Override
     public void run() {
+        window.updateWindow();
         window.repaint();
     }
 }

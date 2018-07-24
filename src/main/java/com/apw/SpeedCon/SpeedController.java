@@ -42,7 +42,7 @@ public class SpeedController {
 		if (cyclesUntilCanDetectStopsign > 0){
 			cyclesUntilCanDetectStopsign--;
 		}
-		dtest.run();
+		//dtest.run();
 		//dtest.window.paint(graf);
 		this.calculateEstimatedSpeed(gasAmount);
 		this.calculateDesiredSpeed(steerDegs, manualSpeed);
@@ -50,7 +50,7 @@ public class SpeedController {
 		//This part runs on-screen blobs thru a set of tests to figure out if they are
 		//relevant, and then what to do with them
 		PedestrianDetector pedDetect = new PedestrianDetector();
-		ImageManager imageManager = dtest.getImgManager();
+		ImageManager imageManager = dtest.imageManager;
 
 
         List<MovingBlob> blobs = pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), 912);

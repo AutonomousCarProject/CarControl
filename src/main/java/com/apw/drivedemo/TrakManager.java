@@ -169,6 +169,6 @@ public class TrakManager extends TimerTask {
      *
      */
     private void speedCode(){
-        speedControl.onUpdateSansGraphics(GasPedal, testSteering.getDegreeOffset(), 0, imageManager);
+        //speedControl.onUpdateSansGraphics(GasPedal, testSteering.getDegreeOffset(), 0, imageManager);
     } //~speedCode
 }

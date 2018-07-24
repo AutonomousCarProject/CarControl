@@ -111,7 +111,7 @@ public class ImageManager {
 
     }
     public int[] getMonoRGB2Raster(){
-        ImageManipulator.convertToMonochromeRaster(picker.getPixels(), mono, nrows, ncols);
+        ImageManipulator.convertToMonochrome2Raster(picker.getPixels(), mono, nrows, ncols);
         ImageManipulator.convertMonotoRGB(mono, rgb, mono.length);
         return rgb;
     }
