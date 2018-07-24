@@ -22,4 +22,11 @@ dependencies {
     implementation 'com.github.AutonomousCarProject:raspivid-j:0.1.0'
     implementation 'org.bidib.com.pi4j:pi4j-distribution:1.2.M1'
 }
-version '1.0-SNAPSHOT'
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/']
+        }
+    }
+}
