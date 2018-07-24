@@ -329,9 +329,12 @@ public class MovingBlobDetection implements IMovingBlobDetection {
         for (Blob blob : blobSet) {
             this.movingBlobs.add(new MovingBlob(blob));
         }
+<<<<<<< HEAD
+=======
         if(Settings.writeBlobsToConsole){
         	System.out.println(movingBlobs.get(0));
         }
+>>>>>>> c6d1ff7c427c1e9e7286a230786ff1275e9c9b9a
     }
 
     private void matchBlob(MovingBlob movingBlob, Blob newBlob) {

@@ -24,12 +24,16 @@ public class SpeedController {
 	private int cyclesToGo;
 	private int cyclesToStopAtLight = Constants.DRIFT_TO_STOPLIGHT_FRAMES;
 	private int cyclesUntilCanDetectStopsign = Constants.WAIT_AFTER_STOPSIGN;
+
 	private PedestrianDetector pedDetect;
+	
+	private List<MovingBlob> currentBlobs;
 	
 	TrakSim trackSim = new TrakSim();
 	
 	public SpeedController(){
 		this.pedDetect = new PedestrianDetector();
+		this.currentBlobs = new ArrayList<MovingBlob>();
 	}
 	
 	//A method to be called every frame. Calculates desired speed and actual speed
@@ -52,34 +56,6 @@ public class SpeedController {
 
 		List<MovingBlob> blobs = this.pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), 912);
 		for(MovingBlob i : blobs){
-			if(Settings.blobsOn){
-				if (i.color.getColor() == Color.BLACK) {
-					graf.setColor(java.awt.Color.BLACK);	
-				}
-				else if (i.color.getColor() == Color.GREY) {
-					graf.setColor(java.awt.Color.GRAY);
-				}
-				else if (i.color.getColor() == Color.WHITE) {
-					graf.setColor(java.awt.Color.WHITE);
-				}
-				else if (i.color.getColor() == Color.RED) {
-					graf.setColor(java.awt.Color.RED);
-				}
-				else if (i.color.getColor() == Color.GREEN) {
-					graf.setColor(java.awt.Color.GREEN);
-				}
-				else if (i.color.getColor() == Color.BLUE) {
-					graf.setColor(java.awt.Color.BLUE);
-				}
-				
-				int velocity = (int)(100*Math.sqrt(i.velocityX*i.velocityX + i.velocityY*i.velocityY));
-				//int color = (velocity << 16) + (velocity << 8) + velocity;
-				this.trackSim.DrawLine(color, i.y, i.x, i.y+i.height, i.x);
-				this.trackSim.DrawLine(color, i.y, i.x, i.y, i.x+i.width);
-				this.trackSim.DrawLine(color, i.y+i.height, i.x, i.y+i.height, i.x+i.width);
-				this.trackSim.DrawLine(color, i.y, i.x+i.width, i.y+i.height, i.x+i.width);
-
-			}
 			/* Returns an int value corresponding to the color of the light we are looking at
 			 * 0 - No light
 			 * 1 - Red Light
@@ -100,12 +76,10 @@ public class SpeedController {
 				cyclesUntilCanDetectStopsign = 100;
 				setStoppingAtSign();
 			}
-			else {
-
-			}
+			else{}
 		}
 		
-		
+		this.currentBlobs = blobs;	
 	}
 	
 	private boolean detectBlobOverlappingBlob(MovingBlob outsideBlob, MovingBlob insideBlob){
@@ -328,6 +302,11 @@ public class SpeedController {
 		}
 	}
 	
+
+	public List<MovingBlob> getBlobs(){
+		return this.currentBlobs;
+	}
+	
 	/* Returns an int value corresponding to the color of the light we are looking at
 	 * 0 - No light
 	 * 1 - Red Light
@@ -373,6 +352,6 @@ public class SpeedController {
 		}
 		else{
 			return 0;
-		}
+		}	
 	}
 }

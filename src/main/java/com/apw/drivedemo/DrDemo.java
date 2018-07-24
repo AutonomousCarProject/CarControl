@@ -19,6 +19,7 @@ package com.apw.drivedemo; // 2018 June 13
 import com.apw.apw3.*;
 import com.apw.fakefirm.Arduino;
 import com.apw.fly2cam.FlyCamera;
+import com.apw.pedestrians.blobtrack.MovingBlob;
 
 import javax.swing.*;
 import java.awt.*;
@@ -792,7 +793,21 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 
 					
 					// Begin Speed Code
+					
 
+					TestServos(); // (replace this with your own code)
+
+					
+
+					// End Speed Code
+					
+					Point[] hi = testSteering.findPoints(thePixels);
+
+					// Steer between lines
+					testSteering.averageMidpoints();
+					int tempDeg = testSteering.getDegreeOffset();
+					theServos.servoWrite(SteerPin, (int) ((tempDeg) + 90));
+					
 					speedControl.onUpdate(this.GasPedal, testSteering.getDegreeOffset(), this.manualSpeed, graf, dtest);
 					AxLR8(true, speedControl.getDesiredSpeed());
 
@@ -807,9 +822,40 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 						 Constants.STOPSIGN_MAX_Y-Constants.STOPSIGN_MIN_Y);
 					}
 					
-					//TestServos(); // (replace this with your own code)
+					for(MovingBlob b:this.speedControl.getBlobs()){
+						int velocity = (int)(100*Math.sqrt(b.velocityX*b.velocityX + b.velocityY*b.velocityY));
+						int color = (velocity << 16) + (velocity << 8) + velocity;
+						this.theSim.DrawLine(color, b.y, b.x, b.y+b.height, b.x);
+						this.theSim.DrawLine(color, b.y, b.x, b.y, b.x+b.width);
+						this.theSim.DrawLine(color, b.y+b.height, b.x, b.y+b.height, b.x+b.width);
+						this.theSim.DrawLine(color, b.y, b.x+b.width, b.y+b.height, b.x+b.width);
+					}
+					
 
-					// End Speed Code
+					// graf.fillRect(100, testSteering.startingPoint, 1, 1);
+					if (DriverCons.D_DrawCurrent == true) {
+						for (int i = 0; i < testSteering.startingPoint
+								- (testSteering.startingHeight + testSteering.heightOfArea); i++) {
+							int x = testSteering.leadingMidPoints[i].x;
+							int y = testSteering.leadingMidPoints[i].y + edges.top;
+							this.theSim.RectFill(16711680, y, x, y + 5, x + 5);
+						}
+					}
+
+					for (int i = 0; i < hi.length; i++) {
+						if (DriverCons.D_DrawPredicted == true) {
+							this.theSim.RectFill(255, hi[i].y + edges.top, hi[i].x, hi[i].y + edges.top + 5, hi[i].x + 5);
+						}
+						if (DriverCons.D_DrawOnSides == true) {
+							int xL = testSteering.leftPoints[i].x;
+							int yL = testSteering.leftPoints[i].y;
+							this.theSim.RectFill(16776960, yL, xL, yL + 5, xL + 5);
+							
+							int xR = testSteering.rightPoints[i].x;
+							int yR = testSteering.rightPoints[i].y;
+							this.theSim.RectFill(16776960, yR, xR, yR + 5, xR + 5);
+						}
+					}
 
 					if (CanDraw) {
 						DrawDemo();
@@ -834,36 +880,7 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 			}
 		BusyPaint = false;
 
-		Point[] hi = testSteering.findPoints(thePixels);
-
-		// Steer between lines
-		testSteering.averageMidpoints();
-		int tempDeg = testSteering.getDegreeOffset();
-		theServos.servoWrite(SteerPin, (int) ((tempDeg) + 90));
-
-		graf.setColor(Color.RED);
-		// graf.fillRect(100, testSteering.startingPoint, 1, 1);
-		if (DriverCons.D_DrawCurrent == true) {
-			for (int i = 0; i < testSteering.startingPoint
-					- (testSteering.startingHeight + testSteering.heightOfArea); i++) {
-				graf.fillRect(testSteering.leadingMidPoints[i].x, testSteering.leadingMidPoints[i].y + +edges.top, 5,
-						5);
-			}
-		}
-
-		for (int i = 0; i < hi.length; i++) {
-			if (DriverCons.D_DrawPredicted == true) {
-				graf.setColor(Color.BLUE);
-				graf.fillRect(hi[i].x, hi[i].y + edges.top, 5, 5);
-			}
-			if (DriverCons.D_DrawOnSides == true) {
-				graf.setColor(Color.YELLOW);
-				graf.fillRect(testSteering.leftPoints[i].x + edges.left, testSteering.leftPoints[i].y + edges.top, 5,
-						5);
-				graf.fillRect(testSteering.rightPoints[i].x + edges.left, testSteering.rightPoints[i].y + edges.top, 5,
-						5);
-			}
-		}
+		
 	} // ~paint
 
 	private static void starting() {
@@ -1001,15 +1018,15 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 	}
 
 	@Override
-	public void keyPressed(KeyEvent e) {
+	public void keyPressed(KeyEvent e) {        
 		if (e.getKeyCode() == KeyEvent.VK_LEFT)
 			SteerMe(false, -5);
 		if (e.getKeyCode() == KeyEvent.VK_RIGHT)
 			SteerMe(false, 5);
 		if (e.getKeyCode() == KeyEvent.VK_UP)
-			manualSpeed += 1;
+			AxLR8(false,1);
 		if (e.getKeyCode() == KeyEvent.VK_DOWN)
-			manualSpeed -= 1;
+			AxLR8(false,-1);
 		if (e.getKeyCode() == KeyEvent.VK_P) {
 			speedControl.setStoppingAtSign();
 		}
