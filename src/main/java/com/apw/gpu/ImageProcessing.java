@@ -25,8 +25,8 @@ public class ImageProcessing {
       System.out.printf("%.2fms%n", kernel.getAccumulatedExecutionTime());
     }
 
-    System.out.printf("%.2fms%n", kernel.getAccumulatedExecutionTime());
-    System.out.println(Arrays.toString(kernel.getSimple()));
+        System.out.printf("%.2fms%n", kernel.getAccumulatedExecutionTime());
+        //System.out.println(Arrays.toString(kernel.getSimple()));
 
     Instant start = Instant.now();
 

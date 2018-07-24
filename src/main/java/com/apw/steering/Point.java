@@ -1,4 +1,4 @@
-package com.apw.steering;
+package com.apw.apw3.steering;
 
 public class Point {
 
