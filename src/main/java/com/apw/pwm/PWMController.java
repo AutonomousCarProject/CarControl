@@ -11,7 +11,7 @@ public interface PWMController {
    * @return The single instance of the PWMController.
    */
   static PWMController getInstance() {
-    System.err.println("Error: singleton accessor was not overriden by member.")
+    System.err.println("Error: singleton accessor was not overriden by member.");
     return null;
   }
 
