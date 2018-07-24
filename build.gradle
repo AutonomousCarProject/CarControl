@@ -20,8 +20,8 @@ allprojects {
 dependencies {
     compile group: 'com.aparapi', name: 'aparapi', version:'1.9.0'
     compile group: 'com.aparapi', name: 'aparapi-jni', version:'1.4.1'
+    compile group: 'gradle.plugin.com.github.sherter.google-java-format', name: 'google-java-format-gradle-plugin', version: '0.7.1'
     implementation 'com.github.AutonomousCarProject:raspivid-j:0.1.0'
     implementation 'org.bidib.com.pi4j:pi4j-distribution:1.2.M1'
-    classpath "gradle.plugin.com.github.sherter.google-java-format:google-java-format-gradle-plugin:0.7.1"
 }
 version '1.0-SNAPSHOT'
