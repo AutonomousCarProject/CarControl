@@ -1,7 +1,12 @@
 language: java
 
-gradle assemble
-gradle check
+install: true
+
+jdk:
+  - oraclejdk8
+
+script:
+  - ./gradlew build --scan -s
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
