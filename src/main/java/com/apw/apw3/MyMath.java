@@ -1,8 +1,8 @@
 /* TrakSim Car Simulator for use with NWAPW Year 3 Autonomous Car Project
- * Use this package for testing with fly2cam.FlyCamera + fakefirm.Arduino
+ * Use this package for testing with fly2cam.FlyCamera + fakefirm.ArduinoPWM
  *
  * This simulator pretends to be a camera using the FlyCamera API, and
- * watches the commands being sent to the Arduino through FakeFirmata,
+ * watches the commands being sent to the ArduinoPWM through FakeFirmata,
  * and controls the simulated car based on those commands, then shows
  * what a forward-facing camera on the simulated car would see.
  *

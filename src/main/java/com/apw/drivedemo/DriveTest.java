@@ -8,7 +8,7 @@ import com.apw.apw3.TrakSim;
 import com.apw.fly2cam.FlyCamera;
 import com.apw.imagemanagement.ImageManager;
 import com.apw.imagemanagement.ImageManipulator;
-import com.apw.pwm.fakefirm.Arduino;
+import com.apw.pwm.fakefirm.ArduinoPWM;
 import com.apw.steering.Point;
 import com.apw.steering.Steering;
 import java.awt.Graphics;
@@ -65,7 +65,7 @@ public class DriveTest extends JFrame implements MouseListener {
   private FlyCamera camSys;
   private ImageManager imageManager;
   private int nRows, nCols, width, height;
-  private Arduino driveSys;
+  private ArduinoPWM driveSys;
   private BufferedImage displayImage;
   private BufferedImage bufferImage;
   private BufferedImage tempImage;
@@ -125,10 +125,10 @@ public class DriveTest extends JFrame implements MouseListener {
     }
     camSys.Connect(FRAME_RATE_NUMBER);
 
-    //Initialize Arduino
-    driveSys = new Arduino();
-    driveSys.pinMode(SteerPin, Arduino.SERVO);
-    driveSys.pinMode(GasPin, Arduino.SERVO);
+    //Initialize ArduinoPWM
+    driveSys = new ArduinoPWM();
+    driveSys.pinMode(SteerPin, ArduinoPWM.SERVO);
+    driveSys.pinMode(GasPin, ArduinoPWM.SERVO);
 
     //Set window Type
     this.viewType = viewType;
@@ -157,10 +157,10 @@ public class DriveTest extends JFrame implements MouseListener {
     }
     camSys.Connect(FRAME_RATE_NUMBER);
 
-    //Initialize Arduino
-    driveSys = new Arduino();
-    driveSys.pinMode(SteerPin, Arduino.SERVO);
-    driveSys.pinMode(GasPin, Arduino.SERVO);
+    //Initialize ArduinoPWM
+    driveSys = new ArduinoPWM();
+    driveSys.pinMode(SteerPin, ArduinoPWM.SERVO);
+    driveSys.pinMode(GasPin, ArduinoPWM.SERVO);
 
     //Set window Type
     this.viewType = viewType;

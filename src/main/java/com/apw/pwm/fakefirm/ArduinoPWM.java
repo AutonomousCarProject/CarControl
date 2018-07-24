@@ -1,7 +1,7 @@
 /* FakeFirmata -- a simple way to control servos from LattePanda in Java.
  *
- * This is essentially a translation of (small parts of) LattePanda's Arduino.cs
- * into Java for using the attached Arduino to control servos.
+ * This is essentially a translation of (small parts of) LattePanda's ArduinoPWM.cs
+ * into Java for using the attached ArduinoPWM to control servos.
  *
  * Under US Copyright law this miniscule copy counts as "Fair Use" and in the
  * public domain, but if you are worried about it, or if you extend it to
@@ -18,11 +18,12 @@ package com.apw.pwm.fakefirm;                                     // 2018 Februa
 
 import com.apw.nojssc.SerialPort;
 
-public class Arduino { // Adapted to Java from arduino.cs ... (FakeFirmata)
+public class ArduinoPWM implements
+    com.apw.pwm.PWMController { // Adapted to Java from arduino.cs ... (FakeFirmata)
   // (subclass this to add input capability)
 
   public static final String CommPortNo = "COM3";
-  public static final int MAX_DATA_BYTES = 16, // =64 in LattePanda's Arduino.cs
+  public static final int MAX_DATA_BYTES = 16, // =64 in LattePanda's ArduinoPWM.cs
       MDB_msk = MAX_DATA_BYTES - 1;
   public static final int SET_PIN_MODE = 0xF4;
   // set a pin to INPUT/OUTPUT/PWM/etc
@@ -52,9 +53,9 @@ public class Arduino { // Adapted to Java from arduino.cs ... (FakeFirmata)
   protected
   SerialPort surrealPort;
 
-  public Arduino() { // outer class constructor..
+  public ArduinoPWM() { // outer class constructor..
     surrealPort = new SerialPort(CommPortNo);
-    System.out.println("new Arduino " + CommPortNo + " " + (surrealPort != null));
+    System.out.println("new ArduinoPWM " + CommPortNo + " " + (surrealPort != null));
     digitalOutputData = new int[MAX_DATA_BYTES];
     Open();
   }
@@ -68,22 +69,12 @@ public class Arduino { // Adapted to Java from arduino.cs ... (FakeFirmata)
     DoMore = whom;
   }
 
-  /**
-   * Current status of the FakeFirmata library, =true if successfully open.
-   *
-   * @return true if successfully open, false if failed or closed
-   */
+  @Override
   public boolean IsOpen() {
     return GoodOpen;
   } // true if opened successfully
 
-  /**
-   * Sets the mode of the specified pin (INPUT or OUTPUT).
-   *
-   * @param pin The arduino pin.
-   * @param mode Mode Arduino.OUTPUT or Arduino.SERVO
-   * (Arduino.INPUT, Arduino.ANALOG or Arduino.PWM not supported)
-   */
+  @Override
   public void pinMode(int pin, byte mode) {
     byte[] msg = new byte[3];
     if (SpeakEasy) {
@@ -102,13 +93,7 @@ public class Arduino { // Adapted to Java from arduino.cs ... (FakeFirmata)
     }
   } //~pinMode
 
-  /**
-   * Write to a digital pin that has been toggled to output mode
-   * with pinMode() method.
-   *
-   * @param pin The digital pin to write to.
-   * @param value Value either Arduino.LOW or Arduino.HIGH.
-   */
+  @Override
   public void digitalWrite(int pin, byte value) {
     int portNumber = (pin >> 3) & 0x0F;
     int digiData = digitalOutputData[portNumber & MDB_msk];
@@ -135,11 +120,7 @@ public class Arduino { // Adapted to Java from arduino.cs ... (FakeFirmata)
     }
   } //~digitalWrite
 
-  /**
-   * [For] controlling [a] servo.
-   *
-   * @param pin Servo output pin.
-   */
+  @Override
   public void servoWrite(int pin, int angle) {
     byte[] msg = new byte[3];
 //ABCDE
@@ -157,13 +138,7 @@ public class Arduino { // Adapted to Java from arduino.cs ... (FakeFirmata)
     }
   } //~servoWrite
 
-  /**
-   * Opens the serial port connection, should it be required.
-   * By default the port is opened when the object is first created.
-   * <p>
-   * Note that JSSC does not recover gracefully from a failure to close,
-   * so a subsequent Open() will fail until the system is rebooted.
-   */
+  @Override
   public void Open() {
     if (SpeakEasy) {
       System.out.println("F%%F/Open..");
@@ -190,12 +165,7 @@ public class Arduino { // Adapted to Java from arduino.cs ... (FakeFirmata)
     }
   } //~Open
 
-  /**
-   * Closes the serial port.
-   * <p>
-   * Note that JSSC does not recover gracefully from a failure to close,
-   * so a subsequent Open() will fail until the system is rebooted.
-   */
+  @Override
   public void Close() {
     if (SpeakEasy) {
       System.out.println("F%%F/Close..");
@@ -210,4 +180,4 @@ public class Arduino { // Adapted to Java from arduino.cs ... (FakeFirmata)
     }
     GoodOpen = false;
   } //~Close
-} //~Arduino (fakefirm) (OO)
+} //~ArduinoPWM (fakefirm) (OO)
