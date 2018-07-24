@@ -1,9 +1,8 @@
-package com.apw.pwm.raspi;
+package com.apw.pinio.raspi;
 
-import com.apw.pwm.PWMController;
+import com.apw.pinio.PWMController;
 import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioFactory;
-import com.pi4j.io.gpio.RaspiPin;
 
 public class RaspiPWM implements PWMController {
 
@@ -25,23 +24,24 @@ public class RaspiPWM implements PWMController {
     return gpioController.isShutdown();
   }
 
-  // TODO wtf are the mode and value bytes actually representing
-
   @Override
-  public void pinMode(int pin, byte mode) {
+  public void pinMode(int pin, Protocol protocol, IO io) {
 
   }
 
   @Override
-  public void digitalWrite(int pin, byte value) {
-    // TODO real implementation
-    gpioController.provisionDigitalOutputPin(RaspiPin.getPinByAddress(pin)).pulse(value);
+  public void write(int pin, DataPackage dataPackage) {
+
   }
 
   @Override
-  public void servoWrite(int pin, int angle) {
-    // TODO real implementation
-    gpioController.provisionDigitalOutputPin(RaspiPin.getPinByAddress(pin)).pulse(angle);
+  public void writeUnchecked(int pin, DataPackage dataPackage) {
+
+  }
+
+  @Override
+  public DataPackage read(int pin) {
+    return null;
   }
 
   @Override

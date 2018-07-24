@@ -23,7 +23,7 @@ import com.apw.apw3.SimCamera;
 import com.apw.apw3.TrakSim;
 import com.apw.fly2cam.FlyCamera;
 import com.apw.imagemanagement.ImageManager;
-import com.apw.pwm.fakefirm.ArduinoPWM;
+import com.apw.pinio.fakefirm.ArduinoPWM;
 import com.apw.speedcon.Constants;
 import com.apw.speedcon.SpeedController;
 import com.apw.steering.Point;

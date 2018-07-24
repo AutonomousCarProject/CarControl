@@ -11,7 +11,7 @@
  * FakeFirmata is designed to work with JSSC (Java Simple Serial Connector),
  * but probably will work with any compatible Java serial port API.
  */
-package com.apw.pwm.fakefirm;                                     // 2018 February 10
+package com.apw.pinio.fakefirm;                                     // 2018 February 10
 
 // import nojssc.SerialPort; // use this instead for working with TrackSim
 //                           // ..on a computer with no serial port.
@@ -19,7 +19,7 @@ package com.apw.pwm.fakefirm;                                     // 2018 Februa
 import com.apw.nojssc.SerialPort;
 
 public class ArduinoPWM implements
-    com.apw.pwm.PWMController { // Adapted to Java from arduino.cs ... (FakeFirmata)
+    com.apw.pinio.PWMController { // Adapted to Java from arduino.cs ... (FakeFirmata)
   // (subclass this to add input capability)
 
   private static final ArduinoPWM theController = new ArduinoPWM();
