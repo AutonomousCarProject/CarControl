@@ -14,6 +14,7 @@ public class ImagePicker extends TimerTask {
 
     private FlyCamera cam;
     private int fps;
+    private byte[] pixels1, pixels2;
     private byte[] pixels;
     private int nrows, ncols;
 

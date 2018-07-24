@@ -27,7 +27,7 @@ public class DriveTest extends JFrame {
     //VARIABLES
 
     //Constants
-    public static final int FPS = 15;                               //Frames per second the window will run at unless defined, as well as the Frame Rate of TrakSim
+    public static final int FPS = 30;                               //Frames per second the window will run at unless defined, as well as the Frame Rate of TrakSim
 
     //Universal window variables
     public static ImageManager imageManager;                        //Object to get camera images and change them
@@ -56,9 +56,9 @@ public class DriveTest extends JFrame {
      */
     public static void main(String[] args){
         TrakManager starter = new TrakManager();                                         //Creates a TrakManager object, which will run TrakSim at a constant Framerate
-        init(new Timer(),starter.getImageManager(), new Steering(starter.getSim()));     //Initializes DriveTest
+        init(new Timer(),starter.getImageManager(), new Steering());     //Initializes DriveTest
         displayTaskTimer.scheduleAtFixedRate(starter, new Date(), 1000 / FPS);    //Initializes TrakManager at FPS frames per second
-        autoDriveTest( new DriveTest(5));                                       //Format to create a new DriveTest window that updates automatically
+        autoDriveTest( new DriveTest(3));                                       //Format to create a new DriveTest window that updates automatically
     }
 
     /** Method that initializes DriveTest (Will run automatically if not ran manually)
@@ -162,7 +162,7 @@ public class DriveTest extends JFrame {
     private void finishInit(){
         edges = getInsets();                                                            //Sets the insets value, which is required for steering's paint method
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);                                 //Sets the program to close when the window closes
-        setSize(width,height);                                                          //Sets the window to be the size defined earlier
+        setSize(14+width,38+height);                                                          //Sets the window to be the size defined earlier
         displayImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);    //Creates the image that will be displayed
         bufferImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);     //Creates the image one frame ahead of the one that will be displayed
         emptyPixels=new int[width*height];                                              //Creates an array that is the same size as the window
