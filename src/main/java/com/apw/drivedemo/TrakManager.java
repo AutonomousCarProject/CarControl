@@ -158,7 +158,13 @@ public class TrakManager extends TimerTask {
      *
      */
     private void steerCode(){
-        Point[] hi = testSteering.findPoints(imageManager.getRGBRaster());
+        Point[] hi = testSteering.findPoints(imageManager.getBWRGBRaster());
+        if(!testSteering.checkMidpoints(hi,imageManager.getSimpleColorRaster(), imageManager.getNcols())){
+            hi = testSteering.findPointsLeft(imageManager.getBWRGBRaster());
+            if(!testSteering.checkMidpoints(hi,imageManager.getSimpleColorRaster(), imageManager.getNcols())){
+                hi = testSteering.findPointsRight(imageManager.getBWRGBRaster());
+            }
+        }
         testSteering.averageMidpoints();
         double tempDeg = testSteering.getDegreeOffset();
         driveSys.servoWrite(SteerPin, (int)((tempDeg) + 90));

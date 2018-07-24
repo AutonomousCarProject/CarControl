@@ -38,19 +38,17 @@ public class SpeedController {
 	
 	//A method to be called every frame. Calculates desired speed and actual speed
 	//Also takes stopping into account
-	public void onUpdate(int gasAmount, double steerDegs, int manualSpeed, Graphics graf, DriveTest dtest, boolean blobsOn, boolean overlayOn){
+	public void onUpdate(int gasAmount, double steerDegs, int manualSpeed, Graphics graf, ImageManager imagemanager, boolean blobsOn, boolean overlayOn){
 		if (cyclesUntilCanDetectStopsign > 0){
 			cyclesUntilCanDetectStopsign--;
 		}
-		dtest.run();
-		//dtest.window.paint(graf);
 		this.calculateEstimatedSpeed(gasAmount);
 		this.calculateDesiredSpeed(steerDegs, manualSpeed);
 
 		//This part runs on-screen blobs thru a set of tests to figure out if they are
 		//relevant, and then what to do with them
 		PedestrianDetector pedDetect = new PedestrianDetector();
-		ImageManager imageManager = dtest.getImgManager();
+		ImageManager imageManager = imagemanager;
 
 
         List<MovingBlob> blobs = pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), 912);
@@ -77,29 +75,70 @@ public class SpeedController {
 				graf.drawRect(i.x+8, i.y+40, i.width, i.height);;
 			}
 			if(detectRedLight(i)){
-				System.out.println("Red light blob " + i);
+				//System.out.println("Red light blob " + i);
 				setStoppingAtLight();
 			}
 			else if (detectYellowLight(i)) {
-				System.out.println("Yellow light blob " + i);
+				//System.out.println("Yellow light blob " + i);
 			}
 			else if (detectGreenLight(i)) {
-				System.out.println("Green light blob " + i);
+				//System.out.println("Green light blob " + i);
 				readyToGo();
 			}
 			else if(detectStopSign(i) && cyclesUntilCanDetectStopsign <= 0){
-				System.out.println("Stop sign blob " + i);
+				//System.out.println("Stop sign blob " + i);
 				cyclesUntilCanDetectStopsign = 100;
 				setStoppingAtSign();
 			}
 			else {
-				System.out.println("Blob " + i);
-				System.out.println("Blob " + i.color.getColor());
+				//System.out.println("Blob " + i);
+				//System.out.println("Blob " + i.color.getColor());
 			}
 		}
 		
 		
 	}
+
+    public void onUpdateSansGraphics(int gasAmount, double steerDegs, int manualSpeed, ImageManager imagemanager){
+        if (cyclesUntilCanDetectStopsign > 0){
+            cyclesUntilCanDetectStopsign--;
+        }
+        this.calculateEstimatedSpeed(gasAmount);
+        this.calculateDesiredSpeed(steerDegs, manualSpeed);
+
+        //This part runs on-screen blobs thru a set of tests to figure out if they are
+        //relevant, and then what to do with them
+        PedestrianDetector pedDetect = new PedestrianDetector();
+        ImageManager imageManager = imagemanager;
+
+
+        List<MovingBlob> blobs = pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), 912);
+        for(MovingBlob i : blobs){
+
+            if(detectRedLight(i)){
+                System.out.println("Red light blob " + i);
+                setStoppingAtLight();
+            }
+            else if (detectYellowLight(i)) {
+                System.out.println("Yellow light blob " + i);
+            }
+            else if (detectGreenLight(i)) {
+                System.out.println("Green light blob " + i);
+                readyToGo();
+            }
+            else if(detectStopSign(i) && cyclesUntilCanDetectStopsign <= 0){
+                System.out.println("Stop sign blob " + i);
+                cyclesUntilCanDetectStopsign = 100;
+                setStoppingAtSign();
+            }
+            else {
+                System.out.println("Blob " + i);
+                System.out.println("Blob " + i.color.getColor());
+            }
+        }
+
+
+    }
 	
 	//This figures out the speed that we want to be traveling at
 	public void calculateDesiredSpeed(double wheelAngle, int manualSpeed){

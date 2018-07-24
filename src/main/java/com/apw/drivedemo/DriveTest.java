@@ -47,8 +47,7 @@ public class DriveTest extends JFrame {
         TrakManager starter = new TrakManager();
         init(new Timer(),starter.getImageManager(), new Steering(starter.getSim()));
         displayTaskTimer.scheduleAtFixedRate(starter, new Date(), 1000 / FPS);
-        autoDriveTest( new DriveTest(5));
-        autoDriveTest( new DriveTest(2));
+        autoDriveTest( new DriveTest(1));
         //displayTaskTimer.scheduleAtFixedRate(new TimerRepaint(createDriveTest(3)), new Date(), 1000 / FPS);
     }
     public static void init(Timer refreshTimer, ImageManager imageMng, Steering steerSys) {
@@ -155,7 +154,7 @@ public class DriveTest extends JFrame {
      */
     private void testPaint(Graphics graf){
         steerPaint(graf);
-        speedPaint(graf);
+        //speedPaint(graf);
     }
 
     /** Paints extra information about steering
