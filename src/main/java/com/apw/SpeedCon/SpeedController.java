@@ -21,84 +21,78 @@ public class SpeedController {
 	private boolean stoppedAtLight;
 	private boolean readyToGo;
 	private boolean emergencyStop;
-	private int color;
+	int color;
 	private int cyclesToStopAtSign = Constants.DRIFT_TO_STOPSIGN_FRAMES;
 	private int cyclesToGo;
 	private int cyclesToStopAtLight = Constants.DRIFT_TO_STOPLIGHT_FRAMES;
 	private int cyclesUntilCanDetectStopsign = Constants.WAIT_AFTER_STOPSIGN;
+
+	private PedestrianDetector pedDetect;
 	
-	
-	private SpeedFinder speedFinder;
+	private List<MovingBlob> currentBlobs;
 	
 	TrakSim trackSim = new TrakSim();
 	
 	public SpeedController(){
-		this.speedFinder = new SpeedFinder();
+		this.pedDetect = new PedestrianDetector();
+		this.currentBlobs = new ArrayList<MovingBlob>();
 	}
 	
 	//A method to be called every frame. Calculates desired speed and actual speed
 	//Also takes stopping into account
-	public void onUpdate(int gasAmount, double steerDegs, int manualSpeed, Graphics graf, DriveTest dtest, boolean blobsOn, boolean overlayOn){
+	public void onUpdate(int gasAmount, int steerDegs, int manualSpeed, Graphics graf, DriveTest dtest){
 		if (cyclesUntilCanDetectStopsign > 0){
 			cyclesUntilCanDetectStopsign--;
 		}
+		com.apw.pedestrians.Constant.LAST_FRAME_MILLIS = com.apw.pedestrians.Constant.CURRENT_FRAME_MILLIS;
+		com.apw.pedestrians.Constant.CURRENT_FRAME_MILLIS = System.currentTimeMillis();
+		com.apw.pedestrians.Constant.TIME_DIFFERENCE = com.apw.pedestrians.Constant.CURRENT_FRAME_MILLIS - com.apw.pedestrians.Constant.LAST_FRAME_MILLIS;
 		dtest.run();
-		//dtest.window.paint(graf);
 		this.calculateEstimatedSpeed(gasAmount);
 		this.calculateDesiredSpeed(steerDegs, manualSpeed);
 
 		//This part runs on-screen blobs thru a set of tests to figure out if they are
 		//relevant, and then what to do with them
-		PedestrianDetector pedDetect = new PedestrianDetector();
 		ImageManager imageManager = dtest.getImgManager();
 
 
-        List<MovingBlob> blobs = pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), 912);
+		List<MovingBlob> blobs = this.pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), 912);
+
+
 		for(MovingBlob i : blobs){
-			if(blobsOn){
-				if (i.color.getColor() == Color.BLACK) {
-					graf.setColor(java.awt.Color.BLACK);	
-				}
-				else if (i.color.getColor() == Color.GREY) {
-					graf.setColor(java.awt.Color.GRAY);
-				}
-				else if (i.color.getColor() == Color.WHITE) {
-					graf.setColor(java.awt.Color.WHITE);
-				}
-				else if (i.color.getColor() == Color.RED) {
-					graf.setColor(java.awt.Color.RED);
-				}
-				else if (i.color.getColor() == Color.GREEN) {
-					graf.setColor(java.awt.Color.GREEN);
-				}
-				else if (i.color.getColor() == Color.BLUE) {
-					graf.setColor(java.awt.Color.BLUE);
-				}
-				graf.drawRect(i.x+8, i.y+40, i.width, i.height);;
-			}
-			if(detectRedLight(i)){
-				System.out.println("Red light blob " + i);
+			/* Returns an int value corresponding to the color of the light we are looking at
+			 * 0 - No light
+			 * 1 - Red Light
+			 * 2 - Yellow Light
+			 * 3 - Green Light
+			 * */
+			int currLight = detectLight(i, blobs);
+			
+			if(currLight == 1){
 				setStoppingAtLight();
 			}
-			else if (detectYellowLight(i)) {
-				System.out.println("Yellow light blob " + i);
+			else if (currLight == 2) {
 			}
-			else if (detectGreenLight(i)) {
-				System.out.println("Green light blob " + i);
+			else if (currLight == 3) {
 				readyToGo();
 			}
 			else if(detectStopSign(i) && cyclesUntilCanDetectStopsign <= 0){
-				System.out.println("Stop sign blob " + i);
 				cyclesUntilCanDetectStopsign = 100;
 				setStoppingAtSign();
 			}
-			else {
-				System.out.println("Blob " + i);
-				System.out.println("Blob " + i.color.getColor());
-			}
+			else{}
 		}
 		
-		
+		this.currentBlobs = blobs;	
+	}
+	
+	private boolean detectBlobOverlappingBlob(MovingBlob outsideBlob, MovingBlob insideBlob){
+		if((insideBlob.x < outsideBlob.x+outsideBlob.width && insideBlob.width + insideBlob.x > outsideBlob.x)  ||  (insideBlob.y < outsideBlob.y+outsideBlob.height && insideBlob.height + insideBlob.y > outsideBlob.y)) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 	
 	//This figures out the speed that we want to be traveling at
@@ -124,153 +118,163 @@ public class SpeedController {
         else if (shouldStopLight == 0){
             this.desiredSpeed = 0;
         }
-        if (this.emergencyStop){
-            this.desiredSpeed = 0;
-        }
-    }
-
-    //Returns the estimated speed IN METERS PER SECOND
-    public double getEstimatedSpeed(){
-        return currentEstimatedSpeed*Constants.PIN_TO_METER_PER_SECOND;
-    }
-
-    //Updates the estimated speed
-    public void calculateEstimatedSpeed(int gasAmount){
-        currentEstimatedSpeed = gasAmount;
-    }
-
-    //To be called every frame. Checks if we need to be stopping at a stopsign
-    //By modifying constants in the Constants.java in SpeedCon, you can adjust how the stopping behaves
-    //Can be triggered by pressing 'P'
-    public int updateStopSign(){
-        if(stoppingAtSign){
-            if(cyclesToStopAtSign <= 0){
-                cyclesToStopAtSign = Constants.DRIFT_TO_STOPSIGN_FRAMES;
-                stoppedAtSign = true;
-                stoppingAtSign = false;
-                cyclesToGo = Constants.WAIT_AT_STOPSIGN_FRAMES;
-            }
-            else{
-                cyclesToStopAtSign--;
-                return -1;
-            }
-        }
-        if(stoppedAtSign){
-            if(cyclesToGo <= 0){
-                cyclesToGo = Constants.WAIT_AT_STOPSIGN_FRAMES;
-                stoppedAtSign = false;
-            }
-            else{
-                cyclesToGo--;
-                return 0;
-            }
-        }
-        return 1;
-    }
-
-    //To be called every frame. Checks if we need to be stopping at a stoplight
-    //By modifying constants in the Constants.java in SpeedCon, you can adjust how the stopping behaves
-    //Can be triggered by pressing 'O', and released by pressing 'I'
-    public int updateStopLight(){
-        if(stoppingAtLight){
-            if(cyclesToStopAtLight <= 0){
-                cyclesToStopAtLight = Constants.DRIFT_TO_STOPLIGHT_FRAMES;
-                stoppedAtLight = true;
-                stoppingAtLight = false;
-                readyToGo = false;
-            }
-            else{
-                cyclesToStopAtLight--;
-                return -1;
-            }
-        }
-        if(stoppedAtLight){
-            if(readyToGo){
-                stoppedAtLight = false;
-                readyToGo = false;
-            }
-            else{
-                return 0;
-            }
-        }
-        return 1;
-    }
-
-    //Triggered by pressing 'O', this tells us that we have a green light
-    public void readyToGo(){
-        readyToGo = true;
-    }
-
-    //Tells you if we are stopping at a sign currently
-    public boolean getStoppingAtSign(){
-        return stoppingAtSign;
-    }
-
-    //Tells you if we are stopping at a light currently
-    public boolean getStoppingAtLight(){
-        return stoppingAtLight;
-    }
-
-    //Tells us that we have detected a stopsign, and need to stop
-    public void setStoppingAtSign(){
-        stoppingAtSign = true;
-        cyclesToStopAtSign = Constants.DRIFT_TO_STOPSIGN_FRAMES;
-    }
-
-    //Tells us that we have seen a red light, and need to stop
-    public void setStoppingAtLight(){
-        stoppingAtLight = true;
-        cyclesToStopAtLight = Constants.DRIFT_TO_STOPLIGHT_FRAMES;
-    }
-
-    //Getting and setting our emergency stop boolean
-    public boolean getEmergencyStop(){
-        return emergencyStop;
-    }
-
-    public void setEmergencyStop(boolean emer){
-        this.emergencyStop = emer;
-    }
-
-    //This returns our distance from an object. Currently non-functional
-    public  double getDistance(double focalLength, double realObjHeight, double cameraFrameHeight, double objectPixelHeight, double sensorHeight) {
-
-        return (focalLength * realObjHeight * cameraFrameHeight )
-                / ( objectPixelHeight * sensorHeight);
-
-    }
-
-
-    //Break Rate Math
-
-    //The total distance it will take to stop
-    double calcStopDist(double targetStopDist, double speed)
-    {
-        return Math.pow(speed, 2) / (Constants.FRICT * Constants.GRAV * 2);
+		if (this.emergencyStop){
+			this.desiredSpeed = 0;
+		}
+	}
+	
+	public int getNextSpeed(){
+		double distance = this.desiredSpeed - this.currentEstimatedSpeed;
+		if(Math.abs(distance) < Constants.MIN_SPEED_INCREMENT){
+			return (int)this.desiredSpeed;
+		}
+		else if (distance < 0){
+			return (int)(this.currentEstimatedSpeed - Constants.MIN_SPEED_INCREMENT);
+		}
+		else{
+			return (int)(this.currentEstimatedSpeed + Constants.MIN_SPEED_INCREMENT);
+		}
+	}
+	
+	//Returns the estimated speed IN METERS PER SECOND
+	public double getEstimatedSpeed(){
+		return currentEstimatedSpeed*Constants.PIN_TO_METER_PER_SECOND; 
+	}
+	
+	//Updates the estimated speed
+	public void calculateEstimatedSpeed(int gasAmount){
+		currentEstimatedSpeed = gasAmount;
+	}
+	
+	//To be called every frame. Checks if we need to be stopping at a stopsign
+	//By modifying constants in the Constants.java in SpeedCon, you can adjust how the stopping behaves
+	//Can be triggered by pressing 'P'
+	public int updateStopSign(){
+		if(stoppingAtSign){
+			if(cyclesToStopAtSign <= 0){
+				cyclesToStopAtSign = Constants.DRIFT_TO_STOPSIGN_FRAMES;
+				stoppedAtSign = true;
+				stoppingAtSign = false;
+				cyclesToGo = Constants.WAIT_AT_STOPSIGN_FRAMES;
+			}
+			else{
+				cyclesToStopAtSign--;
+				return -1;
+			}
+		}
+		if(stoppedAtSign){
+			if(cyclesToGo <= 0){
+				cyclesToGo = Constants.WAIT_AT_STOPSIGN_FRAMES;
+				stoppedAtSign = false;
+			}
+			else{
+				cyclesToGo--;
+				return 0;
+			}
+		}
+		return 1;
+	}
+	
+	//To be called every frame. Checks if we need to be stopping at a stoplight
+	//By modifying constants in the Constants.java in SpeedCon, you can adjust how the stopping behaves
+	//Can be triggered by pressing 'O', and released by pressing 'I'
+	public int updateStopLight(){
+		if(stoppingAtLight){
+			if(cyclesToStopAtLight <= 0){
+				cyclesToStopAtLight = Constants.DRIFT_TO_STOPLIGHT_FRAMES;
+				stoppedAtLight = true;
+				stoppingAtLight = false;
+				readyToGo = false;
+			}
+			else{
+				cyclesToStopAtLight--;
+				return -1;
+			}
+		}
+		if(stoppedAtLight){
+			if(readyToGo){
+				stoppedAtLight = false;
+				readyToGo = false;
+			}
+			else{
+				return 0;
+			}
+		}
+		return 1;
+	}
+	
+	//Triggered by pressing 'O', this tells us that we have a green light
+	public void readyToGo(){
+		readyToGo = true;
+	}
+	
+	//Tells you if we are stopping at a sign currently
+	public boolean getStoppingAtSign(){
+		return stoppingAtSign;
+	}
+	
+	//Tells you if we are stopping at a light currently
+	public boolean getStoppingAtLight(){
+		return stoppingAtLight;
+	}
+	
+	//Tells us that we have detected a stopsign, and need to stop
+	public void setStoppingAtSign(){
+		stoppingAtSign = true;
+		cyclesToStopAtSign = Constants.DRIFT_TO_STOPSIGN_FRAMES;
+	}
+	
+	//Tells us that we have seen a red light, and need to stop
+	public void setStoppingAtLight(){
+		stoppingAtLight = true;
+		cyclesToStopAtLight = Constants.DRIFT_TO_STOPLIGHT_FRAMES;
+	}
+	
+	//Getting and setting our emergency stop boolean
+	public boolean getEmergencyStop(){
+		return emergencyStop;
+	}
+	
+	public void setEmergencyStop(boolean emer){
+		this.emergencyStop = emer;
+	}
+	
+	//This returns our distance from an object. Currently non-functional
+	public  double getDistance(double focalLength, double realObjHeight, double cameraFrameHeight, double objectPixelHeight, double sensorHeight) {
+		
+		return (focalLength * realObjHeight * cameraFrameHeight )
+		/ ( objectPixelHeight * sensorHeight);
+		
+	}
+	
+	
+	//Break Rate Math
+	
+	//The total distance it will take to stop
+    double calcStopDist(double targetStopDist, double speed) {
+    	return Math.pow(speed, 2) / (Constants.FRICT * Constants.GRAV * 2);
     }
 
     //The amount of time that is needed to stop at the given speed.
-    double getStopTime(double dist, double speed)
-    {
-        return dist / speed;
+    double getStopTime(double dist, double speed) {
+    	return dist / speed;
     }
 
     //The rate at which the speed must go down by, linear
-    double calcStopRate(double speed, double time)
-    {
+    double calcStopRate(double speed, double time) {
         return (0 - speed) / time;
     }
 
 
     //Function used to get the rate to lower the speed by when a stop distance is given.
-    double getStopRate(double targetDist, double currentSpeed)
-    {
-        return calcStopRate(currentSpeed, getStopTime(targetDist, currentSpeed));
+
+    double getStopRate(double targetDist, double currentSpeed) {
+    	return calcStopRate(currentSpeed, getStopTime(targetDist, currentSpeed));
     }
 
     // End Of Brake Rate Math
     
-	public int getDesiredSpeed(){
+	public int getDesiredSpeed() {
 		return (int)desiredSpeed;
 	}
 	
@@ -282,34 +286,56 @@ public class SpeedController {
 			return false;
 		}
 	}
-	
-	// Checks a given blob for the properties of a stoplight (size, age, position, color)
-	public boolean detectRedLight(MovingBlob blob) {
-		if (blob.age > Constants.BLOB_AGE && blob.height > Constants.BLOB_HEIGHT && blob.width > Constants.BLOB_WIDTH && blob.x > Constants.STOPLIGHT_MIN_X && blob.x < Constants.STOPLIGHT_MAX_X && blob.y > Constants.STOPLIGHT_MIN_Y && blob.y < Constants.STOPLIGHT_MAX_Y && blob.color.getColor() == Color.RED) {
-			return true;
-		}
-		else {
-			return false;
-		}
+
+	public List<MovingBlob> getBlobs() {
+		return this.currentBlobs;
 	}
 	
-	// Checks a given blob for the properties of a stoplight (size, age, position, color)
-	public boolean detectYellowLight(MovingBlob blob) {
-		if (blob.age > Constants.BLOB_AGE && blob.height > Constants.BLOB_HEIGHT && blob.width > Constants.BLOB_WIDTH && blob.x > Constants.STOPLIGHT_MIN_X && blob.x < Constants.STOPLIGHT_MAX_X && blob.y > Constants.STOPLIGHT_MIN_Y && blob.y < Constants.STOPLIGHT_MAX_Y && blob.color.getColor() == Color.RED) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
+	/* Returns an int value corresponding to the color of the light we are looking at
+	 * 0 - No light
+	 * 1 - Red Light
+	 * 2 - Yellow Light
+	 * 3 - Green Light
+	 * */
 	
-	// Checks a given blob for the properties of a stoplight (size, age, position, color)
-	public boolean detectGreenLight(MovingBlob blob) {
-		if (blob.age > Constants.BLOB_AGE && blob.height > Constants.BLOB_HEIGHT && blob.width > Constants.BLOB_WIDTH && blob.x > Constants.STOPLIGHT_MIN_X && blob.x < Constants.STOPLIGHT_MAX_X && blob.y > Constants.STOPLIGHT_MIN_Y && blob.y < Constants.STOPLIGHT_MAX_Y && blob.color.getColor() == Color.GREEN) {
-			return true;
+	public int detectLight(MovingBlob blob, List<MovingBlob> bloblist){
+		int lightColor = 0;
+		boolean outputLight = false;
+		//Figure out the color of our blob
+		if (blob.age > Constants.BLOB_AGE && blob.height > Constants.BLOB_HEIGHT && blob.width > Constants.BLOB_WIDTH && blob.x > Constants.STOPLIGHT_MIN_X && blob.x < Constants.STOPLIGHT_MAX_X && blob.y > Constants.STOPLIGHT_MIN_Y && blob.y < Constants.STOPLIGHT_MAX_Y && blob.color.getColor() == Color.RED) {
+			//Found a red light
+			lightColor = 1;
+		}
+		else if (blob.age > Constants.BLOB_AGE && blob.height > Constants.BLOB_HEIGHT && blob.width > Constants.BLOB_WIDTH && blob.x > Constants.STOPLIGHT_MIN_X && blob.x < Constants.STOPLIGHT_MAX_X && blob.y > Constants.STOPLIGHT_MIN_Y && blob.y < Constants.STOPLIGHT_MAX_Y && blob.color.getColor() == Color.RED) {
+			//Found a yellow light
+			lightColor = 2;
+		}
+		else if (blob.age > Constants.BLOB_AGE && blob.height > Constants.BLOB_HEIGHT && blob.width > Constants.BLOB_WIDTH && blob.x > Constants.STOPLIGHT_MIN_X && blob.x < Constants.STOPLIGHT_MAX_X && blob.y > Constants.STOPLIGHT_MIN_Y && blob.y < Constants.STOPLIGHT_MAX_Y && blob.color.getColor() == Color.GREEN) {
+			//Found a green light
+			lightColor = 3;
 		}
 		else {
-			return false;
+			//Didn't find a light
+			return 0;
 		}
+		//If we made it here, we know that we have a light
+		//Therefore, we need to check if that light is inside of a black blob, aka the lamp
+		System.out.println("Found a light: " + lightColor);
+		outputLight = true;
+		int overlaps = 0;
+		for(MovingBlob b : bloblist){
+			if(blob.color.getColor() == Color.BLACK){
+				if(detectBlobOverlappingBlob(blob, b)){
+					overlaps++;
+				}
+			}
+		}
+		System.out.println("Overlaps: " + overlaps);
+		if(outputLight) {
+			return lightColor;
+		}
+		else {
+			return 0;
+		}	
 	}
 }
