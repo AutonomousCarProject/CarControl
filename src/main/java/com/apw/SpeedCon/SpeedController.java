@@ -36,7 +36,7 @@ public class SpeedController {
 	
 	//A method to be called every frame. Calculates desired speed and actual speed
 	//Also takes stopping into account
-	public void onUpdate(int gasAmount, int steerDegs, int manualSpeed, Graphics graf, DriveTest dtest, boolean blobsOn, boolean overlayOn){
+	public void onUpdate(int gasAmount, double steerDegs, int manualSpeed, Graphics graf, DriveTest dtest, boolean blobsOn, boolean overlayOn){
 		if (cyclesUntilCanDetectStopsign > 0){
 			cyclesUntilCanDetectStopsign--;
 		}
@@ -44,12 +44,13 @@ public class SpeedController {
 		//dtest.window.paint(graf);
 		this.calculateEstimatedSpeed(gasAmount);
 		this.calculateDesiredSpeed(steerDegs, manualSpeed);
-		
+
 		//This part runs on-screen blobs thru a set of tests to figure out if they are
 		//relevant, and then what to do with them
 		PedestrianDetector pedDetect = new PedestrianDetector();
 		ImageManager imageManager = dtest.getImgManager();
-		List<MovingBlob> blobs = pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), 912);
+
+        List<MovingBlob> blobs = pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), 912);
 		for(MovingBlob i : blobs){
 			if(blobsOn){
 				if (i.color.getColor() == Color.BLACK) {
@@ -98,7 +99,7 @@ public class SpeedController {
 	}
 	
 	//This figures out the speed that we want to be traveling at
-	public void calculateDesiredSpeed(int wheelAngle, int manualSpeed){
+	public void calculateDesiredSpeed(double wheelAngle, int manualSpeed){
 		double curveSteepness = 0; // Steering.getCurveSteepness();
         int shouldStopSign = this.updateStopSign();
         int shouldStopLight = this.updateStopLight();

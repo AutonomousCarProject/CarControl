@@ -40,7 +40,6 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 
     private SpeedController speedControl;
     private ImageManager imageManager;
-    private DriveTest dtest = new DriveTest();
     private boolean overlayOn = Constants.DEFAULT_OVERLAY;
     private boolean blobsOn = Constants.DEFAULT_BLOBS;
 
@@ -78,6 +77,8 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
   private Arduino theServos = null;
   private TrakSim theSim = null;
     Steering testSteering = new Steering(theSim);
+
+    private DriveTest dtest = new DriveTest();
 
     private byte[] CamPix = null;
   private boolean StepMe = false, SimSpedFixt = DriverCons.D_FixedSpeed,
@@ -793,7 +794,7 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
             // handle exception...
         }
         setVisible(true);
-        DriveTest.subMain(theSim, simVideo,2);
+        DriveTest.subMain(theSim, simVideo);
 
         this.speedControl = new SpeedController();
         this.imageManager = dtest.getImgManager();
