@@ -2,14 +2,18 @@ package com.apw.SpeedCon;
 
 public class Constants {
 		public static final boolean
-		DEFAULT_OVERLAY = true,
-		DEFAULT_BLOBS = true;
+		
+		DEFAULT_OVERLAY = false,
+		DEFAULT_BLOBS = false,
+		DEFAULT_WRITE_BLOBS_TO_CONSOLE = false;
 	
 		public static final double 
 		//Speed
 		MAX_SPEED = 40,					//Car's maximum speed
-		MIN_SPEED = 20,					//Car's minimum speed
+		MIN_SPEED = 10,					//Car's minimum speed
 		PIN_TO_METER_PER_SECOND = 0.4,	//Conversion for motor position to m/s. DO NOT TOUCH
+		MAX_OBJECT_WIDTH = 320,			//Maximum width in pixels of object height before car slows
+		MAX_OBJECT_HEIGHT = 200,		//Maximum height of in pixels of an object before car slows
 		
 		//Math
 		GRAV = 9.80665,					//Average gravitational acceleration
@@ -25,6 +29,8 @@ public class Constants {
 		DRIFT_TO_STOPLIGHT_FRAMES = 0,	//Frames to drift forward after stoplight detected
 		STOPLIGHT_DRIFT_SPEED = 12,		//Speed at which the car pulls up to a stoplight
 		WAIT_AFTER_STOPSIGN = 100,
+		MIN_SPEED_INCREMENT = 1,
+		MAX_SPEED_INCREMENT = 10,
 		
 		//Blobs
 		BLOB_HEIGHT = 5,				//Filtered height of a blob in pixels

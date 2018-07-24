@@ -1,5 +1,10 @@
 package com.apw.pedestrians.blobtrack;
 
+<<<<<<< HEAD
+=======
+import com.apw.pedestrians.blobdetect.Blob;
+import com.apw.SpeedCon.Settings;
+>>>>>>> origin/speed
 import com.apw.pedestrians.Constant;
 import com.apw.pedestrians.blobdetect.Blob;
 
@@ -323,11 +328,16 @@ public class MovingBlobDetection implements IMovingBlobDetection {
         for (MovingBlob movingBlob : movingBlobSet) {
             updateUnmatched(movingBlob);
         }
-
+        
         //creates new MovingBlobs for unmatched blobs
         for (Blob blob : blobSet) {
             this.movingBlobs.add(new MovingBlob(blob));
         }
+
+        if(Settings.writeBlobsToConsole){
+        	System.out.println(movingBlobs.get(0));
+        }
+
     }
 
     private void matchBlob(MovingBlob movingBlob, Blob newBlob) {

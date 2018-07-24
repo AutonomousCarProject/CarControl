@@ -49,10 +49,10 @@ public class DriverCons { // TrakSim constant parameters
     public static final int
             D_SecondViewType = 3,   //0 = no view, 1 = RGB, 2 = monochrome, 3 = simplified
             D_Vramp = 68, D_Hramp = 172, // Initial pos'n for car, meters from NW
-            D_RampA = 300,     // Initial orient'n for car, c-wise degrees from north
+            D_RampA = 140,     // Initial orient'n for car, c-wise degrees from north
             D_Zoom35 = 35,     // 35mm-equivalent focal length for "camera"
             D_BayTile = 1,     // Bayer8 tiling code (RG/GB) as defined by Pt.Grey
-            D_FrameTime = 100, // =5/fps, nominal frame rate for camera (must >= 20ms)
+            D_FrameTime = 50, // =5/fps, nominal frame rate for camera (must >= 20ms)
             D_nServoTests = 0, // number of times to run through test (1: no ESC)
             D_ServoMsgPos = 200 * 0x10000 + 0, // position of warning in image file,
             D_ServoMsgTL = 40 * 0x10001, D_ServoMsgSiz = 40 * 0x10000 + 80, // posn on screen

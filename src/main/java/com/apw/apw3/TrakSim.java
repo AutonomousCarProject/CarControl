@@ -2876,7 +2876,7 @@ public class TrakSim {
             TmpI = (whar << 16) + whar;
             break;
         } //~for                // GoodLog = true, logy = Fax_Log = T..
-        if (GoodLog) if (logy) System.out.println(HandyOps.Dec2Log("(Anim8) ", anim,
+        if (GoodLog) if (logy);/* System.out.println(HandyOps.Dec2Log("(Anim8) ", anim,
                 HandyOps.Int2Log(HandyOps.IffyStr(uppy, " =^= ", " =#= "), locn,
                         HandyOps.Dec2Log(" ", whar, HandyOps.Dec2Log(" = ", why,  // why =
                                 HandyOps.Dec2Log(" #", FrameNo, HandyOps.IffyStr(anim == 0, "",
@@ -2889,7 +2889,7 @@ public class TrakSim {
                                                                                         HandyOps.Int2Log(" ", here, HandyOps.Dec2Log(" o", OpMode,
                                                                                                 HandyOps.TF2Log("/", StepOne, HandyOps.Dec2Log(" ", xTrLiteTime,
                                                                                                         " ---> " + HandyOps.ArrayDumpLine(ActivAnima, 0, 36)
-                                                                                                                + aLine))))))))))))))))))))));
+                                                                                                                + aLine))))))))))))))))))))));*/
         return locn;
     } //~Animatron
 
@@ -3087,7 +3087,7 @@ public class TrakSim {
                         }
                     } //~if // (whar>0)
                     zx = 0;
-                    if (RoWiM == 0.0) {
+                    if(DoCloseUp) if (RoWiM == 0.0) {
                         zx = (rx - ImHaf) << 2; // ImHaf = ImHi/2
                         if (pint < 8) zx++; // car facing N/S (use H)
                         else if (pint < 82) zx = 0; // not square-on
@@ -3924,7 +3924,7 @@ public class TrakSim {
                 doit = 0;
                 rx = RangeRow[255] - 1; // at horizon, mid-screen
                 for (dx = 255; dx >= -ImHaf; dx += -1) {    // convert depth to raster line number..
-                    if (rx > ImHi - DrawDash) break; // normal exit at bottom of screen
+                    if (rx >= ImHi - DrawDash) break; // normal exit at bottom of screen
                     if (dx < 0) break;
                     robe = RangeRow[dx & 255]; // dx: nominal depth in park 25cm units
                     // far = far&0xFFFFFF|(robe<<24);
@@ -3941,7 +3941,7 @@ public class TrakSim {
                             seen = false;
                         }
                         cx = rx - ImHaf; // RowRange is bottom half of screen only // ImHaf=240
-                        if (cx > ImHaf - DrawDash) break;
+                        if (cx >= ImHaf - DrawDash) break;
                         doit = RowRange[cx];
                         deep = ((double) doit) * 0.03125; // RR: m*16 (6cm), deep: 2m
                         Vbase = deep * Vstp + Vposn * 0.5; // current center of the view at this dx,
@@ -4144,7 +4144,7 @@ public class TrakSim {
                                                             HandyOps.Flt2Log(" ", VuEdge, HandyOps.Dec2Log(" ", NumFax,
                                                                     HandyOps.PosTime(" @ ")))))))))))))));
             // if (why != 8) break; // if scenery went bad, still do steering wheel..
-            DrawSteerWheel(ShoSteer, false, false);
+            if (DrawDash > 0) DrawSteerWheel(ShoSteer, false, false);
             why = 0;
             if (OpMode == 3) DrawRedX();
             if (SeePaintTopL > 0) SeeOnScrnPaint(SeePaintTopL >> 16, SeePaintTopL & 0xFFFF,
