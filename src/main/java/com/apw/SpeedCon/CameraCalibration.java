@@ -14,31 +14,29 @@ import java.util.List;
 
 public class CameraCalibration {
 
-	/*
-
-	Camera Calibration is used to find the focal length and then distance of an object.
-	To use, you need to create a square the size of testBlobWidthHeight at the distance testBlobDistance, then begine calibration which takes a picure
-	and measures the the square thus filling needed variables. After calibration, you can find the distance of an object
-	if you know its real world size along with picture information.
-
-	-----
-	How to calibrate camera to find object distance
-
-	1) Draw a blue square the size of testBlobWidth. This needs to be a preset size and defined in CameraCalibration.
-	
-	2) Move the square to the distance testBlobDistance away from the camera. This also needs to be defined in the code.
-
-	3) Run the method calibrateCamera, which will get the square that you wrote.
-
-	4) With the square, other methods are ran and should fill out enough data to test a stop sign.
-	-----
-
-	After Calibration is complete
-
-	To find the distance, run distanceToObj with the known real world width of the object (make sure to scale), 
-	focal length (which should be set by calibrateCamera), and object pixel width (the width of the blob you want to get distance to)
-
-	*/
+	/**
+	 * Camera Calibration is used to find the focal length and then distance of an object.
+	 * To use, you need to create a square the size of testBlobWidthHeight at the distance testBlobDistance, then begine calibration which takes a picure
+	 * and measures the the square thus filling needed variables. After calibration, you can find the distance of an object
+	 * if you know its real world size along with picture information.
+	 * 
+	 * -----
+	 * How to calibrate camera to find object distance
+	 * 
+	 * 1) Draw a blue square the size of testBlobWidth. This needs to be a preset size and defined in CameraCalibration.
+	 * 
+	 * 2) Move the square to the distance testBlobDistance away from the camera. This also needs to be defined in the code.
+	 * 
+	 * 3) Run the method calibrateCamera, which will get the square that you wrote.
+	 * 
+	 * 4) With the square, other methods are ran and should fill out enough data to test a stop sign.
+	 * -----
+	 * 
+	 * After Calibration is complete
+	 * 
+	 * To find the distance, run distanceToObj with the known real world width of the object (make sure to scale), 
+	 * focal length (which should be set by calibrateCamera), and object pixel width (the width of the blob you want to get distance to)
+	 */
 
 
 
@@ -54,6 +52,7 @@ public class CameraCalibration {
 	private double testBlobDistance = 10;    //The distance the test blob is away from the camera 
 	private double relativeWorldScale;  //The scale of the world (if 1/3 scale, set to 3)
 	
+	//Used to set world scale, and width of known objects
 	public CameraCalibration(){
 
 		relativeWorldScale = 8;
@@ -65,9 +64,9 @@ public class CameraCalibration {
 	}
 
 	
+	//Finds focal length which can then be used for distance, read above for detail
 	public void calibrateCamera()
 	{
-		int temp = 0;
 		//Searches for a blue blob
 		List<MovingBlob> blobs = this.pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), 912);
 		for(MovingBlob i : blobs)
@@ -76,17 +75,16 @@ public class CameraCalibration {
 			{
 				testBlob = i;
 				findFocalLength(testBlob);
-				temp++;
 				break;
 			}
 		}
-		System.out.print("Blue blobs found = " + temp);
 
 		//Used to test distance to found test blob
-		distanceToObj(signWidth, cameraFocalLength, testBlob.width);
+		distanceToObj(testBlobWidthHeight, cameraFocalLength, testBlob.width);
 	}
 
 
+	//Formula that calculates focal length of the test blob
 	void findFocalLength(MovingBlob blob)
 	{
 		cameraFocalLength = (blob.width * testBlobDistance) / testBlobWidthHeight;
@@ -98,11 +96,11 @@ public class CameraCalibration {
 	public double distanceToObj(double knownWidth, double focalLength, double objPixelWidth)
 	{
 		System.out.print("Distance to object = " + (knownWidth *focalLength) / objPixelWidth);
-		return (knownWidth *focalLength) / objPixelWidth;
+		return (knownWidth * focalLength) / objPixelWidth;
 	}
 
 
-		//Break Rate Math
+	//Break Rate Math
 
 	//The total distance it will take to stop
 	double calcStopDist(double targetStopDist, double speed) {
