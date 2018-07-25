@@ -56,7 +56,7 @@ public class CameraCalibration {
 	public CameraCalibration(){
 
 		relativeWorldScale = 8;
-		signWidth = 750/relativeWorldScale; //sign width in centi meters
+		signWidth = 75/relativeWorldScale; //sign width in centi meters
 
 		this.pedDetect = new PedestrianDetector();
 		this.imageManager = DriveTest.imageManager;
@@ -79,7 +79,7 @@ public class CameraCalibration {
 			}
 		}
 
-		//Used to test distance to found test blob
+		//Used to test distance to found test blob, should be same as testBlobDistance
 		distanceToObj(testBlobWidthHeight, cameraFocalLength, testBlob.width);
 	}
 
@@ -90,12 +90,12 @@ public class CameraCalibration {
 		cameraFocalLength = (blob.width * testBlobDistance) / testBlobWidthHeight;
 		System.out.print("Focal Length = " + cameraFocalLength);
 	}
-	
+	 
 
-	//Use tag on red blobs already stopped at
+	//Calculates the distance to a blob if the real world size is known
 	public double distanceToObj(double knownWidth, double focalLength, double objPixelWidth)
 	{
-		System.out.print("Distance to object = " + (knownWidth *focalLength) / objPixelWidth);
+		System.out.print("Distance to object = " + (knownWidth * focalLength) / objPixelWidth);
 		return (knownWidth * focalLength) / objPixelWidth;
 	}
 
@@ -113,13 +113,12 @@ public class CameraCalibration {
 	}
 
 	//The rate at which the speed must go down by, linear
-	double calcStopRate(double speed, double time) {
+	protected double calcStopRate(double speed, double time) {
 		return (0 - speed) / time;
 	}
 
 
 	//Function used to get the rate to lower the speed by when a stop distance is given.
-
 	double getStopRate(double targetDist, double currentSpeed) {
 		return calcStopRate(currentSpeed, getStopTime(targetDist, currentSpeed));
 	}

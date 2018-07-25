@@ -81,6 +81,10 @@ public class SpeedController {
 		}
 
 		this.currentBlobs = blobs;
+		if(emergencyStop == true)
+		{
+			emergenyStop();
+		}
 	}
 
 	private boolean detectBlobOverlappingBlob(MovingBlob outsideBlob, MovingBlob insideBlob){
@@ -307,5 +311,10 @@ public class SpeedController {
 	public CameraCalibration getCalibrator()
 	{
 		return cameraCalibrator;
+	}
+
+	public void emergenyStop()
+	{
+		cameraCalibrator.calcStopRate(getEstimatedSpeed(), 0.1);
 	}
 }
