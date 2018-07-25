@@ -140,7 +140,6 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
       theVideo = new FlyCamera();
     }
     ViDied = 0;
-    dunit = theServos.IsOpen();
     myPix = new int[ScrPix]; // ScrPix = ImHi*WinWi
     SimBytes = new byte[ScrPix * 4];
     thePixels = myPix;
@@ -162,7 +161,7 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
     theBuff = new BufferedImage(ScrWi, ScrHi, BufferedImage.TYPE_INT_RGB);
     titok = TickTock;
     myVid = simVideo;
-    if (!dunit) {
+    if (!theServos.isOpen()) {
       System.out.println("FakeFirmata failed to open " + ArduinoPWM.CommPortNo);
     } else if (myVid == null) {
       dunit = false;
@@ -427,7 +426,7 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
       return;
     }
     StepMe = true;
-    theServos.servoWrite(SteerPin, whar + 90);
+    theServos.setServoAngle(SteerPin, whar + 90);
   } //~SteerMe
 
   /**
@@ -463,7 +462,7 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
       return;
     }
     StepMe = true;
-    theServos.servoWrite(GasPin, whar + 90);
+    theServos.setServoAngle(GasPin, whar + 90);
   } //~AxLR8
 
   /**
@@ -480,7 +479,7 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
         myVid.Finish();
       }
       if (theServos != null) {
-        theServos.Close();
+        theServos.close();
       }
     } catch (Exception ex) {
     }
@@ -1110,7 +1109,7 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
     // Steer between lines
     testSteering.averageMidpoints();
     double tempDeg = testSteering.getDegreeOffset();
-    theServos.servoWrite(SteerPin, (int) ((tempDeg) + 90));
+    theServos.setServoAngle(SteerPin, (int) ((tempDeg) + 90));
 
     graf.setColor(Color.RED);
     //graf.fillRect(100, testSteering.startingPoint, 1, 1);

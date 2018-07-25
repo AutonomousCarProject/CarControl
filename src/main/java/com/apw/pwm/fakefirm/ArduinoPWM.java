@@ -17,10 +17,10 @@ package com.apw.pwm.fakefirm;                                     // 2018 Februa
 //                           // ..on a computer with no serial port.
 
 import com.apw.nojssc.SerialPort;
-import com.apw.pinio.PinIOController;
+import com.apw.pwm.PWMController;
 
 public class ArduinoPWM implements
-    PinIOController { // Adapted to Java from arduino.cs ... (FakeFirmata)
+    PWMController { // Adapted to Java from arduino.cs ... (FakeFirmata)
   // (subclass this to add input capability)
 
   private static final ArduinoPWM theController = new ArduinoPWM();
@@ -53,14 +53,13 @@ public class ArduinoPWM implements
   protected static SimHookBase DoMore = null; // for extensions
 
   protected int[] digitalOutputData;
-  protected
-  SerialPort surrealPort;
+  protected SerialPort surrealPort;
 
   private ArduinoPWM() { // outer class constructor..
     surrealPort = new SerialPort(CommPortNo);
     System.out.println("new ArduinoPWM " + CommPortNo + " " + (surrealPort != null));
     digitalOutputData = new int[MAX_DATA_BYTES];
-    Open();
+    open();
   }
 
   // Implicit override
@@ -77,7 +76,7 @@ public class ArduinoPWM implements
     DoMore = whom;
   }
 
-  public boolean IsOpen() {
+  public boolean isOpen() {
     return GoodOpen;
   } // true if opened successfully
 
@@ -99,39 +98,18 @@ public class ArduinoPWM implements
     }
   } //~setPinMode
 
-  public void digitalWrite(int pin, byte value) {
-    int portNumber = (pin >> 3) & 0x0F;
-    int digiData = digitalOutputData[portNumber & MDB_msk];
-    byte[] msg = new byte[3];
-    if (SpeakEasy) {
-      System.out.println("F%%F/digiWrite +" + pin + " = " + value);
-    }
-    if ((int) value == 0) {
-      digiData = digiData & ~(1 << (pin & 0x07));
-    } else {
-      digiData = digiData | (1 << (pin & 0x07));
-    }
-    digitalOutputData[portNumber & MDB_msk] = digiData;
-    msg[0] = (byte) (DIGITAL_MESSAGE | portNumber);
-    msg[1] = (byte) (digiData & 0x7F);
-    msg[2] = (byte) (digiData >> 7);
-    try {
-      surrealPort.writeBytes(msg);
-      if (DoMore != null) {
-        DoMore.SendBytes(msg, 3);
-      }
-    } catch (Exception ex) {
-      System.out.println(ex);
-    }
-  } //~digitalWrite
+  @Override
+  public void setServoAngle(int pin, double angle) {
 
-  public void servoWrite(int pin, int angle) {
+    // Temporary patch until this function properly supports doubles
+    int roundedAngle = Math.toIntExact(Math.round(angle));
+
     byte[] msg = new byte[3];
 //ABCDE
 //        if (SpeakEasy) System.out.println("F%%F/servoWrite +" + pin + " = " + angle);
     msg[0] = (byte) (ANALOG_MESSAGE | (pin & 0x0F));
-    msg[1] = (byte) (angle & 0x7F);
-    msg[2] = (byte) (angle >> 7);
+    msg[1] = (byte) (roundedAngle & 0x7F);
+    msg[2] = (byte) (roundedAngle >> 7);
     try {
       surrealPort.writeBytes(msg);
       if (DoMore != null) {
@@ -142,7 +120,11 @@ public class ArduinoPWM implements
     }
   } //~servoWrite
 
-  public void Open() {
+  public void setOutputPulseWidth(int pin, double ms) {
+    // TODO break out from setServoAngle
+  }
+
+  private void open() {
     if (SpeakEasy) {
       System.out.println("F%%F/Open..");
     }
@@ -168,7 +150,8 @@ public class ArduinoPWM implements
     }
   } //~Open
 
-  public void Close() {
+  @Override
+  public void close() {
     if (SpeakEasy) {
       System.out.println("F%%F/Close..");
     }
