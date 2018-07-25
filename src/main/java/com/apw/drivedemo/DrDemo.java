@@ -49,7 +49,10 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 	private SpeedController speedControl;
 	private ImageManager imageManager;
 	private DriveTest dtest = new DriveTest();
-	
+
+	static {
+		DriveTest.init();
+	}
 
 	private static final long serialVersionUID = 1L; // unneed but Java insists {
 
