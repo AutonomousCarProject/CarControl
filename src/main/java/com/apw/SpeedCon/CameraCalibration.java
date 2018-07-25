@@ -1,6 +1,9 @@
 package com.apw.SpeedCon;
 
 import com.apw.ImageManagement.ImageManager;
+import com.apw.drivedemo.DrDemo;
+import com.apw.drivedemo.DriveTest;
+import com.apw.fly2cam.FlyCamera;
 import com.apw.pedestrians.PedestrianDetector;
 import com.apw.pedestrians.blobtrack.MovingBlob;
 import com.apw.pedestrians.blobtrack.MovingBlobDetection;
@@ -47,8 +50,8 @@ public class CameraCalibration {
 	private double signWidth;           //The width of a standared stop sign in mm
 
 	private MovingBlob testBlob;
-	private double testBlobWidthHeight; //the width and height of a square used to calibrate the camera
-	private double testBlobDistance;    //The distance the test blob is away from the camera.
+	private double testBlobWidthHeight = 2; //the width and height of a square used to calibrate the camera Centi Meters
+	private double testBlobDistance = 10;    //The distance the test blob is away from the camera Centi Meters
 	private double relativeWorldScale;  //The scale of the world (if 1/3 scale, set to 3)
 	
 	public CameraCalibration(){
@@ -56,14 +59,15 @@ public class CameraCalibration {
 		relativeWorldScale = 8;
 		signWidth = 750/relativeWorldScale;
 
-
+		this.pedDetect = new PedestrianDetector();
+		this.imageManager = DriveTest.imageManager;
 
 	}
 
 	
 	public void calibrateCamera()
 	{
-
+		int temp = 0;
 		//Searches for a blue blob
 		List<MovingBlob> blobs = this.pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), 912);
 		for(MovingBlob i : blobs)
@@ -71,21 +75,26 @@ public class CameraCalibration {
 			if(i.color.getColor() == Color.BLUE)
 			{
 				testBlob = i;
+				findFocalLength(testBlob);
+				temp++;
 				break;
 			}
 		}
+		System.out.print("Blue blobs found = " + temp);
 
-		findFocalLength(testBlob);
-
+		//Used to test distance to found test blob
+		distanceToObj(signWidth, cameraFocalLength, testBlob.width);
 	}
 
 
 	void findFocalLength(MovingBlob blob)
 	{
-		cameraFocalLength = (blob.width * testBlobDistance) /testBlobWidthHeight;
+		cameraFocalLength = (blob.width * testBlobDistance) / testBlobWidthHeight;
 		System.out.print("Focal Length = " + cameraFocalLength);
 	}
 	
+
+	//Use tag on red blobs already stopped at
 	public double distanceToObj(double knownWidth, double focalLength, double objPixelWidth)
 	{
 		System.out.print("Distance to object = " + (knownWidth *focalLength) / objPixelWidth);
