@@ -202,14 +202,14 @@ public class Steering {
     }
 
 
-    public double getDegreeOffset() {
+    public int getDegreeOffset() {
 	    int xOffset = origin.x - steerPoint.x;
 	    int yOffset = Math.abs(origin.y - steerPoint.y);
 
 	    int tempDeg = (int)((Math.atan2(-xOffset, yOffset)) * (180 / Math.PI));
 	    
 	    
-	    return ((Math.atan2(-(usePID?myPID():xOffset), yOffset)) * (180 / Math.PI));
+	    return (int) Math.round((Math.atan2(-(usePID?myPID():xOffset), yOffset)) * (180 / Math.PI));
     }
     
     public double myPID() {

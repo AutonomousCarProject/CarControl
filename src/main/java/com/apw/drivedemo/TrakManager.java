@@ -169,6 +169,7 @@ public class TrakManager extends TimerTask {
      *
      */
     private void speedCode(){
-        speedControl.onUpdateSansGraphics(GasPedal, testSteering.getDegreeOffset(), 0, imageManager);
+        // FIXME this method doesn't exist... speed people???
+//        speedControl.onUpdateSansGraphics(GasPedal, testSteering.getDegreeOffset(), 0, imageManager);
     } //~speedCode
 }
