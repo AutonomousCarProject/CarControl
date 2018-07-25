@@ -885,6 +885,7 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 	}
 
 	public static void main(String[] args) { // (in DrDemo)
+		DriveTest.init();
 		Runnable runFrameLater = new RunSoon();
 		System.out.println(HandyOps.Dec2Log("(main) image size ", ScrWi,
 				HandyOps.Dec2Log("x", ScrHi, HandyOps.Dec2Log(" = ", ScrPix, ""))));
