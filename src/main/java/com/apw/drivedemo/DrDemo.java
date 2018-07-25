@@ -56,7 +56,7 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 	com.apw.Steering.Steering testSteering = new com.apw.Steering.Steering(theSim);
 	private SpeedController speedControl;
 	private ImageManager imageManager;
-	private DriveTest dtest = new DriveTest();
+	private DriveTest dtest = new DriveTest(3);
 	
 
 	private static final long serialVersionUID = 1L; // unneed but Java insists {
@@ -784,6 +784,8 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 					/* User created code starts here */
 
 					TestServos(); //Runs TestServos D_nServoTests number of times  
+					
+					dtest.repaint();
 					
 					//Find Lines
 					Point[] hi = testSteering.findPoints(thePixels);
