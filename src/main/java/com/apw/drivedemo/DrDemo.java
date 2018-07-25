@@ -56,8 +56,12 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 	com.apw.Steering.Steering testSteering = new com.apw.Steering.Steering(theSim);
 	private SpeedController speedControl;
 	private ImageManager imageManager;
-	private DriveTest dtest = new DriveTest(3);
-	
+
+	private DriveTest dtest = new DriveTest();
+
+	static {
+		DriveTest.init();
+	}
 
 	private static final long serialVersionUID = 1L; // unneed but Java insists {
 
