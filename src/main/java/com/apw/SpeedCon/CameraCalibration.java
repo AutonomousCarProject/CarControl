@@ -24,7 +24,7 @@ public class CameraCalibration {
 	-----
 	How to calibrate camera to find object distance
 
-	1) Draw a blue square the size of testBlobWidth. This needs to be a preset size and defined in CameraCalibration as the varible is not given a value.
+	1) Draw a blue square the size of testBlobWidth. This needs to be a preset size and defined in CameraCalibration.
 	
 	2) Move the square to the distance testBlobDistance away from the camera. This also needs to be defined in the code.
 
@@ -50,14 +50,14 @@ public class CameraCalibration {
 	private double signWidth;           //The width of a standared stop sign in mm
 
 	private MovingBlob testBlob;
-	private double testBlobWidthHeight = 2; //the width and height of a square used to calibrate the camera Centi Meters
-	private double testBlobDistance = 10;    //The distance the test blob is away from the camera Centi Meters
+	private double testBlobWidthHeight = 2 ; //the width and height of a square used to calibrate the camera 
+	private double testBlobDistance = 10;    //The distance the test blob is away from the camera 
 	private double relativeWorldScale;  //The scale of the world (if 1/3 scale, set to 3)
 	
 	public CameraCalibration(){
 
 		relativeWorldScale = 8;
-		signWidth = 750/relativeWorldScale;
+		signWidth = 750/relativeWorldScale; //sign width in centi meters
 
 		this.pedDetect = new PedestrianDetector();
 		this.imageManager = DriveTest.imageManager;
@@ -100,4 +100,33 @@ public class CameraCalibration {
 		System.out.print("Distance to object = " + (knownWidth *focalLength) / objPixelWidth);
 		return (knownWidth *focalLength) / objPixelWidth;
 	}
+
+
+		//Break Rate Math
+
+	//The total distance it will take to stop
+	double calcStopDist(double targetStopDist, double speed) {
+		return Math.pow(speed, 2) / (Constants.FRICT * Constants.GRAV * 2);
+	}
+
+	//The amount of time that is needed to stop at the given speed.
+	double getStopTime(double dist, double speed) {
+		return dist / speed;
+	}
+
+	//The rate at which the speed must go down by, linear
+	double calcStopRate(double speed, double time) {
+		return (0 - speed) / time;
+	}
+
+
+	//Function used to get the rate to lower the speed by when a stop distance is given.
+
+	double getStopRate(double targetDist, double currentSpeed) {
+		return calcStopRate(currentSpeed, getStopTime(targetDist, currentSpeed));
+	}
+
+	// End Of Brake Rate Math
+
+	
 }
