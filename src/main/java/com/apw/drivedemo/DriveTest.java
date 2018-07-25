@@ -8,7 +8,7 @@ import com.apw.apw3.TrakSim;
 import com.apw.fly2cam.FlyCamera;
 import com.apw.imagemanagement.ImageManager;
 import com.apw.imagemanagement.ImageManipulator;
-import com.apw.pinio.fakefirm.ArduinoPWM;
+import com.apw.pwm.fakefirm.ArduinoPWM;
 import com.apw.steering.Point;
 import com.apw.steering.Steering;
 import java.awt.Graphics;

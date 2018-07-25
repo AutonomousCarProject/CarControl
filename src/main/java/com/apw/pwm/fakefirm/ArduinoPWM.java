@@ -11,15 +11,16 @@
  * FakeFirmata is designed to work with JSSC (Java Simple Serial Connector),
  * but probably will work with any compatible Java serial port API.
  */
-package com.apw.pinio.fakefirm;                                     // 2018 February 10
+package com.apw.pwm.fakefirm;                                     // 2018 February 10
 
 // import nojssc.SerialPort; // use this instead for working with TrackSim
 //                           // ..on a computer with no serial port.
 
 import com.apw.nojssc.SerialPort;
+import com.apw.pinio.PinIOController;
 
 public class ArduinoPWM implements
-    com.apw.pinio.PWMController { // Adapted to Java from arduino.cs ... (FakeFirmata)
+    PinIOController { // Adapted to Java from arduino.cs ... (FakeFirmata)
   // (subclass this to add input capability)
 
   private static final ArduinoPWM theController = new ArduinoPWM();
@@ -76,16 +77,14 @@ public class ArduinoPWM implements
     DoMore = whom;
   }
 
-  @Override
   public boolean IsOpen() {
     return GoodOpen;
   } // true if opened successfully
 
-  @Override
   public void pinMode(int pin, byte mode) {
     byte[] msg = new byte[3];
     if (SpeakEasy) {
-      System.out.println("F%%F/pinMode +" + pin + " = " + mode);
+      System.out.println("F%%F/setPinMode +" + pin + " = " + mode);
     }
     msg[0] = (byte) (SET_PIN_MODE);
     msg[1] = (byte) (pin);
@@ -98,9 +97,8 @@ public class ArduinoPWM implements
     } catch (Exception ex) {
       System.out.println(ex);
     }
-  } //~pinMode
+  } //~setPinMode
 
-  @Override
   public void digitalWrite(int pin, byte value) {
     int portNumber = (pin >> 3) & 0x0F;
     int digiData = digitalOutputData[portNumber & MDB_msk];
@@ -127,7 +125,6 @@ public class ArduinoPWM implements
     }
   } //~digitalWrite
 
-  @Override
   public void servoWrite(int pin, int angle) {
     byte[] msg = new byte[3];
 //ABCDE
@@ -145,7 +142,6 @@ public class ArduinoPWM implements
     }
   } //~servoWrite
 
-  @Override
   public void Open() {
     if (SpeakEasy) {
       System.out.println("F%%F/Open..");
@@ -172,7 +168,6 @@ public class ArduinoPWM implements
     }
   } //~Open
 
-  @Override
   public void Close() {
     if (SpeakEasy) {
       System.out.println("F%%F/Close..");

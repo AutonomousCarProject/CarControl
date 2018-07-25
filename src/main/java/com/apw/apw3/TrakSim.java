@@ -17,8 +17,8 @@
 package com.apw.apw3;                                       // 2018 June 13
 
 
-import com.apw.pinio.fakefirm.ArduinoPWM;
-import com.apw.pinio.fakefirm.SimHookBase;
+import com.apw.pwm.fakefirm.ArduinoPWM;
+import com.apw.pwm.fakefirm.SimHookBase;
 import java.io.File;
 import java.io.FileInputStream;
 
