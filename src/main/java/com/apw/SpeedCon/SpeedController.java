@@ -26,10 +26,7 @@ public class SpeedController {
 	private int cyclesUntilCanDetectStopsign = Constants.WAIT_AFTER_STOPSIGN;
 
 	private PedestrianDetector pedDetect;
-<<<<<<< HEAD
 	protected CameraCalibration cameraCalibrator;
-=======
->>>>>>> ea4a0fc84a8389b533c276e1d39e85a4f74b57c2
 
 	private List<MovingBlob> currentBlobs;
 

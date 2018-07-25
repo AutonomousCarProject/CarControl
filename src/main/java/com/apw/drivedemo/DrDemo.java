@@ -45,7 +45,6 @@ import com.apw.Steering.Point;
 // import fly2cam.CameraBase;
 
 public class DrDemo extends JFrame implements MouseListener, KeyListener {
-<<<<<<< HEAD
 
 	private FlyCamera theVideo = null;
 	private FlyCamera simVideo = null;
@@ -55,9 +54,6 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 	private boolean StepMe = false, SimSpedFixt = DriverCons.D_FixedSpeed, CamActive = false;
 
 	com.apw.Steering.Steering testSteering = new com.apw.Steering.Steering(theSim);
-=======
-	com.apw.Steering.Steering testSteering;
->>>>>>> ea4a0fc84a8389b533c276e1d39e85a4f74b57c2
 	private SpeedController speedControl;
 	private ImageManager imageManager;
 	private DriveTest dtest = new DriveTest();
