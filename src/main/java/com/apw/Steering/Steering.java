@@ -1,8 +1,12 @@
 package com.apw.Steering;
 
 
+import com.apw.ImageManagement.ImageManager;
 import com.apw.apw3.DriverCons;
 import com.apw.apw3.TrakSim;
+import com.apw.fakefirm.Arduino;
+
+import java.awt.*;
 
 public class Steering {
 
@@ -461,4 +465,44 @@ public class Steering {
     		return error*kP + integral*kI + derivative*kD;
  
     }
+    public void paint(Graphics graf, ImageManager imageManager, Insets edges, int vEdit){
+		//*
+		Point[] hi = this.findPoints(imageManager.getRGBRaster());
+		//int vEdit = (getHeight()-480)/2+10;
+		graf.setColor(Color.RED);
+		//graf.fillRect(100, this.startingPoint, 1, 1);
+		if (DriverCons.D_DrawCurrent == true) {
+			for (int i = 0; i<this.startingPoint - (this.startingHeight + this.heightOfArea); i++) {
+				graf.fillRect(this.leadingMidPoints[i].x, this.leadingMidPoints[i].y +  + edges.top+vEdit, 5, 5);
+			}
+		}
+
+
+		for (int i = 0; i<hi.length; i++) {
+			if (DriverCons.D_DrawPredicted == true) {
+				graf.setColor(Color.BLUE);
+				graf.fillRect(hi[i].x, hi[i].y + edges.top + vEdit, 5, 5);
+			}
+			if (DriverCons.D_DrawOnSides == true) {
+				graf.setColor(Color.YELLOW);
+				graf.fillRect(this.leftPoints[i].x + edges.left, this.leftPoints[i].y + edges.top+ vEdit, 5, 5);
+				graf.fillRect(this.rightPoints[i].x + edges.left, this.rightPoints[i].y + edges.top + vEdit, 5, 5);
+			}
+		}
+		//*/
+	}
+	public void run(ImageManager imageManager,Arduino driveSys, int SteerPin){
+		Point[] hi = this.findPoints(imageManager.getBWRGBRaster());
+		if(!this.checkMidpoints(hi,imageManager.getSimpleColorRaster(), imageManager.getNcols())){
+			hi = this.findPointsLeft(imageManager.getBWRGBRaster());
+			if(!this.checkMidpoints(hi,imageManager.getSimpleColorRaster(), imageManager.getNcols())){
+				hi = this.findPointsRight(imageManager.getBWRGBRaster());
+			}
+		}
+		this.averageMidpoints();
+		double tempDeg = this.getDegreeOffset();
+		driveSys.servoWrite(SteerPin, (int)((tempDeg) + 90));
+
+	}
+	
 }

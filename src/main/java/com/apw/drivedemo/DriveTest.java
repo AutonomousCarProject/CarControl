@@ -40,8 +40,7 @@ public class DriveTest extends JFrame implements KeyListener, MouseListener {
     
     
     //Universal control variables
-    public static TrakManager starter;
-    public static Steering testSteering;                            //Object to control the steering
+    public static TrakManager starter;                           //Object to control the steering
 
     //Internal variables
     private int viewType;                                           //How the image in the window looks: 1 = RGB, 2 = Green based Grayscale, 3 = 7 Color view, 4 = Black and White only, 5 = true grayscale,
@@ -55,8 +54,8 @@ public class DriveTest extends JFrame implements KeyListener, MouseListener {
     private Insets edges;                                           //Object used for steering drawing
 
     //DrDemo mouse variables
-    private static final int  ImgWi = DriverCons.D_ImWi;
-    private static final boolean  StartLive = DriverCons.D_StartLive;
+    //private static final int  ImgWi = DriverCons.D_ImWi;
+    //private static final boolean  StartLive = DriverCons.D_StartLive;
     private static int NoneStep = 0;
 
     /**Main Method
@@ -68,9 +67,9 @@ public class DriveTest extends JFrame implements KeyListener, MouseListener {
      */
     public static void main(String[] args){
         starter = new TrakManager();                                         //Creates a TrakManager object, which will run TrakSim at a constant Framerate
-        init(new Timer(),starter.getImageManager(), new Steering());     //Initializes DriveTest
+        init(new Timer(),starter.getImageManager());     //Initializes DriveTest
         displayTaskTimer.scheduleAtFixedRate(starter, new Date(), 1000 / FPS);    //Initializes TrakManager at FPS frames per second
-        autoDriveTest( new DriveTest(1),30);                                       //Format to create a new DriveTest window that updates automatically
+        autoDriveTest( new DriveTest(4),120);                                       //Format to create a new DriveTest window that updates automatically
     }
 
     /** Method that initializes DriveTest (Will run automatically if not ran manually)
@@ -79,10 +78,9 @@ public class DriveTest extends JFrame implements KeyListener, MouseListener {
      * @param imageMng Object to get camera images and change them
      * @param steerSys Object to control the steering
      */
-    public static void init(Timer refreshTimer, ImageManager imageMng, Steering steerSys) { //Assigns variables
+    public static void init(Timer refreshTimer, ImageManager imageMng) { //Assigns variables
         displayTaskTimer = refreshTimer;
         imageManager = imageMng;
-        testSteering = steerSys;
     }
 
     /** Method that initializes DriveTest (Will run automatically if not ran manually)
@@ -93,7 +91,6 @@ public class DriveTest extends JFrame implements KeyListener, MouseListener {
     public static void init(){                                                              //Assigns variables
         displayTaskTimer = new Timer();
         imageManager = new ImageManager(new SimCamera());
-        testSteering = new Steering();
     }
 
     /** Makes the given DriveTest refresh its image automatically
@@ -249,28 +246,7 @@ public class DriveTest extends JFrame implements KeyListener, MouseListener {
      * @param graf the graphics to edit
      */
     private void steerPaint(Graphics graf){
-        Point[] hi = testSteering.findPoints(imageManager.getRGBRaster());
-        int vEdit = (getHeight()-480)/2+10;
-        graf.setColor(Color.RED);
-        //graf.fillRect(100, testSteering.startingPoint, 1, 1);
-        if (DriverCons.D_DrawCurrent == true) {
-            for (int i = 0; i<testSteering.startingPoint - (testSteering.startingHeight + testSteering.heightOfArea); i++) {
-                graf.fillRect(testSteering.leadingMidPoints[i].x, testSteering.leadingMidPoints[i].y +  + edges.top+vEdit, 5, 5);
-            }
-        }
-
-
-        for (int i = 0; i<hi.length; i++) {
-            if (DriverCons.D_DrawPredicted == true) {
-                graf.setColor(Color.BLUE);
-                graf.fillRect(hi[i].x, hi[i].y + edges.top + vEdit, 5, 5);
-            }
-            if (DriverCons.D_DrawOnSides == true) {
-                graf.setColor(Color.YELLOW);
-                graf.fillRect(testSteering.leftPoints[i].x + edges.left, testSteering.leftPoints[i].y + edges.top+ vEdit, 5, 5);
-                graf.fillRect(testSteering.rightPoints[i].x + edges.left, testSteering.rightPoints[i].y + edges.top + vEdit, 5, 5);
-            }
-        }
+        starter.testSteering.paint(graf, imageManager, edges,(getHeight()-480)/2+10);
     } //~steerPaint
 
     /** Paints extra information about speed
@@ -278,39 +254,9 @@ public class DriveTest extends JFrame implements KeyListener, MouseListener {
      * @param graf the graphics to edit
      */
     private void speedPaint(Graphics graf){
-        PedestrianDetector pedDetect = new PedestrianDetector();
-        int vEdit = (getHeight()-480)/2+10;
-        limitArray = new byte[640*480];
-        imageManager.getSimpleColorRaster();
-        List<MovingBlob> blobs = pedDetect.getAllBlobs(limitArray, 640);
-
-        //We then:
-        //A. Display those blobs on screen as empty rectangular boxes of the correct color
-        //B. Test if those blobs are a useful roadsign/light
-        //C. Do whatever we need to do if so
-        //D. Write to the console what has happened
-        //We need all of the if statements to display the colors,
-        //as we need to convert from IPixel colors to Java.awt colors for display reasons
-        for(MovingBlob i : blobs) {
-            if (true) {
-                if (i.color.getColor() == com.apw.pedestrians.image.Color.BLACK) {
-                    graf.setColor(java.awt.Color.BLACK);
-                } else if (i.color.getColor() == com.apw.pedestrians.image.Color.GREY) {
-                    graf.setColor(java.awt.Color.GRAY);
-                } else if (i.color.getColor() == com.apw.pedestrians.image.Color.WHITE) {
-                    graf.setColor(java.awt.Color.WHITE);
-                } else if (i.color.getColor() == com.apw.pedestrians.image.Color.RED) {
-                    graf.setColor(java.awt.Color.RED);
-                } else if (i.color.getColor() == com.apw.pedestrians.image.Color.GREEN) {
-                    graf.setColor(java.awt.Color.GREEN);
-                } else if (i.color.getColor() == com.apw.pedestrians.image.Color.BLUE) {
-                    graf.setColor(java.awt.Color.BLUE);
-                }
-                graf.drawRect(i.x + 8, i.y + 40+vEdit, i.width, i.height);
-            }
-        }
+        starter.speedControl.paint(graf,imageManager,(getHeight()-480)/2+10);
     } //~speedPaint
-    
+
     /**
 	 * Converts a RGB pixel array to BufferedImage for painting. Adapted from
 	 * example code found on StackExchange.
@@ -477,7 +423,7 @@ public class DriveTest extends JFrame implements KeyListener, MouseListener {
                 Hx = evt.getX() - edges.left;
                 Vx = evt.getY() - edges.top;
             } // ~if
-        if (Hx < ImgWi) {
+        if (Hx < DriverCons.D_ImWi) {
             why = starter.sim.GridBlock(Vx, Hx); // find which screen chunk it's in..
             zx = why & 0xFF;
             nx = why >> 16;

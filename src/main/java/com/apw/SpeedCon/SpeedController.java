@@ -3,7 +3,9 @@ package com.apw.SpeedCon;
 import java.awt.Graphics;
 import java.util.*;
 
+import com.apw.Steering.Steering;
 import com.apw.apw3.SimCamera;
+import com.apw.drivedemo.TrakManager;
 import com.apw.pedestrians.blobtrack.*;
 import com.apw.pedestrians.image.Color;
 import com.apw.pedestrians.*;
@@ -380,5 +382,44 @@ public class SpeedController {
 		else {
 			return 0;
 		}	
+	}
+	public void paint(Graphics graf,ImageManager imageManager, int vEdit){
+		//*
+		PedestrianDetector pedDetect = new PedestrianDetector();
+		//int vEdit = (getHeight()-480)/2+10;
+		byte[] limitArray = new byte[640*480];
+		imageManager.getSimpleColorRaster();
+		List<MovingBlob> blobs = pedDetect.getAllBlobs(limitArray, 640);
+
+		//We then:
+		//A. Display those blobs on screen as empty rectangular boxes of the correct color
+		//B. Test if those blobs are a useful roadsign/light
+		//C. Do whatever we need to do if so
+		//D. Write to the console what has happened
+		//We need all of the if statements to display the colors,
+		//as we need to convert from IPixel colors to Java.awt colors for display reasons
+		for(MovingBlob i : blobs) {
+			if (true) {
+				if (i.color.getColor() == com.apw.pedestrians.image.Color.BLACK) {
+					graf.setColor(java.awt.Color.BLACK);
+				} else if (i.color.getColor() == com.apw.pedestrians.image.Color.GREY) {
+					graf.setColor(java.awt.Color.GRAY);
+				} else if (i.color.getColor() == com.apw.pedestrians.image.Color.WHITE) {
+					graf.setColor(java.awt.Color.WHITE);
+				} else if (i.color.getColor() == com.apw.pedestrians.image.Color.RED) {
+					graf.setColor(java.awt.Color.RED);
+				} else if (i.color.getColor() == com.apw.pedestrians.image.Color.GREEN) {
+					graf.setColor(java.awt.Color.GREEN);
+				} else if (i.color.getColor() == com.apw.pedestrians.image.Color.BLUE) {
+					graf.setColor(java.awt.Color.BLUE);
+				}
+				graf.drawRect(i.x + 8, i.y + 40+vEdit, i.width, i.height);
+			}
+		}
+		//*/
+	}
+	public void run(TrakManager starter, int GasPedal, Steering testSteering,ImageManager imageManager){
+		onUpdateSansGraphics(GasPedal, testSteering.getDegreeOffset(), 0, imageManager);
+		starter.AxLR8(true, getDesiredSpeed());
 	}
 }

@@ -33,7 +33,7 @@ public class TrakManager extends TimerTask {
     protected TrakSim sim;
     private FlyCamera camSys;
     private Arduino driveSys;
-    private Steering testSteering;
+    protected Steering testSteering;
     private ImageManager imageManager;
     protected SpeedController speedControl;
     private int ncols, nrows;
@@ -151,31 +151,20 @@ public class TrakManager extends TimerTask {
     private void initializeControl(){
         testSteering = new Steering();
         speedControl = new SpeedController();
-        AxLR8(false,10);
+        //AxLR8(false,10);
     } //~initializeControl
 
     /** Per frame code for controlling steering
      *
      */
     private void steerCode(){
-        Point[] hi = testSteering.findPoints(imageManager.getBWRGBRaster());
-        if(!testSteering.checkMidpoints(hi,imageManager.getSimpleColorRaster(), imageManager.getNcols())){
-            hi = testSteering.findPointsLeft(imageManager.getBWRGBRaster());
-            if(!testSteering.checkMidpoints(hi,imageManager.getSimpleColorRaster(), imageManager.getNcols())){
-                hi = testSteering.findPointsRight(imageManager.getBWRGBRaster());
-            }
-        }
-        testSteering.averageMidpoints();
-        double tempDeg = testSteering.getDegreeOffset();
-        driveSys.servoWrite(SteerPin, (int)((tempDeg) + 90));
-
+        testSteering.run(imageManager, driveSys,SteerPin);
     } //~steerCode
 
     /** Per frame code for controlling speed
      *
      */
     private void speedCode(){
-        speedControl.onUpdateSansGraphics(GasPedal, testSteering.getDegreeOffset(), 0, imageManager);
-        AxLR8(true, speedControl.getDesiredSpeed());
+        speedControl.run(this,GasPedal,testSteering, imageManager);
     } //~speedCode
 }
