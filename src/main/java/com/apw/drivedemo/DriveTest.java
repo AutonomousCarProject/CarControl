@@ -30,7 +30,7 @@ public class DriveTest extends JFrame implements KeyListener, MouseListener {
     //VARIABLES
 
     //Constants
-    public static final int FPS = 30;                               //Frames per second the window will run at unless defined, as well as the Frame Rate of TrakSim
+    public static final int FPS = 120;                               //Frames per second the window will run at unless defined, as well as the Frame Rate of TrakSim
 
     //Universal window variables
     public static ImageManager imageManager;                        //Object to get camera images and change them
@@ -202,7 +202,7 @@ public class DriveTest extends JFrame implements KeyListener, MouseListener {
         imagePixels=null;                                                               //removes data from imagePixels
         switch(viewType){                                                               //Sets window based on viewType
             case 1:                                                                     //RGB
-                imagePixels = imageManager.getRGBRaster();
+                imagePixels = imageManager.getRGBRasterFull();
                 break;
             case 2:                                                                     //Green based Grayscale
                 imagePixels = imageManager.getMonoRGBRaster();
@@ -223,7 +223,7 @@ public class DriveTest extends JFrame implements KeyListener, MouseListener {
         //Copies TrakSim image onto the buffer
 
         if(width!=ncols||height!=nrows)                                                                 //checks if the window is a different size from the imageManager image
-            ImageManipulator.limitTo(emptyPixels,imagePixels,ncols,nrows,width,height,false);     //removes extra data from the imageManager image
+            ImageManipulator.limitTo(emptyPixels,imagePixels,ncols,nrows,width,height);     //removes extra data from the imageManager image
         else
             emptyPixels = imagePixels;                                                                  //points emptyPixels to the data for later use
         displayPixels = ((DataBufferInt) bufferImage.getRaster().getDataBuffer()).getData();            //Pulls the array used in bufferImage
@@ -281,7 +281,7 @@ public class DriveTest extends JFrame implements KeyListener, MouseListener {
         PedestrianDetector pedDetect = new PedestrianDetector();
         int vEdit = (getHeight()-480)/2+10;
         limitArray = new byte[640*480];
-        ImageManipulator.limitTo(limitArray,imageManager.getSimpleColorRaster(),ncols,nrows,640,480,false);
+        imageManager.getSimpleColorRaster();
         List<MovingBlob> blobs = pedDetect.getAllBlobs(limitArray, 640);
 
         //We then:
