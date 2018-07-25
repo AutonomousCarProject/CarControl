@@ -26,6 +26,7 @@ public class SpeedController {
 	private int cyclesUntilCanDetectStopsign = Constants.WAIT_AFTER_STOPSIGN;
 
 	private PedestrianDetector pedDetect;
+	private CameraCalibration cameraCalibrator;
 
 	private List<MovingBlob> currentBlobs;
 
@@ -34,6 +35,7 @@ public class SpeedController {
 	public SpeedController(){
 		this.pedDetect = new PedestrianDetector();
 		this.currentBlobs = new ArrayList<MovingBlob>();
+		this.cameraCalibrator = new CameraCalibration();
 	}
 
 	//A method to be called every frame. Calculates desired speed and actual speed
@@ -233,40 +235,9 @@ public class SpeedController {
 		this.emergencyStop = emer;
 	}
 
-	//This returns our distance from an object. Currently non-functional
-	public  double getDistance(double focalLength, double realObjHeight, double cameraFrameHeight, double objectPixelHeight, double sensorHeight) {
-
-		return (focalLength * realObjHeight * cameraFrameHeight )
-				/ ( objectPixelHeight * sensorHeight);
-
-	}
 
 
-	//Break Rate Math
 
-	//The total distance it will take to stop
-	double calcStopDist(double targetStopDist, double speed) {
-		return Math.pow(speed, 2) / (Constants.FRICT * Constants.GRAV * 2);
-	}
-
-	//The amount of time that is needed to stop at the given speed.
-	double getStopTime(double dist, double speed) {
-		return dist / speed;
-	}
-
-	//The rate at which the speed must go down by, linear
-	double calcStopRate(double speed, double time) {
-		return (0 - speed) / time;
-	}
-
-
-	//Function used to get the rate to lower the speed by when a stop distance is given.
-
-	double getStopRate(double targetDist, double currentSpeed) {
-		return calcStopRate(currentSpeed, getStopTime(targetDist, currentSpeed));
-	}
-
-	// End Of Brake Rate Math
 
 	public int getDesiredSpeed() {
 		return (int)desiredSpeed;
@@ -331,5 +302,10 @@ public class SpeedController {
 		else {
 			return 0;
 		}
+	}
+
+	public CameraCalibration getCalibrator()
+	{
+		return cameraCalibrator;
 	}
 }

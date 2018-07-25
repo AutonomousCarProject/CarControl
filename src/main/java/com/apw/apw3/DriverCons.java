@@ -39,7 +39,7 @@ public class DriverCons { // TrakSim constant parameters
             D_DoCloseUp = true,     // T: show close-up map if there is room
             D_RampServos = false,   // T: servos take time to arrive at setting
             D_TrakNoPix = false,    // T: draw track only, omit artifacts & trees
-            D_UseTexTrak = false,    // T: use text file to build track to drive
+            D_UseTexTrak = true,    // T: use text file to build track to drive
             D_Reversible = false,   // T: allow reverse (untested)
             D_StartInCalibrate = false, // T: use this to calibrate servo limits
             D_Log_Draw = false, D_Log_Log = false, D_Fax_Log = false,
@@ -52,7 +52,7 @@ public class DriverCons { // TrakSim constant parameters
             D_RampA = 140,     // Initial orient'n for car, c-wise degrees from north
             D_Zoom35 = 35,     // 35mm-equivalent focal length for "camera"
             D_BayTile = 1,     // Bayer8 tiling code (RG/GB) as defined by Pt.Grey
-            D_FrameTime = 50, // =5/fps, nominal frame rate for camera (must >= 20ms)
+            D_FrameTime = 100, // =5/fps, nominal frame rate for camera (must >= 20ms)
             D_nServoTests = 0, // number of times to run through test (1: no ESC)
             D_ServoMsgPos = 200 * 0x10000 + 0, // position of warning in image file,
             D_ServoMsgTL = 40 * 0x10001, D_ServoMsgSiz = 40 * 0x10000 + 80, // posn on screen
