@@ -83,6 +83,7 @@ public class SpeedController {
 		}
 
 		this.currentBlobs = blobs;
+
 		if(emergencyStop == true)
 		{
 			emergenyStop();
@@ -120,9 +121,7 @@ public class SpeedController {
 		else if (shouldStopLight == 0){
 			this.desiredSpeed = 0;
 		}
-		if (this.emergencyStop){
-			this.desiredSpeed = 0;
-		}
+
 	}
 
 	public int getNextSpeed(){
@@ -321,6 +320,6 @@ public class SpeedController {
 
 	public void emergenyStop()
 	{
-		cameraCalibrator.calcStopRate(getEstimatedSpeed(), 0.1);
+		this.desiredSpeed = cameraCalibrator.calcStopRate(getEstimatedSpeed(), 0.1);
 	}
 }
