@@ -1,7 +1,9 @@
 plugins {
+    id 'com.gradle.build-scan' version '1.15.1'
     id 'java'
 }
 
+apply plugin: 'com.gradle.build-scan'
 apply plugin: 'java'
 apply plugin: 'maven'
 
@@ -22,4 +24,10 @@ dependencies {
     implementation 'com.github.AutonomousCarProject:raspivid-j:0.1.0'
     implementation 'org.bidib.com.pi4j:pi4j-distribution:1.2.M1'
 }
+
+buildScan {
+    termsOfServiceUrl = 'https://gradle.com/terms-of-service'
+    termsOfServiceAgree = 'yes'
+}
+
 version '1.0-SNAPSHOT'
