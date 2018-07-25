@@ -5,13 +5,32 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f525b4a3-b0b1-4062-9d6e-80535089a8f9" name="Default" comment="Make PWMController conform to singleton pattern&#10;&#10;It's fairly weakly enforced, but it should work just fine.">
-      <change beforePath="$PROJECT_DIR$/.gradle/4.9/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.9/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/apw/pwm/fakefirm/ArduinoPinIO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/apw/pwm/raspi/RaspiPWM.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/4.9/fileChanges/last-build.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/4.9/fileHashes/fileHashes.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/vcsWorkingDirs/gc.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/Clayton.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_aparapi_aparapi_1_9_0.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_aparapi_aparapi_jni_1_4_1.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradlew.bat" beforeDir="false" afterPath="$PROJECT_DIR$/gradlew.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/apw3/DriverCons.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/apw3/DriverCons.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/apw3/HandyOps.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/apw3/HandyOps.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/apw3/MyMath.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/apw3/MyMath.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/apw3/SimCamera.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/apw3/SimCamera.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/apw3/TrakSim.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/apw3/TrakSim.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/drivedemo/DrDemo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/drivedemo/DrDemo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/pwm/PWMController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/pwm/PWMController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/pwm/fakefirm/ArduinoPWM.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/pwm/fakefirm/ArduinoPWM.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/pwm/raspi/RaspiPWM.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/pwm/raspi/RaspiPWM.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/drivedemo/DriveTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/drivedemo/DriveTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/pinio/PWMController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/pinio/fakefirm/ArduinoPWM.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/pinio/fakefirm/ReadMe.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/pwm/fakefirm/ReadMe.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/pinio/fakefirm/SimHookBase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/pwm/fakefirm/SimHookBase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/pinio/fakefirm/UpdateListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/pwm/fakefirm/UpdateListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/pinio/raspi/RaspiPWM.java" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/gpu/target/" />
@@ -54,20 +73,15 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/build.gradle">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="20" column="40" selection-start-line="20" selection-start-column="40" selection-end-line="20" selection-end-column="40" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PWMController.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="PWMController.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/pwm/PWMController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="13" column="16" lean-forward="true" selection-start-line="13" selection-start-column="16" selection-end-line="13" selection-end-column="16" />
+            <state relative-caret-position="510">
+              <caret line="34" column="47" selection-start-line="34" selection-start-column="47" selection-end-line="34" selection-end-column="47" />
+              <folding>
+                <element signature="e#442#443#0" expanded="true" />
+                <element signature="e#493#494#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -75,23 +89,31 @@
       <file leaf-file-name="RaspiPWM.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/pwm/raspi/RaspiPWM.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="6" column="30" selection-start-line="6" selection-start-column="30" selection-end-line="6" selection-end-column="30" />
+            <state relative-caret-position="989">
+              <caret line="81" column="72" lean-forward="true" selection-start-line="81" selection-start-column="72" selection-end-line="81" selection-end-column="72" />
               <folding>
-                <element signature="e#256#257#0" expanded="true" />
-                <element signature="e#285#286#0" expanded="true" />
-                <element signature="e#151#152#0" expanded="true" />
-                <element signature="e#173#174#0" expanded="true" />
+                <element signature="imports" expanded="true" />
+                <element signature="e#976#977#0" expanded="true" />
+                <element signature="e#1007#1008#0" expanded="true" />
+                <element signature="e#1245#1246#0" expanded="true" />
+                <element signature="e#1275#1276#0" expanded="true" />
+                <element signature="e#1314#1315#0" expanded="true" />
+                <element signature="e#1348#1349#0" expanded="true" />
+                <element signature="e#2833#2834#0" expanded="true" />
+                <element signature="e#2868#2869#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/.gitignore">
+      <file leaf-file-name="ArduinoPinIO.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/pwm/fakefirm/ArduinoPinIO.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2295">
-              <caret line="153" column="10" selection-start-line="153" selection-start-column="10" selection-end-line="153" selection-end-column="10" />
+            <state relative-caret-position="50">
+              <caret line="22" column="19" selection-start-line="22" selection-start-column="4" selection-end-line="22" selection-end-column="19" />
+              <folding>
+                <element signature="e#0#5803#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -108,7 +130,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>clCreateImage</find>
       <find>BuildFrame</find>
       <find>zoom</find>
       <find>Vposn</find>
@@ -136,6 +157,9 @@
       <find>fps</find>
       <find>.iml</find>
       <find>main</find>
+      <find>run</find>
+      <find>digitalWrite</find>
+      <find>provisionPin</find>
     </findStrings>
     <replaceStrings>
       <replace>cols</replace>
@@ -145,7 +169,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="raspberry-pi" />
+        <entry key="$PROJECT_DIR$" value="cleanup" />
       </map>
     </option>
   </component>
@@ -332,7 +356,7 @@
     </option>
     <option name="modificationStamps">
       <map>
-        <entry key="$PROJECT_DIR$" value="6129707989000" />
+        <entry key="$PROJECT_DIR$" value="6129780034000" />
         <entry key="$PROJECT_DIR$/.gradle" value="0" />
         <entry key="$PROJECT_DIR$/build.gradle" value="3101393388" />
         <entry key="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" value="2371942159" />
@@ -522,14 +546,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/com/apw/blobtrack/UnifiedBlob.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/apw/oldimage/Image.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/apw/fly2cam/IAutoExposure.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/apw/fly2cam/ToggleExposure.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/apw/oldimage/HDRImage.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/apw/oldglobal/Main.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/apw/fly2cam/OldFlyCamera.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/apw/fly2cam/AutoExposure.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/oldimage/FileImage.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/blobtrack/BlobPair.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/blobdetect/AlternatingBlobDetectionRender.java" />
@@ -570,8 +586,16 @@
         <option value="$PROJECT_DIR$/src/main/java/com/apw/fakefirm/Arduino.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/pwm/fakefirm/Arduino.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/drivedemo/DrDemo.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/apw/pwm/raspi/RaspiPWM.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/pwm/fakefirm/ArduinoPWM.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/apw/pinio/PWMController.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/apw/pinio/fakefirm/ArduinoPWM.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/apw/pinio/raspi/RaspiPWM.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/apw/pinio/PinIOController.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/apw/pinio/raspi/RaspiPinIO.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/apw/pinio/fakefirm/ArduinoPinIO.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/apw/pwm/fakefirm/ArduinoPinIO.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/apw/pwm/PWMOutput.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/apw/pwm/raspi/RaspiPWM.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/pwm/PWMController.java" />
       </list>
     </option>
@@ -616,7 +640,7 @@
   </component>
   <component name="ProjectFrameBounds">
     <option name="y" value="23" />
-    <option name="width" value="840" />
+    <option name="width" value="1680" />
     <option name="height" value="1027" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -626,6 +650,28 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="CarControl" type="58d84e3e:PackageViewProjectNode" />
+              <item name="CarControl_main" type="616d4139:PackageViewModuleNode" />
+            </path>
+            <path>
+              <item name="CarControl" type="58d84e3e:PackageViewProjectNode" />
+              <item name="CarControl_main" type="616d4139:PackageViewModuleNode" />
+              <item name="com.apw" type="1f31426a:PackageElementNode" />
+            </path>
+            <path>
+              <item name="CarControl" type="58d84e3e:PackageViewProjectNode" />
+              <item name="CarControl_main" type="616d4139:PackageViewModuleNode" />
+              <item name="com.apw" type="1f31426a:PackageElementNode" />
+              <item name="drivedemo" type="1f31426a:PackageElementNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
       <pane id="Scope">
         <subPane subId="Project Files">
           <expand>
@@ -732,28 +778,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="CarControl" type="58d84e3e:PackageViewProjectNode" />
-              <item name="CarControl_main" type="616d4139:PackageViewModuleNode" />
-            </path>
-            <path>
-              <item name="CarControl" type="58d84e3e:PackageViewProjectNode" />
-              <item name="CarControl_main" type="616d4139:PackageViewModuleNode" />
-              <item name="com.apw" type="1f31426a:PackageElementNode" />
-            </path>
-            <path>
-              <item name="CarControl" type="58d84e3e:PackageViewProjectNode" />
-              <item name="CarControl_main" type="616d4139:PackageViewModuleNode" />
-              <item name="com.apw" type="1f31426a:PackageElementNode" />
-              <item name="drivedemo" type="1f31426a:PackageElementNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
       <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
@@ -827,7 +851,7 @@
     <property name="Downloaded.Files.Path.Enabled" value="false" />
     <property name="Repository.Attach.JavaDocs" value="false" />
     <property name="Repository.Attach.Sources" value="false" />
-    <property name="SearchEverywhereHistoryKey" value="servowr&#9;PSI&#9;JAVA://com.apw.fakefirm.Arduino#servoWrite&#10;axlr8&#9;PSI&#9;JAVA://com.apw.drivedemo.DrDemo#AxLR8&#10;xlr8&#9;PSI&#9;JAVA://com.apw.drivedemo.DriveTest#AxLR8&#10;setservo&#9;PSI&#9;JAVA://com.apw.apw3.TrakSim#SetServo&#10;build.gradle&#9;FILE&#9;file://C:/JavaProjects/ACPW/CarControl/build.gradle&#10;ignore&#9;FILE&#9;file://C:/JavaProjects/ACPW/CarControl/.gitignore&#10;gradle&#9;ACTION&#9;AddGradleDslPluginAction&#10;mave&#9;ACTION&#9;ActivateMavenProjectsToolWindow&#10;maven&#9;ACTION&#9;ActivateMavenProjectsToolWindow&#10;mav&#9;ACTION&#9;ActivateMavenProjectsToolWindow" />
+    <property name="SearchEverywhereHistoryKey" value="servowrite&#9;PSI&#9;JAVA://com.apw.pinio.fakefirm.ArduinoPinIO#servoWrite&#10;servowr&#9;PSI&#9;JAVA://com.apw.fakefirm.Arduino#servoWrite&#10;axlr8&#9;PSI&#9;JAVA://com.apw.drivedemo.DrDemo#AxLR8&#10;xlr8&#9;PSI&#9;JAVA://com.apw.drivedemo.DriveTest#AxLR8&#10;setservo&#9;PSI&#9;JAVA://com.apw.apw3.TrakSim#SetServo&#10;build.gradle&#9;FILE&#9;file://C:/JavaProjects/ACPW/CarControl/build.gradle&#10;ignore&#9;FILE&#9;file://C:/JavaProjects/ACPW/CarControl/.gitignore&#10;gradle&#9;ACTION&#9;AddGradleDslPluginAction&#10;mave&#9;ACTION&#9;ActivateMavenProjectsToolWindow&#10;maven&#9;ACTION&#9;ActivateMavenProjectsToolWindow&#10;mav&#9;ACTION&#9;ActivateMavenProjectsToolWindow" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="add_unversioned_files" value="$PROJECT_DIR$/src/test/java/com/apw/ImageManagement/ImageManipulatorTest.groovy" />
     <property name="aspect.path.notification.shown" value="true" />
@@ -835,7 +859,7 @@
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.Groovy JUnit" value="groovy.util.GroovyTestCase" />
     <property name="external.system.task.project.file.to.start" value="$PROJECT_DIR$" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.17900656" />
     <property name="settings.editor.selected.configurable" value="preferences.sourceCode" />
@@ -1020,7 +1044,9 @@
       <updated>1531772968576</updated>
       <workItem from="1532367767739" duration="1514000" />
       <workItem from="1532380877947" duration="1423000" />
-      <workItem from="1532427160499" duration="1163000" />
+      <workItem from="1532427160499" duration="5377000" />
+      <workItem from="1532457136733" duration="2418000" />
+      <workItem from="1532480826767" duration="10358000" />
     </task>
     <task id="LOCAL-00001" summary="Remove unnecessary files&#10;&#10;Some of these files were even ignored">
       <created>1532381906154</created>
@@ -1085,11 +1111,39 @@
       <option name="project" value="LOCAL" />
       <updated>1532427398944</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Make PWMController conform to singleton pattern&#10;&#10;It's fairly weakly enforced, but it should work just fine.">
+      <created>1532428346131</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1532428346131</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Add basic outline&#10;&#10;It's not the actual code, but it's pretty close to it structure-wise">
+      <created>1532429142497</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1532429142497</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Add missing semicolon">
+      <created>1532429176021</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1532429176021</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Modify interface to better reflect requirements&#10;&#10;Does it break all sorts of compatibility? Of course! Should it have been written more like this the first time? Also of course! But better late than never.">
+      <created>1532430431399</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1532430431399</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5522000" />
+    <option name="totallyTimeSpent" value="26094000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1101,7 +1155,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="840" height="1027" extended-state="0" />
+    <frame x="0" y="23" width="1680" height="1027" extended-state="6" />
     <layout>
       <window_info anchor="right" id="Key Promoter X" order="3" />
       <window_info anchor="right" id="Palette" order="3" />
@@ -1110,7 +1164,6 @@
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
-      <window_info anchor="bottom" id="Build" order="11" visible="true" weight="0.32903227" />
       <window_info anchor="right" id="Database" order="3" />
       <window_info id="Structure" order="1" sideWeight="0.31623933" side_tool="true" weight="0.12708333" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -1123,9 +1176,8 @@
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.23028392" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32905984" />
       <window_info anchor="bottom" id="Terminal" order="7" weight="0.32903227" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.6837607" visible="true" weight="0.26817042" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.6837607" visible="true" weight="0.2777778" />
       <window_info anchor="bottom" id="Run with VisualVM" order="7" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32903227" />
       <window_info anchor="right" id="Gradle" order="7" weight="0.32967034" />
       <window_info anchor="right" id="Theme Preview" order="3" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -1133,9 +1185,11 @@
       <window_info anchor="bottom" id="Messages" order="10" weight="0.32905984" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Build" order="11" weight="0.32903227" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32903227" />
       <window_info anchor="right" id="Coverage" order="6" side_tool="true" weight="0.3296875" />
     </layout>
   </component>
@@ -1159,7 +1213,11 @@
     <MESSAGE value="Remove unnecessary files&#10;&#10;Some of these files were even ignored" />
     <MESSAGE value="Force .bat files to use correct line endings" />
     <MESSAGE value="Extract interface, naming fixes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Extract interface, naming fixes" />
+    <MESSAGE value="Make PWMController conform to singleton pattern&#10;&#10;It's fairly weakly enforced, but it should work just fine." />
+    <MESSAGE value="Add basic outline&#10;&#10;It's not the actual code, but it's pretty close to it structure-wise" />
+    <MESSAGE value="Add missing semicolon" />
+    <MESSAGE value="Modify interface to better reflect requirements&#10;&#10;Does it break all sorts of compatibility? Of course! Should it have been written more like this the first time? Also of course! But better late than never." />
+    <option name="LAST_COMMIT_MESSAGE" value="Modify interface to better reflect requirements&#10;&#10;Does it break all sorts of compatibility? Of course! Should it have been written more like this the first time? Also of course! But better late than never." />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
@@ -1170,34 +1228,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/gpu/MonochromeRasterKernel.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="341">
-          <caret line="31" column="6" selection-start-line="29" selection-start-column="3" selection-end-line="31" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/gpu/BWToRGBKernel.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1152">
-          <caret line="48" column="7" lean-forward="true" selection-start-line="48" selection-start-column="7" selection-end-line="48" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/gpu/MonoToRGBKernel.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="24">
-          <caret line="24" column="11" selection-start-line="24" selection-start-column="11" selection-end-line="24" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/imagemanagement/ImagePicker.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="19" column="41" selection-start-line="19" selection-start-column="41" selection-end-line="19" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/imagemanagement/ImageManipulator.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3360">
@@ -1325,16 +1355,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/apw3/TrakSim.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="81780">
-          <caret line="5489" column="17" selection-start-line="5489" selection-start-column="17" selection-end-line="5489" selection-end-column="17" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml" />
     <entry file="file://$PROJECT_DIR$/CarControl.iml" />
     <entry file="file://$PROJECT_DIR$/test" />
@@ -1350,13 +1370,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="510">
           <caret line="49" column="44" selection-start-line="49" selection-start-column="44" selection-end-line="49" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2295">
-          <caret line="153" column="10" selection-start-line="153" selection-start-column="10" selection-end-line="153" selection-end-column="10" />
         </state>
       </provider>
     </entry>
@@ -1389,40 +1402,6 @@
     <entry file="file://$PROJECT_DIR$/src/Backup" />
     <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/fakefirm/Arduino.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/fakefirm/ReadMe.txt" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/drivedemo/DrDemo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="142">
-          <caret line="133" column="23" lean-forward="true" selection-start-line="133" selection-start-column="23" selection-end-line="133" selection-end-column="23" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/pwm/raspi/RaspiPWM.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="30" selection-start-line="6" selection-start-column="30" selection-end-line="6" selection-end-column="30" />
-          <folding>
-            <element signature="e#256#257#0" expanded="true" />
-            <element signature="e#285#286#0" expanded="true" />
-            <element signature="e#151#152#0" expanded="true" />
-            <element signature="e#173#174#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/pwm/fakefirm/ArduinoPWM.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="63" lean-forward="true" selection-start-line="63" selection-end-line="63" />
-          <folding>
-            <element signature="e#2681#2682#0" expanded="true" />
-            <element signature="e#2711#2712#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/build.gradle">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="300">
@@ -1430,10 +1409,85 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/apw3/TrakSim.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="555">
+          <caret line="5489" column="17" selection-start-line="5489" selection-start-column="17" selection-end-line="5489" selection-end-column="17" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/pwm/fakefirm/SimHookBase.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="19" column="13" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/pinio/raspi/RaspiPinIO.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/pinio/PinIOController.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/drivedemo/DrDemo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="758">
+          <caret line="142" column="22" selection-start-line="142" selection-start-column="22" selection-end-line="142" selection-end-column="22" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="320">
+          <caret line="153" column="10" selection-start-line="153" selection-start-column="10" selection-end-line="153" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.bidib.com.pi4j/pi4j-core/1.2.M1/69dfa3146068a19b132b1d33e2377acffcc2dca4/pi4j-core-1.2.M1-sources.jar!/com/pi4j/io/gpio/GpioController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2475">
+          <caret line="168" column="24" selection-start-line="168" selection-start-column="12" selection-end-line="168" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/pwm/PWMController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="13" column="16" lean-forward="true" selection-start-line="13" selection-start-column="16" selection-end-line="13" selection-end-column="16" />
+        <state relative-caret-position="510">
+          <caret line="34" column="47" selection-start-line="34" selection-start-column="47" selection-end-line="34" selection-end-column="47" />
+          <folding>
+            <element signature="e#442#443#0" expanded="true" />
+            <element signature="e#493#494#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/pwm/raspi/RaspiPWM.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="989">
+          <caret line="81" column="72" lean-forward="true" selection-start-line="81" selection-start-column="72" selection-end-line="81" selection-end-column="72" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#976#977#0" expanded="true" />
+            <element signature="e#1007#1008#0" expanded="true" />
+            <element signature="e#1245#1246#0" expanded="true" />
+            <element signature="e#1275#1276#0" expanded="true" />
+            <element signature="e#1314#1315#0" expanded="true" />
+            <element signature="e#1348#1349#0" expanded="true" />
+            <element signature="e#2833#2834#0" expanded="true" />
+            <element signature="e#2868#2869#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/pwm/fakefirm/ArduinoPinIO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="50">
+          <caret line="22" column="19" selection-start-line="22" selection-start-column="4" selection-end-line="22" selection-end-column="19" />
+          <folding>
+            <element signature="e#0#5803#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
