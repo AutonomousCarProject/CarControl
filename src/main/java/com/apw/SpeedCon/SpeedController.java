@@ -81,6 +81,7 @@ public class SpeedController {
 		}
 
 		this.currentBlobs = blobs;
+		
 		if(emergencyStop == true)
 		{
 			emergenyStop();
