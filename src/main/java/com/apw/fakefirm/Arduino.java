@@ -15,7 +15,7 @@ package com.apw.fakefirm;                                     // 2018 February 1
 
 // import nojssc.SerialPort; // use this instead for working with TrackSim
 //                           // ..on a computer with no serial port.
-
+//import com.apw.Interfacing.SerialPort;
 
 public class Arduino { // Adapted to Java from arduino.cs ... (FakeFirmata)
     // (subclass this to add input capability)
@@ -85,10 +85,10 @@ public class Arduino { // Adapted to Java from arduino.cs ... (FakeFirmata)
      */
     public void pinMode(int pin, byte mode) {
         byte[] msg = new byte[3];
-        if (SpeakEasy) System.out.println("F%%F/pinMode +" + pin + " = " + mode);
-        msg[0] = (byte) (SET_PIN_MODE);
-        msg[1] = (byte) (pin);
-        msg[2] = (byte) (mode);
+        //if (SpeakEasy) System.out.println("F%%F/pinMode +" + pin + " = " + mode);
+        msg[0] = (byte) 0xf;
+        msg[1] = (byte) pin;
+        msg[2] = (byte) mode;
         try {
             surrealPort.writeBytes(msg);
             if (DoMore != null) DoMore.SendBytes(msg, 3);
@@ -131,7 +131,6 @@ public class Arduino { // Adapted to Java from arduino.cs ... (FakeFirmata)
      * @param pin Servo output pin. Port 9 for steering
      */
     public void servoWrite(int pin, int angle) {
-    	
         byte[] msg = new byte[3];
         msg[0] = (byte) (ANALOG_MESSAGE); //Type of message. Likely unneeded
         msg[1] = (byte) (pin); //pin

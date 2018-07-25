@@ -4986,9 +4986,9 @@ public class TrakSim {
 
     public void GotBytes(byte[] msg, int lxx) {
         if (msg == null) return;
-        if ((((int) msg[0]) & 0xF0) != Arduino.ANALOG_MESSAGE) return;
-        if (msg.length >= 3) SetServo(((int) msg[0]) & 0xF,
-                (((int) msg[2]) << 7) | ((int) msg[1]) & 0x7F);
+        //if (msg[0] != Arduino.ANALOG_MESSAGE) return;
+        if (msg.length >= 3) 
+        	SetServo((int) msg[1], (int) msg[2]);
     } //~GotBytes
 
     private int Color4ix(int whom) { // only frm InitInd

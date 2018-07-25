@@ -802,7 +802,6 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 					//Set speed based on max, min, arrow keys, degree offset, and signs
 					speedControl.onUpdate(this.GasPedal, (int)testSteering.getDegreeOffset(), this.manualSpeed, graf, dtest);
 					AxLR8(true, speedControl.getNextSpeed());
-
 					if(Settings.overlayOn){
 						int color = 0xffa500;
 						this.theSim.DrawLine(color, Constants.STOPLIGHT_MIN_Y, Constants.STOPLIGHT_MIN_X, Constants.STOPLIGHT_MIN_Y, Constants.STOPLIGHT_MAX_X);

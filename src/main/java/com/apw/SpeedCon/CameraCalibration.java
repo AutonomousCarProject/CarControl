@@ -8,7 +8,6 @@ import com.apw.pedestrians.PedestrianDetector;
 import com.apw.pedestrians.blobtrack.MovingBlob;
 import com.apw.pedestrians.blobtrack.MovingBlobDetection;
 import com.apw.pedestrians.image.Color;
-import com.pi4j.util.Console;
 
 import java.util.List;
 
