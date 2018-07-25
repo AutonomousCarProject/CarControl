@@ -1,9 +1,11 @@
 plugins {
     id 'java'
+    id 'com.github.sherter.google-java-format' version '0.7.1'
 }
 
 apply plugin: 'java'
 apply plugin: 'maven'
+apply plugin: 'com.github.sherter.google-java-format'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8

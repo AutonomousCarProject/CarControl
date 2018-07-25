@@ -2462,6 +2462,9 @@ public class TrakSim {
      * array given to NewGridTbl.
      */
     public void DrawGrid() { // to show where to click..
+        if(true)
+            return;
+        //*
         // private final int[] Grid_Locns = {6,12,16,18,26,28,  0,16,80,126,228,240,
         //   0,20,300,320,  0,320,  0,45,91,137,182,228,274,320, 0,320,  0,20,300,320};
         int here, thar, whar, nx, prio, fini, lft, rit,
@@ -2501,6 +2504,7 @@ public class TrakSim {
                 lft++;
             }
         }
+        //*/
     } //~DrawGrid
 
     /**
@@ -3087,7 +3091,9 @@ public class TrakSim {
                         }
                     } //~if // (whar>0)
                     zx = 0;
+
                     if(DoCloseUp) if (RoWiM == 0.0) {
+
                         zx = (rx - ImHaf) << 2; // ImHaf = ImHi/2
                         if (pint < 8) zx++; // car facing N/S (use H)
                         else if (pint < 82) zx = 0; // not square-on
@@ -3746,7 +3752,7 @@ public class TrakSim {
                     else colo = 0xFFFF;
                 } //~if // aiming for 3399FF in highest sky
                 else bitz = 0xFF00; // green // 0xFFFFCC99; // not dirt
-                if (DrawDash > 0) if (rx > ImHi - DrawDash) bitz = 0x333300; // dk.brown
+                if (DrawDash > 0) if (rx >= ImHi - DrawDash) bitz = 0x333300; // dk.brown
                 if (ZooMapDim == 0) dx = -1;
                 else dx = rx - (ZooMapBase >> 16); // <0 if above close-up view (in c-u pix)
                 // ZMD=32,32 ZSf=3 ZB=224,642 ZSc=16. ZW=0.2 ZT=8,16
@@ -4144,6 +4150,7 @@ public class TrakSim {
                                                             HandyOps.Flt2Log(" ", VuEdge, HandyOps.Dec2Log(" ", NumFax,
                                                                     HandyOps.PosTime(" @ ")))))))))))))));
             // if (why != 8) break; // if scenery went bad, still do steering wheel..
+
             if (DrawDash > 0) DrawSteerWheel(ShoSteer, false, false);
             why = 0;
             if (OpMode == 3) DrawRedX();
