@@ -1062,7 +1062,7 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 		if (e.getKeyCode() == KeyEvent.VK_M)	//M toggles color mode between velocity based and color based
 			Settings.colorMode ^= true;
 		if(e.getKeyCode() == KeyEvent.VK_F)		//F Calibrates camera for distance of objects
-			speedControl.getCalibrator().calibrateCamera();
+			speedControl.setEmergencyStop(true);
 	}
 
 	@Override
