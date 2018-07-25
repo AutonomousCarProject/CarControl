@@ -70,7 +70,7 @@ public class DriveTest extends JFrame implements KeyListener, MouseListener {
         starter = new TrakManager();                                         //Creates a TrakManager object, which will run TrakSim at a constant Framerate
         init(new Timer(),starter.getImageManager(), new Steering());     //Initializes DriveTest
         displayTaskTimer.scheduleAtFixedRate(starter, new Date(), 1000 / FPS);    //Initializes TrakManager at FPS frames per second
-        autoDriveTest( new DriveTest(1),100);                                       //Format to create a new DriveTest window that updates automatically
+        autoDriveTest( new DriveTest(1),30);                                       //Format to create a new DriveTest window that updates automatically
     }
 
     /** Method that initializes DriveTest (Will run automatically if not ran manually)
@@ -201,7 +201,6 @@ public class DriveTest extends JFrame implements KeyListener, MouseListener {
     }
     public void updateWindow(){
         //pulls and manipulates image from TrakSim
-        imagePixels=null;                                                               //removes data from imagePixels
         switch(viewType){                                                               //Sets window based on viewType
             case 1:                                                                     //RGB
                 imagePixels = imageManager.getRGBRasterFull();
@@ -223,7 +222,6 @@ public class DriveTest extends JFrame implements KeyListener, MouseListener {
         }
 
         //Copies TrakSim image onto the buffer
-
         if(width!=ncols||height!=nrows)                                                                 //checks if the window is a different size from the imageManager image
             ImageManipulator.limitTo(emptyPixels,imagePixels,ncols,nrows,width,height);     //removes extra data from the imageManager image
         else
