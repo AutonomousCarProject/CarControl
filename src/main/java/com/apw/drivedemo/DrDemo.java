@@ -57,7 +57,7 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 	private SpeedController speedControl;
 	private ImageManager imageManager;
 
-	private DriveTest dtest = new DriveTest();
+	private DriveTest dtest = new DriveTest(3);
 
 	static {
 		DriveTest.init();
