@@ -70,7 +70,6 @@ public class Steering {
 			count++;
 		}
 		averageLuminance = (long) (averageLuminance/count * 1.5);
-		System.out.println("average luminance " + averageLuminance);
 		count = 0;
 		
 		//first, find where road starts on both sides
@@ -194,7 +193,6 @@ public class Steering {
 			count++;
 		}
 		averageLuminance = (long) (averageLuminance/count * 1.5);
-		System.out.println("average luminance " + averageLuminance);
 		count = 0;
 
 		//first, find where road starts on both sides
@@ -305,7 +303,6 @@ public class Steering {
 			count++;
 		}
 		averageLuminance = (long) (averageLuminance/count * 1.5);
-		System.out.println("average luminance " + averageLuminance);
 		count = 0;
 
 		//first, find where road starts on both sides

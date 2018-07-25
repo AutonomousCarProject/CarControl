@@ -12,6 +12,7 @@ import com.apw.drivedemo.TrakManager;
 import com.apw.pedestrians.PedestrianDetector;
 import com.apw.pedestrians.blobtrack.MovingBlob;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 
@@ -21,6 +22,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
+import java.io.File;
 import java.util.Date;
 import java.util.List;
 import java.util.Timer;
@@ -68,7 +70,7 @@ public class DriveTest extends JFrame implements KeyListener, MouseListener {
         starter = new TrakManager();                                         //Creates a TrakManager object, which will run TrakSim at a constant Framerate
         init(new Timer(),starter.getImageManager(), new Steering());     //Initializes DriveTest
         displayTaskTimer.scheduleAtFixedRate(starter, new Date(), 1000 / FPS);    //Initializes TrakManager at FPS frames per second
-        autoDriveTest( new DriveTest(3),100);                                       //Format to create a new DriveTest window that updates automatically
+        autoDriveTest( new DriveTest(1),100);                                       //Format to create a new DriveTest window that updates automatically
     }
 
     /** Method that initializes DriveTest (Will run automatically if not ran manually)
@@ -241,7 +243,7 @@ public class DriveTest extends JFrame implements KeyListener, MouseListener {
      */
     private void testPaint(Graphics graf){
         steerPaint(graf);       //Paints components related to steer control
-        speedPaint(graf);       //Paints components related to speed control
+//        speedPaint(graf);       //Paints components related to speed control
     }
 
     /** Paints extra information about steering
@@ -310,6 +312,47 @@ public class DriveTest extends JFrame implements KeyListener, MouseListener {
             }
         }
     } //~speedPaint
+    
+    /**
+	 * Converts a RGB pixel array to BufferedImage for painting. Adapted from
+	 * example code found on StackExchange.
+	 *
+	 * @param pixels The pixel array
+	 *
+	 * @param width  Its width
+	 *
+	 * @param height Its height
+	 *
+	 * @return The BufferedImage result
+	 */
+	public BufferedImage Int2BufImg(int[] pixels, int width, int height) // (in DrDemo)
+			throws IllegalArgumentException {
+		int lxx = 0;
+		int[] theData = null; // Raster raz = null; DataBufferInt DBI = nell;
+		BufferedImage bufIm = null;
+		if (pixels != null)
+			lxx = pixels.length;
+		if (lxx == 0)
+			return null;
+		if (bufIm == null) // (should be never)
+			bufIm = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+		theData = ((DataBufferInt) bufIm.getRaster().getDataBuffer()).getData();
+		System.arraycopy(pixels, 0, theData, 0, lxx);
+		return bufIm;
+	} // ~Int2BufImg
+    
+    public BufferedImage getRoadLines() {
+		BufferedImage roadLines = Int2BufImg(imageManager.getCameraRaw(), 640, 480);
+		Color fill = new Color (0, 0, 0);
+		for (int i = 0; i < 640; i++) {
+			for (int j = 0; j < 480; j++) {
+				if(j < 240 || j > 450) {
+					roadLines.setRGB(i, j, fill.getRGB());
+				}
+			}
+		}
+		return roadLines;
+	}
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -420,6 +463,14 @@ public class DriveTest extends JFrame implements KeyListener, MouseListener {
      */
     @Override
     public void mouseClicked(MouseEvent evt) { // (in DrDemo)
+    	
+    	File out = new File("./screenshot.png");
+		try {
+			ImageIO.write(getRoadLines(), "png", out);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		
         Insets edges = getInsets();
         int kx = 0, nx = 0, zx = 0, Vx = 0, Hx = 0, why = 0;
         boolean didit = false;
