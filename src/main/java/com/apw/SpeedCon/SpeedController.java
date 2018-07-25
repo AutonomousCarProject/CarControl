@@ -23,7 +23,7 @@ public class SpeedController {
 	private int cyclesToStopAtSign = Constants.DRIFT_TO_STOPSIGN_FRAMES;
 	private int cyclesToGo;
 	private int cyclesToStopAtLight = Constants.DRIFT_TO_STOPLIGHT_FRAMES;
-	private int cyclesUntilCanDetectStopsign = Constants.WAIT_AFTER_STOPSIGN;
+	//private int cyclesUntilCanDetectStopsign = Constants.WAIT_AFTER_STOPSIGN;
 
 	private PedestrianDetector pedDetect;
 	protected CameraCalibration cameraCalibrator;
@@ -41,9 +41,9 @@ public class SpeedController {
 	//A method to be called every frame. Calculates desired speed and actual speed
 	//Also takes stopping into account
 	public void onUpdate(int gasAmount, int steerDegs, int manualSpeed, Graphics graf, DriveTest dtest){
-		if (cyclesUntilCanDetectStopsign > 0){
-			cyclesUntilCanDetectStopsign--;
-		}
+		//if (cyclesUntilCanDetectStopsign > 0){
+		//	cyclesUntilCanDetectStopsign--;
+		//}
 		com.apw.pedestrians.Constant.LAST_FRAME_MILLIS = com.apw.pedestrians.Constant.CURRENT_FRAME_MILLIS;
 		com.apw.pedestrians.Constant.CURRENT_FRAME_MILLIS = System.currentTimeMillis();
 		com.apw.pedestrians.Constant.TIME_DIFFERENCE = com.apw.pedestrians.Constant.CURRENT_FRAME_MILLIS - com.apw.pedestrians.Constant.LAST_FRAME_MILLIS;
@@ -69,12 +69,14 @@ public class SpeedController {
 				setStoppingAtLight();
 			}
 			else if (currLight == 2) {
+				//setStoppingAtLight();
 			}
 			else if (currLight == 3) {
 				readyToGo();
 			}
-			else if(detectStopSign(i) && cyclesUntilCanDetectStopsign <= 0){
-				cyclesUntilCanDetectStopsign = 100;
+			else if(detectStopSign(i) /* && cyclesUntilCanDetectStopsign <= 0*/ ){
+				//cyclesUntilCanDetectStopsign = 100;
+				System.out.println("Found a stopsign: " + i);
 				setStoppingAtSign();
 			}
 			else{}
@@ -276,7 +278,8 @@ public class SpeedController {
 
 	// Checks a given blob for the properties of a stopsign (size, age, position, color)
 	public boolean detectStopSign(MovingBlob blob) {
-		if(blob.age > Constants.BLOB_AGE && blob.height > Constants.BLOB_HEIGHT && blob.width > Constants.BLOB_WIDTH && blob.x > Constants.STOPSIGN_MIN_X && blob.x < Constants.STOPSIGN_MAX_X && blob.y > Constants.STOPSIGN_MIN_Y && blob.y < Constants.STOPSIGN_MAX_Y && blob.color.getColor() == Color.RED) {
+		if(blob.age > Constants.BLOB_AGE && blob.height > Constants.BLOB_MIN_HEIGHT && blob.height < Constants.BLOB_MAX_HEIGHT && blob.width > Constants.BLOB_MIN_WIDTH && blob.width < Constants.BLOB_MAX_WIDTH && blob.x > Constants.STOPSIGN_MIN_X && blob.x < Constants.STOPSIGN_MAX_X && blob.y > Constants.STOPSIGN_MIN_Y && blob.y < Constants.STOPSIGN_MAX_Y && blob.color.getColor() == Color.RED && !blob.seen) {
+			blob.seen = true;
 			return true;
 		} else {
 			return false;
@@ -298,16 +301,19 @@ public class SpeedController {
 		int lightColor = 0;
 		boolean outputLight = false;
 		//Figure out the color of our blob
-		if (blob.age > Constants.BLOB_AGE && blob.height > Constants.BLOB_HEIGHT && blob.width > Constants.BLOB_WIDTH && blob.x > Constants.STOPLIGHT_MIN_X && blob.x < Constants.STOPLIGHT_MAX_X && blob.y > Constants.STOPLIGHT_MIN_Y && blob.y < Constants.STOPLIGHT_MAX_Y && blob.color.getColor() == Color.RED) {
+		if (blob.age > Constants.BLOB_AGE && blob.height > Constants.BLOB_MIN_HEIGHT && blob.height < Constants.BLOB_MAX_HEIGHT && blob.width > Constants.BLOB_MIN_WIDTH && blob.width < Constants.BLOB_MAX_WIDTH && blob.x > Constants.STOPLIGHT_MIN_X && blob.x < Constants.STOPLIGHT_MAX_X && blob.y > Constants.STOPLIGHT_MIN_Y && blob.y < Constants.STOPLIGHT_MAX_Y && blob.color.getColor() == Color.RED && !blob.seen) {
 			//Found a red light
+			blob.seen = true;
 			lightColor = 1;
 		}
-		else if (blob.age > Constants.BLOB_AGE && blob.height > Constants.BLOB_HEIGHT && blob.width > Constants.BLOB_WIDTH && blob.x > Constants.STOPLIGHT_MIN_X && blob.x < Constants.STOPLIGHT_MAX_X && blob.y > Constants.STOPLIGHT_MIN_Y && blob.y < Constants.STOPLIGHT_MAX_Y && blob.color.getColor() == Color.RED) {
+		else if (blob.age > Constants.BLOB_AGE && blob.height > Constants.BLOB_MIN_HEIGHT && blob.height < Constants.BLOB_MAX_HEIGHT && blob.width > Constants.BLOB_MIN_WIDTH && blob.width < Constants.BLOB_MAX_WIDTH && blob.y < Constants.STOPLIGHT_MAX_Y && blob.color.getColor() == Color.YELLOW && !blob.seen) {
 			//Found a yellow light
+			blob.seen = true;
 			lightColor = 2;
 		}
-		else if (blob.age > Constants.BLOB_AGE && blob.height > Constants.BLOB_HEIGHT && blob.width > Constants.BLOB_WIDTH && blob.x > Constants.STOPLIGHT_MIN_X && blob.x < Constants.STOPLIGHT_MAX_X && blob.y > Constants.STOPLIGHT_MIN_Y && blob.y < Constants.STOPLIGHT_MAX_Y && blob.color.getColor() == Color.GREEN) {
+		else if (blob.age > Constants.BLOB_AGE && blob.height > Constants.BLOB_MIN_HEIGHT && blob.height < Constants.BLOB_MAX_HEIGHT && blob.width > Constants.BLOB_MIN_WIDTH && blob.width < Constants.BLOB_MAX_WIDTH && blob.x > Constants.STOPLIGHT_MIN_X && blob.x < Constants.STOPLIGHT_MAX_X && blob.y > Constants.STOPLIGHT_MIN_Y && blob.y < Constants.STOPLIGHT_MAX_Y && blob.color.getColor() == Color.GREEN && !blob.seen) {
 			//Found a green light
+			blob.seen = true;
 			lightColor = 3;
 		}
 		else {
@@ -316,7 +322,7 @@ public class SpeedController {
 		}
 		//If we made it here, we know that we have a light
 		//Therefore, we need to check if that light is inside of a black blob, aka the lamp
-		System.out.println("Found a light: " + lightColor);
+		System.out.println("Found a light: " + lightColor + " : " + blob);
 		outputLight = true;
 		int overlaps = 0;
 		for(MovingBlob b : bloblist){
@@ -326,7 +332,7 @@ public class SpeedController {
 				}
 			}
 		}
-		System.out.println("Overlaps: " + overlaps);
+		//System.out.println("Overlaps: " + overlaps);
 		if(outputLight) {
 			return lightColor;
 		}
