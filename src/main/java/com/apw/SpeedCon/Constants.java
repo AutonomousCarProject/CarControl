@@ -5,7 +5,8 @@ public class Constants {
 		//Default Debug Overlays
 		DEFAULT_OVERLAY = false,
 		DEFAULT_BLOBS = false,
-		DEFAULT_WRITE_BLOBS_TO_CONSOLE = false;
+		DEFAULT_WRITE_BLOBS_TO_CONSOLE = false,
+		DEFAULT_COLOR_MODE = true;
 	
 		public static final double 
 		//Speed Related Constants

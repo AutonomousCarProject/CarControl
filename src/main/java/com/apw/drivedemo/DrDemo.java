@@ -811,7 +811,26 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 					if (Settings.blobsOn) {
 						for(MovingBlob b:this.speedControl.getBlobs()){
 							int velocity = (int)(100*Math.sqrt(b.velocityX*b.velocityX + b.velocityY*b.velocityY));
-							int color = (velocity << 16) + (velocity << 8) + velocity;
+							int color = 0x000000;
+							
+							if (b.color.getColor() == com.apw.pedestrians.image.Color.BLACK) {
+				                color = 0x000000;
+				            } else if (b.color.getColor() == com.apw.pedestrians.image.Color.GREY) {
+				            	color = 0xd3d3d3;
+				            } else if (b.color.getColor() == com.apw.pedestrians.image.Color.WHITE) {
+				            	color = 0xffffff;
+				            } else if (b.color.getColor() == com.apw.pedestrians.image.Color.RED) {
+				            	color = 0xff0000;
+				            } else if (b.color.getColor() == com.apw.pedestrians.image.Color.GREEN) {
+				            	color = 0x00ff00;
+				            } else if (b.color.getColor() == com.apw.pedestrians.image.Color.BLUE) {
+				            	color = 0x0000ff;
+				            }
+							
+							if (Settings.colorMode) {
+								color = (velocity << 16) + (velocity << 8) + velocity;	
+							}
+							
 							this.theSim.DrawLine(color, b.y, b.x, b.y+b.height, b.x);
 							this.theSim.DrawLine(color, b.y, b.x, b.y, b.x+b.width);
 							this.theSim.DrawLine(color, b.y+b.height, b.x, b.y+b.height, b.x+b.width);
@@ -1031,6 +1050,8 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 			Settings.overlayOn ^= true;
 		if (e.getKeyCode() == KeyEvent.VK_C) //C toggles writting detected blob information to console
 			Settings.writeBlobsToConsole ^= true;
+		if (e.getKeyCode() == KeyEvent.VK_M) //M toggles color mode between velocity based and color based
+			Settings.colorMode ^= true;
 	}
 
 	@Override
