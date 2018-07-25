@@ -26,6 +26,7 @@ public class SpeedController {
 	private int cyclesUntilCanDetectStopsign = Constants.WAIT_AFTER_STOPSIGN;
 
 	private PedestrianDetector pedDetect;
+	protected CameraCalibration cameraCalibrator;
 
 	private List<MovingBlob> currentBlobs;
 
@@ -34,6 +35,7 @@ public class SpeedController {
 	public SpeedController(){
 		this.pedDetect = new PedestrianDetector();
 		this.currentBlobs = new ArrayList<MovingBlob>();
+		this.cameraCalibrator = new CameraCalibration();
 	}
 
 	//A method to be called every frame. Calculates desired speed and actual speed
@@ -331,5 +333,10 @@ public class SpeedController {
 		else {
 			return 0;
 		}
+	}
+
+	public CameraCalibration getCalibrator()
+	{
+		return cameraCalibrator;
 	}
 }

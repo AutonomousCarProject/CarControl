@@ -5,6 +5,8 @@ import com.apw.pedestrians.PedestrianDetector;
 import com.apw.pedestrians.blobtrack.MovingBlob;
 import com.apw.pedestrians.blobtrack.MovingBlobDetection;
 import com.apw.pedestrians.image.Color;
+import com.pi4j.util.Console;
+
 import java.util.List;
 
 public class CameraCalibration {
@@ -31,7 +33,7 @@ public class CameraCalibration {
 	After Calibration is complete
 
 	To find the distance, run distanceToObj with the known real world width of the object (make sure to scale), 
-	focal length (which should be set by calibrateCamera), and object pixel width (the width of the blob you're testing in this case a red sign)
+	focal length (which should be set by calibrateCamera), and object pixel width (the width of the blob you want to get distance to)
 
 	*/
 
@@ -59,7 +61,7 @@ public class CameraCalibration {
 	}
 
 	
-	void calibrateCamera()
+	public void calibrateCamera()
 	{
 
 		//Searches for a blue blob
@@ -81,10 +83,12 @@ public class CameraCalibration {
 	void findFocalLength(MovingBlob blob)
 	{
 		cameraFocalLength = (blob.width * testBlobDistance) /testBlobWidthHeight;
+		System.out.print("Focal Length = " + cameraFocalLength);
 	}
 	
 	public double distanceToObj(double knownWidth, double focalLength, double objPixelWidth)
 	{
+		System.out.print("Distance to object = " + (knownWidth *focalLength) / objPixelWidth);
 		return (knownWidth *focalLength) / objPixelWidth;
 	}
 }
