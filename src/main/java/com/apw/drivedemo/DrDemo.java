@@ -45,10 +45,18 @@ import com.apw.Steering.Point;
 // import fly2cam.CameraBase;
 
 public class DrDemo extends JFrame implements MouseListener, KeyListener {
-	com.apw.Steering.Steering testSteering;
+
+	private FlyCamera theVideo = null;
+	private FlyCamera simVideo = null;
+	private Arduino theServos = null;
+	private TrakSim theSim = null;
+	private byte[] CamPix = null;
+	private boolean StepMe = false, SimSpedFixt = DriverCons.D_FixedSpeed, CamActive = false;
+
+	com.apw.Steering.Steering testSteering = new com.apw.Steering.Steering(theSim);
 	private SpeedController speedControl;
 	private ImageManager imageManager;
-	private DriveTest dtest = new DriveTest();
+	private DriveTest dtest = new DriveTest(3);
 	
 
 	private static final long serialVersionUID = 1L; // unneed but Java insists {
@@ -75,12 +83,7 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 			NoneStep = 0, // >0: pause simulation after each recalc
 			ViDied = 0, CamTile = 0, CamTall = 0, CamWide = 0, CamFrame = 0;
 
-	private FlyCamera theVideo = null;
-	private FlyCamera simVideo = null;
-	private Arduino theServos = null;
-	private TrakSim theSim = null;
-	private byte[] CamPix = null;
-	private boolean StepMe = false, SimSpedFixt = DriverCons.D_FixedSpeed, CamActive = false;
+
 
 	private static JFrame theWindow = null; // (used by static method)
 
@@ -782,16 +785,18 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 
 					TestServos(); //Runs TestServos D_nServoTests number of times  
 					
+					dtest.repaint();
+					
 					//Find Lines
 					Point[] hi = testSteering.findPoints(thePixels);
 
 					//Steer between lines
 					testSteering.averageMidpoints();
-					int tempDeg = testSteering.getDegreeOffset();
+					double tempDeg = testSteering.getDegreeOffset();
 					theServos.servoWrite(SteerPin, (int) ((tempDeg) + 90));
 					
 					//Set speed based on max, min, arrow keys, degree offset, and signs
-					speedControl.onUpdate(this.GasPedal, testSteering.getDegreeOffset(), this.manualSpeed, graf, dtest);
+					speedControl.onUpdate(this.GasPedal, (int)testSteering.getDegreeOffset(), this.manualSpeed, graf, dtest);
 					AxLR8(true, speedControl.getNextSpeed());
 
 					if(Settings.overlayOn){
@@ -811,7 +816,26 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 					if (Settings.blobsOn) {
 						for(MovingBlob b:this.speedControl.getBlobs()){
 							int velocity = (int)(100*Math.sqrt(b.velocityX*b.velocityX + b.velocityY*b.velocityY));
-							int color = (velocity << 16) + (velocity << 8) + velocity;
+							int color = 0x000000;
+							
+							if (b.color.getColor() == com.apw.pedestrians.image.Color.BLACK) {
+				                color = 0x000000;
+				            } else if (b.color.getColor() == com.apw.pedestrians.image.Color.GREY) {
+				            	color = 0xd3d3d3;
+				            } else if (b.color.getColor() == com.apw.pedestrians.image.Color.WHITE) {
+				            	color = 0xffffff;
+				            } else if (b.color.getColor() == com.apw.pedestrians.image.Color.RED) {
+				            	color = 0xff0000;
+				            } else if (b.color.getColor() == com.apw.pedestrians.image.Color.GREEN) {
+				            	color = 0x00ff00;
+				            } else if (b.color.getColor() == com.apw.pedestrians.image.Color.BLUE) {
+				            	color = 0x0000ff;
+				            }
+							
+							if (Settings.colorMode) {
+								color = (velocity << 16) + (velocity << 8) + velocity;	
+							}
+							
 							this.theSim.DrawLine(color, b.y, b.x, b.y+b.height, b.x);
 							this.theSim.DrawLine(color, b.y, b.x, b.y, b.x+b.width);
 							this.theSim.DrawLine(color, b.y+b.height, b.x, b.y+b.height, b.x+b.width);
@@ -1011,26 +1035,30 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {        
-		if (e.getKeyCode() == KeyEvent.VK_LEFT) //Left arrow key decrements steering angle by 5
+		if (e.getKeyCode() == KeyEvent.VK_LEFT)	//Left arrow key decrements steering angle by 5
 			SteerMe(false, -5);
-		if (e.getKeyCode() == KeyEvent.VK_RIGHT) //Right arrow key increments steering angle by 5
+		if (e.getKeyCode() == KeyEvent.VK_RIGHT)//Right arrow key increments steering angle by 5
 			SteerMe(false, 5);
-		if (e.getKeyCode() == KeyEvent.VK_UP) //Up arrow key increments speed by 1
+		if (e.getKeyCode() == KeyEvent.VK_UP) 	//Up arrow key increments speed by 1
 			AxLR8(false,1);
-		if (e.getKeyCode() == KeyEvent.VK_DOWN) //Down arrow key decrements speed by 1
+		if (e.getKeyCode() == KeyEvent.VK_DOWN)	//Down arrow key decrements speed by 1
 			AxLR8(false,-1);
-		if (e.getKeyCode() == KeyEvent.VK_P) //P simulates a detected stopsign
+		if (e.getKeyCode() == KeyEvent.VK_P) 	//P simulates a detected stopsign
 			speedControl.setStoppingAtSign();
-		if (e.getKeyCode() == KeyEvent.VK_O) //O simulates a detected redlight
+		if (e.getKeyCode() == KeyEvent.VK_O) 	//O simulates a detected redlight
 			speedControl.setStoppingAtLight();
-		if (e.getKeyCode() == KeyEvent.VK_I) //I simulates a detected greenlight
+		if (e.getKeyCode() == KeyEvent.VK_I) 	//I simulates a detected greenlight
 			speedControl.readyToGo();
-		if (e.getKeyCode() == KeyEvent.VK_B) //B toggles blob rectangle overlays
+		if (e.getKeyCode() == KeyEvent.VK_B) 	//B toggles blob rectangle overlays
 			Settings.blobsOn ^= true;
-		if (e.getKeyCode() == KeyEvent.VK_V) //V toggles detection boundry overlays
+		if (e.getKeyCode() == KeyEvent.VK_V) 	//V toggles detection boundry overlays
 			Settings.overlayOn ^= true;
-		if (e.getKeyCode() == KeyEvent.VK_C) //C toggles writting detected blob information to console
+		if (e.getKeyCode() == KeyEvent.VK_C) 	//C toggles writting detected blob information to console
 			Settings.writeBlobsToConsole ^= true;
+		if (e.getKeyCode() == KeyEvent.VK_M)	//M toggles color mode between velocity based and color based
+			Settings.colorMode ^= true;
+		if(e.getKeyCode() == KeyEvent.VK_F)		//F Calibrates camera for distance of objects
+			speedControl.getCalibrator().calibrateCamera();
 	}
 
 	@Override
