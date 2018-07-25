@@ -8,7 +8,6 @@ jdk:
 script:
   - ./gradlew build --scan -s
   - ./gradlew goJF
-  - ./gradlew verGJF
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
