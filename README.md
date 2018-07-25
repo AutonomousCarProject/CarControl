@@ -1,6 +1,8 @@
 # Autonomous Car Project
 Speed, steering, and object detection for an autonomous RC car
 
+[![Build Status](https://travis-ci.org/AutonomousCarProject/CarControl.svg?branch=master)](https://travis-ci.org/AutonomousCarProject/CarControl)
+
 ## Main Components
 
 Stuff required for the car to drive, majority of the program.
@@ -98,6 +100,14 @@ or contact Tom at TPittman@IttyBittyComputers.com
 This project was created and is maintained by a group of highschool students in Portland, Oregon.
 
 You are welcome to submit issues and pull requests if you so desire (you probably dont).
+
+# IC
+
+[Travis](https://travis-ci.org).
+
+# Style Guide
+
+[Google Java Style Guide](https://google.github.io/styleguide/javaguide.html), enforced by [Google Java Formatter](https://github.com/google/google-java-format) with [google-java-format-gradle-plugin](https://github.com/sherter/google-java-format-gradle-plugin).
 
 # Liscense
 
