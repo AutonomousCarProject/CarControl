@@ -44,7 +44,15 @@ import com.apw.Steering.Point;
 // import fly2cam.CameraBase;
 
 public class DrDemo extends JFrame implements MouseListener, KeyListener {
-	com.apw.Steering.Steering testSteering = new com.apw.Steering.Steering();
+
+	private FlyCamera theVideo = null;
+	private FlyCamera simVideo = null;
+	private Arduino theServos = null;
+	private TrakSim theSim = null;
+	private byte[] CamPix = null;
+	private boolean StepMe = false, SimSpedFixt = DriverCons.D_FixedSpeed, CamActive = false;
+
+	com.apw.Steering.Steering testSteering = new com.apw.Steering.Steering(theSim);
 	private SpeedController speedControl;
 	private ImageManager imageManager;
 	private DriveTest dtest = new DriveTest();
@@ -74,12 +82,7 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 			NoneStep = 0, // >0: pause simulation after each recalc
 			ViDied = 0, CamTile = 0, CamTall = 0, CamWide = 0, CamFrame = 0;
 
-	private FlyCamera theVideo = null;
-	private FlyCamera simVideo = null;
-	private Arduino theServos = null;
-	private TrakSim theSim = null;
-	private byte[] CamPix = null;
-	private boolean StepMe = false, SimSpedFixt = DriverCons.D_FixedSpeed, CamActive = false;
+
 
 	private static JFrame theWindow = null; // (used by static method)
 
@@ -786,11 +789,11 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 
 					//Steer between lines
 					testSteering.averageMidpoints();
-					int tempDeg = testSteering.getDegreeOffset();
+					double tempDeg = testSteering.getDegreeOffset();
 					theServos.servoWrite(SteerPin, (int) ((tempDeg) + 90));
 					
 					//Set speed based on max, min, arrow keys, degree offset, and signs
-					speedControl.onUpdate(this.GasPedal, testSteering.getDegreeOffset(), this.manualSpeed, graf, dtest);
+					speedControl.onUpdate(this.GasPedal, (int)testSteering.getDegreeOffset(), this.manualSpeed, graf, dtest);
 					AxLR8(true, speedControl.getNextSpeed());
 
 					if(Settings.overlayOn){
@@ -1028,6 +1031,8 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 			Settings.overlayOn ^= true;
 		if (e.getKeyCode() == KeyEvent.VK_C) //C toggles writting detected blob information to console
 			Settings.writeBlobsToConsole ^= true;
+		if(e.getKeyCode() == KeyEvent.VK_F)   //F Calibrates camera for distance of objects
+			speedControl.getCalibrator().calibrateCamera();
 	}
 
 	@Override
