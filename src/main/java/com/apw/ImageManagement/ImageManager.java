@@ -115,6 +115,18 @@ public class ImageManager {
         ImageManipulator.convertMonotoRGB(mono, rgb, mono.length);
         return rgb;
     }
+    
+    public int[] getCameraRaw() {
+    	int[] output = new int[640*480];
+    	
+//    	ImageManipulator.convertToRGBRaster(picker.getPixels(), rgb, nrows, ncols);
+
+    	ImageManipulator.convertToBlackWhiteRaster(picker.getPixels(), mono, nrows, ncols);
+    	ImageManipulator.convertBWToRGB(mono, rgb, mono.length);
+    	
+    	ImageManipulator.limitTo(output, rgb, ncols, nrows, 640, 480, false);
+    	return output;
+    }
 
 
 }
