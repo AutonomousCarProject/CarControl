@@ -56,8 +56,12 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 	com.apw.Steering.Steering testSteering = new com.apw.Steering.Steering(theSim);
 	private SpeedController speedControl;
 	private ImageManager imageManager;
-	private DriveTest dtest = new DriveTest(3);
-	
+
+	private DriveTest dtest = new DriveTest();
+
+	static {
+		DriveTest.init();
+	}
 
 	private static final long serialVersionUID = 1L; // unneed but Java insists {
 
@@ -1058,7 +1062,7 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 		if (e.getKeyCode() == KeyEvent.VK_M)	//M toggles color mode between velocity based and color based
 			Settings.colorMode ^= true;
 		if(e.getKeyCode() == KeyEvent.VK_F)		//F Calibrates camera for distance of objects
-			speedControl.getCalibrator().calibrateCamera();
+			speedControl.setEmergencyStop(true);
 	}
 
 	@Override
