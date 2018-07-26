@@ -235,6 +235,7 @@ public class ImageManager {
      */
     public BufferedImage Int2BufImg(int[] pixels, int width, int height) // (in DrDemo)
             throws IllegalArgumentException {
+    	System.out.println(pixels);
         int lxx = 0;
         int[] theData = null; // Raster raz = null; DataBufferInt DBI = nell;
         BufferedImage bufIm = null;
@@ -260,6 +261,11 @@ public class ImageManager {
             }
         }
         return roadLines;
+    }
+    
+    public int[] getRoadLinesArray() {
+    	int[] theData = ((DataBufferInt) getRoadLines().getRaster().getDataBuffer()).getData();
+    	return theData;
     }
 
 
