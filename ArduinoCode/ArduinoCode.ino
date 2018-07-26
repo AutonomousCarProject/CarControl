@@ -4,6 +4,7 @@ int wheelSpeed, steeringDeg;
 int wheelDelay = 1500;
 int steerDelay = 1500;
 int normalDelay = 1000;
+int sinceConnect = 0;
 byte out[] = {0, 0, 0};
 //where 1ms is considered full left or full reverse, and 2ms is considered full forward or full right.
 
@@ -19,6 +20,7 @@ void setup() {
   digitalWrite(13, HIGH);
 
   Serial.begin(57600);
+  Serial.setTimeout(1000); //Default value. available for change
   
   
 }
@@ -30,11 +32,19 @@ void loop() {
   
   if (nokill){
     //read input from computer
+    
+    if (Serial.peek() == 0 && sinceConnect >= 1000){
+      nokill = false;
+    }
+    
+    sinceConnect++;
+    
     while (Serial.available() > 0){
       digitalWrite(13, LOW);
       byte type = Serial.read();
       byte pin = Serial.read();
       byte value = Serial.read();
+      sinceConnect = 0;
 
       if (pin == 9){
         if (value != steeringDeg){
@@ -55,7 +65,6 @@ void loop() {
 
       //sensor in: 5V to 0
     }
-    digitalWrite(13, HIGH);
     
     //Steering
     digitalWrite(9, HIGH); 
@@ -69,20 +78,44 @@ void loop() {
     
     delayMicroseconds(normalDelay); //normalize to ~2ms total
     
+    digitalWrite(13, HIGH); //restart signal light
+
+
+    
     out[0] = 1;
-    out[1] = 11;
+    out[1] = sinceConnect;
     out[2] = (char) 'L';
     
     if (sizeof(out) >= 3){
       Serial.write(out, 3);
     }
   } else {
-    //send message to main program
     
-    //discard info from computer while dead
-    while (Serial.available() > 0){
-      Serial.read();
+    //send message to main program
+    if (sinceConnect < 900) {
+      out[0] = 0xFF;
+      Serial.write(out, 3); //send killed message
+      sinceConnect = 900;
     }
+
+    
+    //discard info from computer while dead.
+    while (Serial.available() > 0){
+      byte type = Serial.read();
+      
+      if (type == 0xFF && sinceConnect > 900) {
+        sinceConnect = 0; //Restart if a startup signal is recieved after a timeout
+        wheelDelay = 1500;
+        steerDelay = 1500;
+        nokill = true;
+      }
+    }
+    //blink light in idle mode
+    
+    digitalWrite(13, LOW); 
+    delay(500); //create pulse timing
+    digitalWrite(13, HIGH);
+    delay(100);
   }
   delay(16); //add up total delay to .02 seconds (20ms), leading to 50hz.
 }
