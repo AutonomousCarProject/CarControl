@@ -25,7 +25,7 @@ package com.apw.apw3;                                       // 2018 June 12
  * Some of these constants are checked for reasonable values,
  * and TrakSim won't run unless they are.
  */
-public class DriverCons { // TrakSim constant parameters
+public abstract class DriverCons { // TrakSim constant parameters
 
     public static final boolean // options & diagnostic switches..
             D_PrimaryViewOn = true,    // T: make the main window open up

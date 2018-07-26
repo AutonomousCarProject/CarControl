@@ -52,7 +52,7 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 	private TrakSim theSim = null;
 	private byte[] CamPix = null;
 	private boolean StepMe = false, SimSpedFixt = DriverCons.D_FixedSpeed, CamActive = false;
-
+	
 	com.apw.Steering.Steering testSteering = new com.apw.Steering.Steering(theSim);
 	private SpeedController speedControl;
 	private ImageManager imageManager;
@@ -905,6 +905,7 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 		theWindow = new DrDemo();
 	}
 
+	@Deprecated
 	public static void main(String[] args) { // (in DrDemo)
 		DriveTest.init();
 		Runnable runFrameLater = new RunSoon();

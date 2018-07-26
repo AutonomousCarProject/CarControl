@@ -42,6 +42,7 @@ public class DriveTest extends JFrame {
     private JLabel displaylabel;
     private Insets edges;
 
+    @Deprecated
     public static void main(String[] args){
         //Timer displayTaskTimer = new Timer();
         TrakManager starter = new TrakManager();

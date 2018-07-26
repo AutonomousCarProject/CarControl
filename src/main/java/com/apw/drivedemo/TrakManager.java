@@ -39,6 +39,7 @@ public class TrakManager extends TimerTask {
     private int ncols, nrows;
 
     public TrakManager(){
+
         //Initialize Camera
         if(DriverCons.D_LiveCam){
             camSys = new FlyCamera();

@@ -29,7 +29,7 @@ import java.io.FileInputStream;
 public class TrakSim {
 
      public boolean wasted = false;
-
+     
     // fGratio cnvrts ESC steps to nominal velocity; fMinSpeed=4.0,MinESC=10
     // ..adjust multiplier so it's correct for your car: *1.0 => fGratio=0.4
     private static final double fMinSpeed = DriverCons.D_fMinSpeed,
