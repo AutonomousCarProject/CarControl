@@ -1,5 +1,9 @@
 package com.apw.carcontrol;
 
+import com.apw.ImageManagement.ImageManagementModule;
+import com.apw.SpeedCon.SpeedControlModule;
+import com.apw.Steering.SteeringModule;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -17,7 +21,7 @@ public class MrModule extends JFrame implements Runnable {
     private BufferedImage displayImage, bufferImage;
     private ImageIcon displayIcon;
 
-    // FIXME breaks if dimensions are not 640x480
+    // FIXME breaks if dimensions are not 912x480
     private final int width = 912;
     private final int height = 480;
 
@@ -58,6 +62,7 @@ public class MrModule extends JFrame implements Runnable {
         }
     }
 
+    @Override
     public void paint(Graphics g) {
         super.paint(g);
 
@@ -75,7 +80,7 @@ public class MrModule extends JFrame implements Runnable {
         }
 
         for (Module module : modules) {
-            module.paint(trakSimControl);
+            module.paint(trakSimControl, g);
         }
     }
 

@@ -1,8 +1,10 @@
-package com.apw.carcontrol;
+package com.apw.ImageManagement;
 
 import com.aparapi.Range;
 import com.apw.ImageManagement.ImageManipulator;
 import com.apw.ImageManagement.ImagePicker;
+import com.apw.carcontrol.CarControl;
+import com.apw.carcontrol.Module;
 import com.apw.fly2cam.FlyCamera;
 
 
@@ -149,6 +151,6 @@ public class ImageManagementModule implements Module {
     }
 
     @Override
-    public void paint(CarControl control) {
+    public void paint(CarControl control, Graphics g) {
     }
 }
