@@ -16,51 +16,51 @@ import java.util.Arrays;
 public class ImageManagementModule implements Module {
 
     private int viewType = 1;
-    private int ncols, nrows;
+    private int width, height;
     private int[] imagePixels;
     private byte mono[];
     private byte simple[];
     private int rgb[];
 
-    public ImageManagementModule(int nrows, int ncols) {
-        this.nrows = nrows;
-        this.ncols = ncols;
-        mono = new byte[nrows * ncols];
-        simple = new byte[nrows * ncols];
-        rgb = new int[nrows * ncols];
+    public ImageManagementModule(int width, int height) {
+        this.width = width;
+        this.height = height;
+        mono = new byte[width * height];
+        simple = new byte[width * height];
+        rgb = new int[width * height];
     }
 
-    public int getNrows() {
-        return nrows;
+    public int getWidth() {
+        return width;
     }
 
-    public void setNrows(int nrows) {
-        this.nrows = nrows;
+    public void setWidth(int width) {
+        this.width = width;
     }
 
-    public int getNcols() {
-        return ncols;
+    public int getHeight() {
+        return height;
     }
 
-    public void setNcols(int ncols) {
-        this.ncols = ncols;
+    public void setHeight(int height) {
+        this.height = height;
     }
 
     /*Serves monochrome raster of camera feed
      * Formatted in 1D array of bytes*/
     public byte[] getMonochromeRaster(byte[] pixels) {
-        ImageManipulator.convertToMonochromeRaster(pixels, mono, nrows, ncols);
+        ImageManipulator.convertToMonochromeRaster(pixels, mono, height, width);
         return mono;
 
     }
     public byte[] getMonochrome2Raster(byte[] pixels){
-        ImageManipulator.convertToMonochrome2Raster(pixels, mono, nrows, ncols);
+        ImageManipulator.convertToMonochrome2Raster(pixels, mono, height, width);
         return mono;
     }
 
     public byte[] getBlackWhiteRaster(byte[] pixels) {
 
-        ImageManipulator.convertToBlackWhiteRaster(pixels, mono, nrows, ncols);
+        ImageManipulator.convertToBlackWhiteRaster(pixels, mono, height, width);
         return mono;
 
     }
@@ -75,7 +75,7 @@ public class ImageManagementModule implements Module {
      */
     public byte[] getSimpleColorRaster(byte[] pixels) {
 
-        ImageManipulator.convertToSimpleColorRaster(pixels, simple, nrows, ncols);
+        ImageManipulator.convertToSimpleColorRaster(pixels, simple, height, width);
         return simple;
 
 
@@ -83,14 +83,14 @@ public class ImageManagementModule implements Module {
 
     public int[] getRGBRaster(byte[] pixels) {
 
-        ImageManipulator.convertToRGBRaster(pixels, rgb, nrows, ncols);
+        ImageManipulator.convertToRGBRaster(pixels, rgb, height, width);
         return rgb;
 
     }
 
     public int[] getSimpleRGBRaster(byte[] pixels) {
 
-        ImageManipulator.convertToSimpleColorRaster(pixels, simple, nrows, ncols);
+        ImageManipulator.convertToSimpleColorRaster(pixels, simple, height, width);
         ImageManipulator.convertSimpleToRGB(simple, rgb, simple.length);
         return rgb;
 
@@ -98,7 +98,7 @@ public class ImageManagementModule implements Module {
 
     public int[] getBWRGBRaster(byte[] pixels) {
 
-        ImageManipulator.convertToBlackWhiteRaster(pixels, mono, nrows, ncols);
+        ImageManipulator.convertToBlackWhiteRaster(pixels, mono, height, width);
         ImageManipulator.convertBWToRGB(mono, rgb, mono.length);
         return rgb;
 
@@ -106,13 +106,13 @@ public class ImageManagementModule implements Module {
 
     public int[] getMonoRGBRaster(byte[] pixels) {
 
-        ImageManipulator.convertToMonochromeRaster(pixels, mono, nrows, ncols);
+        ImageManipulator.convertToMonochromeRaster(pixels, mono, height, width);
         ImageManipulator.convertMonotoRGB(mono, rgb, mono.length);
         return rgb;
 
     }
     public int[] getMonoRGB2Raster(byte[] pixels) {
-        ImageManipulator.convertToMonochromeRaster(pixels, mono, nrows, ncols);
+        ImageManipulator.convertToMonochromeRaster(pixels, mono, height, width);
         ImageManipulator.convertMonotoRGB(mono, rgb, mono.length);
         return rgb;
     }

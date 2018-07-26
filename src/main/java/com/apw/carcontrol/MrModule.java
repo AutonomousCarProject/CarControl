@@ -1,11 +1,9 @@
 package com.apw.carcontrol;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -48,7 +46,7 @@ public class MrModule extends JFrame implements Runnable {
     }
 
     private void createModules() {
-        modules.add(new ImageManagementModule(height, width));
+        modules.add(new ImageManagementModule(width, height));
         modules.add(new SpeedControlModule());
         modules.add(new SteeringModule());
     }
