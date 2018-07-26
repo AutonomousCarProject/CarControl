@@ -16,23 +16,18 @@ import java.util.Arrays;
 public class ImageManagementModule implements Module {
 
     private int viewType = 1;
-    private int width, height;
     private int ncols, nrows;
     private int[] imagePixels;
-    private ImagePicker picker;
     private byte mono[];
     private byte simple[];
     private int rgb[];
 
-
-    public ImageManagementModule(FlyCamera trakcam) {
-        picker = new ImagePicker(trakcam, 30);
-        nrows = picker.getNrows();
-        ncols = picker.getNcols();
+    public ImageManagementModule(int nrows, int ncols) {
+        this.nrows = nrows;
+        this.ncols = ncols;
         mono = new byte[nrows * ncols];
         simple = new byte[nrows * ncols];
         rgb = new int[nrows * ncols];
-
     }
 
     public int getNrows() {
@@ -51,22 +46,21 @@ public class ImageManagementModule implements Module {
         this.ncols = ncols;
     }
 
-
     /*Serves monochrome raster of camera feed
      * Formatted in 1D array of bytes*/
-    public byte[] getMonochromeRaster() {
-        ImageManipulator.convertToMonochromeRaster(picker.getPixels(), mono, nrows, ncols);
+    public byte[] getMonochromeRaster(byte[] pixels) {
+        ImageManipulator.convertToMonochromeRaster(pixels, mono, nrows, ncols);
         return mono;
 
     }
-    public byte[] getMonochrome2Raster(){
-        ImageManipulator.convertToMonochrome2Raster(picker.getPixels(), mono, nrows, ncols);
+    public byte[] getMonochrome2Raster(byte[] pixels){
+        ImageManipulator.convertToMonochrome2Raster(pixels, mono, nrows, ncols);
         return mono;
     }
 
-    public byte[] getBlackWhiteRaster() {
+    public byte[] getBlackWhiteRaster(byte[] pixels) {
 
-        ImageManipulator.convertToBlackWhiteRaster(picker.getPixels(), mono, nrows, ncols);
+        ImageManipulator.convertToBlackWhiteRaster(pixels, mono, nrows, ncols);
         return mono;
 
     }
@@ -79,46 +73,46 @@ public class ImageManagementModule implements Module {
      * 4 = GREY
      * 5 = BLACK
      */
-    public byte[] getSimpleColorRaster() {
+    public byte[] getSimpleColorRaster(byte[] pixels) {
 
-        ImageManipulator.convertToSimpleColorRaster(picker.getPixels(), simple, nrows, ncols);
+        ImageManipulator.convertToSimpleColorRaster(pixels, simple, nrows, ncols);
         return simple;
 
 
     }
 
-    public int[] getRGBRaster() {
+    public int[] getRGBRaster(byte[] pixels) {
 
-        ImageManipulator.convertToRGBRaster(picker.getPixels(), rgb, nrows, ncols);
+        ImageManipulator.convertToRGBRaster(pixels, rgb, nrows, ncols);
         return rgb;
 
     }
 
-    public int[] getSimpleRGBRaster() {
+    public int[] getSimpleRGBRaster(byte[] pixels) {
 
-        ImageManipulator.convertToSimpleColorRaster(picker.getPixels(), simple, nrows, ncols);
+        ImageManipulator.convertToSimpleColorRaster(pixels, simple, nrows, ncols);
         ImageManipulator.convertSimpleToRGB(simple, rgb, simple.length);
         return rgb;
 
     }
 
-    public int[] getBWRGBRaster() {
+    public int[] getBWRGBRaster(byte[] pixels) {
 
-        ImageManipulator.convertToBlackWhiteRaster(picker.getPixels(), mono, nrows, ncols);
+        ImageManipulator.convertToBlackWhiteRaster(pixels, mono, nrows, ncols);
         ImageManipulator.convertBWToRGB(mono, rgb, mono.length);
         return rgb;
 
     }
 
-    public int[] getMonoRGBRaster() {
+    public int[] getMonoRGBRaster(byte[] pixels) {
 
-        ImageManipulator.convertToMonochromeRaster(picker.getPixels(), mono, nrows, ncols);
+        ImageManipulator.convertToMonochromeRaster(pixels, mono, nrows, ncols);
         ImageManipulator.convertMonotoRGB(mono, rgb, mono.length);
         return rgb;
 
     }
-    public int[] getMonoRGB2Raster() {
-        ImageManipulator.convertToMonochromeRaster(picker.getPixels(), mono, nrows, ncols);
+    public int[] getMonoRGB2Raster(byte[] pixels) {
+        ImageManipulator.convertToMonochromeRaster(pixels, mono, nrows, ncols);
         ImageManipulator.convertMonotoRGB(mono, rgb, mono.length);
         return rgb;
     }
@@ -133,19 +127,19 @@ public class ImageManagementModule implements Module {
         imagePixels = null;
         switch(viewType) {
             case 1:
-                imagePixels = getRGBRaster();
+                imagePixels = getRGBRaster(control.getRecentCameraImage());
                 break;
             case 2:
-                imagePixels = getMonoRGBRaster();
+                imagePixels = getMonoRGBRaster(control.getRecentCameraImage());
                 break;
             case 3:
-                imagePixels = getSimpleRGBRaster();
+                imagePixels = getSimpleRGBRaster(control.getRecentCameraImage());
                 break;
             case 4:
-                imagePixels = getBWRGBRaster();
+                imagePixels = getBWRGBRaster(control.getRecentCameraImage());
                 break;
             case 5:
-                imagePixels = getMonoRGB2Raster();
+                imagePixels = getMonoRGB2Raster(control.getRecentCameraImage());
                 break;
             default:
                 throw new IllegalStateException("No image management viewType: " + viewType);

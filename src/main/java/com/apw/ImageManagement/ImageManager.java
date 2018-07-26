@@ -9,16 +9,16 @@ import com.apw.fly2cam.FlyCamera;
 import java.lang.invoke.LambdaMetafactory;
 import java.util.Arrays;
 
+@Deprecated
 public class ImageManager {
 
     int nrows, ncols;
-    private ImagePicker picker;
+    ImagePicker picker;
     private byte mono[];
     private byte simple[];
     private int rgb[];
 
     public ImageManager(FlyCamera trakcam) {
-        picker = new ImagePicker(trakcam, 30);
         nrows = picker.getNrows();
         ncols = picker.getNcols();
         mono = new byte[nrows * ncols];

@@ -44,7 +44,7 @@ public abstract class DriverCons { // TrakSim constant parameters
             D_StartInCalibrate = false, // T: use this to calibrate servo limits
             D_Log_Draw = false, D_Log_Log = false, D_Fax_Log = false,
             D_Mini_Log = false, D_NoisyMap = true,
-            D_DrawOnSides = true, D_DrawPredicted = true, D_DrawCurrent = true; //Drive lines.
+            D_DrawOnSides = true, D_DrawPredicted = true, D_DrawCurrent = true; //MrModule lines.
 
     public static final int
 

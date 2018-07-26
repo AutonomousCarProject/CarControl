@@ -7,7 +7,7 @@ import com.apw.fakefirm.Arduino;
 
 import javax.swing.JFrame;
 
-public class TrakSimControl extends JFrame implements CarControl {
+public class TrakSimControl implements CarControl {
     private SimCamera cam;
     private Arduino driveSys;
 
