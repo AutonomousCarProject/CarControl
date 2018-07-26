@@ -19,6 +19,7 @@ public class ImageManager {
     
     int nrows, ncols;
     private ImagePicker picker;
+    private byte tile;
     //private byte mono[];
     //private boolean isRunning;
     //private int[] rgbIn
@@ -31,6 +32,7 @@ public class ImageManager {
         picker = new ImagePicker(trakcam, 30);
         nrows = picker.getNrows();
         ncols = picker.getNcols();
+        byte tile =  (byte) (trakcam.PixTile()-1);
         //mono = new byte[nrows * ncols];
         //rgb = new int[nrows*ncols];
         //cameraInt = new int[cameraWidth*cameraHeight];
@@ -61,7 +63,7 @@ public class ImageManager {
         //int[] rgb = new int[nrows*ncols];
         //int[] cameraInt = new int[cameraWidth*cameraHeight];
         byte[] cameraByte = new byte[cameraWidth*cameraHeight];
-        ImageManipulator.convertToMonochromeRaster(picker.getPixels(), mono, nrows, ncols);
+        ImageManipulator.convertToMonochromeRaster(picker.getPixels(), mono, nrows, ncols, tile);
         ImageManipulator.limitTo(cameraByte,mono,ncols,nrows,cameraWidth,cameraHeight);
         return cameraByte;
 
@@ -71,7 +73,7 @@ public class ImageManager {
         //int[] rgb = new int[nrows*ncols];
         //int[] cameraInt = new int[cameraWidth*cameraHeight];
         byte[] cameraByte = new byte[cameraWidth*cameraHeight];
-        ImageManipulator.convertToMonochrome2Raster(picker.getPixels(), mono, nrows, ncols);
+        ImageManipulator.convertToMonochrome2Raster(picker.getPixels(), mono, nrows, ncols, tile);
         ImageManipulator.limitTo(cameraByte,mono,ncols,nrows,cameraWidth,cameraHeight);
         return cameraByte;
     }
@@ -81,7 +83,7 @@ public class ImageManager {
         //int[] rgb = new int[nrows*ncols];
         //int[] cameraInt = new int[cameraWidth*cameraHeight];
         byte[] cameraByte = new byte[cameraWidth*cameraHeight];
-        ImageManipulator.convertToBlackWhiteRaster(picker.getPixels(), mono, nrows, ncols);
+        ImageManipulator.convertToBlackWhiteRaster(picker.getPixels(), mono, nrows, ncols, tile);
         ImageManipulator.limitTo(cameraByte,mono,ncols,nrows,cameraWidth,cameraHeight);
         return mono;
 
@@ -100,7 +102,7 @@ public class ImageManager {
         //int[] rgb = new int[nrows*ncols];
         //int[] cameraInt = new int[cameraWidth*cameraHeight];
         byte[] cameraByte = new byte[cameraWidth*cameraHeight];
-        ImageManipulator.convertToSimpleColorRaster(picker.getPixels(), mono, nrows, ncols);
+        ImageManipulator.convertToSimpleColorRaster(picker.getPixels(), mono, nrows, ncols, tile);
         ImageManipulator.limitTo(cameraByte,mono,ncols,nrows,cameraWidth,cameraHeight);
         return mono;
     }
@@ -110,7 +112,7 @@ public class ImageManager {
         int[] rgb = new int[nrows*ncols];
         int[] cameraInt = new int[cameraWidth*cameraHeight];
         //byte[] cameraByte = new byte[cameraWidth*cameraHeight];
-        ImageManipulator.convertToRGBRaster(picker.getPixels(), rgb, nrows, ncols);
+        ImageManipulator.convertToRGBRaster(picker.getPixels(), rgb, nrows, ncols, tile);
         ImageManipulator.limitTo(cameraInt,rgb,ncols,nrows,cameraWidth,cameraHeight);
         return rgb;
     }
@@ -119,7 +121,7 @@ public class ImageManager {
         int[] rgb = new int[nrows*ncols];
         //int[] cameraInt = new int[cameraWidth*cameraHeight];
         //byte[] cameraByte = new byte[cameraWidth*cameraHeight];
-        ImageManipulator.convertToRGBRaster(picker.getPixels(), rgb, nrows, ncols);
+        ImageManipulator.convertToRGBRaster(picker.getPixels(), rgb, nrows, ncols, tile);
         return rgb;
     }
     public byte[] getMonochromeRasterFull(){
@@ -127,7 +129,7 @@ public class ImageManager {
         //int[] rgb = new int[nrows*ncols];
         //int[] cameraInt = new int[cameraWidth*cameraHeight];
         //byte[] cameraByte = new byte[cameraWidth*cameraHeight];
-        ImageManipulator.convertToMonochromeRaster(picker.getPixels(),mono,nrows,ncols);
+        ImageManipulator.convertToMonochromeRaster(picker.getPixels(),mono,nrows,ncols, tile);
         return mono;
     }
     public byte[] getSimpleColorRasterFull(){
@@ -135,7 +137,7 @@ public class ImageManager {
         //int[] rgb = new int[nrows*ncols];
         //int[] cameraInt = new int[cameraWidth*cameraHeight];
         //byte[] cameraByte = new byte[cameraWidth*cameraHeight];
-        ImageManipulator.convertToSimpleColorRaster(picker.getPixels(),mono,nrows,ncols);
+        ImageManipulator.convertToSimpleColorRaster(picker.getPixels(),mono,nrows,ncols, tile);
         return mono;
     }
     public byte[] getBlackWhiteRasterFull(){
@@ -143,7 +145,7 @@ public class ImageManager {
         //int[] rgb = new int[nrows*ncols];
         //int[] cameraInt = new int[cameraWidth*cameraHeight];
         //byte[] cameraByte = new byte[cameraWidth*cameraHeight];
-        ImageManipulator.convertToBlackWhiteRaster(picker.getPixels(),mono,nrows,ncols);
+        ImageManipulator.convertToBlackWhiteRaster(picker.getPixels(),mono,nrows,ncols, tile);
         return mono;
     }
     public byte[] convertToMonochrome2RasterFull(){
@@ -151,7 +153,7 @@ public class ImageManager {
         //int[] rgb = new int[nrows*ncols];
         //int[] cameraInt = new int[cameraWidth*cameraHeight];
         //byte[] cameraByte = new byte[cameraWidth*cameraHeight];
-        ImageManipulator.convertToMonochrome2Raster(picker.getPixels(),mono,nrows,ncols);
+        ImageManipulator.convertToMonochrome2Raster(picker.getPixels(),mono,nrows,ncols, tile);
         return mono;
     }
 
@@ -201,7 +203,7 @@ public class ImageManager {
 
     public int[] getRoad(){
         int road[] = new int[nrows*ncols];
-        ImageManipulator.findRoad(picker.getPixels(), road, nrows, ncols);
+        ImageManipulator.findRoad(picker.getPixels(), road, nrows, ncols, tile);
         return road;
     }
 
@@ -213,7 +215,7 @@ public class ImageManager {
 
         //ImageManipulator.convertToRGBRaster(picker.getPixels(), rgb, nrows, ncols);
 
-    	ImageManipulator.convertToBlackWhiteRaster(picker.getPixels(), mono, nrows, ncols);
+    	ImageManipulator.convertToBlackWhiteRaster(picker.getPixels(), mono, nrows, ncols, tile);
     	ImageManipulator.convertBWToRGB(mono, rgb, mono.length);
     	
     	ImageManipulator.limitTo(cameraInt , rgb, ncols, nrows, cameraWidth, cameraHeight);

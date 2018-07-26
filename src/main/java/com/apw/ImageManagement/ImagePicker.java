@@ -16,17 +16,17 @@ public class ImagePicker extends TimerTask {
     private int fps;
     private byte[] pixels;
     private int nrows, ncols;
+    private int tile;
 
     ImagePicker(FlyCamera cam, int fps) {
         //Keep camera ref and fps
         this.cam = cam;
+        this.tile = cam.PixTile();
         this.fps = fps;
         //Get number of pixels
         nrows = cam.Dimz() >> 16;
         ncols = cam.Dimz() << 16 >> 16;
         pixels = new byte[nrows * ncols * 4];
-
-        //Schedule task
         Timer pickerTaskTimer = new Timer();
         pickerTaskTimer.scheduleAtFixedRate(this, new Date(), (long) (1000 / (float) this.fps));
 
@@ -48,6 +48,5 @@ public class ImagePicker extends TimerTask {
     @Override
     public void run() {
         cam.NextFrame(pixels);
-
     }
 }

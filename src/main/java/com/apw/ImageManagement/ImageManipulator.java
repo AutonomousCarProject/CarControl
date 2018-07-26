@@ -2,7 +2,7 @@ package com.apw.ImageManagement;
 
 public class ImageManipulator {
 
-    public static void convertToMonochromeRaster(byte[] bayer, byte[] mono, int nrows, int ncols) {
+    public static void convertToMonochromeRaster(byte[] bayer, byte[] mono, int nrows, int ncols, byte tile) {
 
         for (int r = 0; r < nrows; r++) {
             for (int c = 0; c < ncols; c++) {
@@ -14,12 +14,12 @@ public class ImageManipulator {
 						+ bayer[(r+1)*ncols*2 + c*2]*2;	//Bottom left
 				mono[r*ncols + c] = (byte) (total >> 2);
 				*/
-                mono[r * ncols + c] = (byte) ((((int) bayer[(r * ncols * 2 + c) * 2 + 1]) & 0xFF));            //Use only top right (green)
+                mono[r * ncols + c] = (byte) ((((int) bayer[(r * ncols * 2 + c) * 2 + 1]) & 0xFF));            //Use only top right
             }
         }
     }
 
-	public static void convertToMonochrome2Raster(byte[] bayer, byte[] mono, int nrows, int ncols) {
+	public static void convertToMonochrome2Raster(byte[] bayer, byte[] mono, int nrows, int ncols, byte tile) {
 
 		for (int r = 0; r < nrows; r++) {
 			for (int c = 0; c < ncols; c++) {
@@ -31,9 +31,9 @@ public class ImageManipulator {
 						+ bayer[(r+1)*ncols*2 + c*2]*2;	//Bottom left
 				mono[r*ncols + c] = (byte) (total >> 2);
 				*/
-				int R = ((((int)bayer[(r*ncols*2 + c)*2]) & 0xFF));				//Top left (red)
-				int G = ((((int)bayer[(r*ncols*2 + c)*2 +1])&0xFF)); 			//Top right (green)
-				int B = (((int)bayer[(r*ncols*2 + c)*2 + 1+2*ncols])&0xFF);			//Bottom right (blue)
+				int R = ((((int)bayer[(r*ncols*2 + c)*2+getBit(tile,0)+ncols*2*getBit(tile,1)]) & 0xFF));				//Top left (red)
+				int G = ((((int)bayer[(r*ncols*2 + c)*2 +1-getBit(tile,0)])&0xFF)); 			//Top right (green)
+				int B = (((int)bayer[(r*ncols*2 + c)*2 + 1+2*ncols-ncols*2*getBit(tile,1)-getBit(tile,0)])&0xFF);			//Bottom right (blue)
 				//double Y = R *  .299000 + G *  .587000 + B *  .114000;
 				double Y = (R+G+B)/3;
 				mono[r * ncols + c] = (byte) Y;            //Use only top right (green)
@@ -42,7 +42,7 @@ public class ImageManipulator {
 	}
 
 
-	public static void convertToBlackWhiteRaster(byte[] bayer, byte[] mono, int nrows, int ncols) {
+	public static void convertToBlackWhiteRaster(byte[] bayer, byte[] mono, int nrows, int ncols, byte tile) {
         for (int r = 0; r < nrows; r++) {
             for (int c = 0; c < ncols; c++) {
 
@@ -54,11 +54,11 @@ public class ImageManipulator {
 				mono[r*ncols + c] = (byte) (total >> 2);
 				*/
 
-              
-				int R = ((((int)bayer[(r*ncols*2 + c)*2]) & 0xFF));				//Top left (red)
-				int G = ((((int)bayer[(r*ncols*2 + c)*2 +1])&0xFF)); 			//Top right (green)
-				int B = (((int)bayer[(r*ncols*2 + c)*2 + 1+2*ncols])&0xFF);			//Bottom right (blue)
-				int pix =R+G+B;
+
+                int R = ((((int)bayer[(r*ncols*2 + c)*2+getBit(tile,0)+ncols*2*getBit(tile,1)]) & 0xFF));				//Top left (red)
+                int G = ((((int)bayer[(r*ncols*2 + c)*2 +1-getBit(tile,0)])&0xFF)); 			//Top right (green)
+                int B = (((int)bayer[(r*ncols*2 + c)*2 + 1+2*ncols-ncols*2*getBit(tile,1)-getBit(tile,0)])&0xFF);			//Bottom right (blue)
+                int pix =R+G+B;
 				if(pix>700){
 					mono[r*ncols + c] = 1;
 				}else{
@@ -68,7 +68,7 @@ public class ImageManipulator {
 		}
 	}
 	
-	public static void convertToSimpleColorRaster(byte[] bayer, byte[] simple, int nrows, int ncols) {
+	public static void convertToSimpleColorRaster(byte[] bayer, byte[] simple, int nrows, int ncols, byte tile) {
 		/*
 			*Built for RG/GB Bayer Configuration
 			*Serves color raster encoded in 1D of values 0-5 with
@@ -82,10 +82,10 @@ public class ImageManipulator {
 		*/
 		for(int r = 0; r < nrows; r++){
 			for(int c = 0; c < ncols; c++){
-				int R = ((((int)bayer[(r*ncols*2 + c)*2]) & 0xFF));				//Top left (red)
-				int G = ((((int)bayer[(r*ncols*2 + c)*2 +1])&0xFF)); 			//Top right (green)
-				int B = (((int)bayer[(r*ncols*2 + c)*2 + 1+2*ncols])&0xFF);			//Bottom right (blue)
-				double Y = R *  .299000 + G *  .587000 + B *  .114000;
+                int R = ((((int)bayer[(r*ncols*2 + c)*2+getBit(tile,0)+ncols*2*getBit(tile,1)]) & 0xFF));				//Top left (red)
+                int G = ((((int)bayer[(r*ncols*2 + c)*2 +1-getBit(tile,0)])&0xFF)); 			//Top right (green)
+                int B = (((int)bayer[(r*ncols*2 + c)*2 + 1+2*ncols-ncols*2*getBit(tile,1)-getBit(tile,0)])&0xFF);			//Bottom right (blue)
+                double Y = R *  .299000 + G *  .587000 + B *  .114000;
 				double U  = R * -.168736 + G * -.331264 + B *  .500000 + 128;
 				double V = R *  .500000 + G * -.418688 + B * -.081312 + 128;
 				R =(int)(  1.4075 * (V - 128));
@@ -115,13 +115,13 @@ public class ImageManipulator {
 		}
 	}
 	
-	public static void convertToRGBRaster(byte[] bayer, int[] rgb, int nrows, int ncols) {
+	public static void convertToRGBRaster(byte[] bayer, int[] rgb, int nrows, int ncols, byte tile) {
 		for (int r = 0; r < nrows; r++) {
 			for (int c = 0; c < ncols; c++) {
-				int R = ((((int)bayer[(r*ncols*2 + c)*2]) & 0xFF));				//Top left (red)
-				int G = ((((int)bayer[(r*ncols*2 + c)*2 +1])&0xFF)); 			//Top right (green)
-				int B = (((int)bayer[(r*ncols*2 + c)*2 + 1+2*ncols])&0xFF);			//Bottom right (blue)
-				int pix =(R<<16)+(G<<8)+B;
+                int R = ((((int)bayer[(r*ncols*2 + c)*2+getBit(tile,0)+ncols*2*getBit(tile,1)]) & 0xFF));				//Top left (red)
+                int G = ((((int)bayer[(r*ncols*2 + c)*2 +1-getBit(tile,0)])&0xFF)); 			//Top right (green)
+                int B = (((int)bayer[(r*ncols*2 + c)*2 + 1+2*ncols-ncols*2*getBit(tile,1)-getBit(tile,0)])&0xFF);			//Bottom right (blue)
+                int pix =(R<<16)+(G<<8)+B;
 				rgb[r*ncols + c] = pix;
 			}
 			
@@ -175,14 +175,14 @@ public class ImageManipulator {
         }
     }
 
-    public static void findRoad(byte[] bayer, int[] output, int nrows, int ncols){
+    public static void findRoad(byte[] bayer, int[] output, int nrows, int ncols, byte tile){
     	for(int r = 0; r < ncols; r++){
     		boolean endFound = false;
     		for(int c = nrows-1; c > 0; c--){
-				int R = ((((int)bayer[(c*ncols*2 + r)*2]) & 0xFF));				//Top left (red)
-				int G = ((((int)bayer[(c*ncols*2 + r)*2 +1])&0xFF)); 			//Top right (green)
-				int B = (((int)bayer[(c*ncols*2 + r)*2 + 1+2*ncols])&0xFF);			//Bottom right (blue)
-				int pix =R+G+B;
+                int R = ((((int)bayer[(r*ncols*2 + c)*2+getBit(tile,0)+ncols*2*getBit(tile,1)]) & 0xFF));				//Top left (red)
+                int G = ((((int)bayer[(r*ncols*2 + c)*2 +1-getBit(tile,0)])&0xFF)); 			//Top right (green)
+                int B = (((int)bayer[(r*ncols*2 + c)*2 + 1+2*ncols-ncols*2*getBit(tile,1)-getBit(tile,0)])&0xFF);			//Bottom right (blue)
+                int pix =R+G+B;
 				if(r > 640 || c < 240 || c > 455){
 					output[c*ncols+r] = 0;
 				} else if(pix>700){
@@ -218,6 +218,9 @@ public class ImageManipulator {
 		}
 
 	}
+	public static int getBit(byte tile, int pos){
+        return (tile >> pos) & 1;
+    }
 
 
 
