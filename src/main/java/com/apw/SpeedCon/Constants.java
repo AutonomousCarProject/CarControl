@@ -6,12 +6,16 @@ public class Constants {
 		DEFAULT_OVERLAY = false,
 		DEFAULT_BLOBS = false,
 		DEFAULT_WRITE_BLOBS_TO_CONSOLE = false,
-		DEFAULT_COLOR_MODE = true;
+		DEFAULT_WRITE_SPEED_TO_CONSOLE = false;
+		
+		public static int
+		DEFAULT_COLOR_MODE = 0,
+		NUM_COLOR_MODES = 3;
 	
 		public static final double 
 		//Speed Related Constants
 		MAX_SPEED = 50,					//Car's maximum speed
-		MIN_SPEED = 40,					//Car's minimum speed
+		MIN_SPEED = 30,					//Car's minimum speed
 		PIN_TO_METER_PER_SECOND = 0.4,	//Conversion for motor position to m/s. DO NOT TOUCH
 		MAX_OBJECT_WIDTH = 320,			//Maximum width in pixels of object height before car slows
 		MAX_OBJECT_HEIGHT = 200,		//Maximum height of in pixels of an object before car slows
@@ -29,25 +33,26 @@ public class Constants {
 		STOPSIGN_DRIFT_SPEED = 12,		//Speed at which the car pulls up to a stopsign
 		DRIFT_TO_STOPLIGHT_FRAMES = 0,	//Frames to drift forward after stoplight detected
 		STOPLIGHT_DRIFT_SPEED = 12,		//Speed at which the car pulls up to a stoplight
-<<<<<<< HEAD
-		//WAIT_AFTER_STOPSIGN = 100,		//Time between finding a stopsign and finding a stopsign again
-=======
->>>>>>> e70f852... Get rid of deprecated stopsign wait code
-		MIN_SPEED_INCREMENT = 5,		//Min increment amount between current and next frame speed
-		MAX_SPEED_INCREMENT = 10,		//Max increment amount between current and next frame speed
+		MIN_SPEED_INCREMENT = 10,		//Min increment amount between current and next frame speed
+		MAX_SPEED_INCREMENT = 20,		//Max increment amount between current and next frame speed
 		
 		//Blob Filters
-		BLOB_MIN_HEIGHT = 5,			//Filtered minimum height of a blob in pixels
+		BLOB_MIN_HEIGHT = 4,			//Filtered minimum height of a blob in pixels
 		BLOB_MAX_HEIGHT = 50,			//Filtered maximum height of a blob in pixels
-		BLOB_MIN_WIDTH = 5,				//Filtered minimum width of a blob in pixels
+		BLOB_MIN_WIDTH = 4,				//Filtered minimum width of a blob in pixels
 		BLOB_MAX_WIDTH = 50,			//Filtered maximum width of a blob in pixels
-		BLOB_AGE = 0,					//Filtered age of a blob in frames
+		BLOB_AGE = 1,					//Filtered age of a blob in frames
 		STOPLIGHT_MIN_Y = 0,			//Filtered position of a blob in pixels
 		STOPLIGHT_MAX_Y = 240,			//Filtered position of a blob in pixels
-		STOPLIGHT_MIN_X = 0,			//Filtered position of a blob in pixels
-		STOPLIGHT_MAX_X = 640,			//Filtered position of a blob in pixels
+		STOPLIGHT_MIN_X = 160,			//Filtered position of a blob in pixels
+		STOPLIGHT_MAX_X = 480,			//Filtered position of a blob in pixels
 		STOPSIGN_MIN_Y = 0,				//Filtered position of a blob in pixels
 		STOPSIGN_MAX_Y = 480,			//Filtered position of a blob in pixels
 		STOPSIGN_MIN_X = 400,			//Filtered position of a blob in pixels
 		STOPSIGN_MAX_X = 640;			//Filtered position of a blob in pixels
+		
+		public static final double
+		BLOB_RATIO_DIF = 0.55,
+		DISPLAY_AGE_MAX = 5,
+		DISPLAY_AGE_MIN = 0;
 }

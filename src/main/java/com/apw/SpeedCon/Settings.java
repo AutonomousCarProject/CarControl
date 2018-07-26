@@ -6,5 +6,8 @@ public class Settings {
 	overlayOn = Constants.DEFAULT_OVERLAY,
 	blobsOn = Constants.DEFAULT_BLOBS,
 	writeBlobsToConsole = Constants.DEFAULT_WRITE_BLOBS_TO_CONSOLE,
+	writeSpeedToConsole = Constants.DEFAULT_WRITE_SPEED_TO_CONSOLE;
+	
+	public static int
 	colorMode = Constants.DEFAULT_COLOR_MODE;
 }

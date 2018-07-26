@@ -5,6 +5,7 @@ import java.util.*;
 import com.apw.pedestrians.blobtrack.*;
 import com.apw.pedestrians.image.Color;
 import com.apw.pedestrians.*;
+import com.apw.pedestrians.blobdetect.Blob;
 import com.apw.ImageManagement.*;
 import com.apw.apw3.TrakSim;
 import com.apw.drivedemo.DriveTest;
@@ -70,12 +71,7 @@ public class SpeedController {
 			else if (currLight == 3) {
 				readyToGo();
 			}
-<<<<<<< HEAD
-			else if(detectStopSign(i) /* && cyclesUntilCanDetectStopsign <= 0*/ ){
-				//cyclesUntilCanDetectStopsign = 100;
-=======
-			else if(detectStopSign(i)){
->>>>>>> e70f852... Get rid of deprecated stopsign wait code
+			else if(detectStopSign(i, blobs)){
 				System.out.println("Found a stopsign: " + i);
 				setStoppingAtSign();
 			}
@@ -90,7 +86,7 @@ public class SpeedController {
 		}
 	}
 
-	private boolean detectBlobOverlappingBlob(MovingBlob outsideBlob, MovingBlob insideBlob){
+	public boolean detectBlobOverlappingBlob(MovingBlob outsideBlob, MovingBlob insideBlob){
 		if((insideBlob.x < outsideBlob.x+outsideBlob.width && insideBlob.width + insideBlob.x > outsideBlob.x)  ||  (insideBlob.y < outsideBlob.y+outsideBlob.height && insideBlob.height + insideBlob.y > outsideBlob.y)) {
 			return true;
 		}
@@ -245,13 +241,25 @@ public class SpeedController {
 	}
 
 	// Checks a given blob for the properties of a stopsign (size, age, position, color)
-	public boolean detectStopSign(MovingBlob blob) {
-		if(blob.age > Constants.BLOB_AGE && blob.height > Constants.BLOB_MIN_HEIGHT && blob.height < Constants.BLOB_MAX_HEIGHT && blob.width > Constants.BLOB_MIN_WIDTH && blob.width < Constants.BLOB_MAX_WIDTH && blob.x > Constants.STOPSIGN_MIN_X && blob.x < Constants.STOPSIGN_MAX_X && blob.y > Constants.STOPSIGN_MIN_Y && blob.y < Constants.STOPSIGN_MAX_Y && blob.color.getColor() == Color.RED && !blob.seen) {
+	public boolean detectStopSign(MovingBlob blob, List<MovingBlob> bloblist) {
+		if(blob.age > Constants.BLOB_AGE && 
+			blob.height > Constants.BLOB_MIN_HEIGHT && 
+			blob.height < Constants.BLOB_MAX_HEIGHT && 
+			blob.width > Constants.BLOB_MIN_WIDTH && 
+			blob.width < Constants.BLOB_MAX_WIDTH && 
+			blob.x > Constants.STOPSIGN_MIN_X && 
+			blob.x < Constants.STOPSIGN_MAX_X && 
+			blob.y > Constants.STOPSIGN_MIN_Y && 
+			blob.y < Constants.STOPSIGN_MAX_Y && 
+			blob.color.getColor() == Color.RED && 
+			!blob.seen && 
+			(((double) blob.height / (double) blob.width) < 1 + Constants.BLOB_RATIO_DIF && 
+			((double) blob.height / (double) blob.width) > 1 - Constants.BLOB_RATIO_DIF)) {
+			
 			blob.seen = true;
 			return true;
-		} else {
-			return false;
-		}
+		} 
+		return false;
 	}
 
 	public List<MovingBlob> getBlobs() {
@@ -269,32 +277,84 @@ public class SpeedController {
 		int lightColor = 0;
 		boolean outputLight = false;
 		//Figure out the color of our blob
-		if (blob.age > Constants.BLOB_AGE && blob.height > Constants.BLOB_MIN_HEIGHT && blob.height < Constants.BLOB_MAX_HEIGHT && blob.width > Constants.BLOB_MIN_WIDTH && blob.width < Constants.BLOB_MAX_WIDTH && blob.x > Constants.STOPLIGHT_MIN_X && blob.x < Constants.STOPLIGHT_MAX_X && blob.y > Constants.STOPLIGHT_MIN_Y && blob.y < Constants.STOPLIGHT_MAX_Y && blob.color.getColor() == Color.RED && !blob.seen) {
-			//Found a red light
-<<<<<<< HEAD
-=======
-			System.out.println("Found a redlight: " + blob);
->>>>>>> e70f852... Get rid of deprecated stopsign wait code
-			blob.seen = true;
-			lightColor = 1;
+		
+		if (blob.age > Constants.BLOB_AGE && 
+			blob.height > Constants.BLOB_MIN_HEIGHT && 
+			blob.height < Constants.BLOB_MAX_HEIGHT && 
+			blob.width > Constants.BLOB_MIN_WIDTH && 
+			blob.width < Constants.BLOB_MAX_WIDTH && 
+			blob.x > Constants.STOPLIGHT_MIN_X && 
+			blob.x < Constants.STOPLIGHT_MAX_X && 
+			blob.y > Constants.STOPLIGHT_MIN_Y && 
+			blob.y < Constants.STOPLIGHT_MAX_Y && 
+			blob.color.getColor() == Color.RED && 
+			!blob.seen && 
+			((double) blob.height / (double) blob.width) < 1 + Constants.BLOB_RATIO_DIF && 
+			((double) blob.height / (double) blob.width) > 1 - Constants.BLOB_RATIO_DIF) {
+			
+			for(MovingBlob b : bloblist){
+				if(b.color.getColor() == Color.BLACK){
+					if(detectBlobOverlappingBlob(b, blob)){
+						//Found a red light
+						System.out.println("Found a redlight: " + blob);
+						blob.seen = true;
+						lightColor = 1;
+					}
+				}
+			}
 		}
-		else if (blob.age > Constants.BLOB_AGE && blob.height > Constants.BLOB_MIN_HEIGHT && blob.height < Constants.BLOB_MAX_HEIGHT && blob.width > Constants.BLOB_MIN_WIDTH && blob.width < Constants.BLOB_MAX_WIDTH && blob.y < Constants.STOPLIGHT_MAX_Y && blob.color.getColor() == Color.YELLOW && !blob.seen) {
-			//Found a yellow light
-<<<<<<< HEAD
-=======
-			System.out.println("Found a yellowlight: " + blob);
->>>>>>> e70f852... Get rid of deprecated stopsign wait code
-			blob.seen = true;
-			lightColor = 2;
+		
+		else if (
+			blob.age > Constants.BLOB_AGE && 
+			blob.height > Constants.BLOB_MIN_HEIGHT && 
+			blob.height < Constants.BLOB_MAX_HEIGHT && 
+			blob.width > Constants.BLOB_MIN_WIDTH && 
+			blob.width < Constants.BLOB_MAX_WIDTH && 
+			blob.x > Constants.STOPLIGHT_MIN_X && 
+			blob.x < Constants.STOPLIGHT_MAX_X && 
+			blob.y > Constants.STOPLIGHT_MIN_Y && 
+			blob.y < Constants.STOPLIGHT_MAX_Y && 
+			blob.color.getColor() == Color.YELLOW && 
+			!blob.seen && 
+			((double) blob.height / (double) blob.width) < 1 + Constants.BLOB_RATIO_DIF && 
+			((double) blob.height / (double) blob.width) > 1 - Constants.BLOB_RATIO_DIF) {
+			
+			for(MovingBlob b : bloblist){
+				if(b.color.getColor() == Color.BLACK){
+					if(detectBlobOverlappingBlob(b, blob)){
+						//Found a red light
+						System.out.println("Found a redlight: " + blob);
+						blob.seen = true;
+						lightColor = 1;
+					}
+				}
+			}
 		}
-		else if (blob.age > Constants.BLOB_AGE && blob.height > Constants.BLOB_MIN_HEIGHT && blob.height < Constants.BLOB_MAX_HEIGHT && blob.width > Constants.BLOB_MIN_WIDTH && blob.width < Constants.BLOB_MAX_WIDTH && blob.x > Constants.STOPLIGHT_MIN_X && blob.x < Constants.STOPLIGHT_MAX_X && blob.y > Constants.STOPLIGHT_MIN_Y && blob.y < Constants.STOPLIGHT_MAX_Y && blob.color.getColor() == Color.GREEN && !blob.seen) {
-			//Found a green light
-<<<<<<< HEAD
-=======
-			System.out.println("Found a greenlight: " + blob);
->>>>>>> e70f852... Get rid of deprecated stopsign wait code
-			blob.seen = true;
-			lightColor = 3;
+		
+		else if (blob.age > Constants.BLOB_AGE && 
+			blob.height > Constants.BLOB_MIN_HEIGHT && 
+			blob.height < Constants.BLOB_MAX_HEIGHT && 
+			blob.width > Constants.BLOB_MIN_WIDTH && 
+			blob.width < Constants.BLOB_MAX_WIDTH && 
+			blob.x > Constants.STOPLIGHT_MIN_X && 
+			blob.x < Constants.STOPLIGHT_MAX_X && 
+			blob.y > Constants.STOPLIGHT_MIN_Y && 
+			blob.y < Constants.STOPLIGHT_MAX_Y && 
+			blob.color.getColor() == Color.GREEN && 
+			!blob.seen && 
+			((double) blob.height / (double) blob.width) < 1 + Constants.BLOB_RATIO_DIF && 
+			((double) blob.height / (double) blob.width) > 1 - Constants.BLOB_RATIO_DIF) {
+			
+			for(MovingBlob b : bloblist){
+				if(b.color.getColor() == Color.BLACK){
+					if(detectBlobOverlappingBlob(b, blob)){
+						//Found a red light
+						System.out.println("Found a redlight: " + blob);
+						blob.seen = true;
+						lightColor = 1;
+					}
+				}
+			}
 		}
 		else {
 			//Didn't find a light
@@ -302,15 +362,11 @@ public class SpeedController {
 		}
 		//If we made it here, we know that we have a light
 		//Therefore, we need to check if that light is inside of a black blob, aka the lamp
-<<<<<<< HEAD
-		System.out.println("Found a light: " + lightColor + " : " + blob);
-=======
->>>>>>> e70f852... Get rid of deprecated stopsign wait code
 		outputLight = true;
 		int overlaps = 0;
 		for(MovingBlob b : bloblist){
-			if(blob.color.getColor() == Color.BLACK){
-				if(detectBlobOverlappingBlob(blob, b)){
+			if(b.color.getColor() == Color.BLACK){
+				if(detectBlobOverlappingBlob(b, blob)){
 					overlaps++;
 				}
 			}
