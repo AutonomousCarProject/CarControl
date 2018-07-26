@@ -23,8 +23,7 @@ public class SpeedController {
 	private int cyclesToStopAtSign = Constants.DRIFT_TO_STOPSIGN_FRAMES;
 	private int cyclesToGo;
 	private int cyclesToStopAtLight = Constants.DRIFT_TO_STOPLIGHT_FRAMES;
-	//private int cyclesUntilCanDetectStopsign = Constants.WAIT_AFTER_STOPSIGN;
-
+	
 	private PedestrianDetector pedDetect;
 	private CameraCalibration cameraCalibrator;
 
@@ -40,10 +39,7 @@ public class SpeedController {
 
 	//A method to be called every frame. Calculates desired speed and actual speed
 	//Also takes stopping into account
-	public void onUpdate(int gasAmount, int steerDegs, int manualSpeed, Graphics graf, DriveTest dtest){
-		//if (cyclesUntilCanDetectStopsign > 0){
-		//	cyclesUntilCanDetectStopsign--;
-		//}
+	public void onUpdate(int gasAmount, int steerDegs, int manualSpeed, Graphics graf, DriveTest dtest) {
 		com.apw.pedestrians.Constant.LAST_FRAME_MILLIS = com.apw.pedestrians.Constant.CURRENT_FRAME_MILLIS;
 		com.apw.pedestrians.Constant.CURRENT_FRAME_MILLIS = System.currentTimeMillis();
 		com.apw.pedestrians.Constant.TIME_DIFFERENCE = com.apw.pedestrians.Constant.CURRENT_FRAME_MILLIS - com.apw.pedestrians.Constant.LAST_FRAME_MILLIS;
@@ -69,13 +65,17 @@ public class SpeedController {
 				setStoppingAtLight();
 			}
 			else if (currLight == 2) {
-				//setStoppingAtLight();
+				setStoppingAtLight();
 			}
 			else if (currLight == 3) {
 				readyToGo();
 			}
+<<<<<<< HEAD
 			else if(detectStopSign(i) /* && cyclesUntilCanDetectStopsign <= 0*/ ){
 				//cyclesUntilCanDetectStopsign = 100;
+=======
+			else if(detectStopSign(i)){
+>>>>>>> e70f852... Get rid of deprecated stopsign wait code
 				System.out.println("Found a stopsign: " + i);
 				setStoppingAtSign();
 			}
@@ -240,10 +240,6 @@ public class SpeedController {
 		this.emergencyStop = emer;
 	}
 
-
-
-
-
 	public int getDesiredSpeed() {
 		return (int)desiredSpeed;
 	}
@@ -275,16 +271,28 @@ public class SpeedController {
 		//Figure out the color of our blob
 		if (blob.age > Constants.BLOB_AGE && blob.height > Constants.BLOB_MIN_HEIGHT && blob.height < Constants.BLOB_MAX_HEIGHT && blob.width > Constants.BLOB_MIN_WIDTH && blob.width < Constants.BLOB_MAX_WIDTH && blob.x > Constants.STOPLIGHT_MIN_X && blob.x < Constants.STOPLIGHT_MAX_X && blob.y > Constants.STOPLIGHT_MIN_Y && blob.y < Constants.STOPLIGHT_MAX_Y && blob.color.getColor() == Color.RED && !blob.seen) {
 			//Found a red light
+<<<<<<< HEAD
+=======
+			System.out.println("Found a redlight: " + blob);
+>>>>>>> e70f852... Get rid of deprecated stopsign wait code
 			blob.seen = true;
 			lightColor = 1;
 		}
 		else if (blob.age > Constants.BLOB_AGE && blob.height > Constants.BLOB_MIN_HEIGHT && blob.height < Constants.BLOB_MAX_HEIGHT && blob.width > Constants.BLOB_MIN_WIDTH && blob.width < Constants.BLOB_MAX_WIDTH && blob.y < Constants.STOPLIGHT_MAX_Y && blob.color.getColor() == Color.YELLOW && !blob.seen) {
 			//Found a yellow light
+<<<<<<< HEAD
+=======
+			System.out.println("Found a yellowlight: " + blob);
+>>>>>>> e70f852... Get rid of deprecated stopsign wait code
 			blob.seen = true;
 			lightColor = 2;
 		}
 		else if (blob.age > Constants.BLOB_AGE && blob.height > Constants.BLOB_MIN_HEIGHT && blob.height < Constants.BLOB_MAX_HEIGHT && blob.width > Constants.BLOB_MIN_WIDTH && blob.width < Constants.BLOB_MAX_WIDTH && blob.x > Constants.STOPLIGHT_MIN_X && blob.x < Constants.STOPLIGHT_MAX_X && blob.y > Constants.STOPLIGHT_MIN_Y && blob.y < Constants.STOPLIGHT_MAX_Y && blob.color.getColor() == Color.GREEN && !blob.seen) {
 			//Found a green light
+<<<<<<< HEAD
+=======
+			System.out.println("Found a greenlight: " + blob);
+>>>>>>> e70f852... Get rid of deprecated stopsign wait code
 			blob.seen = true;
 			lightColor = 3;
 		}
@@ -294,7 +302,10 @@ public class SpeedController {
 		}
 		//If we made it here, we know that we have a light
 		//Therefore, we need to check if that light is inside of a black blob, aka the lamp
+<<<<<<< HEAD
 		System.out.println("Found a light: " + lightColor + " : " + blob);
+=======
+>>>>>>> e70f852... Get rid of deprecated stopsign wait code
 		outputLight = true;
 		int overlaps = 0;
 		for(MovingBlob b : bloblist){
@@ -304,7 +315,7 @@ public class SpeedController {
 				}
 			}
 		}
-		//System.out.println("Overlaps: " + overlaps);
+		System.out.println("Overlaps: " + overlaps);
 		if(outputLight) {
 			return lightColor;
 		}

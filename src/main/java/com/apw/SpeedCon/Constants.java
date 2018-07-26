@@ -29,7 +29,10 @@ public class Constants {
 		STOPSIGN_DRIFT_SPEED = 12,		//Speed at which the car pulls up to a stopsign
 		DRIFT_TO_STOPLIGHT_FRAMES = 0,	//Frames to drift forward after stoplight detected
 		STOPLIGHT_DRIFT_SPEED = 12,		//Speed at which the car pulls up to a stoplight
+<<<<<<< HEAD
 		//WAIT_AFTER_STOPSIGN = 100,		//Time between finding a stopsign and finding a stopsign again
+=======
+>>>>>>> e70f852... Get rid of deprecated stopsign wait code
 		MIN_SPEED_INCREMENT = 5,		//Min increment amount between current and next frame speed
 		MAX_SPEED_INCREMENT = 10,		//Max increment amount between current and next frame speed
 		
