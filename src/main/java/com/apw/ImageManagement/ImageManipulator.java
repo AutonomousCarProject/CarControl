@@ -188,30 +188,30 @@ public class ImageManipulator {
     }
 
     public static void findRoad(byte[] bayer, int[] output, int nrows, int ncols, byte tile){
-    	for(int r = 0; r < ncols; r++){
+    	for(int col = 0; col < ncols; col++){
 			int averageLuminance = 0;
-			for(int c = nrows-1; c > 0; c--) {
-				int R = ((((int)bayer[(r*ncols*2 + c)*2+getBit(tile,0)+ncols*2*getBit(tile,1)]) & 0xFF));				//Top left (red)
-				int G = ((((int)bayer[(r*ncols*2 + c)*2 +1-getBit(tile,0)])&0xFF)); 			//Top right (green)
-				int B = (((int)bayer[(r*ncols*2 + c)*2 + 1+2*ncols-ncols*2*getBit(tile,1)-getBit(tile,0)])&0xFF);			//Bottom right (blue)
+			for(int row = nrows-1; row > 0; row--) {
+				int R = ((((int)bayer[(row*ncols*2 + col)*2+getBit(tile,0)+ncols*2*getBit(tile,1)]) & 0xFF));				//Top left (red)
+				int G = ((((int)bayer[(row*ncols*2 + col)*2 +1-getBit(tile,0)])&0xFF)); 			//Top right (green)
+				int B = (((int)bayer[(row*ncols*2 + col)*2 + 1+2*ncols-ncols*2*getBit(tile,1)-getBit(tile,0)])&0xFF);			//Bottom right (blue)
 				averageLuminance += R+G+B/3;
 			}
 			averageLuminance /= ncols;
     		boolean endFound = false;
-    		for(int c = nrows-1; c > 0; c--){
-				int R = ((((int)bayer[(r*ncols*2 + c)*2+getBit(tile,0)+ncols*2*getBit(tile,1)]) & 0xFF));				//Top left (red)
-				int G = ((((int)bayer[(r*ncols*2 + c)*2 +1-getBit(tile,0)])&0xFF)); 			//Top right (green)
-				int B = (((int)bayer[(r*ncols*2 + c)*2 + 1+2*ncols-ncols*2*getBit(tile,1)-getBit(tile,0)])&0xFF);			//Bottom right (blue)
+    		for(int row = nrows-1; row > 0; row--){
+				int R = ((((int)bayer[(row*ncols*2 + col)*2+getBit(tile,0)+ncols*2*getBit(tile,1)]) & 0xFF));				//Top left (red)
+				int G = ((((int)bayer[(row*ncols*2 + col)*2 +1-getBit(tile,0)])&0xFF)); 			//Top right (green)
+				int B = (((int)bayer[(row*ncols*2 + col)*2 + 1+2*ncols-ncols*2*getBit(tile,1)-getBit(tile,0)])&0xFF);			//Bottom right (blue)
 				int pix =(R+G+B)/3;
-				if(r >= 640 || c < 240 || c > 455){
-					output[c*ncols+r] = 0;
+				if(col >= 640 || row < 240 || row > 455){
+					output[row*ncols+col] = 0;
 				} else if(pix>averageLuminance){
 					endFound = true;
-					output[c*ncols+r] = 0xFFFFFF;
+					output[row*ncols+col] = 0xFFFFFF;
 				}else if(!endFound){
-					output[c*ncols + r] = 0xF63FFC;
+					output[row*ncols + col] = 0xF63FFC;
 				}else{
-					output[c*ncols + r] = 0x000000;
+					output[row*ncols + col] = 0x000000;
 				}
 			}
 		}
