@@ -11,7 +11,8 @@
  * FakeFirmata is designed to work with JSSC (Java Simple Serial Connector),
  * but probably will work with any compatible Java serial port API.
  */
-package com.apw.fakefirm;                                     // 2018 February 10
+package com.apw.fakefirm;   // 2018 February 10
+import jssc.SerialPort;
 
 // import nojssc.SerialPort; // use this instead for working with TrackSim
 //                           // ..on a computer with no serial port.
@@ -19,6 +20,7 @@ package com.apw.fakefirm;                                     // 2018 February 1
 
 public class Arduino { // Adapted to Java from arduino.cs ... (FakeFirmata)
     // (subclass this to add input capability)
+	public static final boolean UseServos = false;
 
     public static final String CommPortNo = "COM3";
     public static final int MAX_DATA_BYTES = 16, // =64 in LattePanda's Arduino.cs
@@ -48,14 +50,14 @@ public class Arduino { // Adapted to Java from arduino.cs ... (FakeFirmata)
     protected static SimHookBase DoMore = null; // for extensions
 
     protected int[] digitalOutputData;
-    protected
-    SerialPort surrealPort;
+    protected PortObject surrealPort;
 
     public Arduino() { // outer class constructor..
-        surrealPort = new SerialPort(CommPortNo);
+    	surrealPort = (UseServos) ? new SerialPort(CommPortNo) : new SerialPortDump(CommPortNo);
         System.out.println("new Arduino " + CommPortNo + " " + (surrealPort != null));
         digitalOutputData = new int[MAX_DATA_BYTES];
         Open();
+        
     }
 
     /**

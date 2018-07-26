@@ -8,14 +8,14 @@ package com.apw.fakefirm;                                 // 2018 May 11
 /**
  * This class has the same name & API as JSSC but does nothing.
  */
-public class SerialPort {
+public class SerialPortDump implements PortObject{
     static final boolean logo = true; // enable logging..
 
-    public SerialPort() {
+    public SerialPortDump() {
         if (logo) System.out.println("noJSC/new SerialPort");
     }
 
-    public SerialPort(String myPortName) { // constructor..
+    public SerialPortDump(String myPortName) { // constructor..
         if (logo) System.out.println("noJSC/new SerialPort '"
                 + myPortName + "'");
     }
