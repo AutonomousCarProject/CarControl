@@ -108,6 +108,8 @@ void loop() {
         wheelDelay = 1500;
         steerDelay = 1500;
         nokill = true;
+        Serial.read();
+        Serial.read();
       }
     }
     //blink light in idle mode

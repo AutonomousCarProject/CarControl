@@ -170,6 +170,18 @@ public class Arduino { // Adapted to Java from arduino.cs ... (FakeFirmata)
             System.out.println(ex);
         }
     } //~servoWrite
+    public void Write(int messageType, int pin, int angle) {
+        byte[] msg = new byte[3];
+        msg[0] = (byte) (messageType); //Type of message. Likely unneeded
+        msg[1] = (byte) (pin); //pin
+        msg[2] = (byte) (angle); //angle
+        try {
+            surrealPort.writeBytes(msg);
+            if (DoMore != null) DoMore.SendBytes(msg, 3);
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+    } //~servoWrite
 
     /**
      * Opens the serial port connection, should it be required.
@@ -186,6 +198,7 @@ public class Arduino { // Adapted to Java from arduino.cs ... (FakeFirmata)
         } else try {
             GoodOpen = surrealPort.openPort();
             surrealPort.setParams(57600, 8, 1, 0);
+            this.Write(0xFF, 0, 0); //Send startup message
         } catch (Exception ex) {
             System.out.println(ex);
         }
