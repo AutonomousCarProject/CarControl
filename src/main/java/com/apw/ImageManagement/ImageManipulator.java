@@ -169,6 +169,29 @@ public class ImageManipulator {
         }
     }
 
+    public static void findRoad(byte[] bayer, int[] output, int nrows, int ncols){
+    	boolean road = true;
+    	for(int r = 0; r < ncols; r++){
+    		for(int c = nrows-1; c > 0; c--){
+				int R = ((((int)bayer[(c*ncols*2 + r)*2]) & 0xFF));				//Top left (red)
+				int G = ((((int)bayer[(c*ncols*2 + r)*2 +1])&0xFF)); 			//Top right (green)
+				int B = (((int)bayer[(c*ncols*2 + r)*2 + 1+2*ncols])&0xFF);			//Bottom right (blue)
+				int pix =R+G+B;
+				if(r > 640 || c < 240 || c > 455){
+					output[c*ncols+r] = 0;
+				} else if(pix>700){
+					road = !road;
+					output[c*ncols+r] = 0xFFFFFF;
+				}else if(road){
+					output[c*ncols + r] = 0x0000FF;
+				}else{
+					output[c*ncols + r] = 0x000000;
+				}
+			}
+			road = true;
+		}
+	}
+
 
 	public static void limitTo(int[] output, int[] input, int ncols, int nrows, int width, int height) {
 		for (int r = 0; r < height; r++) {

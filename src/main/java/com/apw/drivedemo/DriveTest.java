@@ -32,7 +32,7 @@ public class DriveTest extends JFrame implements KeyListener, MouseListener {
     //VARIABLES
 
     //Constants
-    public static final int FPS = 120;                               //Frames per second the window will run at unless defined, as well as the Frame Rate of TrakSim
+    public static final int FPS = 30;                               //Frames per second the window will run at unless defined, as well as the Frame Rate of TrakSim
 
     //Universal window variables
     public static ImageManager imageManager;                        //Object to get camera images and change them
@@ -69,14 +69,14 @@ public class DriveTest extends JFrame implements KeyListener, MouseListener {
         starter = new TrakManager();                                         //Creates a TrakManager object, which will run TrakSim at a constant Framerate
         init(new Timer(),starter.getImageManager());     //Initializes DriveTest
         displayTaskTimer.scheduleAtFixedRate(starter, new Date(), 1000 / FPS);    //Initializes TrakManager at FPS frames per second
-        autoDriveTest( new DriveTest(4),120);                                       //Format to create a new DriveTest window that updates automatically
+        autoDriveTest( new DriveTest(6)); //Format to create a new DriveTest window that updates automatically
     }
 
     /** Method that initializes DriveTest (Will run automatically if not ran manually)
      *
      * @param refreshTimer Object used to control window updates
      * @param imageMng Object to get camera images and change them
-     * @param steerSys Object to control the steering
+     *
      */
     public static void init(Timer refreshTimer, ImageManager imageMng) { //Assigns variables
         displayTaskTimer = refreshTimer;
@@ -214,6 +214,9 @@ public class DriveTest extends JFrame implements KeyListener, MouseListener {
             case 5:                                                                     //true grayscale
                 imagePixels = imageManager.getMonoRGB2Raster();
                 break;
+            case 6:
+                imagePixels = imageManager.getRoad();
+                break;
             default:
                 imagePixels = imageManager.getRGBRaster();
         }
@@ -284,19 +287,6 @@ public class DriveTest extends JFrame implements KeyListener, MouseListener {
 		System.arraycopy(pixels, 0, theData, 0, lxx);
 		return bufIm;
 	} // ~Int2BufImg
-    
-    public BufferedImage getRoadLines() {
-		BufferedImage roadLines = Int2BufImg(imageManager.getCameraRaw(), 640, 480);
-		Color fill = new Color (0, 0, 0);
-		for (int i = 0; i < 640; i++) {
-			for (int j = 0; j < 480; j++) {
-				if(j < 240 || j > 450) {
-					roadLines.setRGB(i, j, fill.getRGB());
-				}
-			}
-		}
-		return roadLines;
-	}
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -410,7 +400,7 @@ public class DriveTest extends JFrame implements KeyListener, MouseListener {
     	
     	File out = new File("./screenshot.png");
 		try {
-			ImageIO.write(getRoadLines(), "png", out);
+			ImageIO.write(imageManager.getRoadLines(), "png", out);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

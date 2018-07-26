@@ -7,6 +7,9 @@ import com.apw.apw3.DriverCons;
 import com.apw.fly2cam.FlyCamera;
 
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
 import java.lang.invoke.LambdaMetafactory;
 import java.util.Arrays;
 
@@ -195,7 +198,13 @@ public class ImageManager {
         ImageManipulator.convertMonotoRGB(mono, rgb, mono.length);
         return rgb;
     }
-    
+
+    public int[] getRoad(){
+        int road[] = new int[nrows*ncols];
+        ImageManipulator.findRoad(picker.getPixels(), road, nrows, ncols);
+        return road;
+    }
+
     public int[] getCameraRaw() {
         byte[] mono = new byte[nrows * ncols];
         int[] rgb = new int[nrows*ncols];
@@ -210,6 +219,47 @@ public class ImageManager {
     	ImageManipulator.limitTo(cameraInt , rgb, ncols, nrows, cameraWidth, cameraHeight);
 
         return cameraInt;
+    }
+
+    /**
+     * Converts a RGB pixel array to BufferedImage for painting. Adapted from
+     * example code found on StackExchange.
+     *
+     * @param pixels The pixel array
+     *
+     * @param width  Its width
+     *
+     * @param height Its height
+     *
+     * @return The BufferedImage result
+     */
+    public BufferedImage Int2BufImg(int[] pixels, int width, int height) // (in DrDemo)
+            throws IllegalArgumentException {
+        int lxx = 0;
+        int[] theData = null; // Raster raz = null; DataBufferInt DBI = nell;
+        BufferedImage bufIm = null;
+        if (pixels != null)
+            lxx = pixels.length;
+        if (lxx == 0)
+            return null;
+        if (bufIm == null) // (should be never)
+            bufIm = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        theData = ((DataBufferInt) bufIm.getRaster().getDataBuffer()).getData();
+        System.arraycopy(pixels, 0, theData, 0, lxx);
+        return bufIm;
+    } // ~Int2BufImg
+
+    public BufferedImage getRoadLines() {
+        BufferedImage roadLines = Int2BufImg(getCameraRaw(), 640, 480);
+        Color fill = new Color (0, 0, 0);
+        for (int i = 0; i < 640; i++) {
+            for (int j = 0; j < 480; j++) {
+                if(j < 240 || j > 450) {
+                    roadLines.setRGB(i, j, fill.getRGB());
+                }
+            }
+        }
+        return roadLines;
     }
 
 
