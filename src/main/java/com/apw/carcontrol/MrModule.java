@@ -1,11 +1,11 @@
 package com.apw.carcontrol;
 
-import com.apw.ImageManagement.ImageManipulator;
-
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -20,7 +20,7 @@ public class MrModule extends JFrame implements Runnable {
     private ImageIcon displayIcon;
 
     // FIXME breaks if dimensions are not 640x480
-    private final int width = 640;
+    private final int width = 912;
     private final int height = 480;
 
     private MrModule() {
@@ -60,8 +60,9 @@ public class MrModule extends JFrame implements Runnable {
         }
     }
 
-    @Override
     public void paint(Graphics g) {
+        super.paint(g);
+
         int[] renderedImage = trakSimControl.getRenderedImage();
 
         if(renderedImage != null) {
@@ -82,6 +83,7 @@ public class MrModule extends JFrame implements Runnable {
 
     @Override
     public void run() {
+        trakSimControl.cam.theSim.SimStep(1);
         update();
         this.repaint();
     }

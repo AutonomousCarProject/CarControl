@@ -35,7 +35,7 @@ public class SimCamera extends FlyCamera {
 
     private static final boolean NoisyFaker = DriverCons.D_Mini_Log;
 
-    private TrakSim theSim = null;
+    public TrakSim theSim = null;
 
     public SimCamera() {
         if (NoisyFaker) System.out.println(HandyOps.Dec2Log("apw3.SimCamera ", CamHi,

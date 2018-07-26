@@ -19,6 +19,7 @@ public class ImageManager {
     private int rgb[];
 
     public ImageManager(FlyCamera trakcam) {
+        picker = new ImagePicker(trakcam, 30);
         nrows = picker.getNrows();
         ncols = picker.getNcols();
         mono = new byte[nrows * ncols];

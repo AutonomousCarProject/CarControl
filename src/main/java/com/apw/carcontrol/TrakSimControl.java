@@ -6,7 +6,7 @@ import com.apw.apw3.SimCamera;
 import com.apw.fakefirm.Arduino;
 
 public class TrakSimControl implements CarControl {
-    private SimCamera cam;
+    protected SimCamera cam;
     private Arduino driveSys;
 
     private byte[] cameraImage = null;
