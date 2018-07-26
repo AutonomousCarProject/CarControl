@@ -33,7 +33,7 @@ void loop() {
   if (nokill){
     //read input from computer
     
-    if (Serial.peek() == 0 && sinceConnect >= 1000){
+    if (Serial.peek() <= 0 && sinceConnect >= 100){
       nokill = false;
     }
     
@@ -82,7 +82,7 @@ void loop() {
 
 
     
-    out[0] = 1;
+    out[0] = Serial.peek(); //Debug AND testing 
     out[1] = sinceConnect;
     out[2] = (char) 'L';
     
@@ -92,10 +92,10 @@ void loop() {
   } else {
     
     //send message to main program
-    if (sinceConnect < 900) {
+    if (sinceConnect < 90) {
       out[0] = 0xFF;
       Serial.write(out, 3); //send killed message
-      sinceConnect = 900;
+      sinceConnect = 90;
     }
 
     
@@ -103,7 +103,7 @@ void loop() {
     while (Serial.available() > 0){
       byte type = Serial.read();
       
-      if (type == 0xFF && sinceConnect > 900) {
+      if (type == 0xFF && sinceConnect > 90) {
         sinceConnect = 0; //Restart if a startup signal is recieved after a timeout
         wheelDelay = 1500;
         steerDelay = 1500;
