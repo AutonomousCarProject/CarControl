@@ -13,6 +13,7 @@
  */
 package com.apw.fakefirm;   // 2018 February 10
 import jssc.SerialPort;
+import jssc.SerialPortException;
 
 // import nojssc.SerialPort; // use this instead for working with TrackSim
 //                           // ..on a computer with no serial port.
@@ -51,6 +52,9 @@ public class Arduino { // Adapted to Java from arduino.cs ... (FakeFirmata)
 
     protected int[] digitalOutputData;
     protected PortObject surrealPort;
+    
+    private int readSpeed;
+    private int readAngle;
 
     public Arduino() { // outer class constructor..
     	surrealPort = (UseServos) ? new SerialPort(CommPortNo) : new SerialPortDump(CommPortNo);
@@ -58,6 +62,13 @@ public class Arduino { // Adapted to Java from arduino.cs ... (FakeFirmata)
         digitalOutputData = new int[MAX_DATA_BYTES];
         Open();
         
+    }
+    
+    public int getSpeed(){
+    	return readSpeed;
+    }
+    public int getAngle(){
+    	return readAngle;
     }
 
     /**
@@ -125,6 +136,21 @@ public class Arduino { // Adapted to Java from arduino.cs ... (FakeFirmata)
             System.out.println(ex);
         }
     } //~digitalWrite
+    
+    public void digitalRead(){
+    	try {
+			while (this.surrealPort.getInputBufferBytesCount() >= 3) {
+				byte[] msg = surrealPort.readBytes(3);
+				System.out.println((int) msg[0]);
+				System.out.print((int) msg[1]);
+				System.out.print((char) msg[2]);
+			}
+		} catch (SerialPortException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("Servo reading is creating a problem! last read: ");
+		}
+    }
 
     /**
      * [For] controlling [a] servo.

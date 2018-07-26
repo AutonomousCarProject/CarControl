@@ -24,6 +24,7 @@ import com.apw.fly2cam.FlyCamera;
 
 import com.apw.pedestrians.blobtrack.MovingBlob;
 
+import jssc.SerialPortException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -727,6 +728,10 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 	 */
 	@Override
 	public void paint(Graphics graf) { // (in DrDemo)
+		
+		theServos.digitalRead();
+		
+		
 		int nx, fno = CamFrame, DimSave = 0;
 		int[] SaveScrn = null;
 		Insets edges;
