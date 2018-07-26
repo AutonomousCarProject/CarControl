@@ -34,6 +34,7 @@ public class Steering {
 	Boolean found = false;
 	Boolean leftSideFound = false;
 	Boolean rightSideFound = false;
+	Boolean rightPref = false;
 	
 	private TrakSim theSim;
 	
@@ -170,10 +171,10 @@ public class Steering {
 		
 	}
 
-	public boolean checkMidpoints(Point[] points, byte pixels[], int rowLength){
+	public boolean checkMidpoints(Point[] points, int pixels[], int rowLength){
 		int invalidPoints = 0;
 		for(int i = 0; i < points.length; i++){
-			if(pixels[points[i].x+rowLength*points[i].y]!=4 && pixels[points[i].x+rowLength*points[i].y]!=5){
+			if(pixels[points[i].x+rowLength*points[i].y]!= 0xF63FFC){
 				invalidPoints++;
 			}
 		}
@@ -493,10 +494,11 @@ public class Steering {
 	}
 	public void run(ImageManager imageManager,Arduino driveSys, int SteerPin){
 		Point[] hi = this.findPoints(imageManager.getBWRGBRaster());
-		if(!this.checkMidpoints(hi,imageManager.getSimpleColorRaster(), imageManager.getNcols())){
-			hi = this.findPointsLeft(imageManager.getBWRGBRaster());
-			if(!this.checkMidpoints(hi,imageManager.getSimpleColorRaster(), imageManager.getNcols())){
+		if(!this.checkMidpoints(hi,imageManager.getRoad(), imageManager.getNcols())){
+			if(rightPref){
 				hi = this.findPointsRight(imageManager.getBWRGBRaster());
+			} else {
+				hi = this.findPointsLeft(imageManager.getBWRGBRaster());
 			}
 		}
 		this.averageMidpoints();
