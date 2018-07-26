@@ -4,7 +4,7 @@ int wheelSpeed, steeringDeg;
 int wheelDelay = 1500;
 int steerDelay = 1500;
 int normalDelay = 1000;
-byte[3] out = new byte[3];
+byte out[] = {0, 0, 0};
 //where 1ms is considered full left or full reverse, and 2ms is considered full forward or full right.
 
 void setup() {
@@ -68,6 +68,7 @@ void loop() {
     digitalWrite(10, LOW);
     
     delayMicroseconds(normalDelay); //normalize to ~2ms total
+    
     out[0] = 1;
     out[1] = 11;
     out[2] = (char) 'L';
