@@ -79,8 +79,8 @@ public class TrakManager extends TimerTask {
     }
     private void TestServos() { // exercise steering & ESC servos
         //Graphics graf = new BufferedImage(nCols, nRows, BufferedImage.TYPE_INT_RGB).getGraphics();
-        steerCode();
-        speedCode();
+        //steerCode();
+        //speedCode();
     } //~TestServos
 
 
@@ -149,9 +149,9 @@ public class TrakManager extends TimerTask {
      *
      */
     private void initializeControl(){
-        testSteering = new Steering();
-        speedControl = new SpeedController();
-        //AxLR8(false,10);
+        //testSteering = new Steering();
+        //speedControl = new SpeedController();
+        //AxLR8(false,20);
     } //~initializeControl
 
     /** Per frame code for controlling steering

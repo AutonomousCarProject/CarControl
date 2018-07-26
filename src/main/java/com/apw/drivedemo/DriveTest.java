@@ -69,7 +69,9 @@ public class DriveTest extends JFrame implements KeyListener, MouseListener {
         starter = new TrakManager();                                         //Creates a TrakManager object, which will run TrakSim at a constant Framerate
         init(new Timer(),starter.getImageManager());     //Initializes DriveTest
         displayTaskTimer.scheduleAtFixedRate(starter, new Date(), 1000 / FPS);    //Initializes TrakManager at FPS frames per second
-        autoDriveTest( new DriveTest(6)); //Format to create a new DriveTest window that updates automatically
+        new DriveTest(3).autoDriveTest(); //Format to create a new DriveTest window that updates automatically
+        new DriveTest(1).autoDriveTest(); //Format to create a new DriveTest window that updates automatically
+
     }
 
     /** Method that initializes DriveTest (Will run automatically if not ran manually)
@@ -95,23 +97,19 @@ public class DriveTest extends JFrame implements KeyListener, MouseListener {
 
     /** Makes the given DriveTest refresh its image automatically
      *
-     * @param dtest DriveTest to make so that it refreshes automatically
-     * @return same DriveTest given
      */
-    public static DriveTest autoDriveTest(DriveTest dtest){
-        displayTaskTimer.scheduleAtFixedRate(new TimerRepaint(dtest), new Date(), 1000 / FPS);  //Initializes TrakManager at FPS frames per second
-        return dtest;                                                                                  //Returns the given DriveTest
+    public void autoDriveTest(){
+        displayTaskTimer.scheduleAtFixedRate(new TimerRepaint(this), new Date(), 1000 / FPS);  //Initializes TrakManager at FPS frames per second
+        //return dtest;                                                                                  //Returns the given DriveTest
     }
 
     /** Makes the given DriveTest refresh its image automatically
      *
-     * @param dtest DriveTest to make so that it refreshes automatically
      * @param FPS How many times per second the window should refresh
-     * @return same DriveTest given
      */
-    public static DriveTest autoDriveTest(DriveTest dtest, int FPS){
-        displayTaskTimer.scheduleAtFixedRate(new TimerRepaint(dtest), new Date(), 1000 / FPS);  //Initializes TrakManager at the given frames per second
-        return dtest;                                                                                  //Returns the given DriveTest
+    public void autoDriveTest( int FPS){
+        displayTaskTimer.scheduleAtFixedRate(new TimerRepaint(this), new Date(), 1000 / FPS);  //Initializes TrakManager at the given frames per second
+        //return dtest;                                                                                  //Returns the given DriveTest
     }
 
     /** Creates a new DriveTest with an RGB view
@@ -240,7 +238,7 @@ public class DriveTest extends JFrame implements KeyListener, MouseListener {
      * @param graf the graphics to edit
      */
     private void testPaint(Graphics graf){
-        steerPaint(graf);       //Paints components related to steer control
+        //steerPaint(graf);       //Paints components related to steer control
 //        speedPaint(graf);       //Paints components related to speed control
     }
 
