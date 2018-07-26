@@ -535,7 +535,7 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 			why++; // why = 4
 			if (!CanDraw)
 				break;
-			why++; // why = 5
+			why++; // why = 5fly2cam
 			if (ServoMsgPos <= 0)
 				break; // position of warning in image file,
 			why++; // why = 6

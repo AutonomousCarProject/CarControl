@@ -5,14 +5,13 @@ import com.apw.apw3.MyMath;
 import com.apw.apw3.SimCamera;
 import com.apw.fakefirm.Arduino;
 
-import javax.swing.JFrame;
-
 public class TrakSimControl implements CarControl {
     private SimCamera cam;
     private Arduino driveSys;
 
     private byte[] cameraImage = null;
-    private byte[] processedImage;
+    private byte[] processedImage = null;
+    private int[] renderedImage = null;
 
     private int currentSteering = 0;
     private int currentVelocity = 0;
@@ -45,7 +44,7 @@ public class TrakSimControl implements CarControl {
             System.err.println("An error occurred in TrakSimControl while reading the camera image from SimCamera.");
         }
 
-        processedImage = null;
+//        processedImage = null;
         return cameraImage;
     }
 
@@ -56,15 +55,30 @@ public class TrakSimControl implements CarControl {
 
     @Override
     public byte[] getProcessedImage() {
-        if(processedImage == null) {
-            return cameraImage;
-        }
         return processedImage;
     }
 
     @Override
     public void setProcessedImage(byte[] image) {
         this.processedImage = image;
+    }
+
+    @Override
+    public void setRenderedImage(int[] renderedImage) {
+        this.renderedImage = renderedImage;
+    }
+
+    /**
+     * Gets the image to be rendered on the screen. Normally should not be used by any class except the renderer itself.
+     * @return The image to be rendered on the TrakSim window.
+     */
+    protected int[] getRenderedImage() {
+        return renderedImage;
+    }
+
+    @Override
+    public boolean willPaint() {
+        return true;
     }
 
 

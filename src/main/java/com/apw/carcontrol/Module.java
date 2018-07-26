@@ -1,7 +1,5 @@
 package com.apw.carcontrol;
 
-import java.awt.image.BufferedImage;
-
 public interface Module {
     /**
      * Initialize the driver constants with the ones needed for this module
@@ -19,5 +17,5 @@ public interface Module {
      * Draws on the screen based on info from the CarControl.
      * @param control The CarControl to source data from.
      */
-    void paint(CarControl control, BufferedImage image);
+    void paint(CarControl control);
 }

@@ -6,6 +6,7 @@ package com.apw.carcontrol;
 public interface CarControl {
     /**
      * Gets the current image, from either {@link com.apw.fly2cam.FlyCamera FlyCamera} or {@link com.apw.apw3.SimCamera SimCamera}.
+     * Also invalidates the current version of the processed/rendering images.
      * @return The image as a Bayer-8 encoded byte array.
      */
     byte[] readCameraImage();
@@ -17,16 +18,29 @@ public interface CarControl {
     byte[] getRecentCameraImage();
 
     /**
-     * Gets a processed image. Either this is equivalent to the original from {@link #readCameraImage()} readCameraImage} or will be processed and set through {@link #setProcessedImage(byte[]) setCameraImage}.
-     * @return The processed image in the form of a Bayer-8 byte array.
+     * Gets a processed image. This should be processed and set through {@link #setProcessedImage(byte[]) setCameraImage}. If not, an exception may be thrown.
+     * @return The processed image in the form of a simple color raster array.
      */
     byte[] getProcessedImage();
 
     /**
      * Sets the processed image.
-     * @param image The processed image in the form of a Bayer-8 byte array.
+     * @param image The processed image in the form of a simple color raster array.
      */
     void setProcessedImage(byte[] image);
+
+    /**
+     * Sets the image to be rendered on the screen.
+     * Note that this will do nothing if there is no screen/window to draw on ({@link #willPaint() willPaint} returns false).
+     * @param renderedImage The image to render on the screen as an RGB integer array.
+     */
+    void setRenderedImage(int[] renderedImage);
+
+    /**
+     * Checks if this car control will paint (if there is a screen/window to draw on).
+     * @return Whether or not the car control will paint.
+     */
+    boolean willPaint();
 
     /**
      * Closes open resources and exits.

@@ -66,7 +66,7 @@ public class ImageManagementModule implements Module {
     }
 
     /*Serves color raster encoded in 1D of values 0-5 with
-     * 0 = RED
+     * 0 = REDnew ImageIcon(displayImage)
      * 1 = GREEN
      * 2 = BLUE
      * 3 = WHITE
@@ -144,11 +144,11 @@ public class ImageManagementModule implements Module {
             default:
                 throw new IllegalStateException("No image management viewType: " + viewType);
         }
+
+        control.setRenderedImage(imagePixels);
     }
 
     @Override
-    public void paint(CarControl control, BufferedImage image) {
-        int[] displayPixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
-        System.arraycopy(imagePixels, 0, displayPixels, 0, displayPixels.length);
+    public void paint(CarControl control) {
     }
 }

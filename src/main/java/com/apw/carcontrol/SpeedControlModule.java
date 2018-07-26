@@ -9,7 +9,7 @@ public class SpeedControlModule implements Module {
     }
 
     @Override
-    public void paint(CarControl control, BufferedImage image) {
+    public void paint(CarControl control) {
 
     }
 }
