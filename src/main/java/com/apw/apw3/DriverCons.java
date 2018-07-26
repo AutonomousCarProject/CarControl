@@ -29,7 +29,7 @@ public class DriverCons { // TrakSim constant parameters
 
     public static final boolean // options & diagnostic switches..
             D_PrimaryViewOn = true,    // T: make the main window open up
-            D_LiveCam = true,       // F: omit connecting to FlyCamera
+            D_LiveCam = false,       // F: omit connecting to FlyCamera
             D_StartLive = false,    // T: start in live camera if possible
             D_FixedSpeed = false,    // ignore speed control, assume fMinSpeed
             D_StayInTrack = false,   // ignore steering control, stay centered in track
