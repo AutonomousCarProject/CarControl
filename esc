@@ -1,0 +1,55 @@
+[33me70f852[m[33m ([m[1;36mHEAD[m[33m)[m HEAD@{0}: commit: Get rid of deprecated stopsign wait code
+[33m2c3c668[m HEAD@{1}: commit: Reimplemented ageoff and a seen tag such that the car recognizes stopsigns with object perminance between mmissing frames and doesn't stop for the same stopsign twice
+[33mc1fcf90[m HEAD@{2}: reset: moving to origin/speed
+[33mfb0174e[m HEAD@{3}: checkout: moving from speed to fb0174e975efc9d93adbbc6c09c61c1a33503775
+[33mc864e37[m[33m ([m[1;32mspeed[m[33m)[m HEAD@{4}: reset: moving to origin/speed
+[33mc03765b[m HEAD@{5}: commit: Update
+[33m5367f50[m HEAD@{6}: pull: Merge made by the 'recursive' strategy.
+[33m9bc0692[m HEAD@{7}: commit: Frame rate:
+[33m8f4a54f[m HEAD@{8}: pull: Merge made by the 'recursive' strategy.
+[33m2e94ba5[m HEAD@{9}: commit: ASDF
+[33m746a076[m HEAD@{10}: commit: Fixed DriveTest simple color repaint
+[33mb7f324a[m HEAD@{11}: commit (merge): merge
+[33m81458f0[m HEAD@{12}: commit: Added color mode toggle
+[33m8635160[m HEAD@{13}: commit: Force push
+[33mea4a0fc[m HEAD@{14}: commit: Added third track file
+[33mea6cb17[m HEAD@{15}: pull: Fast-forward
+[33m24c91a3[m HEAD@{16}: checkout: moving from master to speed
+[33md2c3a68[m[33m ([m[1;32mmaster[m[33m)[m HEAD@{17}: reset: moving to origin/master
+[33md2c3a68[m[33m ([m[1;32mmaster[m[33m)[m HEAD@{18}: pull: Fast-forward
+[33m8c5b8b5[m HEAD@{19}: checkout: moving from speed to master
+[33m24c91a3[m HEAD@{20}: reset: moving to origin/speed
+[33m24c91a3[m HEAD@{21}: reset: moving to origin/speed
+[33m24c91a3[m HEAD@{22}: reset: moving to origin/speed
+[33maef6616[m HEAD@{23}: reset: moving to origin/speed
+[33maef6616[m HEAD@{24}: reset: moving to origin/speed
+[33m49a5420[m HEAD@{25}: commit: Adjusted blob filter constants and printed found stop sign with blob information
+[33mb749314[m HEAD@{26}: commit (merge): Merge conflicts
+[33mf4388c2[m HEAD@{27}: commit: Commented code, cleaned up code, and changed detection boundry overlay to track sim graphics
+[33m37b2e9d[m HEAD@{28}: pull: Merge made by the 'recursive' strategy.
+[33m2791e4a[m HEAD@{29}: commit (merge): Merge
+[33m8ea8533[m HEAD@{30}: commit: Changed framerate and fixed bug
+[33mc6d1ff7[m HEAD@{31}: reset: moving to origin/speed
+[33m3e7a051[m HEAD@{32}: pull: Merge made by the 'recursive' strategy.
+[33m2496a53[m HEAD@{33}: commit: Added back lost color code
+[33m63b8915[m HEAD@{34}: commit (merge): Merge -.-
+[33m935842f[m HEAD@{35}: commit: Default blobs off
+[33m0bbc383[m HEAD@{36}: pull: Merge made by the 'recursive' strategy.
+[33m88e11b0[m HEAD@{37}: commit: Did what I said last push, just saved
+[33m9be6623[m HEAD@{38}: commit: Tom's TrakSim fixes
+[33m5ee8b7c[m HEAD@{39}: commit (merge): Merge
+[33m0675b8d[m HEAD@{40}: commit: a
+[33m84f968f[m HEAD@{41}: reset: moving to origin/speed
+[33m84f968f[m HEAD@{42}: reset: moving to origin/speed
+[33m2047125[m HEAD@{43}: reset: moving to origin/speed
+[33mabd28bc[m HEAD@{44}: commit: I don't know
+[33mbf96c0c[m HEAD@{45}: commit: Force push to fix errors
+[33m6ab4fd4[m HEAD@{46}: commit (merge): Another day another mege
+[33m5d08835[m HEAD@{47}: commit: Who knows at this point
+[33m43330ea[m HEAD@{48}: commit: Working stoplight detecting and stopping
+[33mc766b53[m HEAD@{49}: commit (merge): Merge
+[33mc35f37b[m HEAD@{50}: commit: Constant changes
+[33mfe77c35[m HEAD@{51}: commit: Blobs displayed as the color detected
+[33m6a74890[m HEAD@{52}: pull: Fast-forward
+[33m4a3edde[m HEAD@{53}: pull: Merge made by the 'recursive' strategy.
+[33m72adb1f[m HEAD@{54}: commit: Car color and misc.
