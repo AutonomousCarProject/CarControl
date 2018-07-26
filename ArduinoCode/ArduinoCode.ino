@@ -114,10 +114,21 @@ void loop() {
     }
     //blink light in idle mode
     
-    digitalWrite(13, LOW); 
-    delay(500); //create pulse timing
-    digitalWrite(13, HIGH);
-    delay(100);
+
+    if (sinceConnect < 90){ //Force car to stop instantly if kill switch is flipped
+      digitalWrite(13, HIGH); 
+      digitalWrite(10, HIGH);
+      delayMicroseconds(1500); //timing for wheels
+      digitalWrite(10, LOW);
+      delayMicroseconds(2500); //normalizing timing
+      digitalWrite(13, LOW); //blink main light
+    } else {
+      digitalWrite(13, LOW); 
+      delay(500); //create idle pulse timing
+      digitalWrite(13, HIGH);
+      delay(100);
+    }
+    
   }
   delay(16); //add up total delay to .02 seconds (20ms), leading to 50hz.
 }
