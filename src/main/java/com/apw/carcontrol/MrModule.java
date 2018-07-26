@@ -48,7 +48,7 @@ public class MrModule extends JFrame implements Runnable {
     }
 
     private void createModules() {
-        modules.add(new ImageManagementModule(width, height));
+        modules.add(new ImageManagementModule(height, width));
         modules.add(new SpeedControlModule());
         modules.add(new SteeringModule());
     }
