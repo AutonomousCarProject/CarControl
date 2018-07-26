@@ -38,9 +38,9 @@ public class Constants {
 		
 		//Blob Filters
 		BLOB_MIN_HEIGHT = 4,			//Filtered minimum height of a blob in pixels
-		BLOB_MAX_HEIGHT = 50,			//Filtered maximum height of a blob in pixels
+		BLOB_MAX_HEIGHT = 20,			//Filtered maximum height of a blob in pixels
 		BLOB_MIN_WIDTH = 4,				//Filtered minimum width of a blob in pixels
-		BLOB_MAX_WIDTH = 50,			//Filtered maximum width of a blob in pixels
+		BLOB_MAX_WIDTH = 20,			//Filtered maximum width of a blob in pixels
 		BLOB_AGE = 1,					//Filtered age of a blob in frames
 		STOPLIGHT_MIN_Y = 0,			//Filtered position of a blob in pixels
 		STOPLIGHT_MAX_Y = 240,			//Filtered position of a blob in pixels

@@ -243,9 +243,9 @@ public class SpeedController {
 	// Checks a given blob for the properties of a stopsign (size, age, position, color)
 	public boolean detectStopSign(MovingBlob blob, List<MovingBlob> bloblist) {
 		if(blob.age > Constants.BLOB_AGE && 
-			blob.height > Constants.BLOB_MIN_HEIGHT && 
+			blob.height > (3) * Constants.BLOB_MIN_HEIGHT && 
 			blob.height < Constants.BLOB_MAX_HEIGHT && 
-			blob.width > Constants.BLOB_MIN_WIDTH && 
+			blob.width > (3) * Constants.BLOB_MIN_WIDTH && 
 			blob.width < Constants.BLOB_MAX_WIDTH && 
 			blob.x > Constants.STOPSIGN_MIN_X && 
 			blob.x < Constants.STOPSIGN_MAX_X && 
@@ -307,9 +307,9 @@ public class SpeedController {
 		else if (
 			blob.age > Constants.BLOB_AGE && 
 			blob.height > Constants.BLOB_MIN_HEIGHT && 
-			blob.height < Constants.BLOB_MAX_HEIGHT && 
+			blob.height < (1/2) * Constants.BLOB_MAX_HEIGHT && 
 			blob.width > Constants.BLOB_MIN_WIDTH && 
-			blob.width < Constants.BLOB_MAX_WIDTH && 
+			blob.width <  (1/2) * Constants.BLOB_MAX_WIDTH && 
 			blob.x > Constants.STOPLIGHT_MIN_X && 
 			blob.x < Constants.STOPLIGHT_MAX_X && 
 			blob.y > Constants.STOPLIGHT_MIN_Y && 
@@ -322,10 +322,10 @@ public class SpeedController {
 			for(MovingBlob b : bloblist){
 				if(b.color.getColor() == Color.BLACK){
 					if(detectBlobOverlappingBlob(b, blob)){
-						//Found a red light
-						System.out.println("Found a redlight: " + blob);
+						//Found a yellow light
+						System.out.println("Found a yellowlight: " + blob);
 						blob.seen = true;
-						lightColor = 1;
+						lightColor = 2;
 					}
 				}
 			}
@@ -348,10 +348,10 @@ public class SpeedController {
 			for(MovingBlob b : bloblist){
 				if(b.color.getColor() == Color.BLACK){
 					if(detectBlobOverlappingBlob(b, blob)){
-						//Found a red light
-						System.out.println("Found a redlight: " + blob);
+						//Found a green light
+						System.out.println("Found a greenlight: " + blob);
 						blob.seen = true;
-						lightColor = 1;
+						lightColor = 3;
 					}
 				}
 			}
@@ -371,7 +371,7 @@ public class SpeedController {
 				}
 			}
 		}
-		System.out.println("Overlaps: " + overlaps);
+		//System.out.println("Overlaps: " + overlaps);
 		if(outputLight) {
 			return lightColor;
 		}

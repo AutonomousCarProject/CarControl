@@ -831,17 +831,17 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 									if (b.age >= Constants.DISPLAY_AGE_MAX) {
 										color = 0x000000;
 									}
-									else if (b.age <= (4 * (Constants.DISPLAY_AGE_MAX - Constants.DISPLAY_AGE_MIN) / 5) + Constants.DISPLAY_AGE_MIN) {
-										color = 0xffffff;
+									else if (b.age >= (4 * (Constants.DISPLAY_AGE_MAX - Constants.DISPLAY_AGE_MIN) / 5) + Constants.DISPLAY_AGE_MIN) {
+										color = 0x333333;
 									}
-									else if (b.age <= (3 * (Constants.DISPLAY_AGE_MAX - Constants.DISPLAY_AGE_MIN) / 5) + Constants.DISPLAY_AGE_MIN) {
-										color = 0xffffff;
+									else if (b.age >= (3 * (Constants.DISPLAY_AGE_MAX - Constants.DISPLAY_AGE_MIN) / 5) + Constants.DISPLAY_AGE_MIN) {
+										color = 0x666666;
 									}
-									else if (b.age <= (2 * (Constants.DISPLAY_AGE_MAX - Constants.DISPLAY_AGE_MIN) / 5) + Constants.DISPLAY_AGE_MIN) {
-										color = 0xffffff;
+									else if (b.age >= (2 * (Constants.DISPLAY_AGE_MAX - Constants.DISPLAY_AGE_MIN) / 5) + Constants.DISPLAY_AGE_MIN) {
+										color = 0x999999;
 									}
-									else if (b.age <= ((Constants.DISPLAY_AGE_MAX - Constants.DISPLAY_AGE_MIN) / 5) + Constants.DISPLAY_AGE_MIN) {
-										color = 0xffffff;
+									else if (b.age >= ((Constants.DISPLAY_AGE_MAX - Constants.DISPLAY_AGE_MIN) / 5) + Constants.DISPLAY_AGE_MIN) {
+										color = 0xcccccc;
 									}
 									else if (b.age <= Constants.DISPLAY_AGE_MIN) {
 										color = 0xffffff;
