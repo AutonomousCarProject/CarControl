@@ -278,15 +278,15 @@ public class SpeedController {
 		boolean outputLight = false;
 		//Figure out the color of our blob
 		
-		if (blob.age > Constants.BLOB_AGE && 
-			blob.height > Constants.BLOB_MIN_HEIGHT && 
-			blob.height < Constants.BLOB_MAX_HEIGHT && 
-			blob.width > Constants.BLOB_MIN_WIDTH && 
-			blob.width < Constants.BLOB_MAX_WIDTH && 
-			blob.x > Constants.STOPLIGHT_MIN_X && 
-			blob.x < Constants.STOPLIGHT_MAX_X && 
-			blob.y > Constants.STOPLIGHT_MIN_Y && 
-			blob.y < Constants.STOPLIGHT_MAX_Y && 
+		if (blob.age >= Constants.BLOB_AGE && 
+			blob.height >= (1) + Constants.BLOB_MIN_HEIGHT && 
+			blob.height <= Constants.BLOB_MAX_HEIGHT && 
+			blob.width >= Constants.BLOB_MIN_WIDTH && 
+			blob.width <= Constants.BLOB_MAX_WIDTH && 
+			blob.x >= Constants.STOPLIGHT_MIN_X && 
+			blob.x <= Constants.STOPLIGHT_MAX_X && 
+			blob.y >= Constants.STOPLIGHT_MIN_Y && 
+			blob.y <= Constants.STOPLIGHT_MAX_Y && 
 			blob.color.getColor() == Color.RED && 
 			!blob.seen && 
 			((double) blob.height / (double) blob.width) < 1 + Constants.BLOB_RATIO_DIF && 

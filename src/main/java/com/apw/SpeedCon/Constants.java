@@ -52,7 +52,7 @@ public class Constants {
 		STOPSIGN_MAX_X = 640;			//Filtered position of a blob in pixels
 		
 		public static final double
-		BLOB_RATIO_DIF = 0.55,
+		BLOB_RATIO_DIF = 0.9,
 		DISPLAY_AGE_MAX = 5,
 		DISPLAY_AGE_MIN = 0;
 }
