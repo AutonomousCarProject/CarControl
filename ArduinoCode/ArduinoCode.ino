@@ -103,7 +103,7 @@ void loop() {
     while (Serial.available() > 0){
       byte type = Serial.read();
       
-      if (type == 0xFF && sinceConnect > 90) {
+      if (type != -1 && sinceConnect > 90) {
         sinceConnect = 0; //Restart if a startup signal is recieved after a timeout
         wheelDelay = 1500;
         steerDelay = 1500;
@@ -112,9 +112,8 @@ void loop() {
         Serial.read();
       }
     }
-    //blink light in idle mode
-    
 
+    
     if (sinceConnect < 90){ //Force car to stop instantly if kill switch is flipped
       digitalWrite(13, HIGH); 
       digitalWrite(10, HIGH);
