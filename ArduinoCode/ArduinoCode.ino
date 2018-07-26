@@ -5,6 +5,7 @@ int wheelDelay = 1500;
 int steerDelay = 1500;
 int normalDelay = 1000;
 int sinceConnect = 0;
+byte timeout = 40;
 byte out[] = {0, 0, 0};
 //where 1ms is considered full left or full reverse, and 2ms is considered full forward or full right.
 
@@ -33,7 +34,7 @@ void loop() {
   if (nokill){
     //read input from computer
     
-    if (Serial.peek() <= 0 && sinceConnect >= 100){
+    if (Serial.peek() <= 0 && sinceConnect > timeout){
       nokill = false;
     }
     
@@ -92,10 +93,10 @@ void loop() {
   } else {
     
     //send message to main program
-    if (sinceConnect < 90) {
+    if (sinceConnect < timeout) {
       out[0] = 0xFF;
       Serial.write(out, 3); //send killed message
-      sinceConnect = 90;
+      sinceConnect = timeout;
     }
 
     
@@ -103,7 +104,7 @@ void loop() {
     while (Serial.available() > 0){
       byte type = Serial.read();
       
-      if (type != -1 && sinceConnect > 90) {
+      if (type != -1 && sinceConnect > timeout) {
         sinceConnect = 0; //Restart if a startup signal is recieved after a timeout
         wheelDelay = 1500;
         steerDelay = 1500;
@@ -114,7 +115,7 @@ void loop() {
     }
 
     
-    if (sinceConnect < 90){ //Force car to stop instantly if kill switch is flipped
+    if (sinceConnect < timeout){ //Force car to stop instantly if kill switch is flipped
       digitalWrite(13, HIGH); 
       digitalWrite(10, HIGH);
       delayMicroseconds(1500); //timing for wheels
