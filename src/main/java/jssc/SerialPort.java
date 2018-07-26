@@ -169,7 +169,10 @@ public class SerialPort implements PortObject{
             } else throw new SerialPortException(portName, "openPort()", SerialPortException.TYPE_PORT_BUSY);
         }
         else if(portHandle == SerialNativeInterface.ERR_PORT_NOT_FOUND){
-            throw new SerialPortException(portName, "openPort()", SerialPortException.TYPE_PORT_NOT_FOUND);
+        	if (portName == "COM3"){
+            	portName = "COM5";
+            	this.openPort();
+            } else throw new SerialPortException(portName, "openPort()", SerialPortException.TYPE_PORT_NOT_FOUND);
         }
         else if(portHandle == SerialNativeInterface.ERR_PERMISSION_DENIED){
             throw new SerialPortException(portName, "openPort()", SerialPortException.TYPE_PERMISSION_DENIED);
