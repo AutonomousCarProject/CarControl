@@ -4,7 +4,7 @@ public class Settings {
 	public static boolean
 	//Initializing KeyBind Booleans To Default Debug Overlays
 	overlayOn = Constants.DEFAULT_OVERLAY,
-	blobsOn = Constants.DEFAULT_BLOBS,
+	blobverlayOn = Constants.DEFAULT_BLOBVERLAY,
 	writeBlobsToConsole = Constants.DEFAULT_BLOBS_CONSOLE,
 	writeSpeedToConsole = Constants.DEFAULT_SPEED_CONSOLE;
 	

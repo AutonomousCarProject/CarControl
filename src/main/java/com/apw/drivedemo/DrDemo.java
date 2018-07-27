@@ -829,7 +829,7 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 					}
 					
 					//Overlay detected blobs
-					if (Settings.blobsOn) {
+					if (Settings.blobverlayOn) {
 						for(MovingBlob b:this.speedControl.getBlobs()){
 							if ((((double) b.height / (double) b.width) < 1 + Constants.BLOB_RATIO_DIF && ((double) b.height / (double) b.width) > 1 - Constants.BLOB_RATIO_DIF)) {
 								int velocity = (int)(100*Math.sqrt(b.velocityX*b.velocityX + b.velocityY*b.velocityY));
@@ -1094,7 +1094,7 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 		if (e.getKeyCode() == KeyEvent.VK_I) 	//I simulates a detected greenlight
 			speedControl.readyToGo();
 		if (e.getKeyCode() == KeyEvent.VK_B) 	//B toggles blob rectangle overlays
-			Settings.blobsOn ^= true;
+			Settings.blobverlayOn ^= true;
 		if (e.getKeyCode() == KeyEvent.VK_V) 	//V toggles detection boundry overlays
 			Settings.overlayOn ^= true;
 		if (e.getKeyCode() == KeyEvent.VK_C) 	//C toggles writting detected blob information to console
