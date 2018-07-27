@@ -27,15 +27,15 @@ public class Constant {
      */
 
     //maximum time before unmatched MovingBlob is deleted
-    public static int MAX_TIME_OFF_SCREEN = 0;
+    public static int MAX_TIME_OFF_SCREEN = 5;
 
     //maximum distance in pixels between blobs that can be matched
-    public static int DISTANCE_LIMIT_X = 40;
-    public static int DISTANCE_LIMIT_Y = 20;
+    public static int DISTANCE_LIMIT_X = 50;
+    public static int DISTANCE_LIMIT_Y = 30;
 
     //maximum size difference in pixels between blobs that can be matched
-    public static int MAX_CHANGE_WIDTH = 29;
-    public static int MAX_CHANGE_HEIGHT = 34;
+    public static int MAX_CHANGE_WIDTH = 50;
+    public static int MAX_CHANGE_HEIGHT = 55;
 
     /*
      * BlobFilter
