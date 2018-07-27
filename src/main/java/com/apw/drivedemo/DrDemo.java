@@ -57,7 +57,7 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 	private SpeedController speedControl;
 	private ImageManager imageManager;
 
-	private DriveTest dtest = new DriveTest();
+	private DriveTest dtest = new DriveTest(3);
 
 	static {
 		DriveTest.init();
@@ -802,7 +802,11 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 					//Set speed based on max, min, arrow keys, degree offset, and signs
 					speedControl.onUpdate(this.GasPedal, (int)testSteering.getDegreeOffset(), this.manualSpeed, graf, dtest);
 					AxLR8(true, speedControl.getNextSpeed());
-
+					
+					if (Settings.writeSpeedToConsole) {
+						System.out.println("Speed: " + speedControl.getNextSpeed());
+					}
+					
 					if(Settings.overlayOn){
 						int color = 0xffa500;
 						this.theSim.DrawLine(color, Constants.STOPLIGHT_MIN_Y, Constants.STOPLIGHT_MIN_X, Constants.STOPLIGHT_MIN_Y, Constants.STOPLIGHT_MAX_X);
@@ -819,31 +823,55 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 					//Overlay detected blobs
 					if (Settings.blobsOn) {
 						for(MovingBlob b:this.speedControl.getBlobs()){
-							int velocity = (int)(100*Math.sqrt(b.velocityX*b.velocityX + b.velocityY*b.velocityY));
-							int color = 0x000000;
-							
-							if (b.color.getColor() == com.apw.pedestrians.image.Color.BLACK) {
-				                color = 0x000000;
-				            } else if (b.color.getColor() == com.apw.pedestrians.image.Color.GREY) {
-				            	color = 0xd3d3d3;
-				            } else if (b.color.getColor() == com.apw.pedestrians.image.Color.WHITE) {
-				            	color = 0xffffff;
-				            } else if (b.color.getColor() == com.apw.pedestrians.image.Color.RED) {
-				            	color = 0xff0000;
-				            } else if (b.color.getColor() == com.apw.pedestrians.image.Color.GREEN) {
-				            	color = 0x00ff00;
-				            } else if (b.color.getColor() == com.apw.pedestrians.image.Color.BLUE) {
-				            	color = 0x0000ff;
-				            }
-							
-							if (Settings.colorMode) {
-								color = (velocity << 16) + (velocity << 8) + velocity;	
+							if ((((double) b.height / (double) b.width) < 1 + Constants.BLOB_RATIO_DIF && ((double) b.height / (double) b.width) > 1 - Constants.BLOB_RATIO_DIF)) {
+								int velocity = (int)(100*Math.sqrt(b.velocityX*b.velocityX + b.velocityY*b.velocityY));
+								int color = 0x000000;
+								
+								if (Settings.colorMode == 0) {
+									if (b.age >= Constants.DISPLAY_AGE_MAX) {
+										color = 0x000000;
+									}
+									else if (b.age >= (4 * (Constants.DISPLAY_AGE_MAX - Constants.DISPLAY_AGE_MIN) / 5) + Constants.DISPLAY_AGE_MIN) {
+										color = 0x333333;
+									}
+									else if (b.age >= (3 * (Constants.DISPLAY_AGE_MAX - Constants.DISPLAY_AGE_MIN) / 5) + Constants.DISPLAY_AGE_MIN) {
+										color = 0x666666;
+									}
+									else if (b.age >= (2 * (Constants.DISPLAY_AGE_MAX - Constants.DISPLAY_AGE_MIN) / 5) + Constants.DISPLAY_AGE_MIN) {
+										color = 0x999999;
+									}
+									else if (b.age >= ((Constants.DISPLAY_AGE_MAX - Constants.DISPLAY_AGE_MIN) / 5) + Constants.DISPLAY_AGE_MIN) {
+										color = 0xcccccc;
+									}
+									else if (b.age <= Constants.DISPLAY_AGE_MIN) {
+										color = 0xffffff;
+									}
+								}
+								else if (Settings.colorMode == 1) {
+									if (b.color.getColor() == com.apw.pedestrians.image.Color.BLACK) {
+						                color = 0x000000;
+						            } else if (b.color.getColor() == com.apw.pedestrians.image.Color.GREY) {
+						            	color = 0xd3d3d3;
+						            } else if (b.color.getColor() == com.apw.pedestrians.image.Color.WHITE) {
+						            	color = 0xffffff;
+						            } else if (b.color.getColor() == com.apw.pedestrians.image.Color.RED) {
+						            	color = 0xff0000;
+						            } else if (b.color.getColor() == com.apw.pedestrians.image.Color.GREEN) {
+						            	color = 0x00ff00;
+						            } else if (b.color.getColor() == com.apw.pedestrians.image.Color.BLUE) {
+						            	color = 0x0000ff;
+						            }
+								}
+								else if (Settings.colorMode == 2) {
+									color = (velocity << 16) + (velocity << 8) + velocity;	
+								}
+								
+								this.theSim.DrawLine(color, b.y, b.x, b.y+b.height, b.x);
+								this.theSim.DrawLine(color, b.y, b.x, b.y, b.x+b.width);
+								this.theSim.DrawLine(color, b.y+b.height, b.x, b.y+b.height, b.x+b.width);
+								this.theSim.DrawLine(color, b.y, b.x+b.width, b.y+b.height, b.x+b.width);
 							}
 							
-							this.theSim.DrawLine(color, b.y, b.x, b.y+b.height, b.x);
-							this.theSim.DrawLine(color, b.y, b.x, b.y, b.x+b.width);
-							this.theSim.DrawLine(color, b.y+b.height, b.x, b.y+b.height, b.x+b.width);
-							this.theSim.DrawLine(color, b.y, b.x+b.width, b.y+b.height, b.x+b.width);
 						}
 					}
 					
@@ -1060,8 +1088,13 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 			Settings.overlayOn ^= true;
 		if (e.getKeyCode() == KeyEvent.VK_C) 	//C toggles writting detected blob information to console
 			Settings.writeBlobsToConsole ^= true;
-		if (e.getKeyCode() == KeyEvent.VK_M)	//M toggles color mode between velocity based and color based
-			Settings.colorMode ^= true;
+		if (e.getKeyCode() == KeyEvent.VK_S) 	//C toggles writting detected blob information to console
+			Settings.writeSpeedToConsole ^= true;
+		if (e.getKeyCode() == KeyEvent.VK_M)	//M toggles color mode between age based, velocity based, and color based
+			if (Settings.colorMode + 1 < Constants.NUM_COLOR_MODES)
+				Settings.colorMode++;
+			else
+				Settings.colorMode = 0;
 		if(e.getKeyCode() == KeyEvent.VK_F)		//F Calibrates camera for distance of objects
 			speedControl.getCalibrator().calibrateCamera();
 	}

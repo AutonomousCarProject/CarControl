@@ -11,15 +11,16 @@
  * FakeFirmata is designed to work with JSSC (Java Simple Serial Connector),
  * but probably will work with any compatible Java serial port API.
  */
-package com.apw.fakefirm;                                     // 2018 February 10
+package com.apw.fakefirm;   // 2018 February 10
+import jssc.SerialPort;
 
 // import nojssc.SerialPort; // use this instead for working with TrackSim
 //                           // ..on a computer with no serial port.
-
-import com.apw.noJSSC.SerialPort;
+//import com.apw.Interfacing.SerialPort;
 
 public class Arduino { // Adapted to Java from arduino.cs ... (FakeFirmata)
     // (subclass this to add input capability)
+	public static final boolean UseServos = false;
 
     public static final String CommPortNo = "COM3";
     public static final int MAX_DATA_BYTES = 16, // =64 in LattePanda's Arduino.cs
@@ -49,14 +50,14 @@ public class Arduino { // Adapted to Java from arduino.cs ... (FakeFirmata)
     protected static SimHookBase DoMore = null; // for extensions
 
     protected int[] digitalOutputData;
-    protected
-    SerialPort surrealPort;
+    protected PortObject surrealPort;
 
     public Arduino() { // outer class constructor..
-        surrealPort = new SerialPort(CommPortNo);
+    	surrealPort = (UseServos) ? new SerialPort(CommPortNo) : new SerialPortDump(CommPortNo);
         System.out.println("new Arduino " + CommPortNo + " " + (surrealPort != null));
         digitalOutputData = new int[MAX_DATA_BYTES];
         Open();
+        
     }
 
     /**
@@ -86,10 +87,10 @@ public class Arduino { // Adapted to Java from arduino.cs ... (FakeFirmata)
      */
     public void pinMode(int pin, byte mode) {
         byte[] msg = new byte[3];
-        if (SpeakEasy) System.out.println("F%%F/pinMode +" + pin + " = " + mode);
-        msg[0] = (byte) (SET_PIN_MODE);
-        msg[1] = (byte) (pin);
-        msg[2] = (byte) (mode);
+        //if (SpeakEasy) System.out.println("F%%F/pinMode +" + pin + " = " + mode);
+        msg[0] = (byte) 0xf;
+        msg[1] = (byte) pin;
+        msg[2] = (byte) mode;
         try {
             surrealPort.writeBytes(msg);
             if (DoMore != null) DoMore.SendBytes(msg, 3);
@@ -127,16 +128,15 @@ public class Arduino { // Adapted to Java from arduino.cs ... (FakeFirmata)
 
     /**
      * [For] controlling [a] servo.
+     * Maximum input of 1 byte numbers.
      *
-     * @param pin Servo output pin.
+     * @param pin Servo output pin. Port 9 for steering
      */
     public void servoWrite(int pin, int angle) {
         byte[] msg = new byte[3];
-//ABCDE
-//        if (SpeakEasy) System.out.println("F%%F/servoWrite +" + pin + " = " + angle);
-        msg[0] = (byte) (ANALOG_MESSAGE | (pin & 0x0F));
-        msg[1] = (byte) (angle & 0x7F);
-        msg[2] = (byte) (angle >> 7);
+        msg[0] = (byte) (ANALOG_MESSAGE); //Type of message. Likely unneeded
+        msg[1] = (byte) (pin); //pin
+        msg[2] = (byte) (angle); //angle
         try {
             surrealPort.writeBytes(msg);
             if (DoMore != null) DoMore.SendBytes(msg, 3);
