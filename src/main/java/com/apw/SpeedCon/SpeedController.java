@@ -9,6 +9,18 @@ import com.apw.ImageManagement.*;
 import com.apw.apw3.TrakSim;
 import com.apw.drivedemo.DriveTest;
 
+/**
+ * This class handles the speed of our car, given info from image and steering.
+ * 
+ * @author William Adriance
+ * @author Matthew Alexander
+ * @author Derek Schwartz
+ * @author Brett Zonick 
+ * 
+ * @see drivedemo/DrDemo.java
+ * @see SpeedCon/Constants.java
+ */
+
 public class SpeedController {
 
 	private double currentEstimatedSpeed;
@@ -31,6 +43,10 @@ public class SpeedController {
 
 	TrakSim trackSim = new TrakSim();
 
+	
+	/**
+	 * A basic constructor for our SpeedController.
+	 */
 	public SpeedController(){
 		this.pedDetect = new PedestrianDetector();
 		this.currentBlobs = new ArrayList<MovingBlob>();
