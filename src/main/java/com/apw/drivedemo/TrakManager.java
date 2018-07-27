@@ -74,8 +74,8 @@ public class TrakManager extends TimerTask {
     }
     @Override
     public void run() {
-        sim.SimStep(1);
-        TestServos(); // (replace this with your own code)
+        if(!DriverCons.D_LiveCam) sim.SimStep(1);
+        //TestServos(); // (replace this with your own code)
     }
     private void TestServos() { // exercise steering & ESC servos
         //Graphics graf = new BufferedImage(nCols, nRows, BufferedImage.TYPE_INT_RGB).getGraphics();
