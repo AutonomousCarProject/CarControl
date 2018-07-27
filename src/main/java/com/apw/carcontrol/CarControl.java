@@ -73,4 +73,7 @@ public interface CarControl {
     int getManualSpeed();
 
     Insets getEdges();
+
+    // this is a traksim method
+    void rectFill(int colo, int rx, int cx, int rz, int c);
 }

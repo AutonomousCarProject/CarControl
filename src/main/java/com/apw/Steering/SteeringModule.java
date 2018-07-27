@@ -4,258 +4,105 @@ import com.apw.apw3.DriverCons;
 import com.apw.apw3.TrakSim;
 import com.apw.carcontrol.CarControl;
 import com.apw.carcontrol.Module;
+import com.apw.fakefirm.Arduino;
 
 import java.awt.*;
 
 public class SteeringModule implements Module {
 
-    public int startingPoint = 0;
+    private int SteerPin;
+    private Arduino theServos; // The servo to write to
 
+    SteeringMk2 steering = new SteeringMk2(SteerPin, theServos);
 
-    //767 is white
-
-    public int heightOfArea = 32;
-    public int startingHeight = 272;
-
-    private int screenWidth = 912;
-    private int cameraWidth = 640;
-    private int screenHeight = DriverCons.D_ImHi;
-    public Point steerPoint = new Point(0, 0);
-
-    public Point[] leadingMidPoints = new Point[startingHeight + heightOfArea];
-    public Point[] leftPoints = new Point[heightOfArea];
-    public Point[] rightPoints = new Point[heightOfArea];
-
-    public Point[] midPoints = new Point[heightOfArea];
-    Point origin = new Point(cameraWidth/2, screenHeight);
-
-    Boolean found = false;
-    Boolean leftSideFound = false;
-    Boolean rightSideFound = false;
-
-    private double integral, derivative, previousError;
-    private double kP = 0.65;
-    private double kI = 1;
-    private double kD = 1;
-    private boolean usePID = false;
-
-    private double weight = 1;
-
-    private long averageLuminance = 0;
+    int sumOfAngles;
+    double locX, locY;
 
     public SteeringModule() {
-        for (int i = 0; i<heightOfArea; i++) {
-            leftPoints[i] = new Point(0, 0);
-            rightPoints[i] = new Point(0, 0);
-            midPoints[i] = new Point(0, 0);
-        }
-        for (int i = 0; i<leadingMidPoints.length; i++) {
-            leadingMidPoints[i] = new Point(0, 0);
-        }
-    }
-
-    public Point[] findPoints(int[] pixels) {
-        int roadMiddle = cameraWidth;
-        int leftSideTemp = 0;
-        int rightSideTemp = 0;
-        startingPoint = 0;
-        averageLuminance = 0;
-        Boolean first = true;
-        int count = 0;
-        //first before first, find average luminance
-        for (int i = cameraWidth * screenHeight - 1; i > startingHeight * cameraWidth; i--) {
-            averageLuminance = averageLuminance + pixels[i];
-            count++;
-        }
-        averageLuminance = (long) (averageLuminance/count * 1.5);
-        //System.out.println("average luminance " + averageLuminance);
-        count = 0;
-
-        //first, find where road starts on both sides
-        leftSideFound = false;
-        rightSideFound = false;
-        for (int i = screenHeight - 22; i>startingHeight + heightOfArea; i--) {
-            for (int j = roadMiddle/2; j>=0; j--) {
-                if (pixels[(screenWidth * (i)) + j] >= averageLuminance) {
-                    leftSideFound = true;
-                    break;
-                }
-            }
-            for (int j = roadMiddle/2; j<cameraWidth; j++) {
-                if (pixels[(screenWidth * (i)) + j] >= averageLuminance) {
-                    rightSideFound = true;
-                    break;
-                }
-            }
-
-            if (leftSideFound && rightSideFound) {
-                startingPoint = i;
-                leftSideFound = false;
-                rightSideFound = false;
-                break;
-            }
-
-            leftSideFound = false;
-            rightSideFound = false;
-        }
-
-        //Next, calculate the roadpoint
-
-        count = 0;
-
-        for (int i = startingPoint; i > startingHeight + heightOfArea; i--) {
-            for (int j = roadMiddle/2; j>=0; j--) {
-                if (pixels[screenWidth * i + j]  >= averageLuminance) {
-                    leftSideTemp = j;
-                    break;
-                }
-            }
-            for (int j = roadMiddle/2; j<cameraWidth; j++) {
-                if (pixels[screenWidth * i + j]  >= averageLuminance) {
-                    rightSideTemp = j;
-                    break;
-                }
-            }
-            leadingMidPoints[count].x = (int) ((double) roadMiddle / 2.0 * weight);
-            leadingMidPoints[count].y = i;
-            count++;
-            roadMiddle = leftSideTemp + rightSideTemp;
-        }
-        int tempCount = count;
-        count = 0;
-        for (int i = startingHeight + heightOfArea; i>startingHeight; i--) {
-            //center to left
-            found = false;
-            leftPoints[count].y = i;
-
-            for (int j = roadMiddle/2; j>=0; j--) {
-                if (pixels[screenWidth * i + j] >= averageLuminance) {
-                    leftPoints[count].x = j;
-                    found = true;
-                    break;
-                }
-
-            }
-            if (found == false) {
-                leftPoints[count].x = 0;
-            }
-
-
-            //center to right
-            found = false;
-            rightPoints[count].y = leftPoints[count].y;
-            for (int j = roadMiddle/2; j<cameraWidth; j++) {
-                if (pixels[screenWidth * i + j] >= averageLuminance) {
-                    rightPoints[count].x = j;
-                    found = true;
-                    break;
-                }
-
-            }
-            if (found == false) {
-                rightPoints[count].x = cameraWidth;
-            }
-
-            midPoints[count].x = roadMiddle/2;
-            midPoints[count].y = (leftPoints[count].y);
-            roadMiddle = (leftPoints[count].x + rightPoints[count].x);
-            count++;
-        }
-        return midPoints;
-
-    }
-
-    public double curveSteepness(double turnAngle) {
-        return Math.abs(turnAngle)/(45);
-    }
-
-    /*
-	find the average point from the midpoints array
-	 */
-    public void averageMidpoints() {
-        double tempY = 0;
-        double tempX = 0;
-        int tempCount = 0;
-
-        // Sum the x's and the y's
-        for (int i = 0; i<startingPoint - (startingHeight + heightOfArea); i++) {
-            Point point = new Point (leadingMidPoints[i].x, leadingMidPoints[i].y);
-            tempX += point.x;
-            tempY += point.y;
-            tempCount++;
-        }
-        if (tempCount == 0) {
-            for (int i = 0; i<midPoints.length; i++) {
-                Point point = new Point (midPoints[i].x, midPoints[i].y);
-                tempX += point.x;
-                tempY += point.y;
-                tempCount++;
-            }
-        }
-
-        steerPoint.x = (int)(tempX / tempCount);
-        steerPoint.y = (int)(tempY / tempCount);
-
-    }
-
-
-    public int getDegreeOffset() {
-        int xOffset = origin.x - steerPoint.x;
-        int yOffset = Math.abs(origin.y - steerPoint.y);
-
-        int tempDeg = (int)((Math.atan2(-xOffset, yOffset)) * (180 / Math.PI));
-
-
-        return (int) Math.round((Math.atan2(-(usePID?myPID():xOffset), yOffset)) * (180 / Math.PI));
-    }
-
-    public double myPID() {
-
-        int error = origin.x - steerPoint.x;
-
-        integral += error * DriverCons.D_FrameTime;
-        if (error == 0 || (Math.abs(error-previousError)==(Math.abs(error)+Math.abs(previousError)))) {
-            integral = 0;
-        }
-        if (Math.abs(integral) > 100) {
-            integral = 0;
-        }
-
-        derivative = (error - previousError)/DriverCons.D_FrameTime;
-        previousError = error;
-        return error*kP + integral*kI + derivative*kD;
 
     }
 
     @Override
     public void update(CarControl control) {
-        averageMidpoints();
-        double tempDeg = getDegreeOffset();
-        control.steer(false, (int)((tempDeg) + 90));
+        int tempDeg = steering.drive(control.getRGBImage());
+        steering.findPoints(control.getRGBImage());
+        double inRadiusAngle = .57 / 2 * (double) tempDeg;
+        double outRadiusAngle = .38 / 2 * (double) tempDeg;
+        if (tempDeg < 0) {
+            outRadiusAngle = .45 / 2 * tempDeg;
+            inRadiusAngle = 0.7 / 2 * (double) tempDeg;
+        }
+
+        double turnRadiusIn = 2.68 / Math.tan(Math.toRadians(tempDeg * .37)) + .5 * (1.976);
+        double turnRadiusOut = 2.68 / Math.tan(Math.toRadians(tempDeg * .37)) - .5 * (1.976);
+        double averageTurnRadius = (turnRadiusIn + turnRadiusOut) / 2;
+        double angleTurned = ((double) DriverCons.D_FrameTime / 1000.0) * DriverCons.D_fMinSpeed / averageTurnRadius * 2;
+
+        angleTurned = Math.toDegrees(angleTurned);
+        if (tempDeg == 0) angleTurned = 0;
+
+        sumOfAngles += (double) angleTurned;
+
+        locX = locX + (double) Math.cos(Math.toRadians(sumOfAngles)) * (double) DriverCons.D_FrameTime / 1000 * (double) DriverCons.D_fMinSpeed;
+        locY = locY + (double) Math.sin(Math.toRadians(sumOfAngles)) * (double) DriverCons.D_FrameTime / 1000 * (double) DriverCons.D_fMinSpeed;
+
+        makeTurnAdjustment();
     }
 
     @Override
     public void paint(CarControl control, Graphics g) {
-        Point[] hi = findPoints(control.getRGBImage());
-        int vEdit = (screenHeight-480)/2+10;
         g.setColor(Color.RED);
         //graf.fillRect(100, testSteering.startingPoint, 1, 1);
-        if (DriverCons.D_DrawCurrent) {
-            for (int i = 0; i<startingPoint - (startingHeight + heightOfArea); i++) {
-                g.fillRect(leadingMidPoints[i].x, leadingMidPoints[i].y +  + control.getEdges().top+vEdit, 5, 5);
+
+        if (DriverCons.D_DrawPredicted) {
+            int tempY = 0;
+            for (int idx = 0; idx < steering.midPoints.size(); idx++) {
+                if (idx >= steering.startTarget && idx <= steering.endTarget) {
+                    g.setColor(Color.red);
+                    tempY += steering.midPoints.get(idx).y;
+                    g.fillRect(steering.midPoints.get(idx).x, steering.midPoints.get(idx).y + control.getEdges().top, 5, 5);
+                } else {
+                    g.setColor(Color.BLUE);
+                }
+                // graf.fillRect(testSteering.midPoints.get(idx).x, testSteering.midPoints.get(idx).y + edges.top, 5, 5);
+            }
+            System.out.println(tempY / (1.0 * (steering.endTarget - steering.startTarget)));
+        }
+
+        if (DriverCons.D_DrawOnSides) {
+            for (Point point : steering.leftPoints) {
+                g.setColor(Color.YELLOW);
+                g.fillRect(point.x + control.getEdges().left, point.y + control.getEdges().top, 5, 5);
+            }
+            for (Point point : steering.rightPoints) {
+                g.fillRect(point.x + control.getEdges().left, point.y + control.getEdges().top, 5, 5);
             }
         }
 
-        for (int i = 0; i<hi.length; i++) {
+
+        // Draw steerPoint on screen
+        g.setColor(Color.CYAN);
+        g.fillRect(steering.steerPoint.x, steering.steerPoint.y, 7, 7);
+
+
+        //Draw predicted points and detected lines
+        for (Point point : steering.midPoints) {
             if (DriverCons.D_DrawPredicted) {
-                g.setColor(Color.BLUE);
-                g.fillRect(hi[i].x, hi[i].y + control.getEdges().top + vEdit, 5, 5);
-            }
-            if (DriverCons.D_DrawOnSides) {
-                g.setColor(Color.YELLOW);
-                g.fillRect(leftPoints[i].x + control.getEdges().left, leftPoints[i].y + control.getEdges().top+ vEdit, 5, 5);
-                g.fillRect(rightPoints[i].x + control.getEdges().left, rightPoints[i].y + control.getEdges().top + vEdit, 5, 5);
+                control.rectFill(255, point.y, point.x, point.y + 5, point.x + 5);
             }
         }
+        if (DriverCons.D_DrawOnSides) {
+            for (Point point : steering.leftPoints) {
+                int xL = point.x;
+                int yL = point.y;
+                control.rectFill(16776960, yL, xL, yL + 5, xL + 5);
+            }
+            for (Point point : steering.rightPoints) {
+                int xR = point.x;
+                int yR = point.y;
+                control.rectFill(16776960, yR, xR, yR + 5, xR + 5);
+            }
+        }
+
     }
 }

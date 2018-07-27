@@ -173,4 +173,6 @@ public class TrakSimControl implements CarControl {
     public Insets getEdges() {
         return new Insets(480, 0, 0, 912);
     }
+
+
 }
