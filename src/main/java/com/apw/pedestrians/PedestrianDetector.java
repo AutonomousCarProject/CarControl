@@ -37,7 +37,7 @@ public class PedestrianDetector {
             int col = i % width;
             image[row][col] = getPixel(colors[i]);
         }
-        
+
         List<Blob> knownBlobs = blobDetection.getBlobs(() -> image);
         return movingBlobDetection.getMovingBlobs(knownBlobs);
     }

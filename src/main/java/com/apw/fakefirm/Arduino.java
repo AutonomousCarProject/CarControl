@@ -12,6 +12,7 @@
  * but probably will work with any compatible Java serial port API.
  */
 package com.apw.fakefirm;   // 2018 February 10
+
 import jssc.SerialPort;
 import jssc.SerialPortException;
 
@@ -57,11 +58,11 @@ public class Arduino { // Adapted to Java from arduino.cs ... (FakeFirmata)
     private int readAngle;
 
     public Arduino() { // outer class constructor..
-    	surrealPort = (UseServos) ? new SerialPort(CommPortNo) : new SerialPortDump(CommPortNo);
+        surrealPort = (UseServos) ? new SerialPort(CommPortNo) : new SerialPortDump(CommPortNo);
         System.out.println("new Arduino " + CommPortNo + " " + (surrealPort != null));
         digitalOutputData = new int[MAX_DATA_BYTES];
         Open();
-        
+
     }
     
     public int getSpeed(){

@@ -28,8 +28,6 @@ import java.io.FileInputStream;
  */
 public class TrakSim {
 
-     public boolean wasted = false;
-
     // fGratio cnvrts ESC steps to nominal velocity; fMinSpeed=4.0,MinESC=10
     // ..adjust multiplier so it's correct for your car: *1.0 => fGratio=0.4
     private static final double fMinSpeed = DriverCons.D_fMinSpeed,
@@ -66,9 +64,6 @@ public class TrakSim {
             ParkDims = MapTall * 0x10000 + MapWide, CheckerBd = DriverCons.D_CheckerBd,
             ServoStepRate = 0, // = FrameTime/20, // Vscale = DriverCons.D_Vscale,
             TweakRx = DriverCons.D_TweakRx, Crummy = DriverCons.D_Crummy;
-
-    public static final int WinWi = (ShowMap ? MapWide + 16 : 0) + ImWi, // window width
-            Lin2 = WinWi * 2, nPixels = ImHi * WinWi; // + pix in whole window
     private static final double TurnRadius = DriverCons.D_TurnRadius,
             LfDeScaleSt = 90.0 / ((double) DriverCons.D_LeftSteer),
             RtDeScaleSt = 90.0 / ((double) DriverCons.D_RiteSteer),
@@ -80,6 +75,9 @@ public class TrakSim {
             fMaxSpeed = fGratio * ((double) MaxESCact),
             MaxRspeed = (Reversible ? -0.5 * fMaxSpeed : 0.0),
             fTime4mass = fMinESC * fFtime / Acceleration;
+    public static final int WinWi = (ShowMap ? MapWide + 16 : 0) + ImWi, // window width
+            Lin2 = WinWi * 2, nPixels = ImHi * WinWi; // + pix in whole window
+
     private static final String[] CompNames = {" N  ", " NNE ", " NE ", " ENE ",
             " E  ", " ESE ", " SE ", " SSE ", " S  ", " SSW ", " SW ", " WSW ",
             " W  ", " WNW ", " NW ", " NNW "};
@@ -195,6 +193,7 @@ public class TrakSim {
             0x4, 0xE, 0x1F, 0x3E, 0x7C, 0xF8, 0xF0, 0x60, 0x20, 0,     // 9 @73/25
             0x1, 0x3, 0x7, 0xF, 0x1F, 0x1E, 0xC, 0x4, 0,             // 10 @83/28
             1, 3, 3, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // lsb: scrn botm  // 11 @92/33;  [12 @97/38]
+    public boolean wasted = false;
     private int Left_X, Rite_X, PreViewLoc, PreViewAim;
     private SimHookBase SerialCalls = null;
 
@@ -2462,7 +2461,7 @@ public class TrakSim {
      * array given to NewGridTbl.
      */
     public void DrawGrid() { // to show where to click..
-        if(true)
+        if (true)
             return;
         //*
         // private final int[] Grid_Locns = {6,12,16,18,26,28,  0,16,80,126,228,240,
@@ -2661,7 +2660,7 @@ public class TrakSim {
             NextFrUpdate = 0;
         } //~if // in mode=2 this is when to update image
         if (prio == 3) {
-       		wasted = true;
+            wasted = true;
         }
 //ABCDE
 //        System.out.println(HandyOps.Dec2Log(" (SimStep) o", mode,
@@ -2880,7 +2879,7 @@ public class TrakSim {
             TmpI = (whar << 16) + whar;
             break;
         } //~for                // GoodLog = true, logy = Fax_Log = T..
-        if (GoodLog) if (logy);/* System.out.println(HandyOps.Dec2Log("(Anim8) ", anim,
+        if (GoodLog) if (logy) ;/* System.out.println(HandyOps.Dec2Log("(Anim8) ", anim,
                 HandyOps.Int2Log(HandyOps.IffyStr(uppy, " =^= ", " =#= "), locn,
                         HandyOps.Dec2Log(" ", whar, HandyOps.Dec2Log(" = ", why,  // why =
                                 HandyOps.Dec2Log(" #", FrameNo, HandyOps.IffyStr(anim == 0, "",
@@ -3092,7 +3091,7 @@ public class TrakSim {
                     } //~if // (whar>0)
                     zx = 0;
 
-                    if(DoCloseUp) if (RoWiM == 0.0) {
+                    if (DoCloseUp) if (RoWiM == 0.0) {
 
                         zx = (rx - ImHaf) << 2; // ImHaf = ImHi/2
                         if (pint < 8) zx++; // car facing N/S (use H)
@@ -3106,8 +3105,10 @@ public class TrakSim {
                         } else if (pint < 352) zx = 0;
                         else zx++;
                     } //~if // (RoWiM=0) // (RM[] in grid=2m)..
-                    if (zx > 0) RoWiM = fImMid / MyMath.fAbs(RasterMap[(zx + 2) & RmapMsk]
-                            - RasterMap[zx & RmapMsk]);
+                    if (RasterMap != null) if (zx > 0) if (zx < RasterMap.length - 3) {
+                        RoWiM = MyMath.fAbs(RasterMap[zx + 2] - RasterMap[zx]);
+                        if (RoWiM != 0.0) RoWiM = fImMid / RoWiM;
+                    }
                     if (Mini_Log) if (logy)
                         System.out.println(HandyOps.Dec2Log("   (``) ", oops,
                                 HandyOps.Flt2Log(" (", fImMid, HandyOps.Flt2Log("/", VuEdge,
@@ -4987,8 +4988,8 @@ public class TrakSim {
     public void GotBytes(byte[] msg, int lxx) {
         if (msg == null) return;
         //if (msg[0] != Arduino.ANALOG_MESSAGE) return;
-        if (msg.length >= 3) 
-        	SetServo((int) msg[1], (int) msg[2]);
+        if (msg.length >= 3)
+            SetServo((int) msg[1], (int) msg[2]);
     } //~GotBytes
 
     private int Color4ix(int whom) { // only frm InitInd
