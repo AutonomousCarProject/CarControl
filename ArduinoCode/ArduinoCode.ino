@@ -20,7 +20,7 @@ void setup() {
   pinMode(11, INPUT); //speed getter
   
   //pinMode(2, INPUT); //Dead man's switch
-  attachInterrupt(digitalPinToInterrupt(2), killReader, CHANGE);
+  attachInterrupt(2, killReader, CHANGE);
   
   pinMode(13, OUTPUT); //testing light
   digitalWrite(13, HIGH);
@@ -152,7 +152,7 @@ void loop() {
       digitalWrite(13, HIGH);
       delay(100);*/
 
-      if (digitalread(2) == HIGH) {
+      if (digitalRead(2) == HIGH) {
         digitalWrite(13, HIGH);
       } else {
         digitalWrite(13, LOW);
