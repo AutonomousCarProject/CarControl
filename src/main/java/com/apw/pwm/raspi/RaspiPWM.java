@@ -6,7 +6,7 @@ import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.gpio.GpioPinPwmOutput;
 import com.pi4j.io.gpio.RaspiPin;
 import com.pi4j.wiringpi.Gpio;
-import java.util.HashSet;
+import java.util.HashMap;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -24,7 +24,7 @@ public class RaspiPWM implements PWMController {
           (MAX_PULSE_WIDTH * PWM_FREQUENCY) * (BCLCK / CLOCK_DIVIDER / PWM_FREQUENCY)));
   private final GpioController gpioController = GpioFactory.getInstance();
   private int provisionedHardwarePins = 0;
-  private HashSet<Integer> provisionedPins = new HashSet<>(2);
+  private HashMap<Integer, GpioPinPwmOutput> provisionedPins = new HashMap<>(2);
 
   // TODO potentially implement software PWM generation
   private boolean softwarePWMGenerationEnabled = false;
@@ -59,11 +59,11 @@ public class RaspiPWM implements PWMController {
    */
   private @NotNull GpioPinPwmOutput provisionPinPrivate(int pin) {
     GpioPinPwmOutput provisionedPin;
-    if (!provisionedPins.contains(pin)) {
+    if (!provisionedPins.containsKey(pin)) {
       // TODO Check if the board actually supports PWM on 23, 24, 26
       // TODO Pin pairing safety
       if (provisionedHardwarePins < 2 && (pin == 1 || pin == 23 || pin == 24 || pin == 26)) {
-//        provisionedHardwarePins++;
+        provisionedHardwarePins++;
         provisionedPin = gpioController.provisionPwmOutputPin(RaspiPin.getPinByAddress(pin));
       } else {
         if (softwarePWMGenerationEnabled) {
@@ -73,10 +73,11 @@ public class RaspiPWM implements PWMController {
               + "required for more than 2 PWM signals.");
         }
       }
-      provisionedPins.add(pin);
+      configureController();
+      provisionedPins.put(pin, provisionedPin);
       return provisionedPin;
     } else {
-      return (GpioPinPwmOutput) gpioController.getProvisionedPin(RaspiPin.getPinByAddress(pin));
+      return provisionedPins.get(pin);
     }
   }
 
@@ -84,9 +85,8 @@ public class RaspiPWM implements PWMController {
 
   @Override
   public void setOutputPulseWidth(int pin, double ms) {
-    provisionPinPrivate(pin);
-    configureController();
-    provisionPinPrivate(pin)
+    GpioPinPwmOutput realPin = provisionPinPrivate(pin);
+    realPin
         .setPwm(Math.toIntExact(Math.round((ms / 1000) / MAX_PULSE_WIDTH * PWM_ACTIONABLE_RANGE)));
   }
 
