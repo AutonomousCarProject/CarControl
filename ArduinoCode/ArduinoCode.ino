@@ -5,6 +5,7 @@ int wheelDelay = 1500;
 int steerDelay = 1500;
 int normalDelay = 1000;
 int sinceConnect = 0;
+int sinceNokill = 0;
 byte timeout = 40;
 byte out[] = {0, 0, 0};
 //where 1ms is considered full left or full reverse, and 2ms is considered full forward or full right.
@@ -15,7 +16,9 @@ void setup() {
   pinMode(9, OUTPUT); //steering
   pinMode(10, OUTPUT); //speed
   pinMode(11, INPUT); //speed getter
-  pinMode(2, INPUT); //Dead man's switch
+  
+  pinMode(2, INPUT_PULLUP); //Dead man's switch
+  attachInterrupt(digitalPinToInterrupt(2), killtReader(), RISING);
   
   pinMode(13, OUTPUT); //testing light
   digitalWrite(13, HIGH);
@@ -23,7 +26,12 @@ void setup() {
   Serial.begin(57600);
   Serial.setTimeout(1000); //Default value. available for change
   
-  
+}
+
+//A function run when a pin interrupts.
+void fastReader(){
+  msg[0] = 0xFF; //send test info
+  sinceNokill = 0;
 }
 
 void loop() {
@@ -39,6 +47,7 @@ void loop() {
     }
     
     sinceConnect++;
+    sinceNokill++;
     
     while (Serial.available() > 0){
       digitalWrite(13, LOW);
@@ -46,7 +55,7 @@ void loop() {
       byte pin = Serial.read();
       byte value = Serial.read();
       sinceConnect = 0;
-
+      
       if (pin == 9){
         if (value != steeringDeg){
           //steerDelay = 1.0+((double) value)/180;
@@ -66,7 +75,8 @@ void loop() {
 
       //sensor in: 5V to 0
     }
-    
+
+    noInterrupts(); //disable interrupts to assure timing
     //Steering
     digitalWrite(9, HIGH); 
     delayMicroseconds(steerDelay); //create pulse timing
@@ -76,29 +86,30 @@ void loop() {
     digitalWrite(10, HIGH);
     delayMicroseconds(wheelDelay);
     digitalWrite(10, LOW);
+    interrupts();
     
     delayMicroseconds(normalDelay); //normalize to ~2ms total
     
     digitalWrite(13, HIGH); //restart signal light
 
-
     
-    out[0] = Serial.peek(); //Debug AND testing 
-    out[1] = sinceConnect;
-    out[2] = (char) 'L';
+    out[1] = sinceNokill;
+    out[2] = (char) 'U';
     
     if (sizeof(out) >= 3){
       Serial.write(out, 3);
     }
+
+
+
   } else {
     
-    //send message to main program
+    //send message to main program once
     if (sinceConnect < timeout) {
       out[0] = 0xFF;
       Serial.write(out, 3); //send killed message
       sinceConnect = timeout;
     }
-
     
     //discard info from computer while dead.
     while (Serial.available() > 0){
@@ -113,7 +124,6 @@ void loop() {
         Serial.read();
       }
     }
-
     
     if (sinceConnect < timeout){ //Force car to stop instantly if kill switch is flipped
       digitalWrite(13, HIGH); 
