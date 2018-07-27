@@ -1,24 +1,46 @@
+/**
+ * This class contains functions to apply filters and convert images
+ * between bayer8 and rgb formats. Functions in this class are only
+ * accessed by ImageManager in the NWAPW Autonomous Car Project
+ *
+ * @author Vikram K
+ * @author Joshua B
+ * @author Riley J
+ * @author Nathan P
+ *
+ * @see com.apw.ImageManagement.ImageManager
+ */
+
 package com.apw.ImageManagement;
 
 public class ImageManipulator {
 
+	/** Converts a bayer8 image to a monochrome image, uses the green value of the bayer8
+	 *
+	 * @param bayer bayer8 image
+	 * @param mono	monochrome output
+	 * @param nrows	number of rows of pixels in the image
+	 * @param ncols number og columns of pixels in the image
+	 * @param tile tiling pattern of the bayer8 image
+	 */
     public static void convertToMonochromeRaster(byte[] bayer, byte[] mono, int nrows, int ncols, byte tile) {
 
         for (int r = 0; r < nrows; r++) {
             for (int c = 0; c < ncols; c++) {
-
-				/*
-				//Averaging all colors
-				int total = bayer[r*ncols*2 + c*2] 		//Top left (
-						+ bayer[r*ncols*2 + c*2+1] 		//Top right
-						+ bayer[(r+1)*ncols*2 + c*2]*2;	//Bottom left
-				mono[r*ncols + c] = (byte) (total >> 2);
-				*/
                 mono[r * ncols + c] = (byte) ((((int) bayer[(r * ncols * 2 + c) * 2 + 1]) & 0xFF));            //Use only top right
             }
         }
     }
 
+
+	/** Converts a bayer8 image to a monochrome image, uses the the average rgb value of the bayer8
+	 *
+	 * @param bayer bayer8 image
+	 * @param mono	monochrome output
+	 * @param nrows	number of rows of pixels in the image
+	 * @param ncols number og columns of pixels in the image
+	 * @param tile tiling pattern of the bayer8 image
+	 */
 	public static void convertToMonochrome2Raster(byte[] bayer, byte[] mono, int nrows, int ncols, byte tile) {
 
 		for (int r = 0; r < nrows; r++) {
@@ -35,8 +57,9 @@ public class ImageManipulator {
 				int G = (bayer[getPos(c,r,combineTile((byte)1,tile),ncols,nrows,true)]&0xFF);
 				int B = (bayer[getPos(c,r,combineTile((byte)3,tile),ncols,nrows,true)]&0xFF);
 				//double Y = R *  .299000 + G *  .587000 + B *  .114000;
+
 				double Y = (R+G+B)/3;
-				mono[r * ncols + c] = (byte) Y;            //Use only top right (green)
+				mono[r * ncols + c] = (byte) Y;
 			}
 		}
 	}
@@ -51,36 +74,43 @@ public class ImageManipulator {
 				int G = (bayer[getPos(c,r,combineTile((byte)1,tile),ncols,nrows,true)]&0xFF);
 				int B = (bayer[getPos(c,r,combineTile((byte)3,tile),ncols,nrows,true)]&0xFF);
 				averageLuminance += R+G+B/3;
+
 			}
 			averageLuminance /= ncols;
 
             for (int c = 0; c < ncols; c++) {
 
-				/*
-				//Averaging all colors
-				int total = bayer[r*ncols*2 + c*2] 		//Top left (
-						+ bayer[r*ncols*2 + c*2+1] 		//Top right
-						+ bayer[(r+1)*ncols*2 + c*2]*2;	//Bottom left
-				mono[r*ncols + c] = (byte) (total >> 2);
-				*/
-
-
 				int R = (bayer[getPos(c,r,combineTile((byte)0,tile),ncols,nrows,true)]&0xFF);
 				int G = (bayer[getPos(c,r,combineTile((byte)1,tile),ncols,nrows,true)]&0xFF);
 				int B = (bayer[getPos(c,r,combineTile((byte)3,tile),ncols,nrows,true)]&0xFF);
+
 				int pix =(R+G+B)/3;
-				if(pix > averageLuminance){
-					mono[r*ncols + c] = 1;
-				}else{
-					mono[r*ncols + c] = 0;
+				if(!(c >= 640 || r < 240 || r > 455)) {
+					if (pix >  1.8*averageLuminance) {
+						mono[r * ncols + c] = 1;
+					} else {
+						mono[r * ncols + c] = 0;
+
+					}
+				} else {
+					mono[r * ncols + c] = 0;
 				}
 			}
 		}
 	}
-	
+
+
+	/** Converts a bayer8 image to a simple color image, the simple colors are red, green, blue, yellow, white, grey and black
+	 *
+	 * @param bayer bayer8 image
+	 * @param simple simple color output
+	 * @param nrows	number of rows of pixels in the image
+	 * @param ncols number og columns of pixels in the image
+	 * @param tile tiling pattern of the bayer8 image
+	 */
 	public static void convertToSimpleColorRaster(byte[] bayer, byte[] simple, int nrows, int ncols, byte tile) {
 		/*
-			*Built for RG/GB Bayer Configuration
+			*
 			*Serves color raster encoded in 1D of values 0-5 with
 	 		* 0 = RED
 	 		* 1 = GREEN
@@ -125,7 +155,15 @@ public class ImageManipulator {
 			}
 		}
 	}
-	
+
+	/** Converts a bayer8 image to a rgb image
+	 *
+	 * @param bayer bayer8 image
+	 * @param rgb	rgb output
+	 * @param nrows	number of rows of pixels in the image
+	 * @param ncols number og columns of pixels in the image
+	 * @param tile tiling pattern of the bayer8 image
+	 */
 	public static void convertToRGBRaster(byte[] bayer, int[] rgb, int nrows, int ncols, byte tile) {
 		for (int r = 0; r < nrows; r++) {
 			for (int c = 0; c < ncols; c++) {
@@ -139,6 +177,12 @@ public class ImageManipulator {
 		}
 	}
 
+	/** Converts the simpleColor byte array to an rgb int array
+	 *
+	 * @param simpleByte simple color byte array(input)
+	 * @param simpleRGB simple color int array(output)
+	 * @param length length of the array
+	 */
 	public static void convertSimpleToRGB(byte[] simpleByte, int[]simpleRGB, int length){
 		for(int i = 0; i < length; i++){
 			switch(simpleByte[i]){
@@ -167,6 +211,12 @@ public class ImageManipulator {
 		}
 	}
 
+	/** Converts the black and white byte array to an rgb int array
+	 *
+	 * @param simpleByte black and white byte array(input)
+	 * @param mono black and white int array(output)
+	 * @param length length of the array
+	 */
     public static void convertBWToRGB(byte[] simpleByte, int[] mono, int length) {
         for (int i = 0; i < length; i++) {
             switch (simpleByte[i]) {
@@ -179,6 +229,13 @@ public class ImageManipulator {
             }
         }
     }
+
+	/**Converts the monochrome byte array to a int array
+	 *
+	 * @param mono monochrome byte array (input)
+	 * @param rgb monochrome int array (output)
+	 * @param length length of the array
+	 */
 
     public static void convertMonotoRGB(byte[] mono, int[] rgb, int length) {
         for (int i = 0; i < length; i++) {
