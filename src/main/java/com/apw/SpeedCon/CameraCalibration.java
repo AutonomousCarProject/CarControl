@@ -14,31 +14,28 @@ import java.util.List;
 public class CameraCalibration {
 
 	/**
-	 * Camera Calibration is used to find the focal length and then distance of an object.
-	 * To use, you need to create a square the size of testBlobWidthHeight at the distance testBlobDistance, then begine calibration which takes a picure
-	 * and measures the the square thus filling needed variables. After calibration, you can find the distance of an object
-	 * if you know its real world size along with picture information.
+	 * Camera Calibration is used to find the focal length and subsequently the distance of an object.
+	 * In order to use it, you need to create a square the size of testBlobWidthHeight at the distance testBlobDistance,
+	 * then begin calibration, taking a picture, measuring the square, and thus filling the requisite variables.
+	 * After calibration you can find the distance to an object if you know its absolute size along with image information.
 	 * 
-	 * -----
-	 * How to calibrate camera to find object distance
+	 * <p>How to calibrate the camera to find an object's distance:
+	 * 1) Draw a blue square with the size of testBlobWidth. testBlobWidth is a constant defined in CameraCalibration.
+	 * 2) Move the square to the distance from the camera specified by testBlobDistance. testBlobDistance is a constant defined in CameraCalibration.
+	 * 3) Run the method calibrateCamera, getting information about the given square from the camera
+	 * -- After Calibration is Complete --
+	 * 4) After calibration, to find the distance run the method distanceToObj, imputing the absolute width of the object, focal length (given by calibrateCamera), and object pixel width
 	 * 
-	 * 1) Draw a blue square the size of testBlobWidth. This needs to be a preset size and defined in CameraCalibration.
-	 * 
-	 * 2) Move the square to the distance testBlobDistance away from the camera. This also needs to be defined in the code.
-	 * 
-	 * 3) Run the method calibrateCamera, which will get the square that you wrote.
-	 * 
-	 * 4) With the square, other methods are ran and should fill out enough data to test a stop sign.
-	 * -----
-	 * 
-	 * After Calibration is complete
-	 * 
-	 * To find the distance, run distanceToObj with the known real world width of the object (make sure to scale), 
+	 * 4)To find the distance, run distanceToObj with the known real world width of the object (make sure to scale), 
 	 * focal length (which should be set by calibrateCamera), and object pixel width (the width of the blob you want to get distance to)
+	 * 
+	 * @author Derek Schwartz (Wrote the code)
+	 * @author Matthew Alexander (Added documentation)
+	 * @see [another relevant class or method that you think people should look at]
+	 * @see etc.
+	 *
 	 */
-
-
-
+	
 	private PedestrianDetector pedDetect;
 	private ImageManager imageManager;
 
@@ -101,6 +98,16 @@ public class CameraCalibration {
 
 	//Break Rate Math
 
+	/*
+	 * 
+	 * Documentation from Derek's Speed API:
+	 * 
+	 * Gives the needed distance to stop at given location at given speed. Can be used to do something when the car can't stop to avoid hitting what ever is identified.
+	 * 
+	 * Unit: Meters
+	 * 
+	 */
+	
 	//The total distance it will take to stop
 	double calcStopDist(double targetStopDist, double speed) {
 		return Math.pow(speed, 2) / (Constants.FRICT * Constants.GRAV * 2);
@@ -116,7 +123,16 @@ public class CameraCalibration {
 		return (0 - speed) / time;
 	}
 
-
+	/*
+	 * 
+	 * Documentation from Derek's Speed API:
+	 * 
+	 * Gives the rate the car needs to decelerate given a distance from stop point and the current speed. Gives in linear manner.
+	 * 
+	 * Unit: Meter/Second
+	 * 
+	 */
+	
 	//Function used to get the rate to lower the speed by when a stop distance is given.
 	double getStopRate(double targetDist, double currentSpeed) {
 		return calcStopRate(currentSpeed, getStopTime(targetDist, currentSpeed));
