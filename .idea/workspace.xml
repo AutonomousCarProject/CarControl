@@ -5,9 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f525b4a3-b0b1-4062-9d6e-80535089a8f9" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/Steering/SteeringModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/Steering/SteeringModule.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/carcontrol/CarControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/carcontrol/CarControl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/carcontrol/TrakSimControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/carcontrol/TrakSimControl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/apw/drivedemo/BrBemo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/apw3/DriverCons.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/apw3/DriverCons.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/gpu/target/" />
@@ -58,14 +58,14 @@
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="gradle" value="1" />
-          <entry key="java" value="56" />
+          <entry key="java" value="57" />
           <entry key="yml" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="Groovy" value="1" />
-          <entry key="JAVA" value="56" />
+          <entry key="JAVA" value="57" />
           <entry key="YAML" value="1" />
         </counts>
       </usages-collector>
@@ -73,14 +73,14 @@
         <counts>
           <entry key="dummy" value="9" />
           <entry key="gradle" value="102" />
-          <entry key="java" value="2251" />
+          <entry key="java" value="2334" />
           <entry key="yml" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="Groovy" value="102" />
-          <entry key="JAVA" value="2251" />
+          <entry key="JAVA" value="2334" />
           <entry key="PLAIN_TEXT" value="9" />
           <entry key="YAML" value="1" />
         </counts>
@@ -94,8 +94,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/Steering/SteeringModule.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="288">
-                  <caret line="18" column="11" selection-start-line="18" selection-start-column="11" selection-end-line="18" selection-end-column="11" />
+                <state relative-caret-position="216">
+                  <caret line="48" column="29" lean-forward="true" selection-start-line="48" selection-start-column="29" selection-end-line="48" selection-end-column="29" />
                 </state>
               </provider>
             </entry>
@@ -103,8 +103,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/apw3/DriverCons.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="96">
-                  <caret line="58" column="12" selection-start-line="58" selection-start-column="12" selection-end-line="58" selection-end-column="12" />
+                <state relative-caret-position="360">
+                  <caret line="69" column="48" selection-start-line="69" selection-start-column="48" selection-end-line="69" selection-end-column="48" />
                 </state>
               </provider>
             </entry>
@@ -171,17 +171,30 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/drivedemo/DriveTest.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="3312">
+                <state relative-caret-position="3024">
                   <caret line="177" column="43" lean-forward="true" selection-start-line="177" selection-start-column="43" selection-end-line="177" selection-end-column="43" />
                 </state>
               </provider>
             </entry>
           </file>
           <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/drivedemo/BrBemo.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="262">
+                  <caret line="762" lean-forward="true" selection-start-line="762" selection-end-line="762" />
+                  <folding>
+                    <element signature="e#0#37856#0" expanded="true" />
+                    <element signature="imports" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/Steering/SteeringMk2.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-40">
-                  <caret line="76" column="27" selection-start-line="76" selection-start-column="27" selection-end-line="76" selection-end-column="27" />
+                <state relative-caret-position="2040">
+                  <caret line="85" column="8" lean-forward="true" selection-start-line="85" selection-start-column="8" selection-end-line="85" selection-end-column="8" />
                   <folding>
                     <element signature="imports" expanded="true" />
                   </folding>
@@ -244,15 +257,6 @@
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="4728">
                   <caret line="221" column="29" lean-forward="true" selection-start-line="221" selection-start-column="29" selection-end-line="221" selection-end-column="29" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/Steering/SteerControlCheck.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="96">
-                  <caret line="4" selection-start-line="4" selection-end-line="4" selection-end-column="11" />
                 </state>
               </provider>
             </entry>
@@ -691,7 +695,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/com/apw/blobdetect/BlobDetectionRender.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/blobdetect/Blob.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/blobdetect/IBlobDetection.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/blobdetect/BlobDetection.java" />
@@ -722,7 +725,6 @@
         <option value="$PROJECT_DIR$/src/main/java/com/apw/SpeedCon/SpeedController.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/drivedemo/DrDemo.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/drivedemo/TrakManager.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/apw/apw3/DriverCons.java" />
         <option value="$PROJECT_DIR$/.travis.yml" />
         <option value="$PROJECT_DIR$/build.gradle" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/carcontrol/SpeedControlModule.java" />
@@ -742,6 +744,8 @@
         <option value="$PROJECT_DIR$/src/main/java/com/apw/carcontrol/TrakSimControl.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/carcontrol/CarControl.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/Steering/SteeringModule.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/apw/apw3/DriverCons.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/apw/drivedemo/BrBemo.java" />
       </list>
     </option>
   </component>
@@ -1104,7 +1108,14 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.Run TSC">
+  <component name="RunManager" selected="Application.Run BrBemo">
+    <configuration name="Run BrBemo" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="com.apw.drivedemo.BrBemo" />
+      <module name="CarControl_main" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Run DriveTest" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="com.apw.drivedemo.DriveTest" />
       <module name="CarControl_main" />
@@ -1229,6 +1240,7 @@
       <item itemvalue="Application.Run DriveTest" />
       <item itemvalue="Application.Run TrakSim" />
       <item itemvalue="Application.Run TSC" />
+      <item itemvalue="Application.Run BrBemo" />
       <item itemvalue="Gradle.build" />
       <item itemvalue="Maven.convert cl" />
       <item itemvalue="Maven.package" />
@@ -1290,7 +1302,7 @@
       <window_info id="UI Designer" order="6" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32903227" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.32897604" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.32897604" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -1369,9 +1381,6 @@
     <option name="LAST_COMMIT_MESSAGE" value="Add .imls for consistency&#10;&#10;See .gitignore for details" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/apw3/ReadMe.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/wasted.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
@@ -1564,13 +1573,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/apw3/DriverCons.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="96">
-          <caret line="58" column="12" selection-start-line="58" selection-start-column="12" selection-end-line="58" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/Steering/SteerControlCheck.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="96">
@@ -1623,13 +1625,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="984">
           <caret line="50" column="38" lean-forward="true" selection-start-line="50" selection-start-column="38" selection-end-line="50" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/drivedemo/DriveTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="24">
-          <caret line="65" column="12" lean-forward="true" selection-start-line="65" selection-start-column="12" selection-end-line="65" selection-end-column="12" />
         </state>
       </provider>
     </entry>
@@ -1689,18 +1684,43 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/Steering/SteeringMk2.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-40">
-          <caret line="76" column="27" selection-start-line="76" selection-start-column="27" selection-end-line="76" selection-end-column="27" />
+        <state relative-caret-position="2040">
+          <caret line="85" column="8" lean-forward="true" selection-start-line="85" selection-start-column="8" selection-end-line="85" selection-end-column="8" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/drivedemo/DriveTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3024">
+          <caret line="177" column="43" lean-forward="true" selection-start-line="177" selection-start-column="43" selection-end-line="177" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/apw3/DriverCons.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="69" column="48" selection-start-line="69" selection-start-column="48" selection-end-line="69" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/Steering/SteeringModule.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="288">
-          <caret line="18" column="11" selection-start-line="18" selection-start-column="11" selection-end-line="18" selection-end-column="11" />
+        <state relative-caret-position="216">
+          <caret line="48" column="29" lean-forward="true" selection-start-line="48" selection-start-column="29" selection-end-line="48" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/drivedemo/BrBemo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="262">
+          <caret line="762" lean-forward="true" selection-start-line="762" selection-end-line="762" />
+          <folding>
+            <element signature="e#0#37856#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

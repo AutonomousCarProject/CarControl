@@ -46,7 +46,7 @@ public class SteeringModule implements Module {
         locX = locX + (double) Math.cos(Math.toRadians(sumOfAngles)) * (double) DriverCons.D_FrameTime / 1000 * (double) DriverCons.D_fMinSpeed;
         locY = locY + (double) Math.sin(Math.toRadians(sumOfAngles)) * (double) DriverCons.D_FrameTime / 1000 * (double) DriverCons.D_fMinSpeed;
 
-        makeTurnAdjustment();
+        //makeTurnAdjustment();
     }
 
     @Override

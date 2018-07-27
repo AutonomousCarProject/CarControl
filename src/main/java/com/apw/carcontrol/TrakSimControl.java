@@ -174,5 +174,10 @@ public class TrakSimControl implements CarControl {
         return new Insets(480, 0, 0, 912);
     }
 
+    @Override
+    public void rectFill(int colo, int rx, int cx, int rz, int c) {
+
+    }
+
 
 }
