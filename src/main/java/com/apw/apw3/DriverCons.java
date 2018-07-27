@@ -25,7 +25,7 @@ package com.apw.apw3;                                       // 2018 June 12
  * Some of these constants are checked for reasonable values,
  * and TrakSim won't run unless they are.
  */
-public class DriverCons { // TrakSim constant parameters
+public abstract class DriverCons { // TrakSim constant parameters
 
     public static final boolean // options & diagnostic switches..
             D_PrimaryViewOn = true,    // T: make the main window open up
@@ -44,7 +44,7 @@ public class DriverCons { // TrakSim constant parameters
             D_StartInCalibrate = false, // T: use this to calibrate servo limits
             D_Log_Draw = false, D_Log_Log = false, D_Fax_Log = false,
             D_Mini_Log = false, D_NoisyMap = true,
-            D_DrawOnSides = true, D_DrawPredicted = true, D_DrawCurrent = true; //Drive lines.
+            D_DrawOnSides = true, D_DrawPredicted = true, D_DrawCurrent = true; //MrModule lines.
 
     public static final int
 
@@ -73,7 +73,8 @@ public class DriverCons { // TrakSim constant parameters
             D_xCloseUp = 3,    // 2^x magnification, x=0 to let TrakSim decide
             D_xTrLiteTime = 3, // 2^x seconds red time = green time +2secs yellow
             D_Crummy = 255,    // (power of 2) size of BreadCrumbs list for map display
-            D_CheckerBd = 1;   // (power of 2) =1 to checker 1x1m, =2 for 2x2, =0 off
+            D_CheckerBd = 1,   // (power of 2) =1 to checker 1x1m, =2 for 2x2, =0 off
+            D_steeringVersion = 2; // Which Version of steering to use
 
     public static final double D_TurnRadius = 7.0, // nom. meters in park coords
     // measured from midline fully cramped, servo position = 0/180

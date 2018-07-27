@@ -8,7 +8,7 @@ public class Blob {
     public int x, y;
     public IPixel color;
     public int id;
-	public boolean seen;
+    public boolean seen;
 
     public Blob(int width, int height, int x, int y, IPixel color) {
         set(width, height, x, y, color);
