@@ -182,6 +182,14 @@ public class SpeedController {
 		}
 	}
 
+	/*
+	 * 
+	 * Documentation from Derek's Speed API:
+	 * 
+	 * Returns the current estimated speed based on gasPedal. The value is a internal number and not a measure in meters.
+	 * 
+	 */
+	
 	//Returns the estimated speed IN METERS PER SECOND
 	public double getEstimatedSpeed(){
 		return currentEstimatedSpeed*Constants.PIN_TO_METER_PER_SECOND;
@@ -310,7 +318,7 @@ public class SpeedController {
 	 * @return true if the blob is recognized to be a stopsign, otherwise false
 	 */
 	public boolean detectStopSign(MovingBlob blob) {
-		if(blob.age > Constants.BLOB_AGE && 
+		if (blob.age > Constants.BLOB_AGE && 
 			blob.height > (3) * Constants.BLOB_MIN_HEIGHT && 
 			blob.height < Constants.BLOB_MAX_HEIGHT && 
 			blob.width > (3) * Constants.BLOB_MIN_WIDTH && 

@@ -2,18 +2,22 @@ package com.apw.SpeedCon;
 
 public class Constants {
 	
+		//Order of variable types within categories (boolean -> int -> double)
+		//Add more if need be
+	
+	
 		//Debug related constants
 		public static final boolean
-		DEFAULT_OVERLAY = false,		//D
-		DEFAULT_BLOBS = false,			//
-		DEFAULT_BLOBS_CONSOLE = false,	//
-		DEFAULT_SPEED_CONSOLE = false;	//
+		DEFAULT_OVERLAY = false,		//Sets the default state as to the display of blob detection boxes
+		DEFAULT_BLOBS = false,			//Sets the default state as to the display of blob boundaries
+		DEFAULT_BLOBS_CONSOLE = false,	//Sets the default state as to the printing of all blob information
+		DEFAULT_SPEED_CONSOLE = false;	//Sets the default state as to the printing of the current speed
 		public static final int
-		DEFAULT_COLOR_MODE = 0,			//
-		NUM_COLOR_MODES = 3;			//
+		DEFAULT_COLOR_MODE = 0,			//Sets the default state as to the blob boundary color (0 = age, 1 = color, 2 = velocity) 
+		NUM_COLOR_MODES = 3;			//Sets the number current total number of blob boundary color modes
 		public static final double
-		DISPLAY_AGE_MAX = 5,			//
-		DISPLAY_AGE_MIN = 0;			//
+		DISPLAY_AGE_MAX = 5,			//Max age compared to for age based blob boundary color
+		DISPLAY_AGE_MIN = 0;			//Min age compared to for age based blob boundary color
 	
 		
 		//Speed related constants
