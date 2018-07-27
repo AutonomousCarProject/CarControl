@@ -12,6 +12,7 @@
  * but probably will work with any compatible Java serial port API.
  */
 package com.apw.fakefirm;   // 2018 February 10
+
 import jssc.SerialPort;
 
 // import nojssc.SerialPort; // use this instead for working with TrackSim
@@ -20,7 +21,7 @@ import jssc.SerialPort;
 
 public class Arduino { // Adapted to Java from arduino.cs ... (FakeFirmata)
     // (subclass this to add input capability)
-	public static final boolean UseServos = false;
+    public static final boolean UseServos = false;
 
     public static final String CommPortNo = "COM3";
     public static final int MAX_DATA_BYTES = 16, // =64 in LattePanda's Arduino.cs
@@ -53,11 +54,11 @@ public class Arduino { // Adapted to Java from arduino.cs ... (FakeFirmata)
     protected PortObject surrealPort;
 
     public Arduino() { // outer class constructor..
-    	surrealPort = (UseServos) ? new SerialPort(CommPortNo) : new SerialPortDump(CommPortNo);
+        surrealPort = (UseServos) ? new SerialPort(CommPortNo) : new SerialPortDump(CommPortNo);
         System.out.println("new Arduino " + CommPortNo + " " + (surrealPort != null));
         digitalOutputData = new int[MAX_DATA_BYTES];
         Open();
-        
+
     }
 
     /**

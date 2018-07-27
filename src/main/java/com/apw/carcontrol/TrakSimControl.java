@@ -6,20 +6,20 @@ import com.apw.apw3.SimCamera;
 import com.apw.fakefirm.Arduino;
 
 import java.awt.*;
+import java.util.HashMap;
 
 public class TrakSimControl implements CarControl {
+    private final int SteerPin, GasPin;
+    private final double LefScaleSt, RitScaleSt;
     protected SimCamera cam;
+    protected HashMap<Integer, Runnable> keyBindings;
     private Arduino driveSys;
     private Insets edges;
-
     private byte[] cameraImage = null;
     private byte[] processedImage = null;
     private int[] renderedImage = null;
-
     private int currentSteering = 0;
     private int currentVelocity = 0;
-    private final int SteerPin, GasPin;
-    private final double LefScaleSt, RitScaleSt;
 
     public TrakSimControl() {
         cam = new SimCamera();
@@ -28,18 +28,20 @@ public class TrakSimControl implements CarControl {
         SteerPin = DriverCons.D_SteerServo;
         GasPin = DriverCons.D_GasServo;
         LefScaleSt = ((double) DriverCons.D_LeftSteer) / 90.0;
-        RitScaleSt =  ((double) DriverCons.D_RiteSteer) / 90.0;
+        RitScaleSt = ((double) DriverCons.D_RiteSteer) / 90.0;
 
         driveSys = new Arduino();
         driveSys.pinMode(SteerPin, Arduino.SERVO);
         driveSys.pinMode(GasPin, Arduino.SERVO);
+
+        keyBindings = new HashMap<>();
     }
 
     @Override
     public byte[] readCameraImage() {
         int nrows = cam.Dimz() >> 16;
         int ncols = cam.Dimz() << 16 >> 16;
-        if(cameraImage == null || (nrows * ncols * 4) != cameraImage.length) {
+        if (cameraImage == null || (nrows * ncols * 4) != cameraImage.length) {
             cameraImage = new byte[nrows * ncols * 4];
         }
         boolean b = cam.NextFrame(cameraImage);
@@ -62,26 +64,27 @@ public class TrakSimControl implements CarControl {
     }
 
     @Override
-    public int[] getRGBImage() {
-        return renderedImage;
-    }
-
-    @Override
     public void setProcessedImage(byte[] image) {
         this.processedImage = image;
     }
 
     @Override
-    public void setRenderedImage(int[] renderedImage) {
-        this.renderedImage = renderedImage;
+    public int[] getRGBImage() {
+        return renderedImage;
     }
 
     /**
      * Gets the image to be rendered on the screen. Normally should not be used by any class except the renderer itself.
+     *
      * @return The image to be rendered on the TrakSim window.
      */
     protected int[] getRenderedImage() {
         return renderedImage;
+    }
+
+    @Override
+    public void setRenderedImage(int[] renderedImage) {
+        this.renderedImage = renderedImage;
     }
 
     @Override
@@ -175,6 +178,10 @@ public class TrakSimControl implements CarControl {
         return edges;
     }
 
+    protected void setEdges(Insets edges) {
+        this.edges = edges;
+    }
+
     @Override
     public void rectFill(int colo, int rx, int cx, int rz, int c) {
         cam.theSim.RectFill(colo, rx, cx, rz, c);
@@ -184,9 +191,9 @@ public class TrakSimControl implements CarControl {
         return driveSys;
     }
 
-    protected void setEdges(Insets edges)
-    {
-        this.edges = edges;
+    @Override
+    public void addKeyEvent(int keyCode, Runnable action) {
+        keyBindings.put(keyCode, action);
     }
 
 }

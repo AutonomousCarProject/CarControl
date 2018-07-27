@@ -2,9 +2,6 @@ package com.apw.Steering;
 
 import com.apw.fakefirm.Arduino;
 
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
 
 /**
  * <p>Version 2 of steering. This version improves center detection by adding the
@@ -28,6 +25,7 @@ public class SteeringMk2 extends SteeringBase {
 
     /**
      * not currently being used.
+     *
      * @param pixels the array of pixels.
      * @return Degree to drive to
      */
@@ -49,6 +47,7 @@ public class SteeringMk2 extends SteeringBase {
 
     /**
      * Process the camera image, and fill leftPoints, rightPoints, and midPoints.
+     *
      * @param pixels An array of pixels
      */
     @Override

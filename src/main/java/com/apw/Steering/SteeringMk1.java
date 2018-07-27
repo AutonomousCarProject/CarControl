@@ -18,10 +18,10 @@ import java.util.List;
  */
 public class SteeringMk1 extends SteeringBase {
 
-    private List<Double> posLog = new ArrayList<>(); // Array list for logging positions fed into it
-    private int startingPoint = 0; // Where the car starts looking for lines on either side.
     private final int heightOfArea = 32; // How high the car looks for lines
     private final int startingHeight = 272; // how high the car starts looking for lines
+    private List<Double> posLog = new ArrayList<>(); // Array list for logging positions fed into it
+    private int startingPoint = 0; // Where the car starts looking for lines on either side.
     private Point[] leadingMidPoints = new Point[startingHeight + heightOfArea];
     private Point[] pointsAhead = new Point[startingHeight - (screenHeight / 2)]; //points far ahead
     private double weight = 1.0; // >1 = right lane, <1 = left lane
@@ -46,6 +46,7 @@ public class SteeringMk1 extends SteeringBase {
 
     /**
      * Reads the image data, then retruns the angle for the servos to be set to.
+     *
      * @param pixels The array of pixels on the screen
      * @return The Degree that the servos should be set to.
      */
@@ -196,6 +197,7 @@ public class SteeringMk1 extends SteeringBase {
 
     /**
      * Average the points above the target area.
+     *
      * @param pixels Array of pixels (The image)
      * @return The average Point
      */
@@ -250,6 +252,7 @@ public class SteeringMk1 extends SteeringBase {
 
     /**
      * I have no idea
+     *
      * @param pixels Array of pixels (The Image)
      */
     void checkPointsAhead(int[] pixels) {
@@ -263,8 +266,9 @@ public class SteeringMk1 extends SteeringBase {
 
     /**
      * Not sure what this does
-     * @param x x coordinate
-     * @param y y coordinate
+     *
+     * @param x       x coordinate
+     * @param y       y coordinate
      * @param heading idk
      */
     public void updatePosLog(double x, double y, double heading) { // Reference positions by doing point# * 3 + (0 for x, 1 for y, 2 for heading)

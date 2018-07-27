@@ -99,6 +99,7 @@ public class SteeringModule extends SteeringBase implements Module {
         }
         averagePoints();
     }
+
     @Override
     public void paint(CarControl control, Graphics g) {
         g.setColor(Color.RED);

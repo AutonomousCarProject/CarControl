@@ -18,14 +18,14 @@ public abstract class SteeringBase implements Steerable {
     final int screenWidth = 912; // How wide the screen is (including maps)
     public int startTarget = 0;
     public int endTarget = 0;
-    private double integral, // The integral of the
-            previousError;  // PID
-    Point origin = new Point(cameraWidth / 2, screenHeight);
     public Point steerPoint = new Point(0, 0); // Point to where the car attempts to steer towards
     public List<Point> leftPoints = new ArrayList<>();
     public List<Point> rightPoints = new ArrayList<>();
     public List<Point> midPoints = new ArrayList<>();
+    Point origin = new Point(cameraWidth / 2, screenHeight);
     boolean usePID = true;
+    private double integral, // The integral of the
+            previousError;  // PID
 
     @Override
     public double curveSteepness(double turnAngle) {
@@ -42,10 +42,10 @@ public abstract class SteeringBase implements Steerable {
         int xOffset = origin.x - steerPoint.x;
         int yOffset = Math.abs(origin.y - steerPoint.y);
 
-        int tempDeg = (int)(Math.atan2(-xOffset, yOffset) * (180 / Math.PI));
+        int tempDeg = (int) (Math.atan2(-xOffset, yOffset) * (180 / Math.PI));
 
         //System.out.println("\n\n\n" + tempDeg + " " + myPID() + "\n\n\n");
-        return (int)((Math.atan2(-((usePID && (curveSteepness(tempDeg) > 0.3)) ? myPID() : xOffset), yOffset)) * (180 / Math.PI));
+        return (int) ((Math.atan2(-((usePID && (curveSteepness(tempDeg) > 0.3)) ? myPID() : xOffset), yOffset)) * (180 / Math.PI));
     }
 
     /**

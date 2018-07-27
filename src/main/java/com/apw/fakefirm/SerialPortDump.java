@@ -8,7 +8,7 @@ package com.apw.fakefirm;                                 // 2018 May 11
 /**
  * This class has the same name & API as JSSC but does nothing.
  */
-public class SerialPortDump implements PortObject{
+public class SerialPortDump implements PortObject {
     static final boolean logo = true; // enable logging..
 
     public SerialPortDump() {

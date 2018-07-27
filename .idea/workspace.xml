@@ -1,11 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/src/main/java/com/apw/gpu/ImageProcessing.java" line="9" />
+    <bookmark url="file://$PROJECT_DIR$/src/main/java/com/apw/gpu/ImageProcessing.java" line="8" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f525b4a3-b0b1-4062-9d6e-80535089a8f9" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/ImageManagement/ImageManagementModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/ImageManagement/ImageManagementModule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/ImageManagement/ImageManipulator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/ImageManagement/ImageManipulator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/SpeedCon/CameraCalibration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/SpeedCon/CameraCalibration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/SpeedCon/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/SpeedCon/Constants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/SpeedCon/Settings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/SpeedCon/Settings.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/SpeedCon/SpeedControlModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/SpeedCon/SpeedControlModule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/Steering/Steerable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/Steering/Steerable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/Steering/SteeringBase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/Steering/SteeringBase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/Steering/SteeringMk1.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/Steering/SteeringMk1.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/Steering/SteeringMk2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/Steering/SteeringMk2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/Steering/SteeringModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/Steering/SteeringModule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/apw3/TrakSim.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/apw3/TrakSim.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/carcontrol/CarControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/carcontrol/CarControl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/carcontrol/Module.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/carcontrol/Module.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/carcontrol/MrModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/carcontrol/MrModule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/carcontrol/TrakSimControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/carcontrol/TrakSimControl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/fakefirm/Arduino.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/fakefirm/Arduino.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/fakefirm/PortObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/fakefirm/PortObject.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/fakefirm/SerialPortDump.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/fakefirm/SerialPortDump.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/gpu/ImageProcessing.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/gpu/ImageProcessing.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/pedestrians/PedestrianDetector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/pedestrians/PedestrianDetector.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/pedestrians/blobdetect/Blob.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/pedestrians/blobdetect/Blob.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/pedestrians/blobtrack/MovingBlobDetection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/pedestrians/blobtrack/MovingBlobDetection.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/gpu/target/" />
@@ -56,14 +79,14 @@
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="gradle" value="1" />
-          <entry key="java" value="71" />
+          <entry key="java" value="73" />
           <entry key="yml" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="Groovy" value="1" />
-          <entry key="JAVA" value="71" />
+          <entry key="JAVA" value="73" />
           <entry key="YAML" value="1" />
         </counts>
       </usages-collector>
@@ -71,14 +94,14 @@
         <counts>
           <entry key="dummy" value="9" />
           <entry key="gradle" value="102" />
-          <entry key="java" value="3273" />
+          <entry key="java" value="4319" />
           <entry key="yml" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="Groovy" value="102" />
-          <entry key="JAVA" value="3273" />
+          <entry key="JAVA" value="4319" />
           <entry key="PLAIN_TEXT" value="9" />
           <entry key="YAML" value="1" />
         </counts>
@@ -90,26 +113,33 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/carcontrol/MrModule.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="231">
-              <caret line="47" column="33" selection-start-line="47" selection-start-column="33" selection-end-line="47" selection-end-column="33" />
+            <state relative-caret-position="118">
+              <caret line="109" column="53" selection-start-line="109" selection-start-column="53" selection-end-line="109" selection-end-column="53" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#3118#3119#0" expanded="true" />
+                <element signature="e#3148#3149#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/SpeedCon/CameraCalibration.java">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/carcontrol/Module.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="336">
-              <caret line="63" column="87" selection-start-line="63" selection-start-column="87" selection-end-line="63" selection-end-column="87" />
+            <state relative-caret-position="216">
+              <caret line="10" column="46" selection-start-line="10" selection-start-column="46" selection-end-line="10" selection-end-column="46" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/apw3/TrakSim.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="341">
+              <caret line="78" column="78" selection-start-line="78" selection-start-column="78" selection-end-line="78" selection-end-column="78" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#3612#3613#0" expanded="true" />
-                <element signature="e#3638#3639#0" expanded="true" />
-                <element signature="e#3754#3755#0" expanded="true" />
-                <element signature="e#3786#3787#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -118,8 +148,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/carcontrol/TrakSimControl.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="382">
-              <caret line="188" column="27" selection-start-line="188" selection-start-column="27" selection-end-line="188" selection-end-column="27" />
+            <state relative-caret-position="190">
+              <caret line="195" column="16" selection-start-line="195" selection-start-column="16" selection-end-line="195" selection-end-column="16" />
               <folding>
                 <element signature="e#1791#1792#0" expanded="true" />
                 <element signature="e#1827#1828#0" expanded="true" />
@@ -131,25 +161,47 @@
                 <element signature="e#4575#4576#0" expanded="true" />
                 <element signature="e#4621#4622#0" expanded="true" />
                 <element signature="e#4670#4671#0" expanded="true" />
+                <element signature="e#4932#4933#0" expanded="true" />
+                <element signature="e#4959#4960#0" expanded="true" />
                 <element signature="e#4753#4754#0" expanded="true" />
                 <element signature="e#4809#4810#0" expanded="true" />
                 <element signature="e#4843#4844#0" expanded="true" />
                 <element signature="e#4874#4875#0" expanded="true" />
-                <element signature="e#4932#4933#0" expanded="true" />
-                <element signature="e#4959#4960#0" expanded="true" />
+                <element signature="e#5128#5129#0" expanded="true" />
+                <element signature="e#5176#5177#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/SpeedCon/SpeedControlModule.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="344">
-              <caret line="427" column="46" lean-forward="true" selection-start-line="427" selection-start-column="46" selection-end-line="427" selection-end-column="46" />
+            <state relative-caret-position="159">
+              <caret line="56" column="43" lean-forward="true" selection-start-line="56" selection-start-column="43" selection-end-line="56" selection-end-column="43" />
               <folding>
-                <element signature="e#16143#16144#0" expanded="true" />
-                <element signature="e#16182#16183#0" expanded="true" />
+                <element signature="e#7309#7310#0" expanded="true" />
+                <element signature="e#7389#7390#0" expanded="true" />
+                <element signature="e#7481#7482#0" expanded="true" />
+                <element signature="e#7530#7531#0" expanded="true" />
+                <element signature="e#9476#9477#0" expanded="true" />
+                <element signature="e#9508#9509#0" expanded="true" />
+                <element signature="e#9605#9606#0" expanded="true" />
+                <element signature="e#9642#9643#0" expanded="true" />
+                <element signature="e#9741#9742#0" expanded="true" />
+                <element signature="e#9779#9780#0" expanded="true" />
+                <element signature="e#10288#10289#0" expanded="true" />
+                <element signature="e#10324#10325#0" expanded="true" />
+                <element signature="e#10374#10375#0" expanded="true" />
+                <element signature="e#10415#10416#0" expanded="true" />
+                <element signature="e#10451#10452#0" expanded="true" />
+                <element signature="e#10492#10493#0" expanded="true" />
+                <element signature="e#11583#11584#0" expanded="true" />
+                <element signature="e#11623#11624#0" expanded="true" />
+                <element signature="e#16449#16450#0" expanded="true" />
+                <element signature="e#16488#16489#0" expanded="true" />
+                <element signature="e#16523#16524#0" expanded="true" />
+                <element signature="e#16614#16615#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -158,8 +210,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/ImageManagement/ImageManagementModule.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="766">
-              <caret line="154" column="55" lean-forward="true" selection-start-line="154" selection-start-column="55" selection-end-line="154" selection-end-column="55" />
+            <state relative-caret-position="183">
+              <caret line="115" selection-start-line="115" selection-end-line="115" />
             </state>
           </provider>
         </entry>
@@ -167,8 +219,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/carcontrol/CarControl.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="430">
-              <caret line="81" column="16" selection-start-line="81" selection-start-column="16" selection-end-line="81" selection-end-column="16" />
+            <state relative-caret-position="238">
+              <caret line="88" column="31" selection-start-line="88" selection-start-column="31" selection-end-line="88" selection-end-column="31" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -180,7 +232,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/Steering/SteeringBase.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-362">
-              <caret line="40" column="34" lean-forward="true" selection-start-line="40" selection-start-column="34" selection-end-line="40" selection-end-column="34" />
+              <caret line="40" column="34" selection-start-line="40" selection-start-column="34" selection-end-line="40" selection-end-column="34" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#1092#1093#0" expanded="true" />
@@ -193,8 +245,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/Steering/SteeringModule.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="156">
-              <caret line="103" column="30" selection-start-line="103" selection-start-column="30" selection-end-line="103" selection-end-column="30" />
+            <state relative-caret-position="101">
+              <caret line="104" column="30" selection-start-line="104" selection-start-column="30" selection-end-line="104" selection-end-column="30" />
             </state>
           </provider>
         </entry>
@@ -210,8 +262,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>FltWi</find>
-      <find>LineSlope</find>
       <find>MapColor</find>
       <find>PokePixel</find>
       <find>ZoomMapC</find>
@@ -240,6 +290,8 @@
       <find>BLUE</find>
       <find>Color.BLUE</find>
       <find>cameraC</find>
+      <find>VK_B</find>
+      <find>blobsOn</find>
     </findStrings>
     <replaceStrings>
       <replace>cols</replace>
@@ -634,7 +686,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/com/apw/pedestrians/blobdetect/BlobDetection.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/pedestrians/image/IPixel.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/pedestrians/blobtrack/MovingBlobDetection.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/fly2cam/Camera2File.java" />
@@ -657,7 +708,6 @@
         <option value="$PROJECT_DIR$/src/main/java/com/apw/gpu/RGBRasterKernel.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/gpu/SimpleColorRasterKernel.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/gpu/SimpleToRGBKernel.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/apw/apw3/TrakSim.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/SpeedCon/SpeedController.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/drivedemo/DrDemo.java" />
         <option value="$PROJECT_DIR$/.travis.yml" />
@@ -673,18 +723,20 @@
         <option value="$PROJECT_DIR$/src/main/java/com/apw/Steering/SteerControlCheck.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/Steering/Steering.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/drivedemo/DriveTest.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/apw/carcontrol/CarControl.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/Steering/SteeringMk2.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/apw3/DriverCons.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/drivedemo/BrBemo.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/drivedemo/TrakManager.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/apw/ImageManagement/ImageManagementModule.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/apw/carcontrol/TrakSimControl.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/Steering/SteeringBase.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/apw/SpeedCon/SpeedControlModule.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/Steering/SteeringModule.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/apw/carcontrol/MrModule.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/SpeedCon/CameraCalibration.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/apw/carcontrol/CarControl.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/apw/carcontrol/TrakSimControl.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/apw/carcontrol/Module.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/apw/ImageManagement/ImageManagementModule.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/apw/apw3/TrakSim.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/apw/carcontrol/MrModule.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/apw/SpeedCon/SpeedControlModule.java" />
       </list>
     </option>
   </component>
@@ -1224,7 +1276,7 @@
     <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.6837607" visible="true" weight="0.11727079" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.6837607" weight="0.11727079" />
       <window_info id="Structure" order="1" sideWeight="0.31623933" side_tool="true" weight="0.12708333" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -1233,7 +1285,7 @@
       <window_info id="UI Designer" order="6" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32903227" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.32897604" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32897604" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -1268,7 +1320,7 @@
       <window_info id="Favorites" order="5" side_tool="true" />
       <window_info id="UI Designer" order="6" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info active="true" anchor="bottom" id="Find" order="1" visible="true" weight="0.32903227" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32903227" />
       <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32897604" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -1280,7 +1332,7 @@
       <window_info anchor="bottom" id="Debug with VisualVM" order="10" />
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" weight="0.32905984" />
       <window_info anchor="bottom" id="Version Control" order="12" weight="0.23028392" />
-      <window_info anchor="bottom" id="Messages" order="13" weight="0.32371795" />
+      <window_info anchor="bottom" id="Messages" order="13" weight="0.32352942" />
       <window_info anchor="bottom" id="Build" order="14" weight="0.32799146" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -1426,13 +1478,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/carcontrol/ImageManagementModule.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/carcontrol/Module.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="15" column="17" selection-start-line="15" selection-start-column="17" selection-end-line="15" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/carcontrol/SpeedControlModule.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/carcontrol/SteeringModule.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/Steering/Steerable.java">
@@ -1524,16 +1569,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/apw3/TrakSim.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="173">
-          <caret line="4875" column="15" selection-start-line="4875" selection-start-column="15" selection-end-line="4875" selection-end-column="15" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/drivedemo/DrDemo.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="53">
@@ -1545,16 +1580,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-26">
           <caret line="101" lean-forward="true" selection-start-line="101" selection-end-line="101" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/carcontrol/CarControl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="430">
-          <caret line="81" column="16" selection-start-line="81" selection-start-column="16" selection-end-line="81" selection-end-column="16" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1571,36 +1596,11 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/Steering/SteeringBase.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-362">
-          <caret line="40" column="34" lean-forward="true" selection-start-line="40" selection-start-column="34" selection-end-line="40" selection-end-column="34" />
+          <caret line="40" column="34" selection-start-line="40" selection-start-column="34" selection-end-line="40" selection-end-column="34" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#1092#1093#0" expanded="true" />
             <element signature="e#1141#1142#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/carcontrol/TrakSimControl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="382">
-          <caret line="188" column="27" selection-start-line="188" selection-start-column="27" selection-end-line="188" selection-end-column="27" />
-          <folding>
-            <element signature="e#1791#1792#0" expanded="true" />
-            <element signature="e#1827#1828#0" expanded="true" />
-            <element signature="e#4380#4381#0" expanded="true" />
-            <element signature="e#4418#4419#0" expanded="true" />
-            <element signature="e#4464#4465#0" expanded="true" />
-            <element signature="e#4502#4503#0" expanded="true" />
-            <element signature="e#4551#4552#0" expanded="true" />
-            <element signature="e#4575#4576#0" expanded="true" />
-            <element signature="e#4621#4622#0" expanded="true" />
-            <element signature="e#4670#4671#0" expanded="true" />
-            <element signature="e#4753#4754#0" expanded="true" />
-            <element signature="e#4809#4810#0" expanded="true" />
-            <element signature="e#4843#4844#0" expanded="true" />
-            <element signature="e#4874#4875#0" expanded="true" />
-            <element signature="e#4932#4933#0" expanded="true" />
-            <element signature="e#4959#4960#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1612,20 +1612,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/ImageManagement/ImageManagementModule.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="766">
-          <caret line="154" column="55" lean-forward="true" selection-start-line="154" selection-start-column="55" selection-end-line="154" selection-end-column="55" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/Steering/SteeringModule.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="156">
-          <caret line="103" column="30" selection-start-line="103" selection-start-column="30" selection-end-line="103" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/SpeedCon/SpeedController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="237">
@@ -1633,37 +1619,127 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/carcontrol/MrModule.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="231">
-          <caret line="47" column="33" selection-start-line="47" selection-start-column="33" selection-end-line="47" selection-end-column="33" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/SpeedCon/SpeedControlModule.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="344">
-          <caret line="427" column="46" lean-forward="true" selection-start-line="427" selection-start-column="46" selection-end-line="427" selection-end-column="46" />
-          <folding>
-            <element signature="e#16143#16144#0" expanded="true" />
-            <element signature="e#16182#16183#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/SpeedCon/CameraCalibration.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="63" column="87" selection-start-line="63" selection-start-column="87" selection-end-line="63" selection-end-column="87" />
+        <state relative-caret-position="-1610">
+          <caret line="38" lean-forward="true" selection-start-line="38" selection-end-line="38" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#3612#3613#0" expanded="true" />
             <element signature="e#3638#3639#0" expanded="true" />
             <element signature="e#3754#3755#0" expanded="true" />
             <element signature="e#3786#3787#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/carcontrol/Module.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="10" column="46" selection-start-line="10" selection-start-column="46" selection-end-line="10" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/Steering/SteeringModule.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="101">
+          <caret line="104" column="30" selection-start-line="104" selection-start-column="30" selection-end-line="104" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/ImageManagement/ImageManagementModule.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="183">
+          <caret line="115" selection-start-line="115" selection-end-line="115" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/carcontrol/CarControl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="88" column="31" selection-start-line="88" selection-start-column="31" selection-end-line="88" selection-end-column="31" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/carcontrol/TrakSimControl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="190">
+          <caret line="195" column="16" selection-start-line="195" selection-start-column="16" selection-end-line="195" selection-end-column="16" />
+          <folding>
+            <element signature="e#1791#1792#0" expanded="true" />
+            <element signature="e#1827#1828#0" expanded="true" />
+            <element signature="e#4380#4381#0" expanded="true" />
+            <element signature="e#4418#4419#0" expanded="true" />
+            <element signature="e#4464#4465#0" expanded="true" />
+            <element signature="e#4502#4503#0" expanded="true" />
+            <element signature="e#4551#4552#0" expanded="true" />
+            <element signature="e#4575#4576#0" expanded="true" />
+            <element signature="e#4621#4622#0" expanded="true" />
+            <element signature="e#4670#4671#0" expanded="true" />
+            <element signature="e#4932#4933#0" expanded="true" />
+            <element signature="e#4959#4960#0" expanded="true" />
+            <element signature="e#4753#4754#0" expanded="true" />
+            <element signature="e#4809#4810#0" expanded="true" />
+            <element signature="e#4843#4844#0" expanded="true" />
+            <element signature="e#4874#4875#0" expanded="true" />
+            <element signature="e#5128#5129#0" expanded="true" />
+            <element signature="e#5176#5177#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/apw3/TrakSim.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="341">
+          <caret line="78" column="78" selection-start-line="78" selection-start-column="78" selection-end-line="78" selection-end-column="78" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/carcontrol/MrModule.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="118">
+          <caret line="109" column="53" selection-start-line="109" selection-start-column="53" selection-end-line="109" selection-end-column="53" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#3118#3119#0" expanded="true" />
+            <element signature="e#3148#3149#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/SpeedCon/SpeedControlModule.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="159">
+          <caret line="56" column="43" lean-forward="true" selection-start-line="56" selection-start-column="43" selection-end-line="56" selection-end-column="43" />
+          <folding>
+            <element signature="e#7309#7310#0" expanded="true" />
+            <element signature="e#7389#7390#0" expanded="true" />
+            <element signature="e#7481#7482#0" expanded="true" />
+            <element signature="e#7530#7531#0" expanded="true" />
+            <element signature="e#9476#9477#0" expanded="true" />
+            <element signature="e#9508#9509#0" expanded="true" />
+            <element signature="e#9605#9606#0" expanded="true" />
+            <element signature="e#9642#9643#0" expanded="true" />
+            <element signature="e#9741#9742#0" expanded="true" />
+            <element signature="e#9779#9780#0" expanded="true" />
+            <element signature="e#10288#10289#0" expanded="true" />
+            <element signature="e#10324#10325#0" expanded="true" />
+            <element signature="e#10374#10375#0" expanded="true" />
+            <element signature="e#10415#10416#0" expanded="true" />
+            <element signature="e#10451#10452#0" expanded="true" />
+            <element signature="e#10492#10493#0" expanded="true" />
+            <element signature="e#11583#11584#0" expanded="true" />
+            <element signature="e#11623#11624#0" expanded="true" />
+            <element signature="e#16449#16450#0" expanded="true" />
+            <element signature="e#16488#16489#0" expanded="true" />
+            <element signature="e#16523#16524#0" expanded="true" />
+            <element signature="e#16614#16615#0" expanded="true" />
           </folding>
         </state>
       </provider>

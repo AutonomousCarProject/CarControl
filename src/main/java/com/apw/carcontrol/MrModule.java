@@ -6,14 +6,17 @@ import com.apw.Steering.SteeringModule;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class MrModule extends JFrame implements Runnable {
+public class MrModule extends JFrame implements Runnable, KeyListener {
 
     private ScheduledExecutorService executorService;
     private ArrayList<Module> modules;
@@ -36,10 +39,8 @@ public class MrModule extends JFrame implements Runnable {
         displayImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         bufferImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         displayIcon = new ImageIcon(displayImage);
-        this.add(new JLabel(displayIcon));
         trakSimControl = new TrakSimControl();
         modules = new ArrayList<>();
-
     }
 
     private void setupWindow() {
@@ -49,12 +50,17 @@ public class MrModule extends JFrame implements Runnable {
         setSize(width, height + 25);
         setResizable(false);
         setVisible(true);
+        addKeyListener(this);
+        add(new JLabel(displayIcon));
     }
 
     private void createModules() {
         modules.add(new ImageManagementModule(width, height));
         modules.add(new SpeedControlModule());
         modules.add(new SteeringModule());
+
+        for (Module module : modules)
+            module.initialize(trakSimControl);
     }
 
     private void update() {
@@ -97,4 +103,19 @@ public class MrModule extends JFrame implements Runnable {
     public static void main(String[] args) {
         new MrModule();
     }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        for (Map.Entry<Integer, Runnable> binding : trakSimControl.keyBindings.entrySet()) {
+            if (e.getKeyCode() == binding.getKey()) {
+                binding.getValue().run();
+            }
+        }
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {  }
+
+    @Override
+    public void keyReleased(KeyEvent e) {  }
 }

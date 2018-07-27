@@ -1,19 +1,9 @@
 package com.apw.ImageManagement;
 
-import com.aparapi.Range;
-import com.apw.ImageManagement.ImageManipulator;
-import com.apw.ImageManagement.ImagePicker;
 import com.apw.carcontrol.CarControl;
 import com.apw.carcontrol.Module;
-import com.apw.fly2cam.FlyCamera;
 
-
-import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferInt;
-import java.lang.invoke.LambdaMetafactory;
-import java.util.Arrays;
 
 public class ImageManagementModule implements Module {
 
@@ -55,7 +45,8 @@ public class ImageManagementModule implements Module {
         return mono;
 
     }
-    public byte[] getMonochrome2Raster(byte[] pixels){
+
+    public byte[] getMonochrome2Raster(byte[] pixels) {
         ImageManipulator.convertToMonochrome2Raster(pixels, mono, height, width);
         return mono;
     }
@@ -113,6 +104,7 @@ public class ImageManagementModule implements Module {
         return rgb;
 
     }
+
     public int[] getMonoRGB2Raster(byte[] pixels) {
         ImageManipulator.convertToMonochromeRaster(pixels, mono, height, width);
         ImageManipulator.convertMonotoRGB(mono, rgb, mono.length);
@@ -120,14 +112,14 @@ public class ImageManagementModule implements Module {
     }
 
     @Override
-    public void initializeConstants() {
+    public void initialize(CarControl control) {
 
     }
 
     @Override
     public void update(CarControl control) {
         imagePixels = null;
-        switch(viewType) {
+        switch (viewType) {
             case 1:
                 imagePixels = getRGBRaster(control.getRecentCameraImage());
                 break;

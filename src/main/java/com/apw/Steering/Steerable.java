@@ -13,6 +13,7 @@ public interface Steerable {
 
     /**
      * Gets how steep a turn will be. 1.0 being the sparest turn, 0 being no turn.
+     *
      * @param turnAngle angle from center line to furthest point
      * @return how steep the turn will be
      */
