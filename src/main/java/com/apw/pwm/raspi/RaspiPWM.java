@@ -15,12 +15,12 @@ import org.jetbrains.annotations.NotNull;
  */
 public class RaspiPWM implements PWMController {
 
-  public static final int PWM_FREQUENCY = 50;
-  public static final double BCLCK = 19.2e6;
-  public static final double MAX_PULSE_WIDTH = 2.0 / 1000;
   private static final RaspiPWM theController = new RaspiPWM();
+
+  public static final int PWM_FREQUENCY = 50, CLOCK_DIVIDER = 128;
+  public static final double BCLCK = 19.2e6, MAX_PULSE_WIDTH = 2.0 / 1000;
+  private int PWM_REAL_RANGE, PWM_ACTIONABLE_RANGE;
   private final GpioController gpioController = GpioFactory.getInstance();
-  private int PWM_RANGE;
   private int provisionedHardwarePins = 0;
   private HashSet<Integer> provisionedPins = new HashSet<>(2);
 
@@ -37,10 +37,14 @@ public class RaspiPWM implements PWMController {
   }
 
   private void configureController() {
-    PWM_RANGE = softwarePWMGenerationEnabled ? 100 : 4095;
+    // TODO software generation checks
+    PWM_REAL_RANGE = Math.toIntExact(Math.round(BCLCK / CLOCK_DIVIDER / PWM_FREQUENCY));
+    PWM_ACTIONABLE_RANGE =
+        Math.toIntExact(Math.round(
+            (MAX_PULSE_WIDTH * PWM_FREQUENCY) * (BCLCK / CLOCK_DIVIDER / PWM_FREQUENCY)));
     Gpio.pwmSetMode(Gpio.PWM_MODE_MS);
-    Gpio.pwmSetRange(PWM_RANGE);
-    Gpio.pwmSetClock(Math.toIntExact(Math.round(BCLCK / (PWM_FREQUENCY * PWM_RANGE))));
+    Gpio.pwmSetRange(PWM_REAL_RANGE);
+    Gpio.pwmSetClock(CLOCK_DIVIDER);
   }
 
   public void provisionPin(int pin) {
@@ -81,8 +85,12 @@ public class RaspiPWM implements PWMController {
 
   @Override
   public void setOutputPulseWidth(int pin, double ms) {
-    provisionPinPrivate(pin).setPwmRange(
-        Math.toIntExact(Math.round(MAX_PULSE_WIDTH * PWM_FREQUENCY * PWM_RANGE)));
+    System.out.println("PWM_REAL_RANGE:\t" + PWM_REAL_RANGE);
+    System.out.println("PWM_ACTIONABLE_RANGE:\t" + PWM_ACTIONABLE_RANGE);
+    System.out.println("ms:\t" + ms);
+    provisionPinPrivate(pin)
+        .setPwm(Math.toIntExact(Math.round((ms / 1000) / MAX_PULSE_WIDTH * PWM_ACTIONABLE_RANGE)));
+    System.out.println("PWM is:\t" + provisionPinPrivate(1).getPwm());
   }
 
   @Override
