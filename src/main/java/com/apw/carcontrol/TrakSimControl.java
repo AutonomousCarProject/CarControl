@@ -20,6 +20,7 @@ public class TrakSimControl implements CarControl {
     private int[] renderedImage = null;
     private int currentSteering = 0;
     private int currentVelocity = 0;
+    private int currentManualSpeed = 0;
 
     public TrakSimControl() {
         cam = new SimCamera();
@@ -159,6 +160,16 @@ public class TrakSimControl implements CarControl {
     }
 
     @Override
+    public void manualSpeedControl(boolean absolute, int manualSpeed) {
+        if(absolute) {
+            currentManualSpeed = manualSpeed;
+        }
+        else {
+            currentManualSpeed += manualSpeed;
+        }
+    }
+
+    @Override
     public int getGas() {
         return currentVelocity;
     }
@@ -178,17 +189,14 @@ public class TrakSimControl implements CarControl {
         return edges;
     }
 
-    protected void setEdges(Insets edges) {
+    @Override
+    public void setEdges(Insets edges) {
         this.edges = edges;
     }
 
     @Override
     public void rectFill(int colo, int rx, int cx, int rz, int c) {
         cam.theSim.RectFill(colo, rx, cx, rz, c);
-    }
-
-    public Arduino getServos() {
-        return driveSys;
     }
 
     @Override

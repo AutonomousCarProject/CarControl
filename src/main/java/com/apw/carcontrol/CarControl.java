@@ -1,7 +1,5 @@
 package com.apw.carcontrol;
 
-import com.apw.fakefirm.Arduino;
-
 import java.awt.*;
 
 /**
@@ -77,19 +75,65 @@ public interface CarControl {
      */
     void steer(boolean absolute, int angle);
 
-    // TODO figure this out, write javadocs, maybe modify interface
+    /**
+     * Manually controls the speed of the car.
+     *
+     * @param absolute If true, sets the manual speed to the parameter given, else increments it by the parameter given.
+     * @param manualSpeed The manual speed to set the car's velocity to or increment it by.
+     */
+    void manualSpeedControl(boolean absolute, int manualSpeed);
+
+    /**
+     * Gets the current gas (velocity) of the car.
+     * @return The curremt gas/velocity value.
+     * @see #accelerate(boolean, int)
+     */
     int getGas();
 
+    /**
+     * Gets the current steering angle of the car
+     * @return The current steering angle.
+     * @see #steer(boolean, int)
+     */
     int getSteering();
 
+    /**
+     * Gets the manual speed control of the car.
+     * @return The current manual speed control value.
+     * @see #manualSpeedControl(boolean, int)
+     */
     int getManualSpeed();
 
+    /**
+     * Gets the edges of the screen (if one exists).
+     * @return The edges of the rendering window as a Java AWT Insets object.
+     */
     Insets getEdges();
 
-    // this is a traksim method
+
+    /**
+     * Set the edges of the screen. If one does not exist, does nothing.
+     * @param edges The edges of the rendering window as a Java AWT Insets object.
+     */
+    void setEdges(Insets edges);
+
+    /**
+     * Draws a rectangle on the screen (if one exists).
+     *
+     * @param colo The pixel color to fill that rectangle, = 0x00RRGGBB
+     * @param rx   The pixel row in one corner
+     * @param cx   The pixel column in the same corner
+     * @param rz   The pixel row in the other corner (inclusive)
+     * @param c   The pixel column there
+     *
+     * @see com.apw.apw3.TrakSim#RectFill(int, int, int, int, int)
+     */
     void rectFill(int colo, int rx, int cx, int rz, int c);
 
-    Arduino getServos();
-
+    /**
+     * Registers a key event.
+     * @param keyCode The key that should be pressed to trigger the action.
+     * @param action The action to trigger when the key is pressed.
+     */
     void addKeyEvent(int keyCode, Runnable action);
 }
