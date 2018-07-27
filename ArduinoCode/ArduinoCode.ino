@@ -8,6 +8,7 @@ int sinceConnect = 0;
 int sinceNokill = 0;
 byte timeout = 40;
 byte out[] = {0, 0, 0};
+byte outsize = 6;
 //where 1ms is considered full left or full reverse, and 2ms is considered full forward or full right.
 
 void setup() {
@@ -17,8 +18,8 @@ void setup() {
   pinMode(10, OUTPUT); //speed
   pinMode(11, INPUT); //speed getter
   
-  pinMode(2, INPUT_PULLUP); //Dead man's switch
-  attachInterrupt(2, killReader, RISING);
+  pinMode(2, INPUT); //Dead man's switch
+  attachInterrupt(digitalPinToInterrupt(2), killReader, RISING);
   
   pinMode(13, OUTPUT); //testing light
   digitalWrite(13, HIGH);
@@ -26,6 +27,13 @@ void setup() {
   Serial.begin(57600);
   Serial.setTimeout(1000); //Default value. available for change
   
+}
+
+void addMessage(byte ina, byte inb, byte inc){
+  out[outsize] = ina;
+  out[outsize+1] = inb;
+  out[outsize+2] = inc;
+  outsize += 3;
 }
 
 //A function run when a pin interrupts.
@@ -89,15 +97,19 @@ void loop() {
     interrupts();
     
     delayMicroseconds(normalDelay); //normalize to ~2ms total
-    
     digitalWrite(13, HIGH); //restart signal light
 
+    addMessage(1, 2, (byte) "E");
     
-    out[1] = sinceNokill;
-    out[2] = (char) 'U';
-    
-    if (sizeof(out) >= 3){
-      Serial.write(out, 3);
+    while (outsize >= 3){
+      byte msg[3] = {out[0], out[1], out[2]};
+      Serial.write(msg, 3); //Send the first 3 items in the out list
+
+      //Move values backwards in the list for the next run
+      for (byte n = 0; n < outsize-3; n++){
+        out[n] = out[n+3];
+      }
+      outsize -= 3;
     }
 
 
