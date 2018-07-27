@@ -136,4 +136,6 @@ public interface CarControl {
      * @param action The action to trigger when the key is pressed.
      */
     void addKeyEvent(int keyCode, Runnable action);
+    
+    byte getTile();
 }

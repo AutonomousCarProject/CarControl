@@ -203,5 +203,10 @@ public class TrakSimControl implements CarControl {
     public void addKeyEvent(int keyCode, Runnable action) {
         keyBindings.put(keyCode, action);
     }
+    
+    @Override
+    public byte getTile() {
+    	return (byte) (cam.PixTile()-1);
+    }
 
 }
