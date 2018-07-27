@@ -1,5 +1,7 @@
 package com.apw.carcontrol;
 
+import java.awt.*;
+
 /**
  * Wraps control of the car through either TrakSim or real-world car control.
  */
@@ -22,6 +24,8 @@ public interface CarControl {
      * @return The processed image in the form of a simple color raster array.
      */
     byte[] getProcessedImage();
+
+    int[] getRGBImage();
 
     /**
      * Sets the processed image.
@@ -67,4 +71,6 @@ public interface CarControl {
     int getSteering();
 
     int getManualSpeed();
+
+    Insets getEdges();
 }

@@ -163,12 +163,12 @@ public class DriveTest extends JFrame {
      *
      * @param graf the graphics to edit
      */
-    private void steerPaint(Graphics graf){
+    private void steerPaint(Graphics graf) {
         Point[] hi = testSteering.findPoints(imageManager.getRGBRaster());
         int vEdit = (getHeight()-480)/2+10;
         graf.setColor(Color.RED);
         //graf.fillRect(100, testSteering.startingPoint, 1, 1);
-        if (DriverCons.D_DrawCurrent == true) {
+        if (DriverCons.D_DrawCurrent) {
             for (int i = 0; i<testSteering.startingPoint - (testSteering.startingHeight + testSteering.heightOfArea); i++) {
                 graf.fillRect(testSteering.leadingMidPoints[i].x, testSteering.leadingMidPoints[i].y +  + edges.top+vEdit, 5, 5);
             }
@@ -176,11 +176,11 @@ public class DriveTest extends JFrame {
 
 
         for (int i = 0; i<hi.length; i++) {
-            if (DriverCons.D_DrawPredicted == true) {
+            if (DriverCons.D_DrawPredicted) {
                 graf.setColor(Color.BLUE);
                 graf.fillRect(hi[i].x, hi[i].y + edges.top + vEdit, 5, 5);
             }
-            if (DriverCons.D_DrawOnSides == true) {
+            if (DriverCons.D_DrawOnSides) {
                 graf.setColor(Color.YELLOW);
                 graf.fillRect(testSteering.leftPoints[i].x + edges.left, testSteering.leftPoints[i].y + edges.top+ vEdit, 5, 5);
                 graf.fillRect(testSteering.rightPoints[i].x + edges.left, testSteering.rightPoints[i].y + edges.top + vEdit, 5, 5);

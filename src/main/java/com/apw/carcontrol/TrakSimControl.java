@@ -5,6 +5,8 @@ import com.apw.apw3.MyMath;
 import com.apw.apw3.SimCamera;
 import com.apw.fakefirm.Arduino;
 
+import java.awt.*;
+
 public class TrakSimControl implements CarControl {
     protected SimCamera cam;
     private Arduino driveSys;
@@ -56,6 +58,11 @@ public class TrakSimControl implements CarControl {
     @Override
     public byte[] getProcessedImage() {
         return processedImage;
+    }
+
+    @Override
+    public int[] getRGBImage() {
+        return new int[0];
     }
 
     @Override
@@ -160,5 +167,10 @@ public class TrakSimControl implements CarControl {
     @Override
     public int getManualSpeed() {
         return 0;
+    }
+
+    @Override
+    public Insets getEdges() {
+        return new Insets(480, 0, 0, 912);
     }
 }
