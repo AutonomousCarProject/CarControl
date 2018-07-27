@@ -1,3 +1,21 @@
+/**
+* Camera Calibration is used to find the focal length and subsequently the distance of an object.
+* In order to use it, you need to create a square the size of testBlobWidthHeight at the distance testBlobDistance,
+* then begin calibration, taking a picture, measuring the square, and thus filling the requisite variables.
+* After calibration you can find the distance to an object if you know its absolute size along with image information.
+* 
+* <p>How to calibrate the camera to find an object's distance:
+* 1) Draw a blue square with the size of testBlobWidth. testBlobWidth is a constant defined in CameraCalibration.
+* 2) Move the square to the distance from the camera specified by testBlobDistance. testBlobDistance is a constant defined in CameraCalibration.
+* 3) Run the method calibrateCamera, getting information about the given square from the camera
+* -- After Calibration is Complete --
+* 4) After calibration, to find the distance run the method distanceToObj, imputing the absolute width of the object, focal length (given by calibrateCamera), and object pixel width
+* 
+* @author Derek Schwartz (Wrote the code)
+* @author Matthew Alexander (Added documentation)
+* 
+* */
+
 package com.apw.SpeedCon;
 
 import com.apw.ImageManagement.ImageManager;
@@ -12,41 +30,21 @@ import com.apw.pedestrians.image.Color;
 import java.util.List;
 
 public class CameraCalibration {
-
-	/**
-	 * Camera Calibration is used to find the focal length and subsequently the distance of an object.
-	 * In order to use it, you need to create a square the size of testBlobWidthHeight at the distance testBlobDistance,
-	 * then begin calibration, taking a picture, measuring the square, and thus filling the requisite variables.
-	 * After calibration you can find the distance to an object if you know its absolute size along with image information.
-	 * 
-	 * <p>How to calibrate the camera to find an object's distance:
-	 * 1) Draw a blue square with the size of testBlobWidth. testBlobWidth is a constant defined in CameraCalibration.
-	 * 2) Move the square to the distance from the camera specified by testBlobDistance. testBlobDistance is a constant defined in CameraCalibration.
-	 * 3) Run the method calibrateCamera, getting information about the given square from the camera
-	 * -- After Calibration is Complete --
-	 * 4) After calibration, to find the distance run the method distanceToObj, imputing the absolute width of the object, focal length (given by calibrateCamera), and object pixel width
-	 * 
-	 * 4)To find the distance, run distanceToObj with the known real world width of the object (make sure to scale), 
-	 * focal length (which should be set by calibrateCamera), and object pixel width (the width of the blob you want to get distance to)
-	 * 
-	 * @author Derek Schwartz (Wrote the code)
-	 * @author Matthew Alexander (Added documentation)
-	 * @see [another relevant class or method that you think people should look at]
-	 * @see etc.
-	 *
-	 */
-	
 	private PedestrianDetector pedDetect;
 	private ImageManager imageManager;
-
+	private MovingBlob testBlob;
+	
+	
 	//Camera information
 	private double cameraFocalLength;
-	private double signWidth;           //The width of a standared stop sign in mm
-
-	private MovingBlob testBlob;
-	private double testBlobWidthHeight = 2 ; //the width and height of a square used to calibrate the camera 
-	private double testBlobDistance = 10;    //The distance the test blob is away from the camera 
-	private double relativeWorldScale;  //The scale of the world (if 1/3 scale, set to 3)
+	
+	
+	//Object information
+	private double signWidth;				//The width of a standard stop sign in mm
+	private double calSuqareSideLength = 2;	//The side length of the calibration square
+	private double testBlobDistance = 10;	//The distance of the calibration square away from the camera
+	
+	private double relativeWorldScale;		//The scale of the world (if 1/3 scale, set to 3)
 	
 	//Used to set world scale, and width of known objects
 	public CameraCalibration(){
@@ -76,7 +74,7 @@ public class CameraCalibration {
 		}
 
 		//Used to test distance to found test blob, should be same as testBlobDistance
-		distanceToObj(testBlobWidthHeight, cameraFocalLength, testBlob.width);
+		distanceToObj(calSquareSideLength, cameraFocalLength, testBlob.width);
 	}
 
 
