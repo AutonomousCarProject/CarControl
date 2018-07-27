@@ -1,4 +1,4 @@
-package com.apw.fakefirm;
+package com.apw.sbcio.fakefirm;
 
 import java.awt.Graphics;
 
@@ -6,7 +6,7 @@ import com.apw.carcontrol.CarControl;
 import com.apw.carcontrol.Module;
 
 public class InterfaceModule implements Module{
-    private Arduino driveSys;
+    private ArduinoIO driveSys;
 
     public void initialize(CarControl control) {
     }
@@ -21,7 +21,7 @@ public class InterfaceModule implements Module{
 	}
 	
 	public void Close(){
-		driveSys.Close();
+		driveSys.close();
 	}
 
 	@Override

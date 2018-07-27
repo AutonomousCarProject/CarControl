@@ -1,4 +1,4 @@
-package com.apw.pwm;
+package com.apw.sbcio;
 
 /**
  * Members must conform to a singleton pattern.
@@ -36,6 +36,7 @@ public interface PWMController {
    */
   void setOutputPulseWidth(int pin, double ms);
 
+  
   void close();
 
 }

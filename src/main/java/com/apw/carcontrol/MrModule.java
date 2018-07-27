@@ -3,8 +3,10 @@ package com.apw.carcontrol;
 import com.apw.ImageManagement.ImageManagementModule;
 import com.apw.SpeedCon.SpeedControlModule;
 import com.apw.Steering.SteeringModule;
-import com.apw.fakefirm.Arduino;
-import com.apw.fakefirm.Interface;
+import com.apw.sbcio.PWMController;
+import com.apw.sbcio.fakefirm.ArduinoIO;
+import com.apw.sbcio.fakefirm.Interface;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -24,7 +26,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     private TrakSimControl trakSimControl;
     private BufferedImage displayImage, bufferImage;
     private ImageIcon displayIcon;
-    private Interface driveSys;
+    private PWMController driveSys;
 
     // FIXME breaks if dimensions are not 912x480
     private final int width = 912;
@@ -43,6 +45,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         displayIcon = new ImageIcon(displayImage);
         trakSimControl = new TrakSimControl(driveSys);
         modules = new ArrayList<>();
+        driveSys = ArduinoIO.getInstance();
     }
 
     private void setupWindow() {

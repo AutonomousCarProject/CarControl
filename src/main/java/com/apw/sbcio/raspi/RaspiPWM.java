@@ -1,6 +1,6 @@
-package com.apw.pwm.raspi;
+package com.apw.sbcio.raspi;
 
-import com.apw.pwm.PWMController;
+import com.apw.sbcio.PWMController;
 import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.gpio.GpioPinPwmOutput;

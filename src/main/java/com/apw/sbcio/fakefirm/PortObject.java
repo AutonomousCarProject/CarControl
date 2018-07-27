@@ -1,4 +1,4 @@
-package com.apw.fakefirm;
+package com.apw.sbcio.fakefirm;
 
 import jssc.SerialPortException;
 

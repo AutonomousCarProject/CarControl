@@ -17,10 +17,10 @@
 package com.apw.drivedemo;                                    // 2018 June 13
 
 import com.apw.apw3.*;
-import com.apw.fakefirm.Arduino;
 import com.apw.fly2cam.FlyCamera;
 
 import com.apw.pedestrians.blobtrack.MovingBlob;
+import com.apw.sbcio.fakefirm.ArduinoIO;
 
 import jssc.SerialPortException;
 
@@ -45,7 +45,7 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 
 	private FlyCamera theVideo = null;
 	private FlyCamera simVideo = null;
-	private Arduino theServos = null;
+	private ArduinoIO theServos = null;
 	private TrakSim theSim = null;
 	private byte[] CamPix = null;
 	private boolean StepMe = false, SimSpedFixt = DriverCons.D_FixedSpeed, CamActive = false;
@@ -934,7 +934,7 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 						ServoTestCount = nServoTests * 8 - 4;
 		System.out.println(HandyOps.Dec2Log("(Cal8=", Calibrating, HandyOps.Dec2Log(") pix ", ScrPix * 4, sayso)));
 		simVideo = new SimCamera();
-		theServos = new Arduino();
+		theServos = new ArduinoIO();
 		theSim = new TrakSim();
 		testSteering = new com.apw.Steering.Steering(theSim);
 		if (LiveCam)
@@ -960,14 +960,14 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 		titok = TickTock;
 		myVid = simVideo;
 		if (!dunit)
-			System.out.println("FakeFirmata failed to open " + Arduino.CommPortNo);
+			System.out.println("FakeFirmata failed to open " + ArduinoIO.CommPortNo);
 		else if (myVid == null)
 			dunit = false;
 		else
 			try {
 				dunit = myVid.Connect(CamFPS); // SteerPin = DriverCons.D_SteerServo = 9..
-				theServos.pinMode(SteerPin, Arduino.SERVO);
-				theServos.pinMode(GasPin, Arduino.SERVO); // GasPin=10
+				theServos.pinMode(SteerPin, ArduinoIO.SERVO);
+				theServos.pinMode(GasPin, ArduinoIO.SERVO); // GasPin=10
 			} catch (Exception ex) {
 				dunit = false;
 			}
