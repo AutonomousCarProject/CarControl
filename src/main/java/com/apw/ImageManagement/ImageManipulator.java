@@ -13,6 +13,8 @@
 
 package com.apw.ImageManagement;
 
+import com.apw.drivedemo.SimpleThresholds;
+
 public class ImageManipulator {
 
 	/** Converts a bayer8 image to a monochrome image, uses the green value of the bayer8
@@ -135,20 +137,20 @@ public class ImageManipulator {
 				B = (int)(1.7790 * (U - 128));
 				//If one of the colors has a value 50 greater than both other colors
 				//it assigns that pixel to that color
-				if(R > G+55 && R > B+55){
+				if(R > G+SimpleThresholds.redGreen && R > B+SimpleThresholds.redBlue){
 					simple[r*ncols+c] = 0;
-				} else if(G > R+45 && G > B+45){
+				} else if(G > R+SimpleThresholds.greenRed && G > B+SimpleThresholds.greenBlue){
 					simple[r*ncols+c] = 1;
-				} else if(B > R+45 && B > G+45){
+				} else if(B > R+SimpleThresholds.blueRed && B > G+SimpleThresholds.blueGreen){
 					simple[r*ncols+c] = 2;
-				}else if(R<G+20&&G<R+20&&(R>B+45)){
+				}else if(R<G+SimpleThresholds.yellowDiff&&G<R+SimpleThresholds.yellowDiff&&(R>B+SimpleThresholds.yellowBlue)){
 					simple[r*ncols+c] = 6;
 				}
 				//Otherwise it sees if one of the colors has a value above 170 for white
 				// if not, 85 for grey and below 85 for black
-				else if(Y>170){
+				else if(Y>SimpleThresholds.whitePoint){
 					simple[r*ncols+c] = 3;
-				} else if(Y>50){
+				} else if(Y>SimpleThresholds.greyPoint){
 					simple[r*ncols+c] = 4; //0x808080
 				} else {
 					simple[r * ncols + c] = 5;

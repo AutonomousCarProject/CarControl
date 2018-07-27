@@ -69,7 +69,9 @@ public class DriveTest extends JFrame implements KeyListener, MouseListener {
         starter = new TrakManager();                                         //Creates a TrakManager object, which will run TrakSim at a constant Framerate
         init(new Timer(),starter.getImageManager());     //Initializes DriveTest
         displayTaskTimer.scheduleAtFixedRate(starter, new Date(), 1000 / FPS);    //Initializes TrakManager at FPS frames per second
-        new DriveTest(4).autoDriveTest(); //Format to create a new DriveTest window that updates automatically
+        
+        new SimpleThresholds();
+        new DriveTest(3).autoDriveTest(); //Format to create a new DriveTest window that updates automatically
         //new DriveTest(4).autoDriveTest(); //Format to create a new DriveTest window that updates automatically
         //new DriveTest(1).autoDriveTest(); //Format to create a new DriveTest window that updates automatically
 
