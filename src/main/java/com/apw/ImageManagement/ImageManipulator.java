@@ -75,6 +75,7 @@ public class ImageManipulator {
 				int B = (bayer[getPos(c,r,combineTile((byte)3,tile),ncols,nrows,true)]&0xFF);
 				averageLuminance += R+G+B/3;
 
+
 			}
 			averageLuminance /= ncols;
 
@@ -86,7 +87,7 @@ public class ImageManipulator {
 
 				int pix =(R+G+B)/3;
 				if(!(c >= 640 || r < 240 || r > 455)) {
-					if (pix >  1.8*averageLuminance) {
+					if (pix >  0.8*averageLuminance && Math.abs(R-G) < 30 && Math.abs(R-B) < 30 && Math.abs(B-G) < 30) {
 						mono[r * ncols + c] = 1;
 					} else {
 						mono[r * ncols + c] = 0;
@@ -306,21 +307,28 @@ public class ImageManipulator {
     public static void smooth(byte[] input,byte[] output, int ncols, int nrows, byte tile){
     	for(int r = 0; r<nrows;r++){
 			output[getPos(0,r,combineTile((byte)0,tile),ncols,nrows,true)] = input[getPos(0,r,combineTile((byte)0,tile),ncols,nrows,true)];
-			output[getPos(ncols-1,r,combineTile((byte)0,tile),ncols,nrows,true)] = input[getPos(ncols-1,r,combineTile((byte)0,tile),ncols,nrows,true)];
-			for(int c = 1; c<ncols-1;c++){
-				int R1 = (input[getPos(c-1,r,combineTile((byte)0,tile),ncols,nrows,true)]&0xFF);
-				int G1 = (input[getPos(c-1,r,combineTile((byte)1,tile),ncols,nrows,true)]&0xFF);
-				int B1 = (input[getPos(c-1,r,combineTile((byte)3,tile),ncols,nrows,true)]&0xFF);
-				int R2 = (input[getPos(c,r,combineTile((byte)0,tile),ncols,nrows,true)]&0xFF);
-				int G2 = (input[getPos(c,r,combineTile((byte)1,tile),ncols,nrows,true)]&0xFF);
-				int B2 = (input[getPos(c,r,combineTile((byte)3,tile),ncols,nrows,true)]&0xFF);
-				int R3 = (input[getPos(c+1,r,combineTile((byte)0,tile),ncols,nrows,true)]&0xFF);
-				int G3 = (input[getPos(c+1,r,combineTile((byte)1,tile),ncols,nrows,true)]&0xFF);
-				int B3 = (input[getPos(c+1,r,combineTile((byte)3,tile),ncols,nrows,true)]&0xFF);
-				double Y1 = R1 *  .299000 + G1 *  .587000 + B1 *  .114000;
-				double Y2 = R2 *  .299000 + G2 *  .587000 + B2 *  .114000;
-				double Y3 = R3 *  .299000 + G3 *  .587000 + B3 *  .114000;
-				double Y = (Y1+Y2*2+Y3)/4;
+			int R2 = (input[getPos(0,r,combineTile((byte)0,tile),ncols,nrows,true)]&0xFF);
+			int G2 = (input[getPos(0,r,combineTile((byte)1,tile),ncols,nrows,true)]&0xFF);
+			int B2 = (input[getPos(0,r,combineTile((byte)3,tile),ncols,nrows,true)]&0xFF);
+			double Y2 = R2 *  .299000 + G2 *  .587000 + B2 *  .114000;
+			double Y = Y2;
+			//output[getPos(ncols-1,r,combineTile((byte)0,tile),ncols,nrows,true)] = input[getPos(ncols-1,r,combineTile((byte)0,tile),ncols,nrows,true)];
+			for(int c = 1; c<ncols;c++){
+				//int R1 = (input[getPos(c-1,r,combineTile((byte)0,tile),ncols,nrows,true)]&0xFF);
+				//int G1 = (input[getPos(c-1,r,combineTile((byte)1,tile),ncols,nrows,true)]&0xFF);
+				//int B1 = (input[getPos(c-1,r,combineTile((byte)3,tile),ncols,nrows,true)]&0xFF);
+				R2 = (input[getPos(c,r,combineTile((byte)0,tile),ncols,nrows,true)]&0xFF);
+				G2 = (input[getPos(c,r,combineTile((byte)1,tile),ncols,nrows,true)]&0xFF);
+				B2 = (input[getPos(c,r,combineTile((byte)3,tile),ncols,nrows,true)]&0xFF);
+				//int R3 = (input[getPos(c+1,r,combineTile((byte)0,tile),ncols,nrows,true)]&0xFF);
+				//int G3 = (input[getPos(c+1,r,combineTile((byte)1,tile),ncols,nrows,true)]&0xFF);
+				//int B3 = (input[getPos(c+1,r,combineTile((byte)3,tile),ncols,nrows,true)]&0xFF);
+				//double Y1 = R1 *  .299000 + G1 *  .587000 + B1 *  .114000;
+				Y2 = R2 *  .299000 + G2 *  .587000 + B2 *  .114000;
+				//double Y3 = R3 *  .299000 + G3 *  .587000 + B3 *  .114000;
+				//double Y = (Y1+Y2*2+Y3)/4;
+				Y += Y2;
+				Y/=2;
 				double U  = R2 * -.168736 + G2 * -.331264 + B2 *  .500000 + 128;
 				double V = R2 *  .500000 + G2 * -.418688 + B2 * -.081312 + 128;
 				double R = Y + 1.4075 * (V - 128);

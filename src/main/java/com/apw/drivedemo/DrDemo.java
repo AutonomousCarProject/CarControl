@@ -40,7 +40,7 @@ import com.apw.Steering.Point;
 // import fly2cam.CameraBase;
 
 public class DrDemo extends JFrame implements MouseListener, KeyListener {
-	com.apw.Steering.Steering testSteering = new com.apw.Steering.Steering();
+	Steering testSteering;
 	private SpeedController speedControl;
 	private ImageManager imageManager;
 	//private DriveTest dtest;
@@ -995,6 +995,7 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 
 		this.speedControl = new SpeedController();
 		this.imageManager = new ImageManager(simVideo);
+		this.testSteering = new Steering(imageManager);
 	}
 
 	@Override

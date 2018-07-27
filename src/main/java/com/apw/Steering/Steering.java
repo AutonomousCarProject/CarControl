@@ -49,7 +49,7 @@ public class Steering {
 	private long averageLuminance = 0;
 	
 
-	public Steering() {
+	public Steering(ImageManager im) {
 		for (int i = 0; i<heightOfArea; i++) {
 			leftPoints[i] = new Point(0, 0);
 			rightPoints[i] = new Point(0, 0);
@@ -59,6 +59,11 @@ public class Steering {
 			leadingMidPoints[i] = new Point(0, 0);
 		}
 		this.theSim = theSim;
+		
+		if (DriverCons.D_LiveCam) {
+			cameraWidth = screenWidth = im.getNcols();
+			screenHeight = im.getNrows();
+		}
 	}
 	
 	public Point[] findPoints(int[] pixels) {
@@ -467,7 +472,7 @@ public class Steering {
  
     }
     public void paint(Graphics graf, ImageManager imageManager, Insets edges, int vEdit){
-		//*
+    	//*
 		Point[] hi = this.findPoints(imageManager.getRGBRaster());
 		//int vEdit = (getHeight()-480)/2+10;
 		graf.setColor(Color.RED);

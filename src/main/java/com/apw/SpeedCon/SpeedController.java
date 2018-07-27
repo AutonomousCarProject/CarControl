@@ -111,7 +111,7 @@ public class SpeedController {
         ImageManager imageManager = imagemanager;
 
 
-        List<MovingBlob> blobs = pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), 912);
+        List<MovingBlob> blobs = pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), imageManager.getNcols());
         for(MovingBlob i : blobs){
 
             /* Returns an int value corresponding to the color of the light we are looking at
