@@ -143,7 +143,7 @@ public class Arduino { // Adapted to Java from arduino.cs ... (FakeFirmata)
 				byte[] msg = surrealPort.readBytes(3);
 				System.out.println((int) msg[0]);
 				System.out.print((int) msg[1]);
-				System.out.print((char) msg[2]);
+				System.out.print((int) msg[2]);
 			}
 		} catch (SerialPortException e) {
 			// TODO Auto-generated catch block
