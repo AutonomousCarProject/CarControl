@@ -331,8 +331,7 @@ public class SpeedController {
 	 * @param blob our guess for a light, blob color is ALWAYS red, green, or yellow
 	 * @param bloblist all of the blobs on screen
 	 * @return returns a light code, see above for light codes
-	 * */
-
+	 */
 	public int detectLight(MovingBlob blob, List<MovingBlob> bloblist){
 		int lightColor = 0;
 		
