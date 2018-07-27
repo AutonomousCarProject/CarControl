@@ -193,7 +193,7 @@ public class DriveTest extends JFrame {
      */
     private void speedPaint(Graphics graf){
         PedestrianDetector pedDetect = new PedestrianDetector();
-        int vEdit = (getHeight()-480)/2+10;
+        int vEdit = (getHeight()-480)/2-25;
         limitArray = new byte[640*480];
         ImageManipulator.limitTo(limitArray,imageManager.getSimpleColorRaster(),ncols,nrows,640,480,false);
         List<MovingBlob> blobs = pedDetect.getAllBlobs(limitArray, 640);

@@ -87,5 +87,6 @@ public class HowToDocument{
 	public void setNum(int num){
 		this.n = num;
 	}
+	
 }
  

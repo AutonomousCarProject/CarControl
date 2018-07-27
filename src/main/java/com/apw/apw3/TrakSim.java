@@ -3106,8 +3106,10 @@ public class TrakSim {
                         } else if (pint < 352) zx = 0;
                         else zx++;
                     } //~if // (RoWiM=0) // (RM[] in grid=2m)..
-                    if (zx > 0) RoWiM = fImMid / MyMath.fAbs(RasterMap[(zx + 2) & RmapMsk]
-                            - RasterMap[zx & RmapMsk]);
+                    if (RasterMap != null) if (zx>0) if (zx<RasterMap.length-3) {
+                        RoWiM = MyMath.fAbs(RasterMap[zx+2]-RasterMap[zx]);
+                        if (RoWiM !=0.0) RoWiM = fImMid/RoWiM;
+                    }
                     if (Mini_Log) if (logy)
                         System.out.println(HandyOps.Dec2Log("   (``) ", oops,
                                 HandyOps.Flt2Log(" (", fImMid, HandyOps.Flt2Log("/", VuEdge,
@@ -4986,9 +4988,9 @@ public class TrakSim {
 
     public void GotBytes(byte[] msg, int lxx) {
         if (msg == null) return;
-        if ((((int) msg[0]) & 0xF0) != Arduino.ANALOG_MESSAGE) return;
-        if (msg.length >= 3) SetServo(((int) msg[0]) & 0xF,
-                (((int) msg[2]) << 7) | ((int) msg[1]) & 0x7F);
+        //if (msg[0] != Arduino.ANALOG_MESSAGE) return;
+        if (msg.length >= 3) 
+        	SetServo((int) msg[1], (int) msg[2]);
     } //~GotBytes
 
     private int Color4ix(int whom) { // only frm InitInd
