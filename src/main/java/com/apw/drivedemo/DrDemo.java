@@ -871,7 +871,6 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 								this.theSim.DrawLine(color, b.y+b.height, b.x, b.y+b.height, b.x+b.width);
 								this.theSim.DrawLine(color, b.y, b.x+b.width, b.y+b.height, b.x+b.width);
 							}
-							
 						}
 					}
 					

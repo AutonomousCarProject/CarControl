@@ -117,7 +117,6 @@ public class SpeedController {
 		else if (shouldStopLight == 0){
 			this.desiredSpeed = 0;
 		}
-
 	}
 
 	public int getNextSpeed(){
