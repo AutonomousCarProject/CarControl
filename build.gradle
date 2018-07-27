@@ -1,7 +1,9 @@
 plugins {
+    id 'com.gradle.build-scan' version '1.15.1'
     id 'java'
 }
 
+apply plugin: 'com.gradle.build-scan'
 apply plugin: 'java'
 apply plugin: 'maven'
 
@@ -23,12 +25,10 @@ dependencies {
     compile 'com.github.AutonomousCarProject:raspivid-j:0.1.0'
     compile 'com.pi4j:pi4j-core:1.2-SNAPSHOT'
 }
-version '1.0-SNAPSHOT'
 
-jar {
-    from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-
-    manifest {
-        attributes 'Main-Class': 'com.apw.test.TestPWM'
-    }
+buildScan {
+    termsOfServiceUrl = 'https://gradle.com/terms-of-service'
+    termsOfServiceAgree = 'yes'
 }
+
+version '1.0-SNAPSHOT'
