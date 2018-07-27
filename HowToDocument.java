@@ -2,6 +2,9 @@
  * This file is a guide for how you need to document your code.
  * First priority is javadoc documentation for methods, 
  * second priority is commenting your code so people know what's happening. 
+ * 
+ * If you want a good example of how to document, look at the Collections source code:
+ * http://www.docjar.net/html/api/java/util/Collections.java.html
  */
 
 /**
@@ -37,7 +40,6 @@ public class HowToDocument{
 	private static final int IMPORTANT_PARAMETER = 3;
 	private static final int NUMBER_OF_PEOPLE_NAMED_TOM = 1;
 	
-
 	/*
 	 * The same goes for instance variables. Document them, or give them good names. 
 	 * In this case, n is a bad name but sampleDoc is better. 
@@ -73,6 +75,7 @@ public class HowToDocument{
 	 * @see [a related method or class]
 	 */
 	public int getRandomizedNum(int range){
+		//If you're feeling ambitious, you can put comments within the actual code for clarity.
 		return this.n + (int)(Math.random()*range);
 	}
 	
