@@ -10,6 +10,7 @@ import java.awt.*;
 public class TrakSimControl implements CarControl {
     protected SimCamera cam;
     private Arduino driveSys;
+    private Insets edges;
 
     private byte[] cameraImage = null;
     private byte[] processedImage = null;
@@ -171,7 +172,7 @@ public class TrakSimControl implements CarControl {
 
     @Override
     public Insets getEdges() {
-        return new Insets(480, 0, 0, 912);
+        return edges;
     }
 
     @Override
@@ -182,4 +183,10 @@ public class TrakSimControl implements CarControl {
     public Arduino getServos() {
         return driveSys;
     }
+
+    protected void setEdges(Insets edges)
+    {
+        this.edges = edges;
+    }
+
 }

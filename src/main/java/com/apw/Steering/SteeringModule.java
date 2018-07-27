@@ -102,7 +102,6 @@ public class SteeringModule extends SteeringBase implements Module {
     @Override
     public void paint(CarControl control, Graphics g) {
         g.setColor(Color.RED);
-        //graf.fillRect(100, teststartingPoint, 1, 1);
 
         if (DriverCons.D_DrawPredicted) {
             int tempY = 0;
@@ -114,7 +113,6 @@ public class SteeringModule extends SteeringBase implements Module {
                 } else {
                     g.setColor(Color.BLUE);
                 }
-                // graf.fillRect(testmidPoints.get(idx).x, testmidPoints.get(idx).y + edges.top, 5, 5);
             }
             System.out.println(tempY / (1.0 * (endTarget - startTarget)));
         }

@@ -39,13 +39,15 @@ public class MrModule extends JFrame implements Runnable {
         this.add(new JLabel(displayIcon));
         trakSimControl = new TrakSimControl();
         modules = new ArrayList<>();
+
     }
 
     private void setupWindow() {
         executorService.scheduleAtFixedRate(this, 0, 1000 / 60, TimeUnit.MILLISECONDS);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(width, height);
+        setSize(width, height + 25);
+        setResizable(false);
         setVisible(true);
     }
 
@@ -58,6 +60,7 @@ public class MrModule extends JFrame implements Runnable {
     private void update() {
         trakSimControl.cam.theSim.SimStep(1);
         trakSimControl.readCameraImage();
+        trakSimControl.setEdges(getInsets());
         for (Module module : modules) {
             module.update(trakSimControl);
         }

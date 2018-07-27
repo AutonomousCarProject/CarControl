@@ -42,10 +42,10 @@ public abstract class SteeringBase implements Steerable {
         int xOffset = origin.x - steerPoint.x;
         int yOffset = Math.abs(origin.y - steerPoint.y);
 
-        int tempDeg = (int)((Math.atan2(-xOffset, yOffset)) * (180 / Math.PI));
+        int tempDeg = (int)(Math.atan2(-xOffset, yOffset) * (180 / Math.PI));
 
-        System.out.println("\n\n\n" + tempDeg + " " + myPID() + "\n\n\n");
-        return (int)((Math.atan2(-(((usePID) ? (curveSteepness(tempDeg)>0.3) : false) ? myPID() : xOffset), yOffset)) * (180 / Math.PI));
+        //System.out.println("\n\n\n" + tempDeg + " " + myPID() + "\n\n\n");
+        return (int)((Math.atan2(-((usePID && (curveSteepness(tempDeg) > 0.3)) ? myPID() : xOffset), yOffset)) * (180 / Math.PI));
     }
 
     /**
