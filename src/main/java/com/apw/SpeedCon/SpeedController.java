@@ -78,7 +78,7 @@ public class SpeedController {
 		//relevant, and then what to do with them
 		ImageManager imageManager = DriveTest.imageManager;
 
-		List<MovingBlob> blobs = this.pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), 912);
+		List<MovingBlob> blobs = this.pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), imageManager.getNcols());
 
 		for(MovingBlob i : blobs){
 			/* Returns an int value corresponding to the color of the light we are looking at
@@ -172,7 +172,7 @@ public class SpeedController {
 	 * 
 	 * @return the speed that we should currently be traveling at
 	 */
-	private int getNextSpeed(){
+	public int getNextSpeed(){
 		double distance = this.desiredSpeed - this.currentEstimatedSpeed;
 		if(Math.abs(distance) < Constants.MIN_SPEED_INCREMENT){
 			return (int)this.desiredSpeed;
