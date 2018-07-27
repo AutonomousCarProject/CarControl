@@ -26,27 +26,8 @@ public class SteeringModule implements Module {
     public void update(CarControl control) {
         int tempDeg = steering.drive(control.getRGBImage());
         steering.findPoints(control.getRGBImage());
-        double inRadiusAngle = .57 / 2 * (double) tempDeg;
-        double outRadiusAngle = .38 / 2 * (double) tempDeg;
-        if (tempDeg < 0) {
-            outRadiusAngle = .45 / 2 * tempDeg;
-            inRadiusAngle = 0.7 / 2 * (double) tempDeg;
-        }
 
-        double turnRadiusIn = 2.68 / Math.tan(Math.toRadians(tempDeg * .37)) + .5 * (1.976);
-        double turnRadiusOut = 2.68 / Math.tan(Math.toRadians(tempDeg * .37)) - .5 * (1.976);
-        double averageTurnRadius = (turnRadiusIn + turnRadiusOut) / 2;
-        double angleTurned = ((double) DriverCons.D_FrameTime / 1000.0) * DriverCons.D_fMinSpeed / averageTurnRadius * 2;
-
-        angleTurned = Math.toDegrees(angleTurned);
-        if (tempDeg == 0) angleTurned = 0;
-
-        sumOfAngles += (double) angleTurned;
-
-        locX = locX + (double) Math.cos(Math.toRadians(sumOfAngles)) * (double) DriverCons.D_FrameTime / 1000 * (double) DriverCons.D_fMinSpeed;
-        locY = locY + (double) Math.sin(Math.toRadians(sumOfAngles)) * (double) DriverCons.D_FrameTime / 1000 * (double) DriverCons.D_fMinSpeed;
-
-        //makeTurnAdjustment();
+        steering.makeTurnAdjustment(control.getServos());
     }
 
     @Override

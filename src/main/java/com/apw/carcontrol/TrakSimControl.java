@@ -62,7 +62,7 @@ public class TrakSimControl implements CarControl {
 
     @Override
     public int[] getRGBImage() {
-        return new int[0];
+        return renderedImage;
     }
 
     @Override
@@ -176,8 +176,10 @@ public class TrakSimControl implements CarControl {
 
     @Override
     public void rectFill(int colo, int rx, int cx, int rz, int c) {
-
+        cam.theSim.RectFill(colo, rx, cx, rz, c);
     }
 
-
+    public Arduino getServos() {
+        return driveSys;
+    }
 }

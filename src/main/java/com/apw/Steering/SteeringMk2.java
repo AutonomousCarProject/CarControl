@@ -17,12 +17,10 @@ import java.util.concurrent.TimeUnit;
  */
 public class SteeringMk2 extends SteeringBase {
 
-    private final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
     private int SteerPin;
     private boolean haveNewPixels = false;
     private boolean leftSideFound = false;
     private boolean rightSideFound = false;
-    private Arduino theServos; // The servo to write to
 
     /**
      * Constructor to Start image detection thread, and assign values
@@ -31,8 +29,6 @@ public class SteeringMk2 extends SteeringBase {
      */
     public SteeringMk2(int steerPin, Arduino theServos) {
         this.SteerPin = steerPin;
-        this.theServos = theServos;
-        executor.scheduleAtFixedRate(this::makeTurnAdjustment, 20, 50, TimeUnit.MILLISECONDS);
     }
 
     /**
@@ -50,9 +46,9 @@ public class SteeringMk2 extends SteeringBase {
     /**
      * This gets called every 50ms, writes to the car servos. (drives the car)
      */
-    private void makeTurnAdjustment() {
+    public void makeTurnAdjustment(Arduino servos) {
         if (haveNewPixels) {
-            theServos.servoWrite(SteerPin, getDegreeOffset() + 90);
+            servos.servoWrite(SteerPin, getDegreeOffset() + 90);
         }
     }
 

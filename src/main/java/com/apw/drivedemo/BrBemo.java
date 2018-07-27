@@ -753,7 +753,7 @@ public class BrBemo extends JFrame implements MouseListener {
         }
     }//~paint
 
-    private static void starting() {theWindow = new DrDemo();}
+    private static void starting() {theWindow = new BrBemo();}
 
     public static void main(String[] args) { // (in DrDemo)
         Runnable runFrameLater = new RunSoon();

@@ -1,5 +1,7 @@
 package com.apw.carcontrol;
 
+import com.apw.fakefirm.Arduino;
+
 import java.awt.*;
 
 /**
@@ -76,4 +78,6 @@ public interface CarControl {
 
     // this is a traksim method
     void rectFill(int colo, int rx, int cx, int rz, int c);
+
+    Arduino getServos();
 }

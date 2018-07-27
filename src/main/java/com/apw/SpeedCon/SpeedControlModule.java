@@ -44,6 +44,8 @@ public class SpeedControlModule implements Module {
 
     @Override
     public void paint(CarControl control, Graphics g) {
+        if (control.getProcessedImage() == null) return;
+
         PedestrianDetector pedDetect = new PedestrianDetector();
         // TODO get rid of hardcoded values
         final int width = 912;
