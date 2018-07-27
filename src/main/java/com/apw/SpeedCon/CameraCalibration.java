@@ -41,7 +41,7 @@ public class CameraCalibration {
 	
 	//Object information
 	private double signWidth;				//The width of a standard stop sign in mm
-	private double calSuqareSideLength = 2;	//The side length of the calibration square
+	private double calSquareSideLength = 2;	//The side length of the calibration square
 	private double testBlobDistance = 10;	//The distance of the calibration square away from the camera
 	
 	private double relativeWorldScale;		//The scale of the world (if 1/3 scale, set to 3)
@@ -81,7 +81,7 @@ public class CameraCalibration {
 	//Formula that calculates focal length of the test blob
 	void findFocalLength(MovingBlob blob)
 	{
-		cameraFocalLength = (blob.width * testBlobDistance) / testBlobWidthHeight;
+		cameraFocalLength = (blob.width * testBlobDistance) / calSquareSideLength;
 		System.out.print("Focal Length = " + cameraFocalLength);
 	}
 	 
