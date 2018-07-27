@@ -801,19 +801,27 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 					
 					//Set speed based on max, min, arrow keys, degree offset, and signs
 					speedControl.onUpdate(this.GasPedal, (int)testSteering.getDegreeOffset(), this.manualSpeed, graf, dtest);
+					
+					//Accelerate to the speed that we need to accelerate to
 					AxLR8(true, speedControl.getNextSpeed());
 					
+					//Write speed to console if the setting is turned on
 					if (Settings.writeSpeedToConsole) {
 						System.out.println("Speed: " + speedControl.getNextSpeed());
 					}
 					
+					
+					//This chunk of code is responsible for drawing the overlay if it is turned on
 					if(Settings.overlayOn){
-						int color = 0xffa500;
+						//Draw our stoplight hitbox in constant designated color
+						int color = Constants.OVERLAY_STOPLIGHT_HITBOX_COLOR;
 						this.theSim.DrawLine(color, Constants.STOPLIGHT_MIN_Y, Constants.STOPLIGHT_MIN_X, Constants.STOPLIGHT_MIN_Y, Constants.STOPLIGHT_MAX_X);
 						this.theSim.DrawLine(color, Constants.STOPLIGHT_MIN_Y, Constants.STOPLIGHT_MAX_X, Constants.STOPLIGHT_MAX_Y, Constants.STOPLIGHT_MAX_X);
 						this.theSim.DrawLine(color, Constants.STOPLIGHT_MAX_Y, Constants.STOPLIGHT_MAX_X, Constants.STOPLIGHT_MAX_Y, Constants.STOPLIGHT_MIN_X);
 						this.theSim.DrawLine(color, Constants.STOPLIGHT_MAX_Y, Constants.STOPLIGHT_MIN_X, Constants.STOPLIGHT_MIN_Y, Constants.STOPLIGHT_MIN_X);
-						color = 0xff69b4;
+						
+						//Draw our stopsign hitbox in constant designated color
+						color = Constants.OVERLAY_STOPSIGN_HITBOX_COLOR;
 						this.theSim.DrawLine(color, Constants.STOPSIGN_MIN_Y, Constants.STOPSIGN_MIN_X, Constants.STOPSIGN_MIN_Y, Constants.STOPSIGN_MAX_X);
 						this.theSim.DrawLine(color, Constants.STOPSIGN_MIN_Y, Constants.STOPSIGN_MAX_X, Constants.STOPSIGN_MAX_Y, Constants.STOPSIGN_MAX_X);
 						this.theSim.DrawLine(color, Constants.STOPSIGN_MAX_Y, Constants.STOPSIGN_MAX_X, Constants.STOPSIGN_MAX_Y, Constants.STOPSIGN_MIN_X);
@@ -825,47 +833,52 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
 						for(MovingBlob b:this.speedControl.getBlobs()){
 							if ((((double) b.height / (double) b.width) < 1 + Constants.BLOB_RATIO_DIF && ((double) b.height / (double) b.width) > 1 - Constants.BLOB_RATIO_DIF)) {
 								int velocity = (int)(100*Math.sqrt(b.velocityX*b.velocityX + b.velocityY*b.velocityY));
-								int color = 0x000000;
+								int color = Constants.BLOBVERLAY_COLORMODE_AGE_5_COLOR;
 								
+								//If colormode is 0, set displayed blob color based upon age, so that older ones are darker
 								if (Settings.colorMode == 0) {
 									if (b.age >= Constants.DISPLAY_AGE_MAX) {
-										color = 0x000000;
+										color = Constants.BLOBVERLAY_COLORMODE_AGE_5_COLOR;
 									}
 									else if (b.age >= (4 * (Constants.DISPLAY_AGE_MAX - Constants.DISPLAY_AGE_MIN) / 5) + Constants.DISPLAY_AGE_MIN) {
-										color = 0x333333;
+										color = Constants.BLOBVERLAY_COLORMODE_AGE_4_COLOR;
 									}
 									else if (b.age >= (3 * (Constants.DISPLAY_AGE_MAX - Constants.DISPLAY_AGE_MIN) / 5) + Constants.DISPLAY_AGE_MIN) {
-										color = 0x666666;
+										color = Constants.BLOBVERLAY_COLORMODE_AGE_3_COLOR;
 									}
 									else if (b.age >= (2 * (Constants.DISPLAY_AGE_MAX - Constants.DISPLAY_AGE_MIN) / 5) + Constants.DISPLAY_AGE_MIN) {
-										color = 0x999999;
+										color = Constants.BLOBVERLAY_COLORMODE_AGE_2_COLOR;
 									}
 									else if (b.age >= ((Constants.DISPLAY_AGE_MAX - Constants.DISPLAY_AGE_MIN) / 5) + Constants.DISPLAY_AGE_MIN) {
-										color = 0xcccccc;
+										color = Constants.BLOBVERLAY_COLORMODE_AGE_1_COLOR;
 									}
 									else if (b.age <= Constants.DISPLAY_AGE_MIN) {
-										color = 0xffffff;
+										color = Constants.BLOBVERLAY_COLORMODE_AGE_0_COLOR;
 									}
 								}
+								//If colormode is 1, set displayed blob color to the color of the blob we are looking at
+								//A conversion is needed here, as the stored colors in blobs are not hex values, and they need to be
 								else if (Settings.colorMode == 1) {
 									if (b.color.getColor() == com.apw.pedestrians.image.Color.BLACK) {
-						                color = 0x000000;
+						                color = Constants.BLOBVERLAY_COLORMODE_COLOR_BLACK;
 						            } else if (b.color.getColor() == com.apw.pedestrians.image.Color.GREY) {
-						            	color = 0xd3d3d3;
+						            	color = Constants.BLOBVERLAY_COLORMODE_COLOR_GRAY;
 						            } else if (b.color.getColor() == com.apw.pedestrians.image.Color.WHITE) {
-						            	color = 0xffffff;
+						            	color = Constants.BLOBVERLAY_COLORMODE_COLOR_WHITE;
 						            } else if (b.color.getColor() == com.apw.pedestrians.image.Color.RED) {
-						            	color = 0xff0000;
+						            	color = Constants.BLOBVERLAY_COLORMODE_COLOR_RED;
 						            } else if (b.color.getColor() == com.apw.pedestrians.image.Color.GREEN) {
-						            	color = 0x00ff00;
+						            	color = Constants.BLOBVERLAY_COLORMODE_COLOR_GREEN;
 						            } else if (b.color.getColor() == com.apw.pedestrians.image.Color.BLUE) {
-						            	color = 0x0000ff;
+						            	color = Constants.BLOBVERLAY_COLORMODE_COLOR_BLUE;
 						            }
 								}
+								//If colormode is 2, set displayed blob color to be based upon velocity
 								else if (Settings.colorMode == 2) {
 									color = (velocity << 16) + (velocity << 8) + velocity;	
 								}
 								
+								//Draw our current blob on screen
 								this.theSim.DrawLine(color, b.y, b.x, b.y+b.height, b.x);
 								this.theSim.DrawLine(color, b.y, b.x, b.y, b.x+b.width);
 								this.theSim.DrawLine(color, b.y+b.height, b.x, b.y+b.height, b.x+b.width);
