@@ -1,5 +1,6 @@
 package com.apw.SpeedCon;
 
+import com.apw.carcontrol.CarControl;
 import com.apw.pedestrians.PedestrianDetector;
 import com.apw.pedestrians.blobtrack.MovingBlob;
 import com.apw.pedestrians.image.Color;
@@ -57,10 +58,10 @@ public class CameraCalibration {
 
 	
 	//Finds focal length which can then be used for distance, read above for detail
-	public void calibrateCamera()
+	public void calibrateCamera(CarControl control)
 	{
 		//Searches for a blue blob
-		/*List<MovingBlob> blobs = this.pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), 912);
+		List<MovingBlob> blobs = this.pedDetect.getAllBlobs(control.getProcessedImage(), 912);
 		for(MovingBlob i : blobs)
 		{
 			if(i.color.getColor() == Color.BLUE)
@@ -72,7 +73,7 @@ public class CameraCalibration {
 		}
 
 		//Used to test distance to found test blob, should be same as testBlobDistance
-		distanceToObj(testBlobWidthHeight, cameraFocalLength, testBlob.width);*/
+		distanceToObj(testBlobWidthHeight, cameraFocalLength, testBlob.width);
 	}
 
 
