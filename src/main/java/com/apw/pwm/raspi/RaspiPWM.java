@@ -19,7 +19,9 @@ public class RaspiPWM implements PWMController {
 
   public static final int PWM_FREQUENCY = 50, CLOCK_DIVIDER = 128;
   public static final double BCLCK = 19.2e6, MAX_PULSE_WIDTH = 2.0 / 1000;
-  private int PWM_REAL_RANGE, PWM_ACTIONABLE_RANGE;
+  private int PWM_REAL_RANGE = Math.toIntExact(Math.round(BCLCK / CLOCK_DIVIDER / PWM_FREQUENCY)),
+      PWM_ACTIONABLE_RANGE = Math.toIntExact(Math.round(
+          (MAX_PULSE_WIDTH * PWM_FREQUENCY) * (BCLCK / CLOCK_DIVIDER / PWM_FREQUENCY)));
   private final GpioController gpioController = GpioFactory.getInstance();
   private int provisionedHardwarePins = 0;
   private HashSet<Integer> provisionedPins = new HashSet<>(2);
@@ -28,7 +30,8 @@ public class RaspiPWM implements PWMController {
   private boolean softwarePWMGenerationEnabled = false;
 
   private RaspiPWM() {
-    configureController();
+    // So as it turns out, configureController needs to be called *after* the pins are
+    // provisioned, otherwise it outputs a garbage signal.
   }
 
   // Basically an override
@@ -38,10 +41,6 @@ public class RaspiPWM implements PWMController {
 
   private void configureController() {
     // TODO software generation checks
-    PWM_REAL_RANGE = Math.toIntExact(Math.round(BCLCK / CLOCK_DIVIDER / PWM_FREQUENCY));
-    PWM_ACTIONABLE_RANGE =
-        Math.toIntExact(Math.round(
-            (MAX_PULSE_WIDTH * PWM_FREQUENCY) * (BCLCK / CLOCK_DIVIDER / PWM_FREQUENCY)));
     Gpio.pwmSetMode(Gpio.PWM_MODE_MS);
     Gpio.pwmSetRange(PWM_REAL_RANGE);
     Gpio.pwmSetClock(CLOCK_DIVIDER);
@@ -64,7 +63,7 @@ public class RaspiPWM implements PWMController {
       // TODO Check if the board actually supports PWM on 23, 24, 26
       // TODO Pin pairing safety
       if (provisionedHardwarePins < 2 && (pin == 1 || pin == 23 || pin == 24 || pin == 26)) {
-        provisionedHardwarePins++;
+//        provisionedHardwarePins++;
         provisionedPin = gpioController.provisionPwmOutputPin(RaspiPin.getPinByAddress(pin));
       } else {
         if (softwarePWMGenerationEnabled) {
@@ -85,12 +84,10 @@ public class RaspiPWM implements PWMController {
 
   @Override
   public void setOutputPulseWidth(int pin, double ms) {
-    System.out.println("PWM_REAL_RANGE:\t" + PWM_REAL_RANGE);
-    System.out.println("PWM_ACTIONABLE_RANGE:\t" + PWM_ACTIONABLE_RANGE);
-    System.out.println("ms:\t" + ms);
+    provisionPinPrivate(pin);
+    configureController();
     provisionPinPrivate(pin)
         .setPwm(Math.toIntExact(Math.round((ms / 1000) / MAX_PULSE_WIDTH * PWM_ACTIONABLE_RANGE)));
-    System.out.println("PWM is:\t" + provisionPinPrivate(1).getPwm());
   }
 
   @Override
