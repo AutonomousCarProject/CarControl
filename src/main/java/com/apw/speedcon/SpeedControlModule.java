@@ -181,7 +181,7 @@ public class SpeedControlModule implements Module {
     }
 
     //To be called every frame. Checks if we need to be stopping at a stopsign
-    //By modifying constants in the Constants.java in SpeedCon, you can adjust how the stopping behaves
+    //By modifying constants in the Constants.java in speedcon, you can adjust how the stopping behaves
     //Can be triggered by pressing 'P'
     public int updateStopSign() {
         if (stoppingAtSign) {
@@ -208,7 +208,7 @@ public class SpeedControlModule implements Module {
     }
 
     //To be called every frame. Checks if we need to be stopping at a stoplight
-    //By modifying constants in the Constants.java in SpeedCon, you can adjust how the stopping behaves
+    //By modifying constants in the Constants.java in speedcon, you can adjust how the stopping behaves
     //Can be triggered by pressing 'O', and released by pressing 'I'
     public int updateStopLight() {
         if (stoppingAtLight) {

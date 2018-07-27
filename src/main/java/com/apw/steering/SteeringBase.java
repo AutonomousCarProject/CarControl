@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Steering base is the base code for all child steering objects.
+ * steering base is the base code for all child steering objects.
  *
  * @author kevin
  * @author carl
