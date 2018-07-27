@@ -55,6 +55,7 @@ void loop() {
     
     if (Serial.peek() <= 0 && sinceConnect > timeout){
       nokill = false;
+      digitalWrite(13, HIGH);
     }
     
     sinceConnect++;
@@ -146,10 +147,16 @@ void loop() {
       delayMicroseconds(2500); //normalizing timing
       digitalWrite(13, LOW); //blink main light
     } else {
-      digitalWrite(13, LOW); 
+      /*digitalWrite(13, LOW); 
       delay(500); //create idle pulse timing
       digitalWrite(13, HIGH);
-      delay(100);
+      delay(100);*/
+
+      if (digitalread(2) == HIGH) {
+        digitalWrite(13, HIGH);
+      } else {
+        digitalWrite(13, LOW);
+      }
     }
     
   }
