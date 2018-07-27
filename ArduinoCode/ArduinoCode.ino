@@ -9,7 +9,7 @@ int sinceNokill = 0;
 byte timeout = 40;
 byte out[] = {0, 0, 0};
 byte outsize = 6;
-#define NOT_AN_INTERRUPT -1
+//#define NOT_AN_INTERRUPT -1
 //where 1ms is considered full left or full reverse, and 2ms is considered full forward or full right.
 
 void setup() {
@@ -19,8 +19,8 @@ void setup() {
   pinMode(10, OUTPUT); //speed
   pinMode(11, INPUT); //speed getter
   
-  pinMode(2, INPUT); //Dead man's switch
-  attachInterrupt(digitalPinToInterrupt(2), killReader, RISING);
+  //pinMode(2, INPUT); //Dead man's switch
+  attachInterrupt(digitalPinToInterrupt(2), killReader, CHANGE);
   
   pinMode(13, OUTPUT); //testing light
   digitalWrite(13, HIGH);
@@ -92,7 +92,7 @@ void loop() {
     digitalWrite(9, HIGH); 
     delayMicroseconds(steerDelay); //create pulse timing
     digitalWrite(9, LOW);
-
+    if (digitalRead(2) == HIGH) addMessage(3, 3, 3);
     //Speed control
     digitalWrite(10, HIGH);
     delayMicroseconds(wheelDelay);
