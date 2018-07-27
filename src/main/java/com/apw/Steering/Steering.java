@@ -4,6 +4,7 @@ package com.apw.Steering;
 import com.apw.apw3.DriverCons;
 import com.apw.apw3.TrakSim;
 
+@Deprecated
 public class Steering {
 
 	

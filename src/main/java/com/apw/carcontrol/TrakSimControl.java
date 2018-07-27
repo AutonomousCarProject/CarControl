@@ -146,4 +146,19 @@ public class TrakSimControl implements CarControl {
         }
         driveSys.servoWrite(SteerPin, angle + 90);
     }
+
+    @Override
+    public int getGas() {
+        return 0;
+    }
+
+    @Override
+    public int getSteering() {
+        return 0;
+    }
+
+    @Override
+    public int getManualSpeed() {
+        return 0;
+    }
 }

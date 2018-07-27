@@ -56,6 +56,7 @@ public class MrModule extends JFrame implements Runnable {
     }
 
     private void update() {
+        trakSimControl.cam.theSim.SimStep(1);
         trakSimControl.readCameraImage();
         for (Module module : modules) {
             module.update(trakSimControl);
@@ -86,9 +87,8 @@ public class MrModule extends JFrame implements Runnable {
 
     @Override
     public void run() {
-        trakSimControl.cam.theSim.SimStep(1);
         update();
-        this.repaint();
+        repaint();
     }
 
     public static void main(String[] args) {

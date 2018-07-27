@@ -2,6 +2,7 @@ package com.apw.Steering;
 
 import com.apw.ImageManagement.ImageManager;
 
+@Deprecated
 public class SteerControlCheck {
 
     private ImageManager imageManager;
