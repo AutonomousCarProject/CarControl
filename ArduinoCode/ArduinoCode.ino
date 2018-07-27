@@ -49,6 +49,7 @@ void loop() {
   // put your main code here, to run repeatedly:
   //grab input from kill switch
   
+  if (digitalRead(2) == HIGH) addMessage(2, 2, 2);
   
   if (nokill){
     //read input from computer
@@ -93,7 +94,7 @@ void loop() {
     digitalWrite(9, HIGH); 
     delayMicroseconds(steerDelay); //create pulse timing
     digitalWrite(9, LOW);
-    if (digitalRead(2) == HIGH) addMessage(3, 3, 3);
+    //if (digitalRead(2) == HIGH) addMessage(3, 3, 3);
     //Speed control
     digitalWrite(10, HIGH);
     delayMicroseconds(wheelDelay);
