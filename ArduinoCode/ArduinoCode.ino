@@ -18,7 +18,7 @@ void setup() {
   pinMode(11, INPUT); //speed getter
   
   pinMode(2, INPUT_PULLUP); //Dead man's switch
-  attachInterrupt(digitalPinToInterrupt(2), killtReader(), RISING);
+  attachInterrupt(2, killReader, RISING);
   
   pinMode(13, OUTPUT); //testing light
   digitalWrite(13, HIGH);
@@ -29,8 +29,8 @@ void setup() {
 }
 
 //A function run when a pin interrupts.
-void fastReader(){
-  msg[0] = 0xFF; //send test info
+void killReader(){
+  out[0] = 0xFF; //send test info
   sinceNokill = 0;
 }
 
