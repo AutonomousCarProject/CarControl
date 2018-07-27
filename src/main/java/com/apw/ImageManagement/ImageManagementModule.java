@@ -148,6 +148,7 @@ public class ImageManagementModule implements Module {
         }
 
         control.setRenderedImage(imagePixels);
+        control.setProcessedImage(getSimpleColorRaster(control.getRecentCameraImage()));
     }
 
     @Override

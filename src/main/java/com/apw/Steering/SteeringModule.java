@@ -1,10 +1,8 @@
 package com.apw.Steering;
 
 import com.apw.apw3.DriverCons;
-import com.apw.apw3.TrakSim;
 import com.apw.carcontrol.CarControl;
 import com.apw.carcontrol.Module;
-import com.apw.fakefirm.Arduino;
 
 import java.awt.*;
 
@@ -52,11 +50,9 @@ public class SteeringModule implements Module {
             }
         }
 
-
         // Draw steerPoint on screen
         g.setColor(Color.CYAN);
         g.fillRect(steering.steerPoint.x, steering.steerPoint.y, 7, 7);
-
 
         //Draw predicted points and detected lines
         for (Point point : steering.midPoints) {
@@ -76,6 +72,5 @@ public class SteeringModule implements Module {
                 control.rectFill(16776960, yR, xR, yR + 5, xR + 5);
             }
         }
-
     }
 }
