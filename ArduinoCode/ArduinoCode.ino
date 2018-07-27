@@ -27,6 +27,8 @@ void setup() {
 
   Serial.begin(57600);
   Serial.setTimeout(1000); //Default value. available for change
+
+  addMessage(1, 2, 6);
   
 }
 
@@ -39,7 +41,7 @@ void addMessage(byte ina, byte inb, byte inc){
 
 //A function run when a pin interrupts.
 void killReader(){
-  out[0] = 0xFF; //send test info
+  addMessage(1, 3, 7); //send test info
   sinceNokill = 0;
 }
 
@@ -99,8 +101,6 @@ void loop() {
     
     delayMicroseconds(normalDelay); //normalize to ~2ms total
     digitalWrite(13, HIGH); //restart signal light
-
-    addMessage(1, 2, 6);
     
     while (outsize >= 3){
       byte msg[3] = {out[0], out[1], out[2]};
