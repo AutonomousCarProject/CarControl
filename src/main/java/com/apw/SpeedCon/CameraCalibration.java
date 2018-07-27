@@ -1,12 +1,7 @@
 package com.apw.SpeedCon;
 
-import com.apw.ImageManagement.ImageManager;
-import com.apw.drivedemo.DrDemo;
-import com.apw.drivedemo.DriveTest;
-import com.apw.fly2cam.FlyCamera;
 import com.apw.pedestrians.PedestrianDetector;
 import com.apw.pedestrians.blobtrack.MovingBlob;
-import com.apw.pedestrians.blobtrack.MovingBlobDetection;
 import com.apw.pedestrians.image.Color;
 
 import java.util.List;
@@ -40,7 +35,6 @@ public class CameraCalibration {
 
 
 	private PedestrianDetector pedDetect;
-	private ImageManager imageManager;
 
 	//Camera information
 	private double cameraFocalLength;
@@ -58,7 +52,6 @@ public class CameraCalibration {
 		signWidth = 75/relativeWorldScale; //sign width in centi meters
 
 		this.pedDetect = new PedestrianDetector();
-		this.imageManager = DriveTest.imageManager;
 
 	}
 
@@ -67,7 +60,7 @@ public class CameraCalibration {
 	public void calibrateCamera()
 	{
 		//Searches for a blue blob
-		List<MovingBlob> blobs = this.pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), 912);
+		/*List<MovingBlob> blobs = this.pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), 912);
 		for(MovingBlob i : blobs)
 		{
 			if(i.color.getColor() == Color.BLUE)
@@ -79,7 +72,7 @@ public class CameraCalibration {
 		}
 
 		//Used to test distance to found test blob, should be same as testBlobDistance
-		distanceToObj(testBlobWidthHeight, cameraFocalLength, testBlob.width);
+		distanceToObj(testBlobWidthHeight, cameraFocalLength, testBlob.width);*/
 	}
 
 
