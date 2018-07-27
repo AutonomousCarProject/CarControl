@@ -2,7 +2,7 @@
  * Java Window App to Test/Demo TrakSim..
  *
  * This simulator pretends to be a camera using the FlyCamera API, and
- * watches the commands being sent to the Arduino through FakeFirmata,
+ * watches the commands being sent to the ArduinoPWM through FakeFirmata,
  * and controls the simulated car based on those commands, then shows
  * what a forward-facing camera on the simulated car would see.
  *
@@ -23,7 +23,7 @@ import com.apw.apw3.SimCamera;
 import com.apw.apw3.TrakSim;
 import com.apw.fly2cam.FlyCamera;
 import com.apw.imagemanagement.ImageManager;
-import com.apw.pwm.fakefirm.Arduino;
+import com.apw.pwm.fakefirm.ArduinoPWM;
 import com.apw.speedcon.Constants;
 import com.apw.speedcon.SpeedController;
 import com.apw.steering.Point;
@@ -89,7 +89,7 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
   private boolean overlayOn = Constants.DEFAULT_OVERLAY;
   private FlyCamera theVideo = null;
   private FlyCamera simVideo = null;
-  private Arduino theServos = null;
+  private ArduinoPWM theServos = null;
   private TrakSim theSim = null;
   private boolean blobsOn = Constants.DEFAULT_BLOBS;
   private byte[] CamPix = null;
@@ -134,13 +134,12 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
     System.out.println(
         HandyOps.Dec2Log("(Cal8=", Calibrating, HandyOps.Dec2Log(") pix ", ScrPix * 4, sayso)));
     simVideo = new SimCamera();
-    theServos = new Arduino();
+    theServos = ArduinoPWM.getInstance();
     theSim = new TrakSim();
     if (LiveCam) {
       theVideo = new FlyCamera();
     }
     ViDied = 0;
-    dunit = theServos.IsOpen();
     myPix = new int[ScrPix]; // ScrPix = ImHi*WinWi
     SimBytes = new byte[ScrPix * 4];
     thePixels = myPix;
@@ -162,15 +161,15 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
     theBuff = new BufferedImage(ScrWi, ScrHi, BufferedImage.TYPE_INT_RGB);
     titok = TickTock;
     myVid = simVideo;
-    if (!dunit) {
-      System.out.println("FakeFirmata failed to open " + Arduino.CommPortNo);
+    if (!theServos.isOpen()) {
+      System.out.println("FakeFirmata failed to open " + ArduinoPWM.CommPortNo);
     } else if (myVid == null) {
       dunit = false;
     } else {
       try {
         dunit = myVid.Connect(CamFPS); // SteerPin = DriverCons.D_SteerServo = 9..
-        theServos.pinMode(SteerPin, Arduino.SERVO);
-        theServos.pinMode(GasPin, Arduino.SERVO); // GasPin=10
+        theServos.pinMode(SteerPin, ArduinoPWM.SERVO);
+        theServos.pinMode(GasPin, ArduinoPWM.SERVO); // GasPin=10
       } catch (Exception ex) {
         dunit = false;
       }
@@ -427,7 +426,7 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
       return;
     }
     StepMe = true;
-    theServos.servoWrite(SteerPin, whar + 90);
+    theServos.setServoAngle(SteerPin, whar + 90);
   } //~SteerMe
 
   /**
@@ -463,7 +462,7 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
       return;
     }
     StepMe = true;
-    theServos.servoWrite(GasPin, whar + 90);
+    theServos.setServoAngle(GasPin, whar + 90);
   } //~AxLR8
 
   /**
@@ -480,7 +479,7 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
         myVid.Finish();
       }
       if (theServos != null) {
-        theServos.Close();
+        theServos.close();
       }
     } catch (Exception ex) {
     }
@@ -1110,7 +1109,7 @@ public class DrDemo extends JFrame implements MouseListener, KeyListener {
     // Steer between lines
     testSteering.averageMidpoints();
     double tempDeg = testSteering.getDegreeOffset();
-    theServos.servoWrite(SteerPin, (int) ((tempDeg) + 90));
+    theServos.setServoAngle(SteerPin, (int) ((tempDeg) + 90));
 
     graf.setColor(Color.RED);
     //graf.fillRect(100, testSteering.startingPoint, 1, 1);

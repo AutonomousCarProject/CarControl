@@ -1,8 +1,8 @@
 /* TrakSim Car Simulator for use with NWAPW Year 3 Autonomous Car Project
- * Use this package for testing with fly2cam.FlyCamera + fakefirm.Arduino
+ * Use this package for testing with fly2cam.FlyCamera + fakefirm.ArduinoPWM
  *
  * This simulator pretends to be a camera using the FlyCamera API, and
- * watches the commands being sent to the Arduino through FakeFirmata,
+ * watches the commands being sent to the ArduinoPWM through FakeFirmata,
  * and controls the simulated car based on those commands, then shows
  * what a forward-facing camera on the simulated car would see.
  *
@@ -17,7 +17,7 @@
 package com.apw.apw3;                                       // 2018 June 13
 
 
-import com.apw.pwm.fakefirm.Arduino;
+import com.apw.pwm.fakefirm.ArduinoPWM;
 import com.apw.pwm.fakefirm.SimHookBase;
 import java.io.File;
 import java.io.FileInputStream;
@@ -7203,7 +7203,7 @@ public class TrakSim {
     if (msg == null) {
       return;
     }
-    if ((((int) msg[0]) & 0xF0) != Arduino.ANALOG_MESSAGE) {
+    if ((((int) msg[0]) & 0xF0) != ArduinoPWM.ANALOG_MESSAGE) {
       return;
     }
     if (msg.length >= 3) {
@@ -7938,7 +7938,7 @@ public class TrakSim {
       GasBrake = 0;
       NuData++;
       SerialCalls = new SimHookX();
-      Arduino.HookExtend(SerialCalls);
+      ArduinoPWM.HookExtend(SerialCalls);
     }
     nClients++;
   } //~StartPatty
