@@ -61,4 +61,10 @@ public interface CarControl {
      */
     void steer(boolean absolute, int angle);
 
+    // TODO figure this out, write javadocs, maybe modify interface
+    int getGas();
+
+    int getSteering();
+
+    int getManualSpeed();
 }
