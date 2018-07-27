@@ -4,7 +4,7 @@ import com.apw.apw3.DriverCons;
 import com.apw.apw3.MyMath;
 import com.apw.apw3.SimCamera;
 import com.apw.fakefirm.Arduino;
-import com.apw.fakefirm.Interface;
+import com.apw.pwm.fakefirm.ArduinoPWM;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -14,8 +14,8 @@ public class TrakSimControl implements CarControl {
     private final double LefScaleSt, RitScaleSt;
     protected SimCamera cam;
     protected HashMap<Integer, Runnable> keyBindings;
+    private PWMcontroller driveSys;
     private Insets edges;
-    private Interface drivesys;
     private byte[] cameraImage = null;
     private byte[] processedImage = null;
     private int[] renderedImage = null;
@@ -31,6 +31,10 @@ public class TrakSimControl implements CarControl {
         GasPin = DriverCons.D_GasServo;
         LefScaleSt = ((double) DriverCons.D_LeftSteer) / 90.0;
         RitScaleSt = ((double) DriverCons.D_RiteSteer) / 90.0;
+
+        driveSys = ArduinoPWM.getInstance();
+        driveSys.pinMode(SteerPin, ArduinoPWM.SERVO);
+        driveSys.pinMode(GasPin, ArduinoPWM.SERVO);
 
         keyBindings = new HashMap<>();
     }
@@ -101,7 +105,7 @@ public class TrakSimControl implements CarControl {
                 cam.Finish();
             }
             if (driveSys != null) {
-                driveSys.Close();
+                driveSys.close();
             }
         } catch (Exception ignored) {
         }
@@ -125,7 +129,7 @@ public class TrakSimControl implements CarControl {
         }
 
         currentVelocity = velocity;
-        .servoWrite(GasPin, velocity + 90);
+        driveSys.servoWrite(GasPin, velocity + 90);
     }
 
     @Override
@@ -147,7 +151,14 @@ public class TrakSimControl implements CarControl {
                 angle = (int) Math.round(RitScaleSt * ((double) angle));
             }
         }
+<<<<<<< HEAD
         driveSys.servoWrite(SteerPin, angle + 90);
+=======
+        if (driveSys == null) {
+            return;
+        }
+        driveSys.setServoAngle(SteerPin, angle + 90);
+>>>>>>> master
     }
 
     @Override

@@ -4,9 +4,7 @@ import com.apw.ImageManagement.ImageManagementModule;
 import com.apw.SpeedCon.SpeedControlModule;
 import com.apw.Steering.SteeringModule;
 import com.apw.fakefirm.Arduino;
-import com.apw.fakefirm.ArduinoModule;
 import com.apw.fakefirm.Interface;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
