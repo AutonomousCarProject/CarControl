@@ -156,12 +156,12 @@ public class TrakSimControl implements CarControl {
 
     @Override
     public int getGas() {
-        return 0;
+        return currentVelocity;
     }
 
     @Override
     public int getSteering() {
-        return 0;
+        return currentSteering;
     }
 
     @Override

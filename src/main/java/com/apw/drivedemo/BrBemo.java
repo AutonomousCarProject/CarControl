@@ -783,7 +783,7 @@ public class BrBemo extends JFrame implements MouseListener {
         if (DriverCons.D_steeringVersion == 1) {
             testSteering = new SteeringMk1();
         } else if (DriverCons.D_steeringVersion == 2) {
-            testSteering = new SteeringMk2(SteerPin, theServos);
+            testSteering = new SteeringMk2();
         }
         if (LiveCam) theVideo = new FlyCamera();
         ViDied = 0;

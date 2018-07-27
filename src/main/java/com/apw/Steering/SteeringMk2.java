@@ -22,13 +22,8 @@ public class SteeringMk2 extends SteeringBase {
     private boolean leftSideFound = false;
     private boolean rightSideFound = false;
 
-    /**
-     * Constructor to Start image detection thread, and assign values
-     * @param steerPin the pin for servoWrite
-     * @param theServos the servo to be writing to
-     */
-    public SteeringMk2(int steerPin, Arduino theServos) {
-        this.SteerPin = steerPin;
+    public SteeringMk2() {
+
     }
 
     /**

@@ -10,17 +10,9 @@ import java.awt.*;
 
 public class SteeringModule implements Module {
 
-    private int SteerPin;
-    private Arduino theServos; // The servo to write to
+    private SteeringMk2 steering = new SteeringMk2();
 
-    SteeringMk2 steering = new SteeringMk2(SteerPin, theServos);
-
-    int sumOfAngles;
-    double locX, locY;
-
-    public SteeringModule() {
-
-    }
+    public SteeringModule() { }
 
     @Override
     public void update(CarControl control) {
