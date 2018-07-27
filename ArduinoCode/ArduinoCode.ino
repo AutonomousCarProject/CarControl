@@ -9,6 +9,7 @@ int sinceNokill = 0;
 byte timeout = 40;
 byte out[] = {0, 0, 0};
 byte outsize = 6;
+#define NOT_AN_INTERRUPT -1
 //where 1ms is considered full left or full reverse, and 2ms is considered full forward or full right.
 
 void setup() {
@@ -99,7 +100,7 @@ void loop() {
     delayMicroseconds(normalDelay); //normalize to ~2ms total
     digitalWrite(13, HIGH); //restart signal light
 
-    addMessage(1, 2, (byte) "E");
+    addMessage(1, 2, 6);
     
     while (outsize >= 3){
       byte msg[3] = {out[0], out[1], out[2]};
