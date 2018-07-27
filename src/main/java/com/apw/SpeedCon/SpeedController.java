@@ -5,10 +5,21 @@ import java.util.*;
 import com.apw.pedestrians.blobtrack.*;
 import com.apw.pedestrians.image.Color;
 import com.apw.pedestrians.*;
-import com.apw.pedestrians.blobdetect.Blob;
 import com.apw.ImageManagement.*;
 import com.apw.apw3.TrakSim;
 import com.apw.drivedemo.DriveTest;
+
+/**
+ * This class handles the speed of our car, given info from image and steering.
+ * 
+ * @author William Adriance
+ * @author Matthew Alexander
+ * @author Derek Schwartz
+ * @author Brett Zonick 
+ * 
+ * @see drivedemo/DrDemo.java
+ * @see SpeedCon/Constants.java
+ */
 
 public class SpeedController {
 
@@ -32,14 +43,27 @@ public class SpeedController {
 
 	TrakSim trackSim = new TrakSim();
 
+	
+	/**
+	 * A basic constructor for our SpeedController.
+	 */
 	public SpeedController(){
 		this.pedDetect = new PedestrianDetector();
 		this.currentBlobs = new ArrayList<MovingBlob>();
 		this.cameraCalibrator = new CameraCalibration();
 	}
 
-	//A method to be called every frame. Calculates desired speed and actual speed
-	//Also takes stopping into account
+	/**
+	 * This is a method that is called on every frame update by DrDemo. It is responsible for calculating
+	 * our speed at any given time, and setting it. It also calls methods to figure out if we need to be
+	 * stopping due to a street obstacle, and it displays blob overlays on the screen.
+	 * 
+	 * @param gasAmount the pin position of your servos, e.g. how much gas we are giving the engine
+	 * @param steerDegs the degree measure at which our wheels are facing
+	 * @param manualSpeed an int that can be incremented by pressing the up and down arrow keys, and gets added on top of our desired speed
+	 * @param graf a Graphics object fed to us so that we can display blob boxes and overlay lines
+	 * @param dtest the DriveTest object that we feed to our blob detection, which gets displayed in a separate window
+	 */
 	public void onUpdate(int gasAmount, int steerDegs, int manualSpeed, Graphics graf, DriveTest dtest) {
 		com.apw.pedestrians.Constant.LAST_FRAME_MILLIS = com.apw.pedestrians.Constant.CURRENT_FRAME_MILLIS;
 		com.apw.pedestrians.Constant.CURRENT_FRAME_MILLIS = System.currentTimeMillis();
@@ -71,23 +95,35 @@ public class SpeedController {
 			else if (currLight == 3) {
 				readyToGo();
 			}
-			else if(detectStopSign(i, blobs)){
+			else if (detectStopSign(i)) {
 				System.out.println("Found a stopsign: " + i);
 				setStoppingAtSign();
 			}
-			else{}
 		}
 
 		this.currentBlobs = blobs;
 
 		if(emergencyStop == true)
 		{
-			emergenyStop();
+			emergencyStop();
 		}
 	}
-
-	public boolean detectBlobOverlappingBlob(MovingBlob outsideBlob, MovingBlob insideBlob){
-		if((insideBlob.x < outsideBlob.x+outsideBlob.width && insideBlob.width + insideBlob.x > outsideBlob.x)  ||  (insideBlob.y < outsideBlob.y+outsideBlob.height && insideBlob.height + insideBlob.y > outsideBlob.y)) {
+	
+	/**
+	 * This method detects if a given blob is overlapping another blob.
+	 * 
+	 * <p>This is useful for determining if an array of objects contains a stoplight,
+	 * as a stoplight will contain overlapping black and red blobs.
+	 * 
+	 * @param b1 One of the two blobs that we are fed
+	 * @param b2 One of the two blobs that we are fed
+	 * @return a boolean that is true if the blobs are overlapping, and false if they are not
+	 */
+	public boolean detectBlobOverlappingBlob(MovingBlob b1, MovingBlob b2) {
+		if((b2.x < b1.x+b1.width &&
+			b2.width + b2.x > b1.x) ||
+			(b2.y < b1.y+b1.height &&
+			b2.height + b2.y > b1.y)) {
 			return true;
 		}
 		else {
@@ -95,7 +131,16 @@ public class SpeedController {
 		}
 	}
 
-	//This figures out the speed that we want to be traveling at
+	/**
+	 * A method that determines what speed we need to be traveling at given our wheel angle, and how we have
+	 * modified our speed by pressing the arrow keys.
+	 * 
+	 * <p>Also checks whether it has been told to stop at a stopsign or stoplight, and acts accordingly,
+	 * slowing if it needs to slow, and stopping when it needs t stop.
+	 * 
+	 * @param wheelAngle our current wheel angle
+	 * @param manualSpeed our modifier for speed based upon arrow key presses
+	 */
 	public void calculateDesiredSpeed(double wheelAngle, int manualSpeed){
 		double curveSteepness = 0; // Steering.getCurveSteepness();
 		int shouldStopSign = this.updateStopSign();
@@ -119,6 +164,11 @@ public class SpeedController {
 		}
 	}
 
+	/**
+	 * Changes our speed from our current (estimated) speed to our desired speed in a smooth fashion.
+	 * 
+	 * @return the speed that we should currently be traveling at
+	 */
 	public int getNextSpeed(){
 		double distance = this.desiredSpeed - this.currentEstimatedSpeed;
 		if(Math.abs(distance) < Constants.MIN_SPEED_INCREMENT){
@@ -150,9 +200,15 @@ public class SpeedController {
 		currentEstimatedSpeed = gasAmount;
 	}
 
-	//To be called every frame. Checks if we need to be stopping at a stopsign
-	//By modifying constants in the Constants.java in SpeedCon, you can adjust how the stopping behaves
-	//Can be triggered by pressing 'P'
+	/**
+	 * A method called every frame by onUpdate(). Checks if we need to be stopping at a stopsign.
+	 * 
+	 * <p> By modifying constants in SpeedCon/Constants.java, you can adjust how the stopping behaves.
+	 * 
+	 * <p>Can be triggered by pressing 'P'
+	 * 
+	 * @return a stopcode, which reads 1 if we are clear to keep driving, -1 if we are slowing down, and 0 if we need to be stopped
+	 */
 	public int updateStopSign(){
 		if(stoppingAtSign){
 			if(cyclesToStopAtSign <= 0){
@@ -179,9 +235,15 @@ public class SpeedController {
 		return 1;
 	}
 
-	//To be called every frame. Checks if we need to be stopping at a stoplight
-	//By modifying constants in the Constants.java in SpeedCon, you can adjust how the stopping behaves
-	//Can be triggered by pressing 'O', and released by pressing 'I'
+	/**
+	 * A method called every frame by onUpdate(). Checks if we need to be stopping at a stoplight.
+	 * 
+	 * <p>By modifying constants in SpeedCon/Constants.java, you can adjust how the stopping behaves.
+	 * 
+	 * <p>Can be triggered by pressing 'O', and released by pressing 'I'
+	 * 
+	 * @return a stopcode, which reads 1 if we are clear to keep driving, -1 if we are slowing down, and 0 if we need to be stopped
+	 */
 	public int updateStopLight(){
 		if(stoppingAtLight){
 			if(cyclesToStopAtLight <= 0){
@@ -247,8 +309,15 @@ public class SpeedController {
 		return (int)desiredSpeed;
 	}
 
-	// Checks a given blob for the properties of a stopsign (size, age, position, color)
-	public boolean detectStopSign(MovingBlob blob, List<MovingBlob> bloblist) {
+	/**
+	 * Checks a given blob for the properties of a stopsign (size, age, position, color)
+	 * 
+	 * <p>These properties are stored in the blob, and you probably will not need to worry about setting them.
+	 * 
+	 * @param blob the blob that we want to check
+	 * @return true if the blob is recognized to be a stopsign, otherwise false
+	 */
+	public boolean detectStopSign(MovingBlob blob) {
 		if (blob.age > Constants.BLOB_AGE && 
 			blob.height > (3) * Constants.BLOB_MIN_HEIGHT && 
 			blob.height < Constants.BLOB_MAX_HEIGHT && 
@@ -269,22 +338,28 @@ public class SpeedController {
 		return false;
 	}
 
+	//Returns all of the blobs on screen
 	public List<MovingBlob> getBlobs() {
 		return this.currentBlobs;
 	}
 
-	/* Returns an int value corresponding to the color of the light we are looking at
-	 * 0 - No light
-	 * 1 - Red Light
-	 * 2 - Yellow Light
-	 * 3 - Green Light
-	 * */
-
+	/** Returns an int value corresponding to the color of the light we are looking at
+	 * <p>0 - No light
+	 * <p>1 - Red Light
+	 * <p>2 - Yellow Light
+	 * <p>3 - Green Light
+	 * 
+	 * <p>It is crucial that this method be given a list of blobs to iterate through, as it recognizes
+	 * a configuration of blobs to be a light by looking for black around and overlapping a color, rather than just one blob
+	 * 
+	 * @param blob our guess for a light, blob color is ALWAYS red, green, or yellow
+	 * @param bloblist all of the blobs on screen
+	 * @return returns a light code, see above for light codes
+	 */
 	public int detectLight(MovingBlob blob, List<MovingBlob> bloblist){
 		int lightColor = 0;
-		boolean outputLight = false;
-		//Figure out the color of our blob
 		
+		//Here we try to see if the blob is a red light
 		if (blob.age >= Constants.BLOB_AGE && 
 			blob.height >= (1) + Constants.BLOB_MIN_HEIGHT && 
 			blob.height <= Constants.BLOB_MAX_HEIGHT && 
@@ -311,6 +386,7 @@ public class SpeedController {
 			}
 		}
 		
+		//Here we check if it is a yellow light
 		else if (
 			blob.age > Constants.BLOB_AGE && 
 			blob.height > Constants.BLOB_MIN_HEIGHT && 
@@ -338,6 +414,7 @@ public class SpeedController {
 			}
 		}
 		
+		//And here we try to see if it is a green light
 		else if (blob.age > Constants.BLOB_AGE && 
 			blob.height > Constants.BLOB_MIN_HEIGHT && 
 			blob.height < Constants.BLOB_MAX_HEIGHT && 
@@ -363,28 +440,11 @@ public class SpeedController {
 				}
 			}
 		}
-		else {
-			//Didn't find a light
-			return 0;
-		}
-		//If we made it here, we know that we have a light
-		//Therefore, we need to check if that light is inside of a black blob, aka the lamp
-		outputLight = true;
-		int overlaps = 0;
-		for(MovingBlob b : bloblist){
-			if(blob.color.getColor() == Color.BLACK){
-				if(detectBlobOverlappingBlob(b, blob)){
-					overlaps++;
-				}
-			}
-		}
-		//System.out.println("Overlaps: " + overlaps);
-		if(outputLight) {
-			return lightColor;
-		}
+		//Otherwise, it's either an invalid color, or doesn't fit the standards for a light and is just background noise
 		else {
 			return 0;
 		}
+		return lightColor;
 	}
 
 	public CameraCalibration getCalibrator()
@@ -392,7 +452,7 @@ public class SpeedController {
 		return cameraCalibrator;
 	}
 
-	public void emergenyStop()
+	public void emergencyStop()
 	{
 		this.desiredSpeed = cameraCalibrator.calcStopRate(getEstimatedSpeed(), 0.1);
 	}
