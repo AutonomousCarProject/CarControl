@@ -13,6 +13,7 @@ public class MovingBlob extends Blob {
     public int age;
     // The time, in frames, that the MovingBlob has been off-screen.
     public int ageOffScreen;
+    public boolean seen;
 
     /**
      * Creates a MovingBlob from a Blob. This is used when a previously unseen
@@ -26,6 +27,7 @@ public class MovingBlob extends Blob {
         this.velocityY = 0;
         this.age = 0;
         this.ageOffScreen = 0;
+        this.seen = false;
         updatePredictedPosition();
     }
 
@@ -72,9 +74,9 @@ public class MovingBlob extends Blob {
 
     @Override
     public String toString() {
-        return "Moving blob: Color " + /* color.getColor() + */ " X: " + x + " Y: " + y + " vX: " + velocityX +
+        return "Moving blob: Color: " + color.getColor() + " X: " + x + " Y: " + y + " vX: " + velocityX +
                 " vY: " + velocityY + " pX: " + predictedX + " pY: " + predictedY + " w: " + width + " h: " + height
-                + " age: " + age + " ageoff: " + ageOffScreen;
+                + " age: " + age + " ageoff: " + ageOffScreen + " seen: " + seen;
     }
 
     public float getDensity() {

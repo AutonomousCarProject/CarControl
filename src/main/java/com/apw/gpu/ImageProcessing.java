@@ -1,11 +1,10 @@
 package com.apw.gpu;
 
 import com.aparapi.Range;
-import com.apw.ImageManagement.ImageManipulator;
+import com.apw.imagemanagement.ImageManipulator;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Arrays;
 
 public class ImageProcessing {
     public static void main(String[] args) {
@@ -26,7 +25,7 @@ public class ImageProcessing {
         }
 
         System.out.printf("%.2fms%n", kernel.getAccumulatedExecutionTime());
-        System.out.println(Arrays.toString(kernel.getSimple()));
+        //System.out.println(Arrays.toString(kernel.getSimple()));
 
         Instant start = Instant.now();
 

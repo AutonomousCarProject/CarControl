@@ -17,8 +17,8 @@
 package com.apw.apw3;                                       // 2018 June 13
 
 
-import com.apw.fakefirm.Arduino;
-import com.apw.fakefirm.SimHookBase;
+import com.apw.pwm.fakefirm.ArduinoPWM;
+import com.apw.pwm.fakefirm.SimHookBase;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,8 +27,6 @@ import java.io.FileInputStream;
  * The main TrakSim Car Simulator class..
  */
 public class TrakSim {
-
-     public boolean wasted = false;
 
     // fGratio cnvrts ESC steps to nominal velocity; fMinSpeed=4.0,MinESC=10
     // ..adjust multiplier so it's correct for your car: *1.0 => fGratio=0.4
@@ -66,9 +64,6 @@ public class TrakSim {
             ParkDims = MapTall * 0x10000 + MapWide, CheckerBd = DriverCons.D_CheckerBd,
             ServoStepRate = 0, // = FrameTime/20, // Vscale = DriverCons.D_Vscale,
             TweakRx = DriverCons.D_TweakRx, Crummy = DriverCons.D_Crummy;
-
-    public static final int WinWi = (ShowMap ? MapWide + 16 : 0) + ImWi, // window width
-            Lin2 = WinWi * 2, nPixels = ImHi * WinWi; // + pix in whole window
     private static final double TurnRadius = DriverCons.D_TurnRadius,
             LfDeScaleSt = 90.0 / ((double) DriverCons.D_LeftSteer),
             RtDeScaleSt = 90.0 / ((double) DriverCons.D_RiteSteer),
@@ -80,6 +75,9 @@ public class TrakSim {
             fMaxSpeed = fGratio * ((double) MaxESCact),
             MaxRspeed = (Reversible ? -0.5 * fMaxSpeed : 0.0),
             fTime4mass = fMinESC * fFtime / Acceleration;
+    public static final int WinWi = (ShowMap ? MapWide + 16 : 0) + ImWi, // window width
+            Lin2 = WinWi * 2, nPixels = ImHi * WinWi; // + pix in whole window
+
     private static final String[] CompNames = {" N  ", " NNE ", " NE ", " ENE ",
             " E  ", " ESE ", " SE ", " SSE ", " S  ", " SSW ", " SW ", " WSW ",
             " W  ", " WNW ", " NW ", " NNW "};
@@ -195,6 +193,7 @@ public class TrakSim {
             0x4, 0xE, 0x1F, 0x3E, 0x7C, 0xF8, 0xF0, 0x60, 0x20, 0,     // 9 @73/25
             0x1, 0x3, 0x7, 0xF, 0x1F, 0x1E, 0xC, 0x4, 0,             // 10 @83/28
             1, 3, 3, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // lsb: scrn botm  // 11 @92/33;  [12 @97/38]
+    public boolean wasted = false;
     private int Left_X, Rite_X, PreViewLoc, PreViewAim;
     private SimHookBase SerialCalls = null;
 
@@ -2462,6 +2461,9 @@ public class TrakSim {
      * array given to NewGridTbl.
      */
     public void DrawGrid() { // to show where to click..
+        if (true)
+            return;
+        //*
         // private final int[] Grid_Locns = {6,12,16,18,26,28,  0,16,80,126,228,240,
         //   0,20,300,320,  0,320,  0,45,91,137,182,228,274,320, 0,320,  0,20,300,320};
         int here, thar, whar, nx, prio, fini, lft, rit,
@@ -2501,6 +2503,7 @@ public class TrakSim {
                 lft++;
             }
         }
+        //*/
     } //~DrawGrid
 
     /**
@@ -2657,7 +2660,7 @@ public class TrakSim {
             NextFrUpdate = 0;
         } //~if // in mode=2 this is when to update image
         if (prio == 3) {
-       		wasted = true;
+            wasted = true;
         }
 //ABCDE
 //        System.out.println(HandyOps.Dec2Log(" (SimStep) o", mode,
@@ -2876,7 +2879,7 @@ public class TrakSim {
             TmpI = (whar << 16) + whar;
             break;
         } //~for                // GoodLog = true, logy = Fax_Log = T..
-        if (GoodLog) if (logy) System.out.println(HandyOps.Dec2Log("(Anim8) ", anim,
+        if (GoodLog) if (logy) ;/* System.out.println(HandyOps.Dec2Log("(Anim8) ", anim,
                 HandyOps.Int2Log(HandyOps.IffyStr(uppy, " =^= ", " =#= "), locn,
                         HandyOps.Dec2Log(" ", whar, HandyOps.Dec2Log(" = ", why,  // why =
                                 HandyOps.Dec2Log(" #", FrameNo, HandyOps.IffyStr(anim == 0, "",
@@ -2889,7 +2892,7 @@ public class TrakSim {
                                                                                         HandyOps.Int2Log(" ", here, HandyOps.Dec2Log(" o", OpMode,
                                                                                                 HandyOps.TF2Log("/", StepOne, HandyOps.Dec2Log(" ", xTrLiteTime,
                                                                                                         " ---> " + HandyOps.ArrayDumpLine(ActivAnima, 0, 36)
-                                                                                                                + aLine))))))))))))))))))))));
+                                                                                                                + aLine))))))))))))))))))))));*/
         return locn;
     } //~Animatron
 
@@ -3087,7 +3090,9 @@ public class TrakSim {
                         }
                     } //~if // (whar>0)
                     zx = 0;
-                    if (RoWiM == 0.0) {
+
+                    if (DoCloseUp) if (RoWiM == 0.0) {
+
                         zx = (rx - ImHaf) << 2; // ImHaf = ImHi/2
                         if (pint < 8) zx++; // car facing N/S (use H)
                         else if (pint < 82) zx = 0; // not square-on
@@ -3100,8 +3105,10 @@ public class TrakSim {
                         } else if (pint < 352) zx = 0;
                         else zx++;
                     } //~if // (RoWiM=0) // (RM[] in grid=2m)..
-                    if (zx > 0) RoWiM = fImMid / MyMath.fAbs(RasterMap[(zx + 2) & RmapMsk]
-                            - RasterMap[zx & RmapMsk]);
+                    if (RasterMap != null) if (zx > 0) if (zx < RasterMap.length - 3) {
+                        RoWiM = MyMath.fAbs(RasterMap[zx + 2] - RasterMap[zx]);
+                        if (RoWiM != 0.0) RoWiM = fImMid / RoWiM;
+                    }
                     if (Mini_Log) if (logy)
                         System.out.println(HandyOps.Dec2Log("   (``) ", oops,
                                 HandyOps.Flt2Log(" (", fImMid, HandyOps.Flt2Log("/", VuEdge,
@@ -3746,7 +3753,7 @@ public class TrakSim {
                     else colo = 0xFFFF;
                 } //~if // aiming for 3399FF in highest sky
                 else bitz = 0xFF00; // green // 0xFFFFCC99; // not dirt
-                if (DrawDash > 0) if (rx > ImHi - DrawDash) bitz = 0x333300; // dk.brown
+                if (DrawDash > 0) if (rx >= ImHi - DrawDash) bitz = 0x333300; // dk.brown
                 if (ZooMapDim == 0) dx = -1;
                 else dx = rx - (ZooMapBase >> 16); // <0 if above close-up view (in c-u pix)
                 // ZMD=32,32 ZSf=3 ZB=224,642 ZSc=16. ZW=0.2 ZT=8,16
@@ -3924,7 +3931,7 @@ public class TrakSim {
                 doit = 0;
                 rx = RangeRow[255] - 1; // at horizon, mid-screen
                 for (dx = 255; dx >= -ImHaf; dx += -1) {    // convert depth to raster line number..
-                    if (rx > ImHi - DrawDash) break; // normal exit at bottom of screen
+                    if (rx >= ImHi - DrawDash) break; // normal exit at bottom of screen
                     if (dx < 0) break;
                     robe = RangeRow[dx & 255]; // dx: nominal depth in park 25cm units
                     // far = far&0xFFFFFF|(robe<<24);
@@ -3941,7 +3948,7 @@ public class TrakSim {
                             seen = false;
                         }
                         cx = rx - ImHaf; // RowRange is bottom half of screen only // ImHaf=240
-                        if (cx > ImHaf - DrawDash) break;
+                        if (cx >= ImHaf - DrawDash) break;
                         doit = RowRange[cx];
                         deep = ((double) doit) * 0.03125; // RR: m*16 (6cm), deep: 2m
                         Vbase = deep * Vstp + Vposn * 0.5; // current center of the view at this dx,
@@ -4144,7 +4151,8 @@ public class TrakSim {
                                                             HandyOps.Flt2Log(" ", VuEdge, HandyOps.Dec2Log(" ", NumFax,
                                                                     HandyOps.PosTime(" @ ")))))))))))))));
             // if (why != 8) break; // if scenery went bad, still do steering wheel..
-            DrawSteerWheel(ShoSteer, false, false);
+
+            if (DrawDash > 0) DrawSteerWheel(ShoSteer, false, false);
             why = 0;
             if (OpMode == 3) DrawRedX();
             if (SeePaintTopL > 0) SeeOnScrnPaint(SeePaintTopL >> 16, SeePaintTopL & 0xFFFF,
@@ -4979,9 +4987,9 @@ public class TrakSim {
 
     public void GotBytes(byte[] msg, int lxx) {
         if (msg == null) return;
-        if ((((int) msg[0]) & 0xF0) != Arduino.ANALOG_MESSAGE) return;
-        if (msg.length >= 3) SetServo(((int) msg[0]) & 0xF,
-                (((int) msg[2]) << 7) | ((int) msg[1]) & 0x7F);
+        //if (msg[0] != Arduino.ANALOG_MESSAGE) return;
+        if (msg.length >= 3)
+            SetServo((int) msg[1], (int) msg[2]);
     } //~GotBytes
 
     private int Color4ix(int whom) { // only frm InitInd
@@ -5487,7 +5495,7 @@ public class TrakSim {
             GasBrake = 0;
             NuData++;
             SerialCalls = new SimHookX();
-            Arduino.HookExtend(SerialCalls);
+            ArduinoPWM.HookExtend(SerialCalls);
         }
         nClients++;
     } //~StartPatty
