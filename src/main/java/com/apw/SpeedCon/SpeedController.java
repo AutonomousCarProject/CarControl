@@ -12,6 +12,9 @@ import com.apw.drivedemo.DriveTest;
 /**
  * This class handles the speed of our car, given info from image and steering.
  * 
+ * <p>onUpdate() gets called every frame, and handles everything. Most of the other big methods are private, and get called from 
+ * onUpdate(). Most of the smaller methods are getters and setters.
+ * 
  * @author William Adriance
  * @author Matthew Alexander
  * @author Derek Schwartz
@@ -75,7 +78,7 @@ public class SpeedController {
 		//relevant, and then what to do with them
 		ImageManager imageManager = DriveTest.imageManager;
 
-		List<MovingBlob> blobs = this.pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), 912);
+		List<MovingBlob> blobs = this.pedDetect.getAllBlobs(imageManager.getSimpleColorRaster(), imageManager.getNcols());
 
 		for(MovingBlob i : blobs){
 			/* Returns an int value corresponding to the color of the light we are looking at
@@ -141,7 +144,7 @@ public class SpeedController {
 	 * @param wheelAngle our current wheel angle
 	 * @param manualSpeed our modifier for speed based upon arrow key presses
 	 */
-	public void calculateDesiredSpeed(double wheelAngle, int manualSpeed){
+	private void calculateDesiredSpeed(double wheelAngle, int manualSpeed){
 		double curveSteepness = 0; // Steering.getCurveSteepness();
 		int shouldStopSign = this.updateStopSign();
 		int shouldStopLight = this.updateStopLight();
@@ -209,7 +212,7 @@ public class SpeedController {
 	 * 
 	 * @return a stopcode, which reads 1 if we are clear to keep driving, -1 if we are slowing down, and 0 if we need to be stopped
 	 */
-	public int updateStopSign(){
+	private int updateStopSign(){
 		if(stoppingAtSign){
 			if(cyclesToStopAtSign <= 0){
 				cyclesToStopAtSign = Constants.DRIFT_TO_STOPSIGN_FRAMES;
@@ -244,7 +247,7 @@ public class SpeedController {
 	 * 
 	 * @return a stopcode, which reads 1 if we are clear to keep driving, -1 if we are slowing down, and 0 if we need to be stopped
 	 */
-	public int updateStopLight(){
+	private int updateStopLight(){
 		if(stoppingAtLight){
 			if(cyclesToStopAtLight <= 0){
 				cyclesToStopAtLight = Constants.DRIFT_TO_STOPLIGHT_FRAMES;
@@ -317,7 +320,7 @@ public class SpeedController {
 	 * @param blob the blob that we want to check
 	 * @return true if the blob is recognized to be a stopsign, otherwise false
 	 */
-	public boolean detectStopSign(MovingBlob blob) {
+	private boolean detectStopSign(MovingBlob blob) {
 		if (blob.age > Constants.BLOB_AGE && 
 			blob.height > (3) * Constants.BLOB_MIN_HEIGHT && 
 			blob.height < Constants.BLOB_MAX_HEIGHT && 
@@ -356,7 +359,7 @@ public class SpeedController {
 	 * @param bloblist all of the blobs on screen
 	 * @return returns a light code, see above for light codes
 	 */
-	public int detectLight(MovingBlob blob, List<MovingBlob> bloblist){
+	private int detectLight(MovingBlob blob, List<MovingBlob> bloblist){
 		int lightColor = 0;
 		
 		//Here we try to see if the blob is a red light
