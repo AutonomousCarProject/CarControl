@@ -17,8 +17,8 @@
 package com.apw.apw3;                                       // 2018 June 13
 
 
-import com.apw.fakefirm.Arduino;
-import com.apw.fakefirm.SimHookBase;
+import com.apw.pwm.fakefirm.ArduinoPWM;
+import com.apw.pwm.fakefirm.SimHookBase;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -5495,7 +5495,7 @@ public class TrakSim {
             GasBrake = 0;
             NuData++;
             SerialCalls = new SimHookX();
-            Arduino.HookExtend(SerialCalls);
+            ArduinoPWM.HookExtend(SerialCalls);
         }
         nClients++;
     } //~StartPatty

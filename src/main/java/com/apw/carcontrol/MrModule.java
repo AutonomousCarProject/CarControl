@@ -1,8 +1,8 @@
 package com.apw.carcontrol;
 
-import com.apw.ImageManagement.ImageManagementModule;
-import com.apw.SpeedCon.SpeedControlModule;
-import com.apw.Steering.SteeringModule;
+import com.apw.imagemanagement.ImageManagementModule;
+import com.apw.speedcon.SpeedControlModule;
+import com.apw.steering.SteeringModule;
 
 import javax.swing.*;
 import java.awt.*;
