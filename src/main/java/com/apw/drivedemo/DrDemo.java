@@ -16,8 +16,6 @@
  */
 package com.apw.drivedemo;                                    // 2018 June 13
 
-import com.apw.ImageManagement.ImageManager;
-import com.apw.Steering.Steering;
 import com.apw.apw3.*;
 import com.apw.fakefirm.Arduino;
 import com.apw.fly2cam.FlyCamera;
@@ -37,10 +35,8 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 
-import com.apw.ImageManagement.ImageManager;
 import com.apw.SpeedCon.Constants;
 import com.apw.SpeedCon.Settings;
-import com.apw.SpeedCon.SpeedController;
 import com.apw.Steering.Point;
 
 // import fly2cam.CameraBase;

@@ -20,7 +20,7 @@ import jssc.SerialPortException;
 //                           // ..on a computer with no serial port.
 //import com.apw.Interfacing.SerialPort;
 
-public class Arduino { // Adapted to Java from arduino.cs ... (FakeFirmata)
+public class Arduino implements Interface{ // Adapted to Java from arduino.cs ... (FakeFirmata)
     // (subclass this to add input capability)
 	public static final boolean UseServos = true;
 
