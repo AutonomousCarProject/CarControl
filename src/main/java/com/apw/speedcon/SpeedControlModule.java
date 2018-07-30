@@ -16,20 +16,14 @@ public class SpeedControlModule implements Module {
 
     private double currentEstimatedSpeed;
     private double desiredSpeed;
-    private boolean stoppingAtSign;
-    private boolean stoppedAtSign;
-    private boolean stoppingAtLight;
-    private boolean stoppedAtLight;
-    private boolean readyToGo;
     private boolean emergencyStop;
-    private int cyclesToStopAtSign = Constants.DRIFT_TO_STOPSIGN_FRAMES;
-    private int cyclesToGo;
-    private int cyclesToStopAtLight = Constants.DRIFT_TO_STOPLIGHT_FRAMES;
+    private boolean go;
 
     private PedestrianDetector pedDetect;
     private CameraCalibration cameraCalibrator;
 
     private List<MovingBlob> currentBlobs;
+    private List<MovingBlob> stopObjects;
 
     public SpeedControlModule() {
         this.pedDetect = new PedestrianDetector();
@@ -109,32 +103,18 @@ public class SpeedControlModule implements Module {
         com.apw.pedestrians.Constant.TIME_DIFFERENCE = com.apw.pedestrians.Constant.CURRENT_FRAME_MILLIS - com.apw.pedestrians.Constant.LAST_FRAME_MILLIS;
         this.calculateEstimatedSpeed(gasAmount);
         this.calculateDesiredSpeed(steerDegs, manualSpeed);
+        this.updateStop();  //Finds things that should be stopped at and adds them to stopObjects
 
         List<MovingBlob> blobs = this.pedDetect.getAllBlobs(control.getProcessedImage(), 912);
+        this.currentBlobs = blobs;
 
-        for (MovingBlob i : blobs) {
-            /* Returns an int value corresponding to the color of the light we are looking at
-             * 0 - No light
-             * 1 - Red Light
-             * 2 - Yellow Light
-             * 3 - Green Light
-             * */
-            int currLight = detectLight(i, blobs);
 
-            if (currLight == 1) {
-                setStoppingAtLight();
-            } else if (currLight == 2) {
-                setStoppingAtLight();
-            } else if (currLight == 3) {
-                readyToGo();
-            } else if (detectStopSign(i, blobs)) {
-                System.out.println("Found a stopsign: " + i);
-                setStoppingAtSign();
-            } else {
-            }
+        for (MovingBlob i : stopObjects) {
+            
+            determineStop(i);
+
         }
 
-        this.currentBlobs = blobs;
 
         if (emergencyStop) {
             emergencyStop();
@@ -147,21 +127,14 @@ public class SpeedControlModule implements Module {
 
     //This figures out the speed that we want to be traveling at
     public void calculateDesiredSpeed(double wheelAngle, int manualSpeed) {
-        int shouldStopSign = this.updateStopSign();
-        int shouldStopLight = this.updateStopLight();
+        this.updateStopSign();
+        this.updateStopLight();
 
         //Logic for determining if we need to be slowing down due to a roadsign/light, and why
-        if (shouldStopSign == 1 && shouldStopLight == 1) {
+        if (go == true) {
             this.desiredSpeed = Math.min(Math.max((1 - Math.abs((double) (wheelAngle) / 90.0)) * Constants.MAX_SPEED + manualSpeed, Constants.MIN_SPEED), Constants.MAX_SPEED);
-        } else if (shouldStopSign == -1) {
-            this.desiredSpeed = Constants.STOPSIGN_DRIFT_SPEED;
-        } else if (shouldStopSign == 0) {
-            this.desiredSpeed = 0;
-        } else if (shouldStopLight == -1) {
-            this.desiredSpeed = Constants.STOPLIGHT_DRIFT_SPEED;
-        } else if (shouldStopLight == 0) {
-            this.desiredSpeed = 0;
-        }
+        } 
+
 
     }
 
@@ -176,6 +149,23 @@ public class SpeedControlModule implements Module {
         }
     }
 
+
+    //Calculates when the car should start to stop.
+    private void determineStop(MovingBlob closestBlob)
+    {
+        double distToBlob = cameraCalibrator.distanceToObj(75, closestBlob.width);
+        if(cameraCalibrator.getStopTime(distToBlob, getEstimatedSpeed()) <= Constants.MIN_STOP_TIME)
+        {
+            go = false;
+            this.desiredSpeed = desiredSpeed - cameraCalibrator.calcStopRate(getEstimatedSpeed(), cameraCalibrator.getStopTime(distToBlob, getEstimatedSpeed()));
+        }
+        else
+        {
+            go = true;
+        }
+    }
+
+
     //Returns the estimated speed IN METERS PER SECOND
     public double getEstimatedSpeed() {
         return currentEstimatedSpeed * Constants.PIN_TO_METER_PER_SECOND;
@@ -186,85 +176,45 @@ public class SpeedControlModule implements Module {
         currentEstimatedSpeed = gasAmount;
     }
 
-    //To be called every frame. Checks if we need to be stopping at a stopsign
-    //By modifying constants in the Constants.java in speedcon, you can adjust how the stopping behaves
-    //Can be triggered by pressing 'P'
-    public int updateStopSign() {
-        if (stoppingAtSign) {
-            if (cyclesToStopAtSign <= 0) {
-                cyclesToStopAtSign = Constants.DRIFT_TO_STOPSIGN_FRAMES;
-                stoppedAtSign = true;
-                stoppingAtSign = false;
-                cyclesToGo = Constants.WAIT_AT_STOPSIGN_FRAMES;
-            } else {
-                cyclesToStopAtSign--;
-                return -1;
+
+    //One method that tracks all things needed
+    private void updateStop()
+    {
+        this.updateStopLight();
+        this.updateStopSign();
+    }
+    
+    //Finds stop signs and adds them to stopSigns
+    public void updateStopSign() {
+
+        for(MovingBlob i : currentBlobs)
+        {
+            if(i.color.getColor() == Color.RED && detectStopSign(i))
+            {
+                stopObjects.add(i);
+                i.type = "sign";
             }
         }
-        if (stoppedAtSign) {
-            if (cyclesToGo <= 0) {
-                cyclesToGo = Constants.WAIT_AT_STOPSIGN_FRAMES;
-                stoppedAtSign = false;
-            } else {
-                cyclesToGo--;
-                return 0;
+            }
+
+
+    //Finds stopLights, if red or yellow, adds to stopLight list
+    public void updateStopLight() {
+
+        for(MovingBlob i : currentBlobs)
+        {
+            if(i.color.getColor() == Color.RED && detectLight(i, currentBlobs) <= 2)
+            {
+                stopObjects.add(i);
+                i.type = "light";
             }
         }
-        return 1;
     }
+    
 
-    //To be called every frame. Checks if we need to be stopping at a stoplight
-    //By modifying constants in the Constants.java in speedcon, you can adjust how the stopping behaves
-    //Can be triggered by pressing 'O', and released by pressing 'I'
-    public int updateStopLight() {
-        if (stoppingAtLight) {
-            if (cyclesToStopAtLight <= 0) {
-                cyclesToStopAtLight = Constants.DRIFT_TO_STOPLIGHT_FRAMES;
-                stoppedAtLight = true;
-                stoppingAtLight = false;
-                readyToGo = false;
-            } else {
-                cyclesToStopAtLight--;
-                return -1;
-            }
-        }
-        if (stoppedAtLight) {
-            if (readyToGo) {
-                stoppedAtLight = false;
-                readyToGo = false;
-            } else {
-                return 0;
-            }
-        }
-        return 1;
-    }
 
-    //Triggered by pressing 'O', this tells us that we have a green light
-    public void readyToGo() {
-        readyToGo = true;
-    }
 
-    //Tells you if we are stopping at a sign currently
-    public boolean getStoppingAtSign() {
-        return stoppingAtSign;
-    }
 
-    //Tells you if we are stopping at a light currently
-    public boolean getStoppingAtLight() {
-        return stoppingAtLight;
-    }
-
-    //Tells us that we have detected a stopsign, and need to stop
-    public void setStoppingAtSign() {
-        stoppingAtSign = true;
-        cyclesToStopAtSign = Constants.DRIFT_TO_STOPSIGN_FRAMES;
-    }
-
-    //Tells us that we have seen a red light, and need to stop
-    public void setStoppingAtLight() {
-        stoppingAtLight = true;
-        cyclesToStopAtLight = Constants.DRIFT_TO_STOPLIGHT_FRAMES;
-    }
 
     //Getting and setting our emergency stop boolean
     public boolean getEmergencyStop() {
@@ -280,7 +230,7 @@ public class SpeedControlModule implements Module {
     }
 
     // Checks a given blob for the properties of a stopsign (size, age, position, color)
-    public boolean detectStopSign(MovingBlob blob, List<MovingBlob> bloblist) {
+    public boolean detectStopSign(MovingBlob blob) {
         if (blob.age > Constants.BLOB_AGE &&
                 blob.height > (3) * Constants.BLOB_MIN_HEIGHT &&
                 blob.height < Constants.BLOB_MAX_HEIGHT &&

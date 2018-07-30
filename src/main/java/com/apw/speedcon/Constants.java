@@ -14,6 +14,7 @@ public class Constants {
             PIN_TO_METER_PER_SECOND = 0.4,    //Conversion for motor position to m/s. DO NOT TOUCH
             MAX_OBJECT_WIDTH = 320,            //Maximum width in pixels of object height before car slows
             MAX_OBJECT_HEIGHT = 200,        //Maximum height of in pixels of an object before car slows
+            MIN_STOP_TIME = 5,                //The lest amount of time the car will take to slow to stop, starts stopping if time needed is below
 
     //Math Constants
     GRAV = 9.80665,                    //Average gravitational acceleration

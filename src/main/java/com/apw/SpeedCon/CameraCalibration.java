@@ -69,7 +69,7 @@ public class CameraCalibration {
         }
 
         //Used to test distance to found test blob, should be same as testBlobDistance
-        distanceToObj(testBlobWidthHeight, cameraFocalLength, testBlob.width);
+        distanceToObj(testBlobWidthHeight, testBlob.width);
     }
     
 
@@ -81,9 +81,9 @@ public class CameraCalibration {
 
 
     //Calculates the distance to a blob if the real world size is known
-    public double distanceToObj(double knownWidth, double focalLength, double objPixelWidth) {
-        System.out.print("Distance to object = " + (knownWidth * focalLength) / objPixelWidth);
-        return (knownWidth * focalLength) / objPixelWidth;
+    public double distanceToObj(double knownWidth, double objPixelWidth) {
+        System.out.print("Distance to object = " + (knownWidth * cameraFocalLength) / objPixelWidth);
+        return (knownWidth * cameraFocalLength) / objPixelWidth;
     }
 
 
