@@ -30,7 +30,7 @@ void setup() {
   pinMode(11, INPUT); //speed getter
   
   //pinMode(2, INPUT); //Dead man's switch
-  //attachInterrupt(digitalPinToInterrupt(2), killReader, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(2), killReader, CHANGE);
   
   pinMode(13, OUTPUT); //testing light
   digitalWrite(13, HIGH);
@@ -62,10 +62,10 @@ void loop() {
     //read input from computer
 
     //Timeout check
-    if (Serial.peek() <= 0 && sinceConnect > timeout){
-      nokill = false;
-      digitalWrite(13, HIGH);
-    }
+    //if (Serial.peek() <= 0 && sinceConnect > timeout){
+    //  nokill = false;
+    //  digitalWrite(13, HIGH);
+    //}
     
     sinceConnect++;
     sinceNokill++;
@@ -99,6 +99,8 @@ void loop() {
     
     //Start next cycle every .02 seconds
     if (micros()-lastTime >= 20000){
+      
+      digitalWrite(13, HIGH);
       digitalWrite(9, HIGH);
       digitalWrite(10, HIGH);
       steerON = true;
