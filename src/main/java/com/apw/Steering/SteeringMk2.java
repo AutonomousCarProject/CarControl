@@ -1,48 +1,56 @@
 package com.apw.steering;
 
-import com.apw.apw3.DriverCons;
-import com.apw.carcontrol.CarControl;
-import com.apw.carcontrol.Module;
+import com.apw.fakefirm.Arduino;
 
-import java.awt.*;
 
-public class SteeringModule extends SteeringBase implements Module {
+/**
+ * <p>Version 2 of steering. This version improves center detection by adding the
+ * ability to follow a single lane. This makes crashing much rarer, as well as better
+ * navigating tight corners.</p>
+ *
+ * @author kevin
+ * @author carl
+ * @author nathan
+ */
+public class SteeringMk2 extends SteeringBase {
+
+    private int SteerPin;
+    private boolean haveNewPixels = false;
     private boolean leftSideFound = false;
     private boolean rightSideFound = false;
 
-    public SteeringModule() {
+    public SteeringMk2() {
+
     }
 
+    /**
+     * not currently being used.
+     *
+     * @param pixels the array of pixels.
+     * @return Degree to drive to
+     */
     @Override
-    public void update(CarControl control) {
-        int angle = drive(control.getRGBImage());
-        control.steer(true, angle);
-    }
-
     public int drive(int pixels[]) {
         findPoints(pixels);
         averagePoints();
         return getDegreeOffset();
     }
 
-    private void averagePoints() {
-
-        startTarget = (int) (midPoints.size() * 0.5);
-        endTarget = (int) (midPoints.size() * 0.7);
-
-        double ySum = 0;
-        double xSum = 0;
-
-        // Sum the x's and the y's
-        for (int idx = startTarget; idx <= endTarget; idx++) {
-            xSum += midPoints.get(idx).x;
-            ySum += midPoints.get(idx).y;
+    /**
+     * This gets called every 50ms, writes to the car servos. (drives the car)
+     */
+    public void makeTurnAdjustment(Arduino servos) {
+        if (haveNewPixels) {
+            servos.servoWrite(SteerPin, getDegreeOffset() + 90);
         }
-
-        steerPoint.x = (int) (xSum / (endTarget - startTarget));
-        steerPoint.y = (int) (ySum / (endTarget - startTarget));
     }
 
+    /**
+     * Process the camera image, and fill leftPoints, rightPoints, and midPoints.
+     *
+     * @param pixels An array of pixels
+     */
+    @Override
     public void findPoints(int[] pixels) {
         clearArrays();
         int midX = cameraWidth / 2; // midX is where the car thinks is the middle of the road
@@ -98,63 +106,37 @@ public class SteeringModule extends SteeringBase implements Module {
             leftSideFound = false;
         }
         averagePoints();
+        haveNewPixels = true;
     }
 
-    @Override
-    public void paint(CarControl control, Graphics g) {
-        g.setColor(Color.RED);
-
-        if (DriverCons.D_DrawPredicted) {
-            int tempY = 0;
-            for (int idx = 0; idx < midPoints.size(); idx++) {
-                if (idx >= startTarget && idx <= endTarget) {
-                    g.setColor(Color.red);
-                    tempY += midPoints.get(idx).y;
-                    g.fillRect(midPoints.get(idx).x, midPoints.get(idx).y + control.getEdges().top, 5, 5);
-                } else {
-                    g.setColor(Color.BLUE);
-                }
-            }
-            //System.out.println(tempY / (1.0 * (endTarget - startTarget)));
-        }
-
-        if (DriverCons.D_DrawOnSides) {
-            for (Point point : leftPoints) {
-                g.setColor(Color.YELLOW);
-                g.fillRect(point.x + control.getEdges().left, point.y + control.getEdges().top, 5, 5);
-            }
-            for (Point point : rightPoints) {
-                g.fillRect(point.x + control.getEdges().left, point.y + control.getEdges().top, 5, 5);
-            }
-        }
-
-        // Draw steerPoint on screen
-        g.setColor(Color.CYAN);
-        g.fillRect(steerPoint.x, steerPoint.y, 7, 7);
-
-        //Draw predicted points and detected lines
-        for (Point point : midPoints) {
-            if (DriverCons.D_DrawPredicted) {
-                control.rectFill(255, point.y, point.x, point.y + 5, point.x + 5);
-            }
-        }
-        if (DriverCons.D_DrawOnSides) {
-            for (Point point : leftPoints) {
-                int xL = point.x;
-                int yL = point.y;
-                control.rectFill(16776960, yL, xL, yL + 5, xL + 5);
-            }
-            for (Point point : rightPoints) {
-                int xR = point.x;
-                int yR = point.y;
-                control.rectFill(16776960, yR, xR, yR + 5, xR + 5);
-            }
-        }
-    }
-
+    /**
+     * Clear all the arrays
+     */
     private void clearArrays() {
         leftPoints.clear();
         rightPoints.clear();
         midPoints.clear();
     }
+
+    /**
+     * Average the midpoints to create the steerPoint.
+     */
+    private void averagePoints() {
+
+        startTarget = (int) (midPoints.size() * 0.5);
+        endTarget = (int) (midPoints.size() * 0.7);
+
+        double ySum = 0;
+        double xSum = 0;
+
+        // Sum the x's and the y's
+        for (int idx = startTarget; idx <= endTarget; idx++) {
+            xSum += midPoints.get(idx).x;
+            ySum += midPoints.get(idx).y;
+        }
+
+        steerPoint.x = (int) (xSum / (endTarget - startTarget));
+        steerPoint.y = (int) (ySum / (endTarget - startTarget));
+    }
+
 }

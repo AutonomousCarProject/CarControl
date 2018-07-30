@@ -3,7 +3,7 @@ package com.apw.carcontrol;
 import com.apw.apw3.DriverCons;
 import com.apw.apw3.MyMath;
 import com.apw.apw3.SimCamera;
-import com.apw.pwm.fakefirm.ArduinoPWM;
+import com.apw.fakefirm.Arduino;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -13,7 +13,7 @@ public class TrakSimControl implements CarControl {
     private final double LefScaleSt, RitScaleSt;
     protected SimCamera cam;
     protected HashMap<Integer, Runnable> keyBindings;
-    private ArduinoPWM driveSys;
+    private Arduino driveSys;
     private Insets edges;
     private byte[] cameraImage = null;
     private byte[] processedImage = null;
@@ -31,9 +31,9 @@ public class TrakSimControl implements CarControl {
         LefScaleSt = ((double) DriverCons.D_LeftSteer) / 90.0;
         RitScaleSt = ((double) DriverCons.D_RiteSteer) / 90.0;
 
-        driveSys = ArduinoPWM.getInstance();
-        driveSys.pinMode(SteerPin, ArduinoPWM.SERVO);
-        driveSys.pinMode(GasPin, ArduinoPWM.SERVO);
+        driveSys = new Arduino();
+        driveSys.pinMode(SteerPin, Arduino.SERVO);
+        driveSys.pinMode(GasPin, Arduino.SERVO);
 
         keyBindings = new HashMap<>();
     }
@@ -104,7 +104,7 @@ public class TrakSimControl implements CarControl {
                 cam.Finish();
             }
             if (driveSys != null) {
-                driveSys.close();
+                driveSys.Close();
             }
         } catch (Exception ignored) {
         }
@@ -131,7 +131,7 @@ public class TrakSimControl implements CarControl {
         if (driveSys == null) {
             return;
         }
-        driveSys.setServoAngle(GasPin, velocity + 90);
+        driveSys.servoWrite(GasPin, velocity + 90);
     }
 
     @Override
@@ -156,7 +156,7 @@ public class TrakSimControl implements CarControl {
         if (driveSys == null) {
             return;
         }
-        driveSys.setServoAngle(SteerPin, angle + 90);
+        driveSys.servoWrite(SteerPin, angle + 90);
     }
 
     @Override
@@ -181,7 +181,7 @@ public class TrakSimControl implements CarControl {
 
     @Override
     public int getManualSpeed() {
-        return 0;
+        return currentManualSpeed;
     }
 
     @Override

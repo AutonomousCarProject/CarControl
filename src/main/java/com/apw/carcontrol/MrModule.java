@@ -1,8 +1,8 @@
 package com.apw.carcontrol;
 
 import com.apw.imagemanagement.ImageManagementModule;
-import com.apw.speedcon.SpeedControlModule;
 import com.apw.steering.SteeringModule;
+import com.apw.speedcon.SpeedControlModule;
 
 import javax.swing.*;
 import java.awt.*;
@@ -44,7 +44,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     }
 
     private void setupWindow() {
-        executorService.scheduleAtFixedRate(this, 0, 1000 / 60, TimeUnit.MILLISECONDS);
+        executorService.scheduleAtFixedRate(this, 0, 1000 / 15, TimeUnit.MILLISECONDS);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(width, height + 25);
