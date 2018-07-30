@@ -181,7 +181,7 @@ public class TrakSimControl implements CarControl {
 
     @Override
     public int getManualSpeed() {
-        return 0;
+        return currentManualSpeed;
     }
 
     @Override

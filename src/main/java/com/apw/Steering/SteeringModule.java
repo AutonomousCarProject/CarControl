@@ -5,12 +5,19 @@ import com.apw.carcontrol.CarControl;
 import com.apw.carcontrol.Module;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 
 public class SteeringModule extends SteeringBase implements Module {
     private boolean leftSideFound = false;
     private boolean rightSideFound = false;
 
     public SteeringModule() {
+    }
+
+    @Override
+    public void initialize(CarControl control) {
+        control.addKeyEvent(KeyEvent.VK_LEFT, () -> control.steer(false, -5));
+        control.addKeyEvent(KeyEvent.VK_RIGHT, () -> control.steer(false, 5));
     }
 
     @Override
