@@ -75,24 +75,25 @@ public class ImageManipulator {
 				int R = (bayer[getPos(c,r,combineTile((byte)0,tile),ncols,nrows,true)]&0xFF);
 				int G = (bayer[getPos(c,r,combineTile((byte)1,tile),ncols,nrows,true)]&0xFF);
 				int B = (bayer[getPos(c,r,combineTile((byte)3,tile),ncols,nrows,true)]&0xFF);
-				averageLuminance = (averageLuminance + ((R+G+B)/3))/2;
+				averageLuminance += (R + G + B)/3;
 			}
+        	averageLuminance /= ncols;
 
-            for (int c = 1; c < ncols - 1; c++) {
+            for (int c = 0; c < ncols; c++) {
 
-				int R1 = (bayer[getPos(c-1,r,combineTile((byte)0,tile),ncols,nrows,true)]&0xFF);
-				int G1 = (bayer[getPos(c-1,r,combineTile((byte)1,tile),ncols,nrows,true)]&0xFF);
-				int B1 = (bayer[getPos(c-1,r,combineTile((byte)3,tile),ncols,nrows,true)]&0xFF);
+//				int R1 = (bayer[getPos(c-1,r,combineTile((byte)0,tile),ncols,nrows,true)]&0xFF);
+//				int G1 = (bayer[getPos(c-1,r,combineTile((byte)1,tile),ncols,nrows,true)]&0xFF);
+//				int B1 = (bayer[getPos(c-1,r,combineTile((byte)3,tile),ncols,nrows,true)]&0xFF);
 				int R2 = (bayer[getPos(c,r,combineTile((byte)0,tile),ncols,nrows,true)]&0xFF);
 				int G2 = (bayer[getPos(c,r,combineTile((byte)1,tile),ncols,nrows,true)]&0xFF);
 				int B2 = (bayer[getPos(c,r,combineTile((byte)3,tile),ncols,nrows,true)]&0xFF);
-				int R3 = (bayer[getPos(c+1,r,combineTile((byte)0,tile),ncols,nrows,true)]&0xFF);
-				int G3 = (bayer[getPos(c+1,r,combineTile((byte)1,tile),ncols,nrows,true)]&0xFF);
-				int B3 = (bayer[getPos(c+1,r,combineTile((byte)3,tile),ncols,nrows,true)]&0xFF);
+//				int R3 = (bayer[getPos(c+1,r,combineTile((byte)0,tile),ncols,nrows,true)]&0xFF);
+//				int G3 = (bayer[getPos(c+1,r,combineTile((byte)1,tile),ncols,nrows,true)]&0xFF);
+//				int B3 = (bayer[getPos(c+1,r,combineTile((byte)3,tile),ncols,nrows,true)]&0xFF);
 
-				int pix =(R1+R2+R3+B1+B2+B3+G1+G2+G3)/9;
+				int pix =(R2 + G2 + B2)/3;
 				if(!(c >= 640 || r < 240 || r > 455)) {
-					if (pix > 0.8 * averageLuminance) {
+					if (pix > 2 * averageLuminance) {
 						mono[r * ncols + c] = 1;
 					} else {
 						mono[r * ncols + c] = 0;
