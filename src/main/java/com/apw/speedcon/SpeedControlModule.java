@@ -47,6 +47,7 @@ public class SpeedControlModule implements Module {
     public void update(CarControl control) {
         onUpdate(control);
         control.accelerate(true, getNextSpeed());
+        System.out.println(getNextSpeed());
     }
 
     @Override
