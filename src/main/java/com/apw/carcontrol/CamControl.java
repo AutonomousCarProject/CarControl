@@ -1,17 +1,17 @@
 package com.apw.carcontrol;
 
-import com.apw.apw3.DriverCons;
-import com.apw.apw3.MyMath;
-import com.apw.apw3.SimCamera;
-import com.apw.fakefirm.Arduino;
-
-import java.awt.*;
+import java.awt.Insets;
 import java.util.HashMap;
 
-public class TrakSimControl implements CarControl {
+import com.apw.apw3.DriverCons;
+import com.apw.apw3.MyMath;
+import com.apw.fakefirm.Arduino;
+import com.apw.fly2cam.FlyCamera;
+
+public class CamControl implements CarControl {
     private final int SteerPin, GasPin;
     private final double LefScaleSt, RitScaleSt;
-    protected SimCamera cam;
+    protected FlyCamera cam;
     protected HashMap<Integer, Runnable> keyBindings;
     private Arduino driveSys;
     private Insets edges;
@@ -21,11 +21,14 @@ public class TrakSimControl implements CarControl {
     private int currentSteering = 0;
     private int currentVelocity = 0;
     private int currentManualSpeed = 0;
-
-    public TrakSimControl() {
-        cam = new SimCamera();
+    private int nrows, ncols;
+	
+    public CamControl() {
+        cam = new FlyCamera();
         cam.Connect(4); // 30 FPS
-
+        nrows = cam.Dimz() >> 16;
+        ncols = cam.Dimz() << 16 >> 16;
+        
         SteerPin = DriverCons.D_SteerServo;
         GasPin = DriverCons.D_GasServo;
         LefScaleSt = ((double) DriverCons.D_LeftSteer) / 90.0;
@@ -40,17 +43,14 @@ public class TrakSimControl implements CarControl {
 
     @Override
     public byte[] readCameraImage() {
-        int nrows = cam.Dimz() >> 16;
-        int ncols = cam.Dimz() << 16 >> 16;
         if (cameraImage == null || (nrows * ncols * 4) != cameraImage.length) {
             cameraImage = new byte[nrows * ncols * 4];
         }
         boolean b = cam.NextFrame(cameraImage);
         if (!b) {
-            System.err.println("An error occurred in TrakSimControl while reading the camera image from SimCamera.");
+            System.err.println("An error occurred while reading the camera image from FlyCamera.");
         }
 
-//        processedImage = null;
         return cameraImage;
     }
 
@@ -82,17 +82,17 @@ public class TrakSimControl implements CarControl {
     protected int[] getRenderedImage() {
         return renderedImage;
     }
-    
+
     @Override
 	public int getImageWidth() {
-		return 912;
+		return ncols;
 	}
 
 	@Override
 	public int getImageHeight() {
-		return 480;
+		return nrows;
 	}
-
+    
     @Override
     public void setRenderedImage(int[] renderedImage) {
         this.renderedImage = renderedImage;
@@ -206,12 +206,14 @@ public class TrakSimControl implements CarControl {
 
     @Override
     public void rectFill(int colo, int rx, int cx, int rz, int c) {
-        cam.theSim.RectFill(colo, rx, cx, rz, c);
+        /*Might be implemented*/
     }
 
     @Override
     public void addKeyEvent(int keyCode, Runnable action) {
         keyBindings.put(keyCode, action);
     }
+
+	
 
 }

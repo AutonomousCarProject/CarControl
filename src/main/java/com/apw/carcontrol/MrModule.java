@@ -24,8 +24,8 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     private ImageIcon displayIcon;
 
     // FIXME breaks if dimensions are not 912x480
-    private final int width = 912;
-    private final int height = 480;
+    private int width = 912;
+    private int height = 480;
 
     private MrModule(boolean renderWindow) {
         if(renderWindow) {
@@ -33,9 +33,13 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
             setupWindow();
         }
         else {
-            control = null;
+            control = new CamControl();
+            setupWindow();
         }
 
+        width = control.getImageWidth();
+        height = control.getImageHeight();
+        
         init();
         createModules();
     }
