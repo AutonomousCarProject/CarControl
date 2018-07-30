@@ -20,7 +20,7 @@ void setup() {
   pinMode(11, INPUT); //speed getter
   
   //pinMode(2, INPUT); //Dead man's switch
-  attachInterrupt(digitalPinToInterrupt(2), killReader, CHANGE);
+  //attachInterrupt(digitalPinToInterrupt(2), killReader, CHANGE);
   
   pinMode(13, OUTPUT); //testing light
   digitalWrite(13, HIGH);
