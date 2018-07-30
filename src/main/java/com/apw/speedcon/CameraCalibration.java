@@ -37,7 +37,7 @@ public class CameraCalibration {
     private PedestrianDetector pedDetect;
 
     //Camera information
-    private double cameraFocalLength;
+    private double cameraFocalLength = 35;
     private double signWidth;           //The width of a standared stop sign in mm
 
     private MovingBlob testBlob;

@@ -41,9 +41,9 @@ public class SpeedControlModule implements Module {
         control.addKeyEvent(KeyEvent.VK_M, () -> Settings.colorMode++);
         control.addKeyEvent(KeyEvent.VK_UP, () -> control.manualSpeedControl(false, 1));
         control.addKeyEvent(KeyEvent.VK_UP, () -> control.manualSpeedControl(false, -1));
-        control.addKeyEvent(KeyEvent.VK_P, this::setStoppingAtSign);
-        control.addKeyEvent(KeyEvent.VK_O, this::setStoppingAtLight);
-        control.addKeyEvent(KeyEvent.VK_I, this::readyToGo);
+        //control.addKeyEvent(KeyEvent.VK_P, this::setStoppingAtSign);
+        //control.addKeyEvent(KeyEvent.VK_O, this::setStoppingAtLight);
+        //control.addKeyEvent(KeyEvent.VK_I, this::readyToGo);
     }
 
     @Override
@@ -158,7 +158,8 @@ public class SpeedControlModule implements Module {
     //Calculates when the car should start to stop.
     private void determineStop(MovingBlob closestBlob)
     {
-        double distToBlob = cameraCalibrator.distanceToObj(75, closestBlob.width);
+        double blobRealSize = getStopReal(closestBlob); //Gets real size
+        double distToBlob = cameraCalibrator.distanceToObj(blobRealSize, closestBlob.width);
         if(cameraCalibrator.getStopTime(distToBlob, getEstimatedSpeed()) <= Constants.MIN_STOP_TIME)
         {
             go = false;
@@ -168,6 +169,13 @@ public class SpeedControlModule implements Module {
         {
             go = true;
         }
+    }
+
+
+    //Returns the real size of the object to find distance to it
+    private double getStopReal(MovingBlob stopBlob)
+    {
+        return SizeConstants.SIGN_INFO.get(stopBlob.type).get(1);
     }
 
 
@@ -194,10 +202,10 @@ public class SpeedControlModule implements Module {
 
         for(MovingBlob i : currentBlobs)
         {
-            if(i.color.getColor() == Color.RED && detectStopSign(i))
+            if(detectStopSign(i))
             {
                 stopObjects.add(i);
-                i.type = "sign";
+                i.type = "Stop";
             }
         }
             }
@@ -208,10 +216,10 @@ public class SpeedControlModule implements Module {
 
         for(MovingBlob i : currentBlobs)
         {
-            if(i.color.getColor() == Color.RED && detectLight(i, currentBlobs) <= 2)
+            if(detectLight(i, currentBlobs) <= 2)
             {
                 stopObjects.add(i);
-                i.type = "light";
+                i.type = "StopLightWidth";
             }
         }
     }
