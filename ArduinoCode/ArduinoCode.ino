@@ -17,7 +17,7 @@ byte value;
 unsigned long lastNoKill = 0;
 unsigned long sinceConnect = 0;
 unsigned long sinceNoKill = 0; //Input timing for kill
-unsigned long timeout = 4000;
+unsigned long timeout = 40000000;
 unsigned long lastTime = 0; //timekeeping for 50 hz, 20000 us reset
 unsigned long lastRun = 0; //timekeeping for loop
 
@@ -156,8 +156,8 @@ void loop() {
     
     //send message to main program once
     if (sinceConnect < timeout) {
-      out[0] = 0xFF;
-      Serial.write(out, 3); //send killed message
+      addMessage(4, 0, 4);
+      Serial.write(msg, 3);
       sinceConnect = timeout;
     }
     
@@ -194,7 +194,6 @@ void loop() {
         digitalWrite(13, LOW);
       }
     }
-    delay(16); //add up total delay to .02 seconds (20ms), leading to 50hz.
     
   }
 }
