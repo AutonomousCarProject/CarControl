@@ -16,7 +16,7 @@ byte value;
 
 unsigned long lastNoKill = 0;
 unsigned long sinceConnect = 0;
-unsigned long sinceNokill = 0; //Input timing for kill
+unsigned long sinceNoKill = 0; //Input timing for kill
 unsigned long timeout = 4000;
 unsigned long lastTime = 0; //timekeeping for 50 hz, 20000 us reset
 unsigned long lastRun = 0; //timekeeping for loop
@@ -53,7 +53,7 @@ void addMessage(byte ina, byte inb, byte inc){
 //A function run when a pin interrupts.
 void killReader(){
   addMessage(1, 3, 7); //send test info
-  sinceNokill = 0;
+  sinceNoKill = 0;
 }
 
 void loop() {
