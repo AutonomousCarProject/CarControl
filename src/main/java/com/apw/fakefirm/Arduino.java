@@ -11,21 +11,17 @@
  * FakeFirmata is designed to work with JSSC (Java Simple Serial Connector),
  * but probably will work with any compatible Java serial port API.
  */
-package com.apw.sbcio.fakefirm;   // 2018 February 10
-
-import com.apw.pwm.fakefirm.SimHookBase;
-import com.apw.sbcio.PWMController;
+package com.apw.fakefirm;   // 2018 February 10
 
 import jssc.SerialPort;
-import jssc.SerialPortException;
 
 // import nojssc.SerialPort; // use this instead for working with TrackSim
 //                           // ..on a computer with no serial port.
 //import com.apw.Interfacing.SerialPort;
 
-public class ArduinoIO implements PWMController { // Adapted to Java from arduino.cs ... (FakeFirmata)
+public class Arduino { // Adapted to Java from arduino.cs ... (FakeFirmata)
     // (subclass this to add input capability)
-	public static final boolean UseServos = false;
+    public static final boolean UseServos = false;
 
     public static final String CommPortNo = "COM3";
     public static final int MAX_DATA_BYTES = 16, // =64 in LattePanda's Arduino.cs
@@ -56,23 +52,13 @@ public class ArduinoIO implements PWMController { // Adapted to Java from arduin
 
     protected int[] digitalOutputData;
     protected PortObject surrealPort;
-    
-    private int readSpeed;
-    private int readAngle;
 
-    public ArduinoIO() { // outer class constructor..
+    public Arduino() { // outer class constructor..
         surrealPort = (UseServos) ? new SerialPort(CommPortNo) : new SerialPortDump(CommPortNo);
         System.out.println("new Arduino " + CommPortNo + " " + (surrealPort != null));
         digitalOutputData = new int[MAX_DATA_BYTES];
         Open();
-    }
-    // Implicit override
-    
-    public int getSpeed(){
-    	return readSpeed;
-    }
-    public int getAngle(){
-    	return readAngle;
+
     }
 
     /**
@@ -114,21 +100,32 @@ public class ArduinoIO implements PWMController { // Adapted to Java from arduin
         }
     } //~pinMode
 
-    
-    public void digitalRead(){
-    	try {
-			while (this.surrealPort.getInputBufferBytesCount() >= 3) {
-				byte[] msg = surrealPort.readBytes(3);
-				System.out.println((int) msg[0]);
-				System.out.print((int) msg[1]);
-				System.out.print((int) msg[2]);
-			}
-		} catch (SerialPortException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.out.println("Servo reading is creating a problem! last read: ");
-		}
-    }
+    /**
+     * Write to a digital pin that has been toggled to output mode
+     * with pinMode() method.
+     *
+     * @param pin   The digital pin to write to.
+     * @param value Value either Arduino.LOW or Arduino.HIGH.
+     */
+    public void digitalWrite(int pin, byte value) {
+        int portNumber = (pin >> 3) & 0x0F;
+        int digiData = digitalOutputData[portNumber & MDB_msk];
+        byte[] msg = new byte[3];
+        if (SpeakEasy) System.out.println("F%%F/digiWrite +" + pin + " = " + value);
+        if ((int) value == 0)
+            digiData = digiData & ~(1 << (pin & 0x07));
+        else digiData = digiData | (1 << (pin & 0x07));
+        digitalOutputData[portNumber & MDB_msk] = digiData;
+        msg[0] = (byte) (DIGITAL_MESSAGE | portNumber);
+        msg[1] = (byte) (digiData & 0x7F);
+        msg[2] = (byte) (digiData >> 7);
+        try {
+            surrealPort.writeBytes(msg);
+            if (DoMore != null) DoMore.SendBytes(msg, 3);
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+    } //~digitalWrite
 
     /**
      * [For] controlling [a] servo.
@@ -136,7 +133,7 @@ public class ArduinoIO implements PWMController { // Adapted to Java from arduin
      *
      * @param pin Servo output pin. Port 9 for steering
      */
-    public void setServoAngle(int pin, int angle) {
+    public void servoWrite(int pin, int angle) {
         byte[] msg = new byte[3];
         msg[0] = (byte) (ANALOG_MESSAGE); //Type of message. Likely unneeded
         msg[1] = (byte) (pin); //pin
@@ -148,23 +145,6 @@ public class ArduinoIO implements PWMController { // Adapted to Java from arduin
             System.out.println(ex);
         }
     } //~servoWrite
-    public void Write(int messageType, int pin, int angle) {
-        byte[] msg = new byte[3];
-        msg[0] = (byte) (messageType); //Type of message. Likely unneeded
-        msg[1] = (byte) (pin); //pin
-        msg[2] = (byte) (angle); //angle
-        try {
-            surrealPort.writeBytes(msg);
-            if (DoMore != null) DoMore.SendBytes(msg, 3);
-        } catch (Exception ex) {
-            System.out.println(ex);
-        }
-    } //~servoWrite
-    
-    @Override
-	public void setOutputPulseWidth(int pin, double ms) {
-    	setServoAngle(pin, (ms - 1) * 180);
-    }
 
     /**
      * Opens the serial port connection, should it be required.
@@ -181,7 +161,6 @@ public class ArduinoIO implements PWMController { // Adapted to Java from arduin
         } else try {
             GoodOpen = surrealPort.openPort();
             surrealPort.setParams(57600, 8, 1, 0);
-            this.Write(0xFF, 0, 0); //Send startup message
         } catch (Exception ex) {
             System.out.println(ex);
         }
@@ -197,7 +176,7 @@ public class ArduinoIO implements PWMController { // Adapted to Java from arduin
      * Note that JSSC does not recover gracefully from a failure to close,
      * so a subsequent Open() will fail until the system is rebooted.
      */
-    public void close() {
+    public void Close() {
         if (SpeakEasy) System.out.println("F%%F/Close..");
         if (GoodOpen) try {
             surrealPort.closePort();

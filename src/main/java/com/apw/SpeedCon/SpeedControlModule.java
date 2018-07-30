@@ -1,6 +1,6 @@
-package com.apw.speedcon;
+package com.apw.SpeedCon;
 
-import com.apw.imagemanagement.ImageManipulator;
+import com.apw.ImageManagement.ImageManipulator;
 import com.apw.carcontrol.CarControl;
 import com.apw.carcontrol.Module;
 import com.apw.pedestrians.PedestrianDetector;

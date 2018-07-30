@@ -1,4 +1,4 @@
-package com.apw.steering;
+package com.apw.Steering;
 
 /**
  * Point class holds an x, and y.

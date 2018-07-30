@@ -28,7 +28,7 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 
-import com.apw.sbcio.fakefirm.PortObject;
+import com.apw.fakefirm.PortObject;
 
 /**
  *
@@ -163,16 +163,10 @@ public class SerialPort implements PortObject{
             throw new SerialPortException(portName, "openPort()", SerialPortException.TYPE_NULL_NOT_PERMITTED);//since 2.1.0 -> NULL port name fix
         }
         if(portHandle == SerialNativeInterface.ERR_PORT_BUSY){
-            if (portName == "COM3"){
-            	portName = "COM5";
-            	this.openPort();
-            } else throw new SerialPortException(portName, "openPort()", SerialPortException.TYPE_PORT_BUSY);
+            throw new SerialPortException(portName, "openPort()", SerialPortException.TYPE_PORT_BUSY);
         }
         else if(portHandle == SerialNativeInterface.ERR_PORT_NOT_FOUND){
-        	if (portName == "COM3"){
-            	portName = "COM5";
-            	this.openPort();
-            } else throw new SerialPortException(portName, "openPort()", SerialPortException.TYPE_PORT_NOT_FOUND);
+            throw new SerialPortException(portName, "openPort()", SerialPortException.TYPE_PORT_NOT_FOUND);
         }
         else if(portHandle == SerialNativeInterface.ERR_PERMISSION_DENIED){
             throw new SerialPortException(portName, "openPort()", SerialPortException.TYPE_PERMISSION_DENIED);

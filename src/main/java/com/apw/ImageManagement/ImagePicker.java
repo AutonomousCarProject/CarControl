@@ -1,4 +1,4 @@
-package com.apw.imagemanagement;
+package com.apw.ImageManagement;
 
 
 import com.apw.fly2cam.FlyCamera;
