@@ -1,4 +1,4 @@
-package com.apw.speedcon;
+package com.apw.SpeedCon;
 
 import java.awt.List;
 import java.util.ArrayList;
