@@ -137,6 +137,7 @@ public class ArduinoIO implements PWMController { // Adapted to Java from arduin
      * @param pin Servo output pin. Port 9 for steering
      */
     public void setServoAngle(int pin, int angle) {
+    	System.out.println("AAAHHH")
         byte[] msg = new byte[3];
         msg[0] = (byte) (ANALOG_MESSAGE); //Type of message. Likely unneeded
         msg[1] = (byte) (pin); //pin

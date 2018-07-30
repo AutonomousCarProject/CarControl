@@ -11,7 +11,7 @@ int sinceNokill = 0;
 int timeout = 40000;
 
 byte out[] = {0, 0, 0};
-byte outsize = 6;
+byte outsize = 3;
 
 byte type;
 byte pin;
@@ -30,7 +30,6 @@ void setup() {
   pinMode(11, INPUT); //speed getter
   
   //pinMode(2, INPUT); //Dead man's switch
-  attachInterrupt(digitalPinToInterrupt(2), killReader, CHANGE);
   
   pinMode(13, OUTPUT); //testing light
   digitalWrite(13, HIGH);
@@ -94,6 +93,9 @@ void loop() {
         wheelDelay = map(value, 0, 180, 1000, 2000);
       }
       wheelSpeed = value;
+    }
+
+    if (sinceConnect == 0 && pin == 0){
     }
 
     
