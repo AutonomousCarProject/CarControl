@@ -53,7 +53,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     private void setupWindow() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(width, height + 25);
-        setResizable(false);
+        setResizable(true);
         setVisible(true);
         addKeyListener(this);
         add(new JLabel(displayIcon));
