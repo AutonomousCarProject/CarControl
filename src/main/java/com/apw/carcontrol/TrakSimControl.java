@@ -3,7 +3,7 @@ package com.apw.carcontrol;
 import com.apw.apw3.DriverCons;
 import com.apw.apw3.MyMath;
 import com.apw.apw3.SimCamera;
-import com.apw.pwm.fakefirm.ArduinoPWM;
+import com.apw.sbcio.PWMController;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -13,7 +13,7 @@ public class TrakSimControl implements CarControl {
     private final double LefScaleSt, RitScaleSt;
     protected SimCamera cam;
     protected HashMap<Integer, Runnable> keyBindings;
-    private ArduinoPWM driveSys;
+    private PWMController driveSys;
     private Insets edges;
     private byte[] cameraImage = null;
     private byte[] processedImage = null;
@@ -22,7 +22,7 @@ public class TrakSimControl implements CarControl {
     private int currentVelocity = 0;
     private int currentManualSpeed = 0;
 
-    public TrakSimControl() {
+    public TrakSimControl(PWMController drivesys) {
         cam = new SimCamera();
         cam.Connect(4); // 30 FPS
 
@@ -31,9 +31,7 @@ public class TrakSimControl implements CarControl {
         LefScaleSt = ((double) DriverCons.D_LeftSteer) / 90.0;
         RitScaleSt = ((double) DriverCons.D_RiteSteer) / 90.0;
 
-        driveSys = ArduinoPWM.getInstance();
-        driveSys.pinMode(SteerPin, ArduinoPWM.SERVO);
-        driveSys.pinMode(GasPin, ArduinoPWM.SERVO);
+        driveSys = drivesys;
 
         keyBindings = new HashMap<>();
     }
@@ -128,9 +126,6 @@ public class TrakSimControl implements CarControl {
         }
 
         currentVelocity = velocity;
-        if (driveSys == null) {
-            return;
-        }
         driveSys.setServoAngle(GasPin, velocity + 90);
     }
 
@@ -152,9 +147,6 @@ public class TrakSimControl implements CarControl {
             if (RitScaleSt > 1.0) {
                 angle = (int) Math.round(RitScaleSt * ((double) angle));
             }
-        }
-        if (driveSys == null) {
-            return;
         }
         driveSys.setServoAngle(SteerPin, angle + 90);
     }
