@@ -23,7 +23,7 @@ public interface PWMController {
    * implementation.
    * @param angle Double from 0 to 180 inclusive representing the angle of the servo.
    */
-  default void setServoAngle(int pin, double angle) {
+  default void setServoAngle(int pin, int angle) {
     setOutputPulseWidth(pin, 1 + angle / 180);
   }
   

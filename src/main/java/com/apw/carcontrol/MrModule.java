@@ -4,7 +4,6 @@ import com.apw.imagemanagement.ImageManagementModule;
 import com.apw.sbcio.PWMController;
 import com.apw.sbcio.fakefirm.ArduinoIO;
 import com.apw.sbcio.fakefirm.ArduinoModule;
-import com.apw.sbcio.fakefirm.Interface;
 import com.apw.speedcon.SpeedControlModule;
 import com.apw.steering.SteeringModule;
 
@@ -65,8 +64,9 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         modules.add(new SteeringModule());
         modules.add(new ArduinoModule(driveSys)); //Arduino mode
 
-        for (Module module : modules)
+        for (Module module : modules) {
             module.initialize(trakSimControl);
+        }
     }
 
     private void update() {
@@ -74,6 +74,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         trakSimControl.readCameraImage();
         trakSimControl.setEdges(getInsets());
         for (Module module : modules) {
+        	//System.out.println(module.getClass().getSimpleName());
             module.update(trakSimControl);
         }
     }

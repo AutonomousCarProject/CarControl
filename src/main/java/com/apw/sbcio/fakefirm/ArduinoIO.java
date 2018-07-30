@@ -25,7 +25,7 @@ import jssc.SerialPortException;
 
 public class ArduinoIO implements PWMController { // Adapted to Java from arduino.cs ... (FakeFirmata)
     // (subclass this to add input capability)
-	public static final boolean UseServos = true;
+	public static final boolean UseServos = false;
 
     public static final String CommPortNo = "COM3";
     public static final int MAX_DATA_BYTES = 16, // =64 in LattePanda's Arduino.cs
@@ -137,7 +137,6 @@ public class ArduinoIO implements PWMController { // Adapted to Java from arduin
      * @param pin Servo output pin. Port 9 for steering
      */
     public void setServoAngle(int pin, int angle) {
-    	System.out.println("AAAHHH")
         byte[] msg = new byte[3];
         msg[0] = (byte) (ANALOG_MESSAGE); //Type of message. Likely unneeded
         msg[1] = (byte) (pin); //pin
@@ -164,7 +163,7 @@ public class ArduinoIO implements PWMController { // Adapted to Java from arduin
     
     @Override
 	public void setOutputPulseWidth(int pin, double ms) {
-    	setServoAngle(pin, (ms - 1) * 180);
+    	setServoAngle(pin, (int) ((ms - 1) * 180));
     }
 
     /**
