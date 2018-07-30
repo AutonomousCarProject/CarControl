@@ -17,18 +17,19 @@ public class SpeedControlModule implements Module {
     private double currentEstimatedSpeed;
     private double desiredSpeed;
     private boolean emergencyStop;
-    private boolean go;
+    private boolean go; //A toggle to avoid the car from accelerating and decelerating at same time
 
     private PedestrianDetector pedDetect;
     private CameraCalibration cameraCalibrator;
 
     private List<MovingBlob> currentBlobs;
-    private List<MovingBlob> stopObjects;
+    private ArrayList<MovingBlob> stopObjects;
 
     public SpeedControlModule() {
         this.pedDetect = new PedestrianDetector();
         this.currentBlobs = new ArrayList<>();
         this.cameraCalibrator = new CameraCalibration();
+        this.stopObjects = new ArrayList<>();
     }
 
     @Override
@@ -116,8 +117,8 @@ public class SpeedControlModule implements Module {
 
         for (MovingBlob i : stopObjects) {
             
+            //Could increase efficency by after determining stop, stop at that rate and stop calculating stop until current stop is over.
             determineStop(i);
-
         }
 
 
@@ -190,7 +191,7 @@ public class SpeedControlModule implements Module {
     }
 
 
-    //One method that tracks all things needed
+    //One method that tracks all objects that the car needs to stop at
     private void updateStop()
     {
         this.updateStopLight();
