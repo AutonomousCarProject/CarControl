@@ -147,7 +147,7 @@ void loop() {
     
     if (outsize >= 3){
       byte msg[3] = {out[0], out[1], out[2]};
-      Serial.write(out, 3); //Send the first 3 items in the out list
+      Serial.write(msg, 3); //Send the first 3 items in the out list
 
       //Move values backwards in the list for the next run
       for (byte n = 0; n < outsize-3; n++){
@@ -156,7 +156,7 @@ void loop() {
       outsize -= 3;
     }
 
-    addMessage(micros()-lastRun, 0, 0);
+    addMessage((byte) micros()-lastRun, 0, 0);
 
   } else {
     
@@ -180,12 +180,14 @@ void loop() {
     }
     
     if (sinceConnect < timeout){ //Force car to stop instantly if kill switch is flipped
-      digitalWrite(13, HIGH); 
       digitalWrite(10, HIGH);
       delayMicroseconds(1500); //timing for wheels
       digitalWrite(10, LOW);
       delayMicroseconds(2500); //normalizing timing
       digitalWrite(13, LOW); //blink main light
+      delay(1000);
+      digitalWrite(13, HIGH);
+      delay(1000);
     } else {
       /*digitalWrite(13, LOW); 
       delay(500); //create idle pulse timing
