@@ -70,31 +70,33 @@ public class ImageManipulator {
 
 	public static void convertToBlackWhiteRaster(byte[] bayer, byte[] mono, int nrows, int ncols, byte tile) {
 		for (int r = 0; r < nrows; r++) {
-			for (int c = 0; c < ncols; c++) {
-				double averageLuminance = 0;
-				int counter = 0;
-				for(int i = r-1; i < r+2; i++)
-					for(int j = c-1; j < c+2; j++){
-						if((i* ncols*2 + j)*2 > 0 && (i*ncols*2 + j)*2 + 1+2*ncols < bayer.length){
-							int R = ((((int)bayer[(i*ncols*2 + j)*2+getBit(tile,0)+ncols*2*getBit(tile,1)]) & 0xFF));				//Top left (red)
-							int G = ((((int)bayer[(i*ncols*2 + j)*2 +1-getBit(tile,0)+ncols*2*getBit(tile,1)])&0xFF)); 			//Top right (green)
-							int B = (((int)bayer[(i*ncols*2 + j)*2 + 1+2*ncols-ncols*2*getBit(tile,1)-getBit(tile,0)])&0xFF);
-							averageLuminance += (R+G+B)/3.0;
+    		int averageLuminance = 0;
+        	for(int c = 0; c < ncols; c++) {
+				int R = (bayer[getPos(c,r,combineTile((byte)0,tile),ncols,nrows,true)]&0xFF);
+				int G = (bayer[getPos(c,r,combineTile((byte)1,tile),ncols,nrows,true)]&0xFF);
+				int B = (bayer[getPos(c,r,combineTile((byte)3,tile),ncols,nrows,true)]&0xFF);
+				averageLuminance += R+G+B/3;
 
-						}
+			}
+			averageLuminance /= ncols;
+
+            for (int c = 0; c < ncols; c++) {
+
+				int R = (bayer[getPos(c,r,combineTile((byte)0,tile),ncols,nrows,true)]&0xFF);
+				int G = (bayer[getPos(c,r,combineTile((byte)1,tile),ncols,nrows,true)]&0xFF);
+				int B = (bayer[getPos(c,r,combineTile((byte)3,tile),ncols,nrows,true)]&0xFF);
+
+				int pix =(R+G+B)/3;
+				if(!(c >= 640 || r < 240 || r > 455)) {
+					if (pix > 0.8 * averageLuminance) {
+						mono[r * ncols + c] = 1;
+					} else {
+						mono[r * ncols + c] = 0;
 
 					}
-				averageLuminance /= 9;
-				int R = ((((int)bayer[(r*ncols*2 + c)*2+getBit(tile,0)+ncols*2*getBit(tile,1)]) & 0xFF));				//Top left (red)
-				int G = ((((int)bayer[(r*ncols*2 + c)*2 +1-getBit(tile,0)+ncols*2*getBit(tile,1)])&0xFF)); 			//Top right (green)
-				int B = (((int)bayer[(r*ncols*2 + c)*2 + 1+2*ncols-ncols*2*getBit(tile,1)-getBit(tile,0)])&0xFF);
-				if((double)(R+G+B)/3.0 > averageLuminance + 50){
-					mono[r*ncols+c] = 1;
-				}else{
-					mono[r*ncols+c] = 0;
+				} else {
+					mono[r * ncols + c] = 0;
 				}
-
-
 			}
 		}
 	}
