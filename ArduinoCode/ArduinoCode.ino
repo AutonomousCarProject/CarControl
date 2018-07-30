@@ -156,7 +156,7 @@ void loop() {
       outsize -= 3;
     }
 
-    addMessage((byte) micros()-lastRun, 0, 0);
+    //addMessage((byte) micros()-lastRun, 0, 0);
 
   } else {
     
