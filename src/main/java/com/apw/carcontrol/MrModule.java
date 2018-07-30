@@ -31,12 +31,14 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     private ArrayList<Module> modules;
     private CarControl control;
     private boolean fullscreen;
+    private boolean renderWindow;
 
     // FIXME breaks if dimensions are not 912x480
     private int windowWidth = 912;
     private int windowHeight = 480;
 
     private MrModule(boolean renderWindow) {
+        this.renderWindow = renderWindow;
         if (renderWindow) {
             control = new TrakSimControl(driveSys);
         } else {
@@ -57,11 +59,14 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
 
         Future run = executorService.submit(this);
 
+/*
         try {
             run.get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
+*/
+	executorService.scheduleAtFixedRate(this, 0, 1000 / 20, TimeUnit.MILLISECONDS);
     }
 
     private void setupWindow() {
@@ -89,6 +94,13 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     }
 
     private void update() {
+
+        /*
+        if (renderWindow) {
+            control = new TrakSimControl(driveSys);
+        } else {
+            control = new CamControl(driveSys);
+        }//*/
         if (control instanceof TrakSimControl) {
             ((TrakSimControl) control).cam.theSim.SimStep(1);
         }
@@ -100,6 +112,29 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         	modules) {
             module.update(control);
         }
+
+/*
+        // bad code here for example
+        ImageManagementModule imageModule = (ImageManagementModule) modules.get(0);
+        CompletableFuture<String> futureImage = CompletableFuture.supplyAsync(() -> {
+            imageModule.update(control);
+            return "";
+        });
+        //Call steering Module
+        CompletableFuture<Void> futureSteering = futureImage.thenAcceptAsync(image -> modules.get(2).update(control));
+        // Call speed module
+        CompletableFuture<Void> furtureSpeed = futureImage.thenAcceptAsync(image -> modules.get(1).update(control));
+        // Wait for them all to finish
+        CompletableFuture<Void> futureComplete = CompletableFuture.allOf(furtureSpeed, futureSteering)
+                .thenAccept(v -> paint())
+                // Handle errors
+                .exceptionally(ex -> null);
+        // This makes java wait
+        futureComplete.join();
+
+
+        // bad code here for example */
+
     }
 
 
