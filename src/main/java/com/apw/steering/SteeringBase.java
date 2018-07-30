@@ -87,6 +87,7 @@ public abstract class SteeringBase implements Steerable {
      */
     public abstract void findPoints(int[] pixels);
 
+
     /**
      * Not sure what this does
      *

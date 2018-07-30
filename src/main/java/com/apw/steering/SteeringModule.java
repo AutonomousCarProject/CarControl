@@ -26,12 +26,6 @@ public class SteeringModule implements Module {
 
     public SteeringModule(SpeedControlModule speed) {
         this.speed = speed;
-        if (DriverCons.D_steeringVersion == 1) {
-            steering = new SteeringMk1(640, 480, 912);
-        }
-        else if (DriverCons.D_steeringVersion == 2) {
-            steering = new SteeringMk2(640, 480, 912);
-        }
     }
 
     @Override
@@ -121,20 +115,6 @@ public class SteeringModule implements Module {
             }
         }
 
-        for (int idx = 0; idx < steering.midPoints.size(); idx++) {
-            g.setColor(Color.blue);
-            g.fillRect(steering.midPoints.get(idx).x, steering.midPoints.get(idx).y, 3, 3);
-        }	
-        if (DriverCons.D_DrawPredicted) {
-            for (int idx = 0; idx < steering.midPoints.size(); idx++) {
-                if (idx >= steering.startTarget && idx <= steering.endTarget) {
-                    g.setColor(Color.red);
-                    g.fillRect(steering.midPoints.get(idx).x, steering.midPoints.get(idx).y + control.getEdges().top, 5, 5);
-                } else {
-                    g.setColor(Color.BLUE);
-                }
-            }
-        }
 
         if (DriverCons.D_DrawOnSides) {
             for (Point point : steering.leftPoints) {
@@ -146,19 +126,16 @@ public class SteeringModule implements Module {
             }
         }
 
-        // Draw steerPoint on screen
-        g.setColor(Color.CYAN);
-        g.fillRect(steering.steerPoint.x, steering.steerPoint.y, 7, 7);
-
-        //Draw predicted points and detected lines
-        for (Point point : steering.midPoints) {
-            if (DriverCons.D_DrawPredicted) {
-                control.rectFill(255, point.y, point.x, point.y + 5, point.x + 5);
-            }
+        // Draw midPoints
+        for (int idx = 0; idx < steering.midPoints.size(); idx++) {
+            g.setColor(Color.blue);
+            g.fillRect(steering.midPoints.get(idx).x, steering.midPoints.get(idx).y, 3, 3);
         }
+
+        // Draw left and right sides
+        g.setColor(Color.yellow);
         if (DriverCons.D_DrawOnSides) {
             for (Point point : steering.leftPoints) {
-                g.setColor(Color.yellow);
                 int xL = point.x;
                 int yL = point.y;
                 g.fillRect(xL, yL, 3, 3);
@@ -166,9 +143,11 @@ public class SteeringModule implements Module {
             for (Point point : steering.rightPoints) {
                 int xR = point.x;
                 int yR = point.y;
-                g.setColor(Color.yellow);
                 g.fillRect(xR, yR, 3, 3);
             }
         }
+        // Draw steerPoint on screen
+        g.setColor(Color.CYAN);
+        g.fillRect(steering.steerPoint.x, steering.steerPoint.y, 7, 7);
     }
 }
