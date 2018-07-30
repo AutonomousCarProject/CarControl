@@ -4,9 +4,14 @@ import java.awt.Graphics;
 
 import com.apw.carcontrol.CarControl;
 import com.apw.carcontrol.Module;
+import com.apw.sbcio.PWMController;
 
-public class InterfaceModule implements Module{
-    private ArduinoIO driveSys;
+public class ArduinoModule implements Module{
+    private PWMController driveSys;
+    
+    public ArduinoModule(PWMController system){
+    	driveSys = system;
+    }
 
     public void initialize(CarControl control) {
     }
@@ -16,7 +21,7 @@ public class InterfaceModule implements Module{
 
 		driveSys.digitalRead();
 		
-		control.accelerate(false, 0);
+		driveSys.Write(0, 0, 0);
 		
 	}
 	

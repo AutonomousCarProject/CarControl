@@ -94,4 +94,10 @@ public class RaspiPWM implements PWMController {
   public void close() {
     gpioController.shutdown();
   }
+
+@Override
+public void digitalRead() {
+	// TODO Auto-generated method stub
+	
+}
 }

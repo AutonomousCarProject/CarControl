@@ -21,6 +21,9 @@ import com.apw.fly2cam.FlyCamera;
 
 import com.apw.pedestrians.blobtrack.MovingBlob;
 import com.apw.sbcio.fakefirm.ArduinoIO;
+import com.apw.speedcon.Constants;
+import com.apw.speedcon.Settings;
+import com.apw.steering.Point;
 
 import jssc.SerialPortException;
 
@@ -34,10 +37,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
-
-import com.apw.SpeedCon.Constants;
-import com.apw.SpeedCon.Settings;
-import com.apw.Steering.Point;
 
 // import fly2cam.CameraBase;
 

@@ -25,9 +25,8 @@ import jssc.SerialPortException;
 
 public class ArduinoIO implements PWMController { // Adapted to Java from arduino.cs ... (FakeFirmata)
     // (subclass this to add input capability)
-	public static final boolean UseServos = true;
+	public static final boolean UseServos = false;
 
-	private static final ArduinoIO theController = new ArduinoIO();
     public static final String CommPortNo = "COM3";
     public static final int MAX_DATA_BYTES = 16, // =64 in LattePanda's Arduino.cs
             MDB_msk = MAX_DATA_BYTES - 1;
@@ -61,17 +60,13 @@ public class ArduinoIO implements PWMController { // Adapted to Java from arduin
     private int readSpeed;
     private int readAngle;
 
-    private ArduinoIO() { // outer class constructor..
+    public ArduinoIO() { // outer class constructor..
         surrealPort = (UseServos) ? new SerialPort(CommPortNo) : new SerialPortDump(CommPortNo);
         System.out.println("new Arduino " + CommPortNo + " " + (surrealPort != null));
         digitalOutputData = new int[MAX_DATA_BYTES];
         Open();
-
     }
     // Implicit override
-    public static ArduinoIO getInstance() {
-      return theController;
-    }
     
     public int getSpeed(){
     	return readSpeed;
