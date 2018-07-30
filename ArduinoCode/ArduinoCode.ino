@@ -6,9 +6,6 @@ int offf = 0;
 int wheelDelay = 1500;
 int steerDelay = 1500;
 int normalDelay = 1000;
-long sinceConnect = 0;
-long sinceNokill = 0;
-long timeout = 40000;
 
 byte out[] = {0, 0, 0};
 byte outsize = 3;
@@ -17,8 +14,13 @@ byte type;
 byte pin;
 byte value;
 
+unsigned long lastNoKill = 0;
+unsigned long sinceConnect = 0;
+unsigned long sinceNokill = 0; //Input timing for kill
+unsigned long timeout = 4000;
 unsigned long lastTime = 0; //timekeeping for 50 hz, 20000 us reset
 unsigned long lastRun = 0; //timekeeping for loop
+
 //#define NOT_AN_INTERRUPT -1
 //where 1ms is considered full left or full reverse, and 2ms is considered full forward or full right.
 
@@ -56,18 +58,37 @@ void killReader(){
 
 void loop() {
   lastRun = micros();
+  killed:
   
   if (nokill){
-    //read input from computer
+    digitalWrite(13, HIGH);
 
-    Timeout check
-    if (Serial.peek() <= 0 && sinceConnect > timeout){
-      nokill = false;
-      digitalWrite(13, HIGH);
+    //Read rise of signal
+    if (sinceNoKill == 0 && digitalRead(2) == HIGH){
+      sinceNoKill = micros();
     }
-    
-    sinceConnect++;
-    sinceNokill++;
+
+    //Read fall of signal
+    if (sinceNoKill != 0 && digitalRead(2) == LOW){
+      lastNoKill = micros();
+      if (micros()-sinceNoKill < 1600){ //Check difference to find duration of input
+        nokill = false;
+        goto killed; //skip to dead mode
+      }
+         
+      sinceNoKill = 0;
+    }
+
+    if (micros()-lastNoKill > timeout){
+      nokill = false;
+      goto killed;
+    }
+
+    //Timeout check
+    if (Serial.peek() <= 0 && micros()-sinceConnect > timeout){
+      nokill = false;
+      digitalWrite(13, LOW);
+    }
 
     //Grab info from buffer
     if (Serial.available() > 0){
@@ -75,7 +96,7 @@ void loop() {
       type = Serial.read();
       pin = Serial.read();
       value = Serial.read();
-      sinceConnect = 0;
+      sinceConnect = micros();
     }
 
     //Interpret info if sinceConnect is 0 to prevent multiple readings
@@ -94,10 +115,6 @@ void loop() {
       }
       wheelSpeed = value;
     }
-
-    if (sinceConnect == 0 && pin == 0){
-    }
-
     
     //Start next cycle every .02 seconds
     if (micros()-lastTime >= 20000){
@@ -133,8 +150,8 @@ void loop() {
       outsize -= 3;
     }
 
-    addMessage(micros()-lastRun, offf, 0);
-    
+    addMessage(micros()-lastRun, 0, 0);
+
   } else {
     
     //send message to main program once
