@@ -6,9 +6,9 @@ int offf = 0;
 int wheelDelay = 1500;
 int steerDelay = 1500;
 int normalDelay = 1000;
-int sinceConnect = 0;
-int sinceNokill = 0;
-int timeout = 40000;
+long sinceConnect = 0;
+long sinceNokill = 0;
+long timeout = 40000;
 
 byte out[] = {0, 0, 0};
 byte outsize = 3;
@@ -60,11 +60,11 @@ void loop() {
   if (nokill){
     //read input from computer
 
-    //Timeout check
-    //if (Serial.peek() <= 0 && sinceConnect > timeout){
-    //  nokill = false;
-    //  digitalWrite(13, HIGH);
-    //}
+    Timeout check
+    if (Serial.peek() <= 0 && sinceConnect > timeout){
+      nokill = false;
+      digitalWrite(13, HIGH);
+    }
     
     sinceConnect++;
     sinceNokill++;
