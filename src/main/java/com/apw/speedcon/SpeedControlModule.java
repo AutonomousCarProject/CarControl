@@ -39,6 +39,11 @@ public class SpeedControlModule implements Module {
         control.addKeyEvent(KeyEvent.VK_C, () -> Settings.writeBlobsToConsole ^= true);
         control.addKeyEvent(KeyEvent.VK_S, () -> Settings.writeSpeedToConsole ^= true);
         control.addKeyEvent(KeyEvent.VK_M, () -> Settings.colorMode++);
+        control.addKeyEvent(KeyEvent.VK_UP, () -> control.manualSpeedControl(false, 1));
+        control.addKeyEvent(KeyEvent.VK_UP, () -> control.manualSpeedControl(false, -1));
+        control.addKeyEvent(KeyEvent.VK_P, this::setStoppingAtSign);
+        control.addKeyEvent(KeyEvent.VK_O, this::setStoppingAtLight);
+        control.addKeyEvent(KeyEvent.VK_I, this::readyToGo);
     }
 
     @Override

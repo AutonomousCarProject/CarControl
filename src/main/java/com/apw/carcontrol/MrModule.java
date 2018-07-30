@@ -1,8 +1,8 @@
 package com.apw.carcontrol;
 
 import com.apw.imagemanagement.ImageManagementModule;
-import com.apw.speedcon.SpeedControlModule;
 import com.apw.steering.SteeringModule;
+import com.apw.speedcon.SpeedControlModule;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,10 +17,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class MrModule extends JFrame implements Runnable, KeyListener {
-
     private ScheduledExecutorService executorService;
     private ArrayList<Module> modules;
-    private TrakSimControl trakSimControl;
+    private CarControl control;
     private BufferedImage displayImage, bufferImage;
     private ImageIcon displayIcon;
 
@@ -28,9 +27,16 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     private final int width = 912;
     private final int height = 480;
 
-    private MrModule() {
+    private MrModule(boolean renderWindow) {
+        if(renderWindow) {
+            control = new TrakSimControl();
+            setupWindow();
+        }
+        else {
+            control = null;
+        }
+
         init();
-        setupWindow();
         createModules();
     }
 
@@ -39,13 +45,12 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         displayImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         bufferImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         displayIcon = new ImageIcon(displayImage);
-        trakSimControl = new TrakSimControl();
         modules = new ArrayList<>();
+
+        executorService.scheduleAtFixedRate(this, 0, 1000 / 15, TimeUnit.MILLISECONDS);
     }
 
     private void setupWindow() {
-        executorService.scheduleAtFixedRate(this, 0, 1000 / 60, TimeUnit.MILLISECONDS);
-
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(width, height + 25);
         setResizable(true);
@@ -60,23 +65,29 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         modules.add(new SteeringModule());
 
         for (Module module : modules)
-            module.initialize(trakSimControl);
+            module.initialize(control);
     }
 
     private void update() {
-        trakSimControl.cam.theSim.SimStep(1);
-        trakSimControl.readCameraImage();
-        trakSimControl.setEdges(getInsets());
+        if(control instanceof TrakSimControl) {
+            ((TrakSimControl) control).cam.theSim.SimStep(1);
+        }
+        control.readCameraImage();
+        control.setEdges(getInsets());
         for (Module module : modules) {
-            module.update(trakSimControl);
+            module.update(control);
         }
     }
 
     @Override
     public void paint(Graphics g) {
+        if(!(control instanceof TrakSimControl)) {
+            return;
+        }
+
         super.paint(g);
 
-        int[] renderedImage = trakSimControl.getRenderedImage();
+        int[] renderedImage = ((TrakSimControl) control).getRenderedImage();
 
         if(renderedImage != null) {
             int[] displayPixels = ((DataBufferInt) bufferImage.getRaster().getDataBuffer()).getData();
@@ -90,7 +101,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         }
 
         for (Module module : modules) {
-            module.paint(trakSimControl, g);
+            module.paint(control, g);
         }
     }
 
@@ -101,12 +112,20 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     }
 
     public static void main(String[] args) {
-        new MrModule();
+        boolean renderWindow = true;
+        if(args.length > 0 && args[0].toLowerCase().equals("nosim")) {
+            renderWindow = false;
+        }
+        new MrModule(renderWindow);
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        for (Map.Entry<Integer, Runnable> binding : trakSimControl.keyBindings.entrySet()) {
+        if(!(control instanceof TrakSimControl)) {
+            return;
+        }
+
+        for (Map.Entry<Integer, Runnable> binding : ((TrakSimControl) control).keyBindings.entrySet()) {
             if (e.getKeyCode() == binding.getKey()) {
                 binding.getValue().run();
             }
