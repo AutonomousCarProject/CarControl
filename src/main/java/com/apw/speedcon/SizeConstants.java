@@ -65,6 +65,8 @@ public class SizeConstants {
 	
 	public static final Map<String, ArrayList<Double>> SIGN_INFO = new HashMap<String, ArrayList<Double>>(){{
 		put("Stop", (ArrayList<Double>) Arrays.asList(3.0, .750, .900, .0, .600, 1.200));
+		put("StopLightWidth", (ArrayList<Double>) Arrays.asList(.300, .0, .00, .0, .200, 0.0));
+		put("Stop", (ArrayList<Double>) Arrays.asList(3.0, .750, .900, .0, .600, 1.200));
 		put("Yield", (ArrayList<Double>) Arrays.asList(1.0, .900, 1.200, 1.500, .750, 0.0));
 		put("4Way", (ArrayList<Double>) Arrays.asList(0.0, .300, .150, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
 		put("AllWay", (ArrayList<Double>) Arrays.asList(0.0, .450, .150, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
