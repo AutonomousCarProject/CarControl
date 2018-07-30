@@ -48,7 +48,7 @@ public class Constants {
             BLOB_RATIO_DIF = 0.9,
             DISPLAY_AGE_MAX = 5,
             DISPLAY_AGE_MIN = 0;
-    public static int
+    public static final int
             DEFAULT_COLOR_MODE = 0,
             NUM_COLOR_MODES = 3;
 }

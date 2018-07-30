@@ -41,13 +41,16 @@ public class SpeedControlModule implements Module {
     public void initialize(CarControl control) {
         control.addKeyEvent(KeyEvent.VK_B, () -> Settings.blobsOn ^= true);
         control.addKeyEvent(KeyEvent.VK_V, () -> Settings.overlayOn ^= true);
+        control.addKeyEvent(KeyEvent.VK_C, () -> Settings.writeBlobsToConsole ^= true);
+        control.addKeyEvent(KeyEvent.VK_S, () -> Settings.writeSpeedToConsole ^= true);
+        control.addKeyEvent(KeyEvent.VK_M, () -> Settings.colorMode++);
     }
 
     @Override
     public void update(CarControl control) {
         onUpdate(control);
         control.accelerate(true, getNextSpeed());
-        System.out.println(getNextSpeed());
+        System.out.println("Speed: " + getNextSpeed());
     }
 
     @Override
