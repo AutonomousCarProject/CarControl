@@ -39,6 +39,11 @@ public class RaspiPWM implements PWMController {
     return theController;
   }
 
+  @Override
+  public void Write(int i, int j, int k) {
+
+  }
+
   private void configureController() {
     // TODO software generation checks
     Gpio.pwmSetMode(Gpio.PWM_MODE_MS);
