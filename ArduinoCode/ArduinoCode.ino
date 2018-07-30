@@ -73,6 +73,8 @@ void loop() {
       lastNoKill = micros();
       if (micros()-sinceNoKill < 1600){ //Check difference to find duration of input
         nokill = false;
+        addMessage(4, 0, 3);
+        Serial.write(out, 3);
         goto killed; //skip to dead mode
       }
          
@@ -81,12 +83,16 @@ void loop() {
 
     if (micros()-lastNoKill > timeout){
       nokill = false;
+      addMessage(4, 0, 4);
+      Serial.write(out, 3);
       goto killed;
     }
 
     //Timeout check
     if (Serial.peek() <= 0 && micros()-sinceConnect > timeout){
       nokill = false;
+      addMessage(4, 0, 5);
+      Serial.write(out, 3);
       digitalWrite(13, LOW);
     }
 
@@ -141,7 +147,7 @@ void loop() {
     
     if (outsize >= 3){
       byte msg[3] = {out[0], out[1], out[2]};
-      Serial.write(msg, 3); //Send the first 3 items in the out list
+      Serial.write(out, 3); //Send the first 3 items in the out list
 
       //Move values backwards in the list for the next run
       for (byte n = 0; n < outsize-3; n++){
@@ -156,8 +162,6 @@ void loop() {
     
     //send message to main program once
     if (sinceConnect < timeout) {
-      addMessage(4, 0, 4);
-      Serial.write(msg, 3);
       sinceConnect = timeout;
     }
     
