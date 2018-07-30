@@ -29,7 +29,7 @@ public abstract class SteeringBase implements Steerable {
     public Point[] leftEdge;
     public Point[] rightEdge;
     public Point[] pathTraveled;
-    private List<Double> posLog = new ArrayList<>(); // Array list for logging positions fed into it
+    List<Double> posLog = new ArrayList<>(); // Array list for logging positions fed into it
 
     @Override
     public double curveSteepness(double turnAngle) {

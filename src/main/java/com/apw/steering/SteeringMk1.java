@@ -269,6 +269,21 @@ public class SteeringMk1 extends SteeringBase {
     }
 
     /**
+     * Adds the three coordinates of the vehicles position to the posLog arraylist.
+     * For point #n, x = n*3, y = n*3+1, and heading = n*3+2
+     *
+     * @param x       x coordinate
+     * @param y       y coordinate
+     * @param heading current heading of the car
+     */
+    public void updatePosLog(double x, double y, double heading) {
+        posLog.add(x);
+        posLog.add(y);
+        posLog.add(heading);
+    }
+
+
+    /**
      * Average the midpoints, and assign the average to steerPoint.
      */
     private void averageMidpoints() {
