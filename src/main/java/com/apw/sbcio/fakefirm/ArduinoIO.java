@@ -11,7 +11,10 @@
  * FakeFirmata is designed to work with JSSC (Java Simple Serial Connector),
  * but probably will work with any compatible Java serial port API.
  */
-package com.apw.fakefirm;   // 2018 February 10
+package com.apw.sbcio.fakefirm;   // 2018 February 10
+
+import com.apw.pwm.fakefirm.SimHookBase;
+import com.apw.sbcio.PWMController;
 
 import jssc.SerialPort;
 import jssc.SerialPortException;
@@ -20,7 +23,7 @@ import jssc.SerialPortException;
 //                           // ..on a computer with no serial port.
 //import com.apw.Interfacing.SerialPort;
 
-public class Arduino { // Adapted to Java from arduino.cs ... (FakeFirmata)
+public class ArduinoIO implements PWMController { // Adapted to Java from arduino.cs ... (FakeFirmata)
     // (subclass this to add input capability)
 	public static final boolean UseServos = true;
 
@@ -57,13 +60,13 @@ public class Arduino { // Adapted to Java from arduino.cs ... (FakeFirmata)
     private int readSpeed;
     private int readAngle;
 
-    public Arduino() { // outer class constructor..
+    public ArduinoIO() { // outer class constructor..
         surrealPort = (UseServos) ? new SerialPort(CommPortNo) : new SerialPortDump(CommPortNo);
         System.out.println("new Arduino " + CommPortNo + " " + (surrealPort != null));
         digitalOutputData = new int[MAX_DATA_BYTES];
         Open();
-
     }
+    // Implicit override
     
     public int getSpeed(){
     	return readSpeed;
@@ -111,32 +114,6 @@ public class Arduino { // Adapted to Java from arduino.cs ... (FakeFirmata)
         }
     } //~pinMode
 
-    /**
-     * Write to a digital pin that has been toggled to output mode
-     * with pinMode() method.
-     *
-     * @param pin   The digital pin to write to.
-     * @param value Value either Arduino.LOW or Arduino.HIGH.
-     */
-    public void digitalWrite(int pin, byte value) {
-        int portNumber = (pin >> 3) & 0x0F;
-        int digiData = digitalOutputData[portNumber & MDB_msk];
-        byte[] msg = new byte[3];
-        if (SpeakEasy) System.out.println("F%%F/digiWrite +" + pin + " = " + value);
-        if ((int) value == 0)
-            digiData = digiData & ~(1 << (pin & 0x07));
-        else digiData = digiData | (1 << (pin & 0x07));
-        digitalOutputData[portNumber & MDB_msk] = digiData;
-        msg[0] = (byte) (DIGITAL_MESSAGE | portNumber);
-        msg[1] = (byte) (digiData & 0x7F);
-        msg[2] = (byte) (digiData >> 7);
-        try {
-            surrealPort.writeBytes(msg);
-            if (DoMore != null) DoMore.SendBytes(msg, 3);
-        } catch (Exception ex) {
-            System.out.println(ex);
-        }
-    } //~digitalWrite
     
     public void digitalRead(){
     	try {
@@ -159,7 +136,7 @@ public class Arduino { // Adapted to Java from arduino.cs ... (FakeFirmata)
      *
      * @param pin Servo output pin. Port 9 for steering
      */
-    public void servoWrite(int pin, int angle) {
+    public void setServoAngle(int pin, int angle) {
         byte[] msg = new byte[3];
         msg[0] = (byte) (ANALOG_MESSAGE); //Type of message. Likely unneeded
         msg[1] = (byte) (pin); //pin
@@ -183,6 +160,11 @@ public class Arduino { // Adapted to Java from arduino.cs ... (FakeFirmata)
             System.out.println(ex);
         }
     } //~servoWrite
+    
+    @Override
+	public void setOutputPulseWidth(int pin, double ms) {
+    	setServoAngle(pin, (ms - 1) * 180);
+    }
 
     /**
      * Opens the serial port connection, should it be required.
@@ -215,7 +197,7 @@ public class Arduino { // Adapted to Java from arduino.cs ... (FakeFirmata)
      * Note that JSSC does not recover gracefully from a failure to close,
      * so a subsequent Open() will fail until the system is rebooted.
      */
-    public void Close() {
+    public void close() {
         if (SpeakEasy) System.out.println("F%%F/Close..");
         if (GoodOpen) try {
             surrealPort.closePort();

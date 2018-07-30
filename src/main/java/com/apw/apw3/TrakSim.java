@@ -17,11 +17,11 @@
 package com.apw.apw3;                                       // 2018 June 13
 
 
-import com.apw.fakefirm.Arduino;
-import com.apw.fakefirm.SimHookBase;
-
 import java.io.File;
 import java.io.FileInputStream;
+
+import com.apw.pwm.fakefirm.SimHookBase;
+import com.apw.sbcio.fakefirm.ArduinoIO;
 
 /**
  * The main TrakSim Car Simulator class..
@@ -5495,7 +5495,7 @@ public class TrakSim {
             GasBrake = 0;
             NuData++;
             SerialCalls = new SimHookX();
-            Arduino.HookExtend(SerialCalls);
+            ArduinoIO.HookExtend(SerialCalls); //Specifies arduino mode. Does this interfere with RPI version?
         }
         nClients++;
     } //~StartPatty

@@ -28,7 +28,7 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 
-import com.apw.fakefirm.PortObject;
+import com.apw.sbcio.fakefirm.PortObject;
 
 /**
  *

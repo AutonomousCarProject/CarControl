@@ -1,14 +1,24 @@
 
 bool nokill = true;
-int wheelSpeed, steeringDeg;
+byte steeringDeg, wheelSpeed;
+bool wheelON, steerON;
+int offf = 0;
 int wheelDelay = 1500;
 int steerDelay = 1500;
 int normalDelay = 1000;
 int sinceConnect = 0;
 int sinceNokill = 0;
-byte timeout = 40;
+int timeout = 40000;
+
 byte out[] = {0, 0, 0};
 byte outsize = 6;
+
+byte type;
+byte pin;
+byte value;
+
+unsigned long lastTime = 0; //timekeeping for 50 hz, 20000 us reset
+unsigned long lastRun = 0; //timekeeping for loop
 //#define NOT_AN_INTERRUPT -1
 //where 1ms is considered full left or full reverse, and 2ms is considered full forward or full right.
 
@@ -46,14 +56,12 @@ void killReader(){
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  //grab input from kill switch
-  
-  if (digitalRead(2) == HIGH) addMessage(2, 2, 2);
+  lastRun = micros();
   
   if (nokill){
     //read input from computer
-    
+
+    //Timeout check
     if (Serial.peek() <= 0 && sinceConnect > timeout){
       nokill = false;
       digitalWrite(13, HIGH);
@@ -61,50 +69,56 @@ void loop() {
     
     sinceConnect++;
     sinceNokill++;
-    
-    while (Serial.available() > 0){
-      digitalWrite(13, LOW);
-      byte type = Serial.read();
-      byte pin = Serial.read();
-      byte value = Serial.read();
-      sinceConnect = 0;
-      
-      if (pin == 9){
-        if (value != steeringDeg){
-          //steerDelay = 1.0+((double) value)/180;
-          steerDelay = map(value, 0, 180, 1000, 2000);
-        }
-        steeringDeg = value;
-      }
-      if (pin == 10){
-        if (value != wheelSpeed){
-          //wheelDelay = 1.0+((double) value)/180;
-          wheelDelay = map(value, 0, 180, 1000, 2000);
-        }
-        wheelSpeed = value;
-      }
-      //create normalizer delay to keep hertz more consistant
-      normalDelay = 4000 - wheelDelay - steerDelay;
 
-      //sensor in: 5V to 0
+    //Grab info from buffer
+    if (Serial.available() > 0){
+      digitalWrite(13, LOW);
+      type = Serial.read();
+      pin = Serial.read();
+      value = Serial.read();
+      sinceConnect = 0;
     }
 
-    noInterrupts(); //disable interrupts to assure timing
-    //Steering
-    digitalWrite(9, HIGH); 
-    delayMicroseconds(steerDelay); //create pulse timing
-    digitalWrite(9, LOW);
-    //if (digitalRead(2) == HIGH) addMessage(3, 3, 3);
-    //Speed control
-    digitalWrite(10, HIGH);
-    delayMicroseconds(wheelDelay);
-    digitalWrite(10, LOW);
-    interrupts();
+    //Interpret info if sinceConnect is 0 to prevent multiple readings
+    if (sinceConnect == 0 && pin == 9){
+      if (value != steeringDeg){
+        //steerDelay = 1.0+((double) value)/180;
+        steerDelay = map(value, 0, 180, 1000, 2000);
+      }
+      steeringDeg = value;
+    }
     
-    delayMicroseconds(normalDelay); //normalize to ~2ms total
-    digitalWrite(13, HIGH); //restart signal light
+    if (sinceConnect == 0 && pin == 10){
+      if (value != wheelSpeed){
+        //wheelDelay = 1.0+((double) value)/180;
+        wheelDelay = map(value, 0, 180, 1000, 2000);
+      }
+      wheelSpeed = value;
+    }
+
     
-    while (outsize >= 3){
+    //Start next cycle every .02 seconds
+    if (micros()-lastTime >= 20000){
+      digitalWrite(9, HIGH);
+      digitalWrite(10, HIGH);
+      steerON = true;
+      wheelON = true;
+      
+      lastTime = micros();
+    }
+
+    //Turn off the signal at approximately the correct timing.
+    if (steerON && micros()-lastTime >= steerDelay){
+      digitalWrite(9, LOW);
+      steerON = false;
+    }
+
+    if (wheelON && micros()-lastTime >= wheelDelay){
+      digitalWrite(10, LOW);
+      wheelON = false;
+    }
+    
+    if (outsize >= 3){
       byte msg[3] = {out[0], out[1], out[2]};
       Serial.write(msg, 3); //Send the first 3 items in the out list
 
@@ -115,8 +129,8 @@ void loop() {
       outsize -= 3;
     }
 
-
-
+    addMessage(micros()-lastRun, offf, 0);
+    
   } else {
     
     //send message to main program once
@@ -159,9 +173,9 @@ void loop() {
         digitalWrite(13, LOW);
       }
     }
+    delay(16); //add up total delay to .02 seconds (20ms), leading to 50hz.
     
   }
-  delay(16); //add up total delay to .02 seconds (20ms), leading to 50hz.
 }
 
 //jssc
