@@ -1,4 +1,4 @@
-package com.apw.imagemanagement;
+package com.apw.ImageManagement;
 
 import com.apw.carcontrol.CarControl;
 import com.apw.carcontrol.Module;

@@ -1,4 +1,4 @@
-package com.apw.speedcon;
+package com.apw.SpeedCon;
 
 public class Settings {
     public static boolean
