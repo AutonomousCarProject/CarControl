@@ -1,4 +1,4 @@
-package com.apw.pwm;
+package com.apw.sbcio;
 
 /**
  * Members must conform to a singleton pattern.
@@ -26,7 +26,17 @@ public interface PWMController {
   default void setServoAngle(int pin, double angle) {
     setOutputPulseWidth(pin, 1 + angle / 180);
   }
-
+  
+  /**
+   * Write three byte-castable ints to the buffer
+   * 
+   * @param i First byte
+   * @param j Second byte
+   * @param k Third byte
+   */
+  void Write(int i, int j, int k);
+  
+  
   /**
    * Set the pulse width of the output.
    *
@@ -36,6 +46,17 @@ public interface PWMController {
    */
   void setOutputPulseWidth(int pin, double ms);
 
+  
   void close();
+
+  
+  /**
+   * Get any info sent from the other interface
+   * 
+   * @return undecided
+   */
+  void digitalRead();
+
+
 
 }

@@ -3,7 +3,9 @@
  * FakeFirmata is designed to work with JSSC (Java Simple Serial Connector),
  * but when using TrakSim, all you need are stubs with the same API.
  */
-package com.apw.fakefirm;                                 // 2018 May 11
+package com.apw.sbcio.fakefirm;                                 // 2018 May 11
+
+import jssc.SerialPortException;
 
 /**
  * This class has the same name & API as JSSC but does nothing.
@@ -67,4 +69,17 @@ public class SerialPortDump implements PortObject {
         if (logo) System.out.println("noJSC/closePort");
         return true;
     } //~closePort
+
+	@Override
+	public byte[] readBytes(int byteCount) throws SerialPortException {
+		// TODO Auto-generated method stub
+		System.out.println("noJSC/ You shouldn't be trying to read bytes without anything to read!");
+		return null;
+	}
+
+	@Override
+	public int getInputBufferBytesCount() throws SerialPortException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 } //~SerialPort (nojssc) (NS)
