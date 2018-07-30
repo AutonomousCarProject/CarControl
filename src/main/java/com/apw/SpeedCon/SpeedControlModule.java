@@ -41,6 +41,11 @@ public class SpeedControlModule implements Module {
     public void initialize(CarControl control) {
         control.addKeyEvent(KeyEvent.VK_B, () -> Settings.blobsOn ^= true);
         control.addKeyEvent(KeyEvent.VK_V, () -> Settings.overlayOn ^= true);
+        control.addKeyEvent(KeyEvent.VK_UP, () -> control.manualSpeedControl(false, 1));
+        control.addKeyEvent(KeyEvent.VK_UP, () -> control.manualSpeedControl(false, -1));
+        control.addKeyEvent(KeyEvent.VK_P, this::setStoppingAtSign);
+        control.addKeyEvent(KeyEvent.VK_O, this::setStoppingAtLight);
+        control.addKeyEvent(KeyEvent.VK_I, this::readyToGo);
     }
 
     @Override
