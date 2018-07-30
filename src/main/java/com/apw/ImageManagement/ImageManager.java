@@ -210,7 +210,11 @@ public class ImageManager {
 
     public int[] getRoad(){
         int road[] = new int[nrows*ncols];
-        ImageManipulator.findRoad(picker.getPixels(), road, nrows, ncols, tile);
+        byte temp[] = new byte[nrows*ncols];
+        byte mono[] = new byte[nrows*ncols];
+        ImageManipulator.convertToBlackWhiteRaster(picker.getPixels(),mono, nrows, ncols, tile);
+        ImageManipulator.removeNoise(mono, temp, nrows, ncols);
+        ImageManipulator.findRoad(temp, road, nrows, ncols);
         return road;
     }
 

@@ -71,7 +71,7 @@ public class DriveTest extends JFrame implements KeyListener, MouseListener {
         displayTaskTimer.scheduleAtFixedRate(starter, new Date(), 1000 / FPS);    //Initializes TrakManager at FPS frames per second
         
         new SimpleThresholds();
-        new DriveTest(3).autoDriveTest(); //Format to create a new DriveTest window that updates automatically
+        new DriveTest(6).autoDriveTest(); //Format to create a new DriveTest window that updates automatically
         //new DriveTest(4).autoDriveTest(); //Format to create a new DriveTest window that updates automatically
         //new DriveTest(1).autoDriveTest(); //Format to create a new DriveTest window that updates automatically
 
@@ -195,7 +195,7 @@ public class DriveTest extends JFrame implements KeyListener, MouseListener {
         //repaints the window
         super.paint(g);                                                                 //calls the JFrame paint function
         //paints extra information about steering and speed
-        //testPaint(g);
+        testPaint(g);
     }
     public void updateWindow(){
         //pulls and manipulates image from TrakSim

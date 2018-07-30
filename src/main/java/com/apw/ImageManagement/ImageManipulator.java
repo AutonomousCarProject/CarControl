@@ -79,21 +79,22 @@ public class ImageManipulator {
 			}
         	averageLuminance /= ncols;
 
-            for (int c = 0; c < ncols; c++) {
+            for (int c = 1; c < ncols-1; c++) {
 
-//				int R1 = (bayer[getPos(c-1,r,combineTile((byte)0,tile),ncols,nrows,true)]&0xFF);
-//				int G1 = (bayer[getPos(c-1,r,combineTile((byte)1,tile),ncols,nrows,true)]&0xFF);
-//				int B1 = (bayer[getPos(c-1,r,combineTile((byte)3,tile),ncols,nrows,true)]&0xFF);
+				int R1 = (bayer[getPos(c-1,r,combineTile((byte)0,tile),ncols,nrows,true)]&0xFF);
+				int G1 = (bayer[getPos(c-1,r,combineTile((byte)1,tile),ncols,nrows,true)]&0xFF);
+				int B1 = (bayer[getPos(c-1,r,combineTile((byte)3,tile),ncols,nrows,true)]&0xFF);
 				int R2 = (bayer[getPos(c,r,combineTile((byte)0,tile),ncols,nrows,true)]&0xFF);
 				int G2 = (bayer[getPos(c,r,combineTile((byte)1,tile),ncols,nrows,true)]&0xFF);
 				int B2 = (bayer[getPos(c,r,combineTile((byte)3,tile),ncols,nrows,true)]&0xFF);
-//				int R3 = (bayer[getPos(c+1,r,combineTile((byte)0,tile),ncols,nrows,true)]&0xFF);
-//				int G3 = (bayer[getPos(c+1,r,combineTile((byte)1,tile),ncols,nrows,true)]&0xFF);
-//				int B3 = (bayer[getPos(c+1,r,combineTile((byte)3,tile),ncols,nrows,true)]&0xFF);
+				int R3 = (bayer[getPos(c+1,r,combineTile((byte)0,tile),ncols,nrows,true)]&0xFF);
+				int G3 = (bayer[getPos(c+1,r,combineTile((byte)1,tile),ncols,nrows,true)]&0xFF);
+				int B3 = (bayer[getPos(c+1,r,combineTile((byte)3,tile),ncols,nrows,true)]&0xFF);
 
-				int pix =(R2 + G2 + B2)/3;
+				int pix =(R1 + R2 + R3 + B1 + B2 + B3 + G1 + G2 + G3)/9;
+//				int pix = (R2 + G2 + B2)/3;
 				if(!(c >= 640 || r < 240 || r > 455)) {
-					if (pix > 2 * averageLuminance) {
+					if (pix > 1.6 * averageLuminance) {
 						mono[r * ncols + c] = 1;
 					} else {
 						mono[r * ncols + c] = 0;
@@ -143,7 +144,7 @@ public class ImageManipulator {
 					if((r + 1) < nrows && (c + 1) < ncols && pixels[(r + 1) * ncols + (c + 1)] == 1) {
 						whiteNeighbors++;
 					}
-					if(whiteNeighbors > 2) {
+					if(whiteNeighbors > 7) {
 						output[r * ncols + c] = 1;
 					}
 					else {
@@ -298,26 +299,14 @@ public class ImageManipulator {
         }
     }
 
-    public static void findRoad(byte[] bayer, int[] output, int nrows, int ncols, byte tile){
+    public static void findRoad(byte[] mono, int[] output, int nrows, int ncols){
     	for(int col = 0; col < ncols; col++){
-			int averageLuminance = 0;
-			for(int row = nrows-1; row > 0; row--) {
-				int R = ((((int)bayer[(row*ncols*2 + col)*2+getBit(tile,0)+ncols*2*getBit(tile,1)]) & 0xFF));				//Top left (red)
-				int G = ((((int)bayer[(row*ncols*2 + col)*2 +1-getBit(tile,0)])&0xFF)); 			//Top right (green)
-				int B = (((int)bayer[(row*ncols*2 + col)*2 + 1+2*ncols-ncols*2*getBit(tile,1)-getBit(tile,0)])&0xFF);			//Bottom right (blue)
-				averageLuminance += R+G+B/3;
-			}
-			averageLuminance /= ncols;
     		boolean endFound = false;
 
     		for(int row = nrows-1; row > 0; row--){
-				int R = ((((int)bayer[(row*ncols*2 + col)*2+getBit(tile,0)+ncols*2*getBit(tile,1)]) & 0xFF));				//Top left (red)
-				int G = ((((int)bayer[(row*ncols*2 + col)*2 +1-getBit(tile,0)])&0xFF)); 			//Top right (green)
-				int B = (((int)bayer[(row*ncols*2 + col)*2 + 1+2*ncols-ncols*2*getBit(tile,1)-getBit(tile,0)])&0xFF);			//Bottom right (blue)
-				int pix =(R+G+B)/3;
 				if(col >= 640 || row < 240 || row > 455){
 					output[row*ncols+col] = 0;
-				} else if(pix>averageLuminance){
+				} else if(mono[row*ncols+col] == 1){
 					endFound = true;
 					output[row*ncols+col] = 0xFFFFFF;
 				}else if(!endFound){
