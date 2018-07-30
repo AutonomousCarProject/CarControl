@@ -177,11 +177,13 @@ public class ImageManager {
 
     public int[] getBWRGBRaster() {
         byte[] mono;
+        byte[] output = new byte[nrows * ncols];
         int[] rgb = new int[nrows*ncols];
         //int[] cameraInt = new int[cameraWidth*cameraHeight];
         //byte[] cameraByte = new byte[cameraWidth*cameraHeight];
         mono = getBlackWhiteRasterFull();
-        ImageManipulator.convertBWToRGB(mono, rgb, mono.length);
+        ImageManipulator.removeNoise(mono, output, nrows, ncols);
+        ImageManipulator.convertBWToRGB(output, rgb, output.length);
         return rgb;
 
     }

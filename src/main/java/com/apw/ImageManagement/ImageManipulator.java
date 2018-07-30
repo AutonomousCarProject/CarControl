@@ -100,6 +100,54 @@ public class ImageManipulator {
 			}
 		}
 	}
+	
+	public static void removeNoise(byte[] pixels, byte[] output, int nrows, int ncols) {
+		for (int r = 0; r < nrows; r++) {
+			for (int c = 0; c < ncols; c++) {
+				if(pixels[r * ncols + c] == 1) {
+					int whiteNeighbors = 0;
+					//top left
+					if((r - 1) > 0 && (c - 1) > 0 && pixels[(r - 1) * ncols + (c - 1)] == 1) {
+						whiteNeighbors++;
+					}
+					//top
+					if((r - 1) > 0 && pixels[(r - 1) * ncols + (c)] == 1) {
+						whiteNeighbors++;
+					}
+					//top right
+					if((r - 1) > 0 && (c + 1) < ncols && pixels[(r - 1) * ncols + (c + 1)] == 1) {
+						whiteNeighbors++;
+					}
+					//left
+					if((c - 1) > 0 && pixels[(r) * ncols + (c - 1)] == 1) {
+						whiteNeighbors++;
+					}
+					//right
+					if((c + 1) < ncols && pixels[(r) * ncols + (c + 1)] == 1) {
+						whiteNeighbors++;
+					}
+					//bot left
+					if((r + 1) < nrows && (c - 1) > 0 && pixels[(r + 1) * ncols + (c - 1)] == 1) {
+						whiteNeighbors++;
+					}
+					//bot
+					if((r + 1) < nrows && pixels[(r + 1) * ncols + (c)] == 1) {
+						whiteNeighbors++;
+					}
+					//bot right
+					if((r + 1) < nrows && (c + 1) < ncols && pixels[(r + 1) * ncols + (c + 1)] == 1) {
+						whiteNeighbors++;
+					}
+					if(whiteNeighbors > 2) {
+						output[r * ncols + c] = 1;
+					}
+					else {
+						output[r * ncols + c] = 0;
+					}
+				}
+			}
+		}
+	}
 
 
 	/** Converts a bayer8 image to a simple color image, the simple colors are red, green, blue, yellow, white, grey and black
