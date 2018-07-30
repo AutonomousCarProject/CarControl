@@ -1,8 +1,8 @@
 package com.apw.carcontrol;
 
 import com.apw.imagemanagement.ImageManagementModule;
-import com.apw.steering.SteeringModule;
 import com.apw.speedcon.SpeedControlModule;
+import com.apw.steering.SteeringModule;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,27 +30,29 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     private MrModule(boolean renderWindow) {
         if(renderWindow) {
             control = new TrakSimControl();
+            headlessInit();
             setupWindow();
         }
         else {
             control = null;
+            headlessInit();
         }
 
-        init();
         createModules();
+
     }
 
-    private void init() {
+    private void headlessInit() {
         executorService = Executors.newSingleThreadScheduledExecutor();
-        displayImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        bufferImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        displayIcon = new ImageIcon(displayImage);
         modules = new ArrayList<>();
-
         executorService.scheduleAtFixedRate(this, 0, 1000 / 15, TimeUnit.MILLISECONDS);
     }
 
     private void setupWindow() {
+        displayImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        bufferImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        displayIcon = new ImageIcon(displayImage);
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(width, height + 25);
         setResizable(true);
