@@ -55,7 +55,7 @@ public class CameraCalibration {
 
     }
 
-
+    
     //Finds focal length which can then be used for distance, read above for detail
     public void calibrateCamera(CarControl control) {
         //Searches for a blue blob
@@ -71,7 +71,7 @@ public class CameraCalibration {
         //Used to test distance to found test blob, should be same as testBlobDistance
         distanceToObj(testBlobWidthHeight, cameraFocalLength, testBlob.width);
     }
-
+    
 
     //Formula that calculates focal length of the test blob
     void findFocalLength(MovingBlob blob) {
