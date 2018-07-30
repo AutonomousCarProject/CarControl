@@ -6,7 +6,7 @@ int offf = 0;
 int wheelDelay = 1500;
 int steerDelay = 1500;
 int normalDelay = 1000;
-int sinceConnect = 0;
+double sinceConnect = 0;
 int sinceNokill = 0;
 int timeout = 40000;
 
@@ -133,7 +133,7 @@ void loop() {
       outsize -= 3;
     }
 
-    addMessage(micros()-lastRun, offf, 0);
+    addMessage(micros()-lastRun, sinceConnect, 0);
     
   } else {
     
