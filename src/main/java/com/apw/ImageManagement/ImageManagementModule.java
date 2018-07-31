@@ -100,15 +100,29 @@ public class ImageManagementModule implements Module {
     }
 
     public int[] getBWRGBRaster(byte[] pixels) {
-
-        ImageManipulator.convertToBlackWhiteRaster(pixels, mono, height, width, tile);
-        ImageManipulator.convertBWToRGB(mono, rgb, mono.length);
+        byte[] mono;
+        byte[] output = new byte[width * height];
+        int[] rgb = new int[width*height];
+        //int[] cameraInt = new int[cameraWidth*cameraHeight];
+        //byte[] cameraByte = new byte[cameraWidth*cameraHeight];
+        mono = getBlackWhiteRasterFull(pixels);
+        ImageManipulator.removeNoise(mono, output, height, width);
+        ImageManipulator.convertBWToRGB(output, rgb, output.length);
         return rgb;
 
     }
     
+    public byte[] getBlackWhiteRasterFull(byte[] pixels){
+        byte[] mono = new byte[width * height];
+        //int[] rgb = new int[nrows*ncols];
+        //int[] cameraInt = new int[cameraWidth*cameraHeight];
+        //byte[] cameraByte = new byte[cameraWidth*cameraHeight];
+        ImageManipulator.convertToBlackWhiteRaster(pixels, mono, height, width, tile);
+        return mono;
+    }
+    
     public int[] getRoad(byte[] pixels){
-        ImageManipulator.findRoad(pixels, rgb, height, width, tile);
+        ImageManipulator.findRoad(pixels, rgb, height, width);
         return rgb;
     }
 
