@@ -83,6 +83,7 @@ public class SpeedControlModule implements Module {
 		byte[] limitArray = new byte[640 * 480];
 		ImageManipulator.limitTo(limitArray, control.getProcessedImage(), width, height, 640, 480, false);
 		List<MovingBlob> blobs = pedDetect.getAllBlobs(limitArray, 640);
+		List<MovingBlob> peds = pedDetect.detect(limitArray, 640);
 		
 		
 		
@@ -116,9 +117,14 @@ public class SpeedControlModule implements Module {
 				g.drawRect(i.x + 8, i.y + 40 + vEdit, i.width, i.height);
 			}
 		}
+		for(MovingBlob i : peds) {
+			g.setColor(java.awt.Color.MAGENTA);
+			g.drawRect(i.x + 8, i.y + 40 + vEdit, i.width, i.height);
+		}
+		
 	}
 	
-	//A method to be called every frame. Calculates desired speed and actual speed
+//A method to be called every frame. Calculates desired speed and actual speed
 	//Also takes stopping into account
 	/**
 	 * This is a method that is called on every frame update by DrDemo. It is responsible for calculating
@@ -302,10 +308,11 @@ public class SpeedControlModule implements Module {
 	}
 	
 	public boolean determinePedStop(MovingBlob ped) {
-		System.out.println("Ped Width "+ped.width+" Ped X "+ped.x);
+		System.out.println("Ped Width "+ped.width+" Ped X "+ped.x+" Ped Y "+ped.y);
 		if(ped.width >= Constants.PED_MIN_SIZE &&
 			ped.x >= Constants.PED_MIN_X &&
 			ped.x <= Constants.PED_MAX_X) {
+			System.out.println(ped);
 			return true;
 		}
 		return false;
