@@ -87,13 +87,17 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
 
     @Override
     public void paint(Graphics g) {
-        if(!(control instanceof TrakSimControl)) {
-            return;
+    	int[] renderedImage = null;
+
+    	
+        if(control instanceof TrakSimControl) {
+            renderedImage = ((TrakSimControl) control).getRenderedImage();
+        }
+        else if (control instanceof CamControl) {
+        	renderedImage = ((CamControl) control).getRGBImage();
         }
 
         super.paint(g);
-
-        int[] renderedImage = ((TrakSimControl) control).getRenderedImage();
 
         if(renderedImage != null) {
             int[] displayPixels = ((DataBufferInt) bufferImage.getRaster().getDataBuffer()).getData();
@@ -114,7 +118,9 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     @Override
     public void run() {
         update();
+        System.out.println("HEY");
         repaint();
+        System.out.println("HEYO");
     }
 
     public static void main(String[] args) {
@@ -122,7 +128,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         if(args.length > 0 && args[0].toLowerCase().equals("nosim")) {
             renderWindow = false;
         }
-        new MrModule(renderWindow);
+        new MrModule(true);
     }
 
     @Override
