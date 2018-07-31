@@ -99,7 +99,7 @@ public class CameraCalibration {
 
 	//The rate at which the speed must go down by, linear
 	protected double calcStopRate(double speed, double time) {
-		return (0 - speed) / time;
+		return speed / time;
 	}
 
 
