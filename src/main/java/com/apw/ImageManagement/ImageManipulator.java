@@ -48,7 +48,15 @@ public class ImageManipulator {
 			}
 		}
 	}
-
+	
+	/** Converts a bayer8 image to a black and white image based on average luminance of each row
+	 *
+	 * @param bayer bayer8 image
+	 * @param mono	black and white output
+	 * @param nrows	number of rows of pixels in the image
+	 * @param ncols number of columns of pixels in the image
+	 * @param tile tiling pattern of the bayer8 image
+	 */
 	public static void convertToBlackWhiteRaster(byte[] bayer, byte[] mono, int nrows, int ncols, byte tile) {
 		for (int r = 0; r < nrows; r++) {
     		int averageLuminance = 0;
@@ -88,6 +96,14 @@ public class ImageManipulator {
 		}
 	}
 	
+	
+	/** erosion filter used on pixels in a byte[]
+	 *
+	 * @param pixels image to be eroded
+	 * @param nrows	number of rows of pixels in the image
+	 * @param ncols number of columns of pixels in the image
+	 * @return byte[] of eroded image
+	 */
 	public static byte[] removeNoise(byte[] pixels, int nrows, int ncols) {
 		byte[] output = new byte[nrows * ncols];
 		for (int r = 0; r < nrows; r++) {
@@ -138,6 +154,13 @@ public class ImageManipulator {
 		return output;
 	}
 	
+	/** dilation filter used on pixels in a byte[]
+	 *
+	 * @param pixels image to be dilated
+	 * @param nrows	number of rows of pixels in the image
+	 * @param ncols number of columns of pixels in the image
+	 * @return byte[] of dilated image
+	 */
 	public static byte[] dilate(byte[] pixels, int nrows, int ncols) {
 		byte[] output = new byte[nrows * ncols];
 		for (int r = 0; r < nrows; r++) {
@@ -328,15 +351,21 @@ public class ImageManipulator {
         }
     }
 
-
-    public static void findRoad(byte[] mono, int[] output, int nrows, int ncols){
+    /** Converts a bayer8 image to a black white image with a colored road
+	 *
+	 * @param bayer bayer8 image
+	 * @param output image output in int[]
+	 * @param nrows	number of rows of pixels in the image
+	 * @param ncols number og columns of pixels in the image
+	 */
+    public static void findRoad(byte[] bayer, int[] output, int nrows, int ncols){
     	for(int col = 0; col < ncols; col++){
     		boolean endFound = false;
 
     		for(int row = nrows-1; row > 0; row--){
 				if(col > 638 || row < 240 || row > 455){
 					output[row*ncols+col] = 0;
-				} else if(mono[row*ncols+col] == 1){
+				} else if(bayer[row*ncols+col] == 1){
 					endFound = true;
 					output[row*ncols+col] = 0xFFFFFF;
 				}else if(!endFound){
