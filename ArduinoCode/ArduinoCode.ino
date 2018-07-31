@@ -1,5 +1,6 @@
 
-bool nokill = true;
+bool kill = false;
+bool timedout = false;
 byte steeringDeg, wheelSpeed;
 bool wheelON, steerON;
 int offf = 0;
@@ -17,7 +18,7 @@ byte value;
 unsigned long lastNoKill = 0;
 unsigned long sinceConnect = 0;
 unsigned long sinceNoKill = 0; //Input timing for kill
-unsigned long timeout = 30000; //microseconds before timeout
+unsigned long timeout = 300000; //microseconds before timeout
 unsigned long lastTime = 0; //timekeeping for 50 hz, 20000 us reset
 unsigned long lastRun = 0; //timekeeping for loop
 
@@ -76,7 +77,7 @@ void loop() {
   if (sinceNoKill != 0 && digitalRead(2) == LOW){
     lastNoKill = micros();
     if (micros()-sinceNoKill < 1600){ //Check difference to find duration of input
-      nokill = false;
+      kill = true;
       wheelDelay = 1500;
       steerDelay = 1500;
       //Send message to computer
@@ -84,13 +85,13 @@ void loop() {
       sendMessage();
     }
     if (micros()-sinceNoKill > 1800){ //Start up if un-killed
-      nokill = true;
+      kill = false;
     }
     sinceNoKill = 0;
   }
 
   if (micros()-lastNoKill > timeout){
-    nokill = false;
+    kill = true;
     addMessage(4, 0, 4);
     sendMessage();
   }
@@ -103,7 +104,7 @@ void loop() {
     value = Serial.read();
     sinceConnect = micros();
 
-    if (pin == 9){
+    if (!kill && pin == 9){
       if (value != steeringDeg){
         //steerDelay = 1.0+((double) value)/180;
         steerDelay = map(value, 0, 180, 1000, 2000);
@@ -111,7 +112,7 @@ void loop() {
       steeringDeg = value;
     }
     
-    if (pin == 10){
+    if (!kill && pin == 10){
       if (value != wheelSpeed){
         //wheelDelay = 1.0+((double) value)/180;
         wheelDelay = map(value, 0, 180, 1000, 2000);
@@ -119,11 +120,13 @@ void loop() {
       wheelSpeed = value;
     }
   
-    if (type == 0xFF) { //Restart if a startup signal is recieved
+    if (kill && type == 0xFF) { //Restart if a startup signal is recieved
       sinceConnect = micros();
       wheelDelay = 1500;
       steerDelay = 1500;
-      nokill = true;
+      kill = false;
+      timedout = false;
+      addMessage(3, 0, 0);
     }
   }
   
@@ -150,20 +153,16 @@ void loop() {
     wheelON = false;
   }
   
-  sendMessage();
-  
-  if (nokill){
+  if (!kill && !timedout){
     digitalWrite(13, HIGH);
 
     //Timeout check
     if (Serial.peek() <= 0 && micros()-sinceConnect > timeout){
-      nokill = false;
+      timedout = true;
       addMessage(5, 0, 4);
       sendMessage();
       digitalWrite(13, LOW);
     }
-
-    //addMessage((byte) micros()-lastRun, 0, 0);
 
   } else {
     
@@ -174,6 +173,7 @@ void loop() {
     }
   }
     
+  sendMessage();
 }
 
 //jssc
