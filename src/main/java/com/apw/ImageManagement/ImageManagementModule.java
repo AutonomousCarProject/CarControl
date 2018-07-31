@@ -7,7 +7,7 @@ import java.awt.*;
 
 public class ImageManagementModule implements Module {
 
-    private int viewType = 5;
+    private int viewType = 4;
     private int width, height;
     private int[] imagePixels;
     private byte mono[];
@@ -15,6 +15,7 @@ public class ImageManagementModule implements Module {
     private int rgb[];
     private byte tile;
     boolean removeNoise = false;
+    boolean dilate = true;
 
     public ImageManagementModule(int width, int height, byte newtile) {
         this.width = width;
@@ -101,19 +102,18 @@ public class ImageManagementModule implements Module {
     }
 
     public int[] getBWRGBRaster(byte[] pixels) {
-        byte[] mono;
         byte[] output = new byte[width * height];
         int[] rgb = new int[width*height];
         //int[] cameraInt = new int[cameraWidth*cameraHeight];
         //byte[] cameraByte = new byte[cameraWidth*cameraHeight];
-        mono = getBlackWhiteRasterFull(pixels);
+        output = getBlackWhiteRasterFull(pixels);
         if(removeNoise) {
-        	ImageManipulator.removeNoise(mono, output, height, width);
-        	ImageManipulator.convertBWToRGB(output, rgb, output.length);
+        	output = ImageManipulator.removeNoise(output, height, width);
         }
-        else {
-        	ImageManipulator.convertBWToRGB(mono, rgb, output.length);
+        if(dilate) {
+        	output = ImageManipulator.dilate(output, height, width);
         }
+        ImageManipulator.convertBWToRGB(output, rgb, output.length);
         return rgb;
 
     }
@@ -130,15 +130,14 @@ public class ImageManagementModule implements Module {
     public int[] getRoad(byte[] pixels){
         int road[] = new int[width*height];
         byte temp[] = new byte[width*height];
-        byte mono[] = new byte[width*height];
-        ImageManipulator.convertToBlackWhiteRaster(pixels, mono, height, width, tile);
+        temp = getBlackWhiteRasterFull(pixels);
         if(removeNoise) {
-        	ImageManipulator.removeNoise(mono, temp, height, width);
-        	ImageManipulator.findRoad(temp, road, height, width);
+        	temp = ImageManipulator.removeNoise(temp, height, width);
         }
-        else {
-        	ImageManipulator.findRoad(mono, road, height, width);
+        if(dilate) {
+        	temp = ImageManipulator.dilate(temp, height, width);
         }
+        ImageManipulator.findRoad(temp, road, height, width);
         return road;
     }
 

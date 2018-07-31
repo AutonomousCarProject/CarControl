@@ -13,7 +13,6 @@
 
 package com.apw.ImageManagement;
 
-import com.apw.drivedemo.SimpleThresholds;
 
 public class ImageManipulator {
 
@@ -22,7 +21,7 @@ public class ImageManipulator {
 	 * @param bayer bayer8 image
 	 * @param mono	monochrome output
 	 * @param nrows	number of rows of pixels in the image
-	 * @param ncols number og columns of pixels in the image
+	 * @param ncols number of columns of pixels in the image
 	 * @param tile tiling pattern of the bayer8 image
 	 */
     public static void convertToMonochromeRaster(byte[] bayer, byte[] mono, int nrows, int ncols, byte tile) {
@@ -89,7 +88,8 @@ public class ImageManipulator {
 		}
 	}
 	
-	public static void removeNoise(byte[] pixels, byte[] output, int nrows, int ncols) {
+	public static byte[] removeNoise(byte[] pixels, int nrows, int ncols) {
+		byte[] output = new byte[nrows * ncols];
 		for (int r = 0; r < nrows; r++) {
 			for (int c = 0; c < ncols; c++) {
 				if(pixels[r * ncols + c] == 1) {
@@ -135,6 +135,53 @@ public class ImageManipulator {
 				}
 			}
 		}
+		return output;
+	}
+	
+	public static byte[] dilate(byte[] pixels, int nrows, int ncols) {
+		byte[] output = new byte[nrows * ncols];
+		for (int r = 0; r < nrows; r++) {
+			for (int c = 0; c < ncols; c++) {
+				if(pixels[r * ncols + c] == 0) {
+					//top left
+					if((r - 1) > 0 && (c - 1) > 0 && pixels[(r - 1) * ncols + (c - 1)] == 1) {
+						output[r * ncols + c] = 1;
+					}
+					//top
+					else if((r - 1) > 0 && pixels[(r - 1) * ncols + (c)] == 1) {
+						output[r * ncols + c] = 1;
+					}
+					//top right
+					else if((r - 1) > 0 && (c + 1) < ncols && pixels[(r - 1) * ncols + (c + 1)] == 1) {
+						output[r * ncols + c] = 1;
+					}
+					//left
+					else if((c - 1) > 0 && pixels[(r) * ncols + (c - 1)] == 1) {
+						output[r * ncols + c] = 1;
+					}
+					//right
+					else if((c + 1) < ncols && pixels[(r) * ncols + (c + 1)] == 1) {
+						output[r * ncols + c] = 1;
+					}
+					//bot left
+					else if((r + 1) < nrows && (c - 1) > 0 && pixels[(r + 1) * ncols + (c - 1)] == 1) {
+						output[r * ncols + c] = 1;
+					}
+					//bot
+					else if((r + 1) < nrows && pixels[(r + 1) * ncols + (c)] == 1) {
+						output[r * ncols + c] = 1;
+					}
+					//bot right
+					else if((r + 1) < nrows && (c + 1) < ncols && pixels[(r + 1) * ncols + (c + 1)] == 1) {
+						output[r * ncols + c] = 1;
+					}
+				}
+				else {
+					output[r * ncols + c] = 1;
+				}
+			}
+		}
+		return output;
 	}
 
 
