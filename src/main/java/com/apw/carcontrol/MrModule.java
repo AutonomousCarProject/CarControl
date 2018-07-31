@@ -57,7 +57,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     private void createModules() {
         modules.add(new ImageManagementModule(width, height, trakSimControl.getTile()));
         modules.add(new SpeedControlModule());
-        modules.add(new SteeringModule());
+        modules.add(new SteeringModule((SpeedControlModule) modules.get(1)));
 
         for (Module module : modules)
             module.initialize(trakSimControl);

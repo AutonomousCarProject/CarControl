@@ -2,6 +2,8 @@ package com.apw.Steering;
 
 import com.apw.fakefirm.Arduino;
 
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+
 
 /**
  * <p>Version 2 of steering. This version improves center detection by adding the
@@ -14,13 +16,13 @@ import com.apw.fakefirm.Arduino;
  */
 public class SteeringMk2 extends SteeringBase {
 
-    private int SteerPin;
-    private boolean haveNewPixels = false;
     private boolean leftSideFound = false;
     private boolean rightSideFound = false;
 
-    public SteeringMk2() {
-
+    public SteeringMk2(int cameraWidth, int cameraHeight) {
+        this.cameraWidth = cameraWidth;
+        this.cameraHeight = cameraHeight;
+        origin = new Point(cameraWidth / 2, cameraHeight);
     }
 
     /**
@@ -36,14 +38,6 @@ public class SteeringMk2 extends SteeringBase {
         return getDegreeOffset();
     }
 
-    /**
-     * This gets called every 50ms, writes to the car servos. (drives the car)
-     */
-    public void makeTurnAdjustment(Arduino servos) {
-        if (haveNewPixels) {
-            servos.servoWrite(SteerPin, getDegreeOffset() + 90);
-        }
-    }
 
     /**
      * Process the camera image, and fill leftPoints, rightPoints, and midPoints.
@@ -52,14 +46,14 @@ public class SteeringMk2 extends SteeringBase {
      */
     @Override
     public void findPoints(int[] pixels) {
+
         clearArrays();
         int midX = cameraWidth / 2; // midX is where the car thinks is the middle of the road
         double distanceAhead = 1.8; // how far ahead the car looks for road. (Eventually dynamic?)
-        int screenWidth = 912;
 
 
         // Iterate through each row in camera
-        for (int cameraRow = screenHeight - 50; cameraRow > (int) (screenHeight / distanceAhead); cameraRow--) {
+        for (int cameraRow = cameraHeight - 50; cameraRow > (int) (cameraHeight / distanceAhead); cameraRow--) {
 
             // Find left point
             for (int cameraColumn = midX; cameraColumn >= 0; cameraColumn--) {
@@ -71,7 +65,7 @@ public class SteeringMk2 extends SteeringBase {
             }
 
             // Find Right point
-            for (int cameraColumn = midX; cameraColumn <= cameraWidth; cameraColumn++) {
+            for (int cameraColumn = midX; cameraColumn <= this.cameraWidth; cameraColumn++) {
                 if (!rightSideFound && pixels[(screenWidth * (cameraRow - 1)) + cameraColumn] >= 16777215) {
                     rightSideFound = true;
                     rightPoints.add(new Point(cameraColumn, cameraRow));
@@ -88,17 +82,17 @@ public class SteeringMk2 extends SteeringBase {
             } else if (rightSideFound) {
                 double lastY = rightPoints.get(rightPoints.size() - 1).y;
                 int lastX = rightPoints.get(rightPoints.size() - 1).x;
-                midX = (int) Math.round(lastX - ((cameraWidth) * Math.pow((lastY) / (screenHeight), 2)));
+                midX = (int) Math.round(lastX - ((this.cameraWidth) * Math.pow((lastY) / (cameraHeight), 2)));
                 midPoints.add(new Point(midX, cameraRow));
             } else if (leftSideFound) {
                 double lastY = leftPoints.get(leftPoints.size() - 1).y;
                 int lastX = leftPoints.get(leftPoints.size() - 1).x;
-                midX = (int) Math.round(lastX + ((cameraWidth) * Math.pow((lastY) / (screenHeight), 2)));
+                midX = (int) Math.round(lastX + ((this.cameraWidth) * Math.pow((lastY) / (cameraHeight), 2)));
                 midPoints.add(new Point(midX, cameraRow));
 
                 // If no lanes are found, route towards found lines.
             } else {
-                midX = cameraWidth / 2;
+                midX = this.cameraWidth / 2;
                 midPoints.add(new Point(midX, cameraRow));
             }
 
@@ -106,7 +100,6 @@ public class SteeringMk2 extends SteeringBase {
             leftSideFound = false;
         }
         averagePoints();
-        haveNewPixels = true;
     }
 
     /**
