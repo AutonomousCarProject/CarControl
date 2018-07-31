@@ -1,9 +1,12 @@
 package com.apw.carcontrol;
 
-import com.apw.ImageManagement.ImageManagementModule;
-import com.apw.SpeedCon.SpeedControlModule;
-import com.apw.Steering.SteeringModule;
+import com.apw.imagemanagement.ImageManagementModule;
+import com.apw.sbcio.PWMController;
+import com.apw.sbcio.fakefirm.ArduinoIO;
+import com.apw.sbcio.fakefirm.ArduinoModule;
+import com.apw.speedcon.SpeedControlModule;
 
+import com.apw.steering.SteeringModule;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -17,14 +20,15 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class MrModule extends JFrame implements Runnable, KeyListener {
+
     private ScheduledExecutorService executorService;
     private BufferedImage displayImage, bufferImage;
     private GraphicsDevice graphicsDevice;
+    private PWMController driveSys = new ArduinoIO();
     private ArrayList<Module> modules;
     private ImageIcon displayIcon;
     private CarControl control;
     private boolean fullscreen;
-    private JPanel panel;
 
     // FIXME breaks if dimensions are not 912x480
     private final int windowWidth = 912;
@@ -32,7 +36,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
 
     private MrModule(boolean renderWindow) {
         if (renderWindow) {
-            control = new TrakSimControl();
+            control = new TrakSimControl(driveSys);
             headlessInit();
             setupWindow();
         } else {
@@ -54,20 +58,18 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         displayImage = new BufferedImage(windowWidth, windowHeight, BufferedImage.TYPE_INT_RGB);
         bufferImage = new BufferedImage(windowWidth, windowHeight, BufferedImage.TYPE_INT_RGB);
         displayIcon = new ImageIcon(displayImage);
-        panel = new JPanel();
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(windowWidth, windowHeight + 25);
         setResizable(true);
         setVisible(true);
         addKeyListener(this);
-        add(panel);
     }
-
     private void createModules() {
         modules.add(new ImageManagementModule(windowWidth, windowHeight));
         modules.add(new SpeedControlModule());
         modules.add(new SteeringModule());
+        modules.add(new ArduinoModule(driveSys)); //Arduino mode
 
         for (Module module : modules)
             module.initialize(control);
@@ -112,6 +114,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
             module.paint(control, g);
         }
     }
+
 
     @Override
     public void run() {

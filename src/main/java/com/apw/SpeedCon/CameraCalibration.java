@@ -1,4 +1,4 @@
-package com.apw.SpeedCon;
+package com.apw.speedcon;
 
 import com.apw.carcontrol.CarControl;
 import com.apw.pedestrians.PedestrianDetector;

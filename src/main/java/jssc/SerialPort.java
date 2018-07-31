@@ -1,4 +1,4 @@
-/* jSSC (Java Simple Serial Connector) - serial port communication library.
+/** jSSC (Java Simple Serial Connector) - serial port communication library.
  * © Alexey Sokolov (scream3r), 2010-2014.
  *
  * This file is part of jSSC.
@@ -24,17 +24,15 @@
  */
 package jssc;
 
+import com.apw.sbcio.fakefirm.PortObject;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
-import java.nio.charset.Charset;
-
-import com.apw.fakefirm.PortObject;
 
 /**
  *
  * @author scream3r
  */
-public class SerialPort implements PortObject{
+public class SerialPort implements PortObject {
 
     private SerialNativeInterface serialInterface;
     private SerialPortEventListener eventListener;

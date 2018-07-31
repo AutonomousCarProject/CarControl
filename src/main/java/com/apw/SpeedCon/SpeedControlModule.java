@@ -1,8 +1,8 @@
-package com.apw.SpeedCon;
+package com.apw.speedcon;
 
-import com.apw.ImageManagement.ImageManipulator;
 import com.apw.carcontrol.CarControl;
 import com.apw.carcontrol.Module;
+import com.apw.imagemanagement.ImageManipulator;
 import com.apw.pedestrians.PedestrianDetector;
 import com.apw.pedestrians.blobtrack.MovingBlob;
 import com.apw.pedestrians.image.Color;
@@ -64,7 +64,8 @@ public class SpeedControlModule implements Module {
         final int height = 480;
         int vEdit = (height - 480) / 2 - 25;
         byte[] limitArray = new byte[640 * 480];
-        ImageManipulator.limitTo(limitArray, control.getProcessedImage(), width, height, 640, 480, false);
+        ImageManipulator
+            .limitTo(limitArray, control.getProcessedImage(), width, height, 640, 480, false);
         List<MovingBlob> blobs = pedDetect.getAllBlobs(limitArray, 640);
 
         //We then:
