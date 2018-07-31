@@ -7,6 +7,8 @@ import com.apw.sbcio.fakefirm.ArduinoModule;
 import com.apw.speedcon.SpeedControlModule;
 
 import com.apw.steering.SteeringModule;
+import java.awt.image.Raster;
+import java.awt.image.WritableRaster;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -26,7 +28,6 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     private GraphicsDevice graphicsDevice;
     private PWMController driveSys = new ArduinoIO();
     private ArrayList<Module> modules;
-    private ImageIcon displayIcon;
     private CarControl control;
     private boolean fullscreen;
 
@@ -57,19 +58,19 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         graphicsDevice = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         displayImage = new BufferedImage(windowWidth, windowHeight, BufferedImage.TYPE_INT_RGB);
         bufferImage = new BufferedImage(windowWidth, windowHeight, BufferedImage.TYPE_INT_RGB);
-        displayIcon = new ImageIcon(displayImage);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(windowWidth, windowHeight + 25);
         setResizable(true);
         setVisible(true);
         addKeyListener(this);
+        setIgnoreRepaint(true);
     }
     private void createModules() {
         modules.add(new ImageManagementModule(windowWidth, windowHeight));
         modules.add(new SpeedControlModule());
         modules.add(new SteeringModule());
-        modules.add(new ArduinoModule(driveSys)); //Arduino mode
+        modules.add(new ArduinoModule(driveSys));
 
         for (Module module : modules)
             module.initialize(control);
@@ -87,27 +88,25 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         }
     }
 
-    @Override
-    public void paint(Graphics g) {
+    private void paint() {
+        Graphics g;
+        g = this.getGraphics();
         if (!(control instanceof TrakSimControl)) {
             return;
         }
 
-        super.paint(g);
-
-        g.drawImage(displayImage, 0, 0, getWidth(), getHeight(), null);
-
         int[] renderedImage = ((TrakSimControl) control).getRenderedImage();
 
         if (renderedImage != null) {
-            int[] displayPixels = ((DataBufferInt) bufferImage.getRaster().getDataBuffer()).getData();
+            int[] displayPixels =
+                ((DataBufferInt) bufferImage.getRaster().getDataBuffer()).getData();
             System.arraycopy(renderedImage, 0, displayPixels, 0, renderedImage.length);
 
             BufferedImage tempImage = displayImage;
             displayImage = bufferImage;
             bufferImage = tempImage;
 
-            displayIcon.setImage(displayImage);
+            g.drawImage(displayImage, 0, 0, getWidth(), getHeight(), null);
         }
 
         for (Module module : modules) {
@@ -119,7 +118,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     @Override
     public void run() {
         update();
-        repaint();
+        paint();
     }
 
     public static void main(String[] args) {
