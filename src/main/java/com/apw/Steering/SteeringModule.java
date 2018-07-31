@@ -108,13 +108,39 @@ public class SteeringModule implements Module {
             }
         }
 
-        for (int idx = 0; idx < steering.midPoints.size(); idx++) {
-            if (idx >= steering.startTarget && idx <= steering.endTarget) {
-                control.rectFill(0x0000FF00, steering.midPoints.get(idx).y, steering.midPoints.get(idx).x,
-                        steering.midPoints.get(idx).y + 5, steering.midPoints.get(idx).x + 5);
-            } else {
-                control.rectFill(0x000000ff, steering.midPoints.get(idx).y, steering.midPoints.get(idx).x,
-                        steering.midPoints.get(idx).y + 5, steering.midPoints.get(idx).x + 5);
+        g.setColor(Color.RED);
+
+        if (DriverCons.D_DrawPredicted) {
+            int tempY = 0;
+            for (int idx = 0; idx < steering.midPoints.size(); idx++) {
+                if (idx >= steering.startTarget && idx <= steering.endTarget) {
+                    g.setColor(Color.red);
+                    tempY += steering.midPoints.get(idx).y;
+                    g.fillRect(steering.midPoints.get(idx).x, steering.midPoints.get(idx).y + control.getEdges().top, 5, 5);
+                } else {
+                    g.setColor(Color.BLUE);
+                }
+            }
+        }
+
+        if (DriverCons.D_DrawOnSides) {
+            for (Point point : steering.leftPoints) {
+                g.setColor(Color.YELLOW);
+                g.fillRect(point.x + control.getEdges().left, point.y + control.getEdges().top, 5, 5);
+            }
+            for (Point point : steering.rightPoints) {
+                g.fillRect(point.x + control.getEdges().left, point.y + control.getEdges().top, 5, 5);
+            }
+        }
+
+        // Draw steering.steerPoint on screen
+        g.setColor(Color.CYAN);
+        g.fillRect(steering.steerPoint.x, steering.steerPoint.y, 7, 7);
+
+        //Draw predicted points and detected lines
+        for (Point point : steering.midPoints) {
+            if (DriverCons.D_DrawPredicted) {
+                control.rectFill(255, point.y, point.x, point.y + 5, point.x + 5);
             }
         }
         if (DriverCons.D_DrawOnSides) {
