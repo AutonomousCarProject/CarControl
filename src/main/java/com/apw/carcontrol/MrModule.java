@@ -19,12 +19,12 @@ import java.util.concurrent.TimeUnit;
 public class MrModule extends JFrame implements Runnable, KeyListener {
     private ScheduledExecutorService executorService;
     private BufferedImage displayImage, bufferImage;
+    private GraphicsDevice graphicsDevice;
     private ArrayList<Module> modules;
-    private CarControl control;
     private ImageIcon displayIcon;
-    private JPanel panel;
+    private CarControl control;
     private boolean fullscreen;
-    GraphicsDevice graphicsDevice;
+    private JPanel panel;
 
     // FIXME breaks if dimensions are not 912x480
     private final int windowWidth = 912;
