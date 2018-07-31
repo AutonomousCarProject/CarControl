@@ -54,6 +54,12 @@ public class Constants {
             DEFAULT_COLOR_MODE = 0,
             NUM_COLOR_MODES = 3;
     
+    //Pedestrian Filters
+    public static final int
+    		PED_MIN_SIZE = 30,
+    		PED_MAX_X = 912,
+    		PED_MIN_X = 128;
+    
     //Other
     public static final int
     		SCREEN_WIDTH = 912,

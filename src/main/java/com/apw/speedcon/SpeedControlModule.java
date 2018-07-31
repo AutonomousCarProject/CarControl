@@ -22,6 +22,7 @@ public class SpeedControlModule implements Module {
 	private CameraCalibration cameraCalibrator;
 	
 	private List<MovingBlob> currentBlobs;
+	private List<MovingBlob> currentPeds;
 	private ArrayList<MovingBlob> stopObjects;
 	
 	private SizeConstants sizeCons;
@@ -83,6 +84,8 @@ public class SpeedControlModule implements Module {
 		ImageManipulator.limitTo(limitArray, control.getProcessedImage(), width, height, 640, 480, false);
 		List<MovingBlob> blobs = pedDetect.getAllBlobs(limitArray, 640);
 		
+		
+		
 		//We then:
 		//A. Display those blobs on screen as empty rectangular boxes of the correct color
 		//B. Test if those blobs are a useful roadsign/light
@@ -140,7 +143,10 @@ public class SpeedControlModule implements Module {
 		this.calculateDesiredSpeed(steerDegs, manualSpeed);
 		
 		List<MovingBlob> blobs = this.pedDetect.getAllBlobs(control.getProcessedImage(), 912);
+		List<MovingBlob> peds = this.pedDetect.detect(control.getProcessedImage(), 912);
 		this.currentBlobs = blobs;
+		this.currentPeds = peds;
+
 		
 		for (MovingBlob i: currentBlobs) {
 			if (detectStopSign(i)) {
@@ -160,8 +166,15 @@ public class SpeedControlModule implements Module {
 		}
 		
 		if (emergencyStop) {
+			System.out.println("EMERGENCY STOP");
 			emergencyStop();
 		}
+		
+		for(MovingBlob i : currentPeds) {
+			System.out.println("FOUND PED "+i.id);
+			determinePedStop(i);
+		}
+
 	}
 	
 	/**
@@ -284,6 +297,16 @@ public class SpeedControlModule implements Module {
 			return true;
 		}
 		
+		return false;
+	}
+	
+	public boolean determinePedStop(MovingBlob ped) {
+		System.out.println("Ped Width "+ped.width+" Ped X "+ped.x);
+		if(ped.width >= Constants.PED_MIN_SIZE &&
+			ped.x >= Constants.PED_MIN_X &&
+			ped.x <= Constants.PED_MAX_X) {
+			return true;
+		}
 		return false;
 	}
 	

@@ -36,7 +36,7 @@ T 20 16 10 1 0 -- start timer #0 +1 secs when: V>40m, H>32m
 J 35 28 6 15n 16f 23z 0d 1.3r 1.25e 0.3i -0.29p*23 -- northbound car
 @ 19.0 29.5 6 20 0 -- northbound car parked at end
 
-//J 26.5 30 5 30n 13f 14z 180d 0.125r 1.0e 0.2i -- ped'n walking south
+J 26.5 30 5 30n 13f 14z 180d 0.125r 1.0e 0.2i -- ped'n walking south
 -- J 28.0 28 6 15n 16f 23z 0d 0r 0.5e 0.25i -- car rotates (disabled)
 
 -- _ 55 -- (disabled) TripLine (extra logging on map row 55m)
