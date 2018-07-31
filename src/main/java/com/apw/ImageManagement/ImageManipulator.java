@@ -76,7 +76,7 @@ public class ImageManipulator {
 				int pix =(R1 + R2 + R3 + B1 + B2 + B3 + G1 + G2 + G3)/9;
 //				int pix = (R2 + G2 + B2)/3;
 				if(!(c >= 640 || r < 240 || r > 455)) {
-					if (pix > 1.6 * averageLuminance) {
+					if (pix > 2.5 * averageLuminance) {
 						mono[r * ncols + c] = 1;
 					} else {
 						mono[r * ncols + c] = 0;

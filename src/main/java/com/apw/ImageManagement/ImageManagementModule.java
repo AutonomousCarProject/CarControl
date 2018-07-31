@@ -7,13 +7,14 @@ import java.awt.*;
 
 public class ImageManagementModule implements Module {
 
-    private int viewType = 5;
+    private int viewType = 4;
     private int width, height;
     private int[] imagePixels;
     private byte mono[];
     private byte simple[];
     private int rgb[];
     private byte tile;
+    boolean removeNoise = false;
 
     public ImageManagementModule(int width, int height, byte newtile) {
         this.width = width;
@@ -106,8 +107,13 @@ public class ImageManagementModule implements Module {
         //int[] cameraInt = new int[cameraWidth*cameraHeight];
         //byte[] cameraByte = new byte[cameraWidth*cameraHeight];
         mono = getBlackWhiteRasterFull(pixels);
-        ImageManipulator.removeNoise(mono, output, height, width);
-        ImageManipulator.convertBWToRGB(output, rgb, output.length);
+        if(removeNoise) {
+        	ImageManipulator.removeNoise(mono, output, height, width);
+        	ImageManipulator.convertBWToRGB(output, rgb, output.length);
+        }
+        else {
+        	ImageManipulator.convertBWToRGB(mono, rgb, output.length);
+        }
         return rgb;
 
     }
