@@ -161,7 +161,7 @@ public class SpeedControlModule implements Module {
     {
         double blobRealSize = getStopReal(closestBlob); //Gets real size
         double distToBlob = cameraCalibrator.distanceToObj(blobRealSize, closestBlob.width);
-        if(cameraCalibrator.getStopTime(distToBlob, getEstimatedSpeed()) <= Constants.MIN_STOP_TIME)
+        if(cameraCalibrator.getStopTime(distToBlob - Constants.MIN_STOP_DISTANCE, getEstimatedSpeed()) <= Constants.MIN_STOP_TIME)  //If amount of time needed to stop is <= min stop time, starts to stop
         {
             go = false;
             this.desiredSpeed = desiredSpeed - cameraCalibrator.calcStopRate(getEstimatedSpeed(), cameraCalibrator.getStopTime(distToBlob, getEstimatedSpeed()));
