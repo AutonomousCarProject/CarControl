@@ -58,6 +58,23 @@ public class Constants {
 		BLOB_RATIO_DIF = 0.9,			//Filtered allowed multiplier difference between blob height and width
 		DISPLAY_AGE_MAX = 5,			//Max age compared to for age based blob boundary color
 		DISPLAY_AGE_MIN = 0;			//Min age compared to for age based blob boundary color
+    
+    //Overlay and Blobverlay constants
+  	public static final int
+  		OVERLAY_STOPLIGHT_HITBOX_COLOR 	 = 0xffa500,	//Color of the stoplight hitbox in overlay
+  		OVERLAY_STOPSIGN_HITBOX_COLOR 	 = 0xff69b4,	//Color of the stopsign hitbox in overlay
+  		BLOBVERLAY_COLORMODE_AGE_5_COLOR = 0x000000,	//Color of the oldest blobs in overlay
+  		BLOBVERLAY_COLORMODE_AGE_4_COLOR = 0x333333,	//Color of the older blobs in overlay
+  		BLOBVERLAY_COLORMODE_AGE_3_COLOR = 0x666666,	//Color of the middle-aged blobs in overlay
+  		BLOBVERLAY_COLORMODE_AGE_2_COLOR = 0x999999,	//Color of the teenage blobs in overlay
+  		BLOBVERLAY_COLORMODE_AGE_1_COLOR = 0xcccccc,	//Color of the child blobs in overlay
+  		BLOBVERLAY_COLORMODE_AGE_0_COLOR = 0xffffff,	//Color of the newborn blobs in overlay
+  		BLOBVERLAY_COLORMODE_COLOR_BLACK = 0x000000,	//Black hexvalue
+  		BLOBVERLAY_COLORMODE_COLOR_GRAY  = 0xd3d3d3,	//Gray hexvalue
+  		BLOBVERLAY_COLORMODE_COLOR_WHITE = 0xffffff,	//White hexvalue
+  		BLOBVERLAY_COLORMODE_COLOR_RED   = 0xff0000,	//Red hexvalue
+  		BLOBVERLAY_COLORMODE_COLOR_GREEN = 0x00ff00,	//Green hexvalue
+  		BLOBVERLAY_COLORMODE_COLOR_BLUE  = 0x0000ff;	//Blue hexvalue
 	
     //Pedestrian Filters
     public static final int
