@@ -120,6 +120,7 @@ public class ArduinoIO implements PWMController { // Adapted to Java from arduin
     	try {
 			while (this.surrealPort.getInputBufferBytesCount() >= 3) {
 				byte[] msg = surrealPort.readBytes(3);
+				System.out.println("----ARDUINO IN");
 				System.out.print((int) msg[0]);
 				System.out.print((int) msg[1]);
 				System.out.println((int) msg[2]);

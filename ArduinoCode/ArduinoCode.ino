@@ -133,7 +133,7 @@ void loop() {
   //Start next cycle every .02 seconds
   if (micros()-lastTime >= 20000){
     
-    digitalWrite(13, HIGH);
+    //digitalWrite(13, HIGH);
     digitalWrite(9, HIGH);
     digitalWrite(10, HIGH);
     steerON = true;
