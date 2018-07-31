@@ -23,6 +23,8 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     private CarControl control;
     private ImageIcon displayIcon;
     private JPanel panel;
+    private boolean fullscreen;
+    GraphicsDevice graphicsDevice;
 
     // FIXME breaks if dimensions are not 912x480
     private final int windowWidth = 912;
@@ -44,10 +46,11 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     private void headlessInit() {
         executorService = Executors.newSingleThreadScheduledExecutor();
         modules = new ArrayList<>();
-        executorService.scheduleAtFixedRate(this, 0, 1000 / 15, TimeUnit.MILLISECONDS);
+        executorService.scheduleAtFixedRate(this, 0, 1000 / 1000, TimeUnit.MILLISECONDS);
     }
 
     private void setupWindow() {
+        graphicsDevice = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         displayImage = new BufferedImage(windowWidth, windowHeight, BufferedImage.TYPE_INT_RGB);
         bufferImage = new BufferedImage(windowWidth, windowHeight, BufferedImage.TYPE_INT_RGB);
         displayIcon = new ImageIcon(displayImage);
@@ -128,6 +131,20 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     public void keyPressed(KeyEvent e) {
         if (!(control instanceof TrakSimControl)) {
             return;
+        }
+
+        if (e.getKeyCode() == KeyEvent.VK_F) {
+            fullscreen = !fullscreen;
+            setVisible(false);
+            dispose();
+            setUndecorated(fullscreen);
+            if (fullscreen) {
+                graphicsDevice.setFullScreenWindow(this);
+                validate();
+            } else {
+                graphicsDevice.setFullScreenWindow(null);
+                setVisible(true);
+            }
         }
 
         for (Map.Entry<Integer, Runnable> binding : ((TrakSimControl) control).keyBindings.entrySet()) {
