@@ -27,6 +27,10 @@ public class SpeedControlModule implements Module {
     
     private SizeConstants sizeCons;
 
+    /**
+	 * A basic constructor for our SpeedController.
+	 */
+    
     public SpeedControlModule() {
         this.pedDetect = new PedestrianDetector();
         this.currentBlobs = new ArrayList<>();
@@ -34,7 +38,12 @@ public class SpeedControlModule implements Module {
         this.stopObjects = new ArrayList<>();
         this.sizeCons = new SizeConstants();
     }
-
+  
+    /**
+     * This method is some gpu stuff to add key events, so that we can control stuff by
+     * manually hitting keys
+     */
+    
     @Override
     public void initialize(CarControl control) {
         control.addKeyEvent(KeyEvent.VK_B, () -> Settings.blobsOn ^= true);
@@ -49,6 +58,12 @@ public class SpeedControlModule implements Module {
         //control.addKeyEvent(KeyEvent.VK_O, this::setStoppingAtLight);
         //control.addKeyEvent(KeyEvent.VK_I, this::readyToGo);
     }
+    
+    /**
+     * A method that is called every frame to call the methods that need to get called every frame
+     * @param control this is our car controller
+     *
+     */
 
     @Override
     public void update(CarControl control) {
@@ -100,8 +115,17 @@ public class SpeedControlModule implements Module {
         }
     }
 
-    //A method to be called every frame. Calculates desired speed and actual speed
-    //Also takes stopping into account
+    /**
+	 * This is a method that is called on every frame update by DrDemo. It is responsible for calculating
+	 * our speed at any given time, and setting it. It also calls methods to figure out if we need to be
+	 * stopping due to a street obstacle, and it displays blob overlays on the screen.
+	 * 
+	 * @param gasAmount the pin position of your servos, e.g. how much gas we are giving the engine
+	 * @param steerDegs the degree measure at which our wheels are facing
+	 * @param manualSpeed an int that can be incremented by pressing the up and down arrow keys, and gets added on top of our desired speed
+	 * @param graf a Graphics object fed to us so that we can display blob boxes and overlay lines
+	 * @param dtest the DriveTest object that we feed to our blob detection, which gets displayed in a separate window
+	 */
     public void onUpdate(CarControl control) {
         int gasAmount = control.getGas();
         int steerDegs = control.getSteering();
@@ -129,12 +153,35 @@ public class SpeedControlModule implements Module {
             emergencyStop();
         }
     }
+    
+    /**
+	 * This method detects if a given blob is overlapping another blob.
+	 * 
+	 * <p>This is useful for determining if an array of objects contains a stoplight,
+	 * as a stoplight will contain overlapping black and red blobs.
+	 * 
+	 * @param b1 One of the two blobs that we are fed
+	 * @param b2 One of the two blobs that we are fed
+	 * @return a boolean that is true if the blobs are overlapping, and false if they are not
+	 */
 
     public boolean detectBlobOverlappingBlob(MovingBlob outsideBlob, MovingBlob insideBlob) {
-        return (insideBlob.x < outsideBlob.x + outsideBlob.width && insideBlob.width + insideBlob.x > outsideBlob.x) || (insideBlob.y < outsideBlob.y + outsideBlob.height && insideBlob.height + insideBlob.y > outsideBlob.y);
+        return (insideBlob.x < outsideBlob.x + outsideBlob.width &&
+        		insideBlob.width + insideBlob.x > outsideBlob.x) ||
+        		(insideBlob.y < outsideBlob.y + outsideBlob.height &&
+        		insideBlob.height + insideBlob.y > outsideBlob.y);
     }
 
-    //This figures out the speed that we want to be traveling at
+    /**
+	 * A method that determines what speed we need to be traveling at given our wheel angle, and how we have
+	 * modified our speed by pressing the arrow keys.
+	 * 
+	 * <p>Also checks whether it has been told to stop at a stopsign or stoplight, and acts accordingly,
+	 * slowing if it needs to slow, and stopping when it needs t stop.
+	 * 
+	 * @param wheelAngle our current wheel angle
+	 * @param manualSpeed our modifier for speed based upon arrow key presses
+	 */
     public void calculateDesiredSpeed(double wheelAngle, int manualSpeed) {
         this.updateStopSign();
         this.updateStopLight();
@@ -146,6 +193,12 @@ public class SpeedControlModule implements Module {
 
 
     }
+    
+    /**
+	 * Changes our speed from our current (estimated) speed to our desired speed in a smooth fashion.
+	 * 
+	 * @return the speed that we should currently be traveling at
+	 */
 
     public int getNextSpeed() {
         double distance = this.desiredSpeed - this.currentEstimatedSpeed;
@@ -183,7 +236,12 @@ public class SpeedControlModule implements Module {
     }
 
 
-    //Returns the estimated speed IN METERS PER SECOND
+    /**
+     * Documentation from Derek's Speed API:
+	 * 
+	 * Returns the current estimated speed based on gasPedal. The value is a internal number and not a measure in meters.
+	 * 
+	 */    
     public double getEstimatedSpeed() {
         return currentEstimatedSpeed * Constants.PIN_TO_METER_PER_SECOND;
     }
@@ -201,7 +259,15 @@ public class SpeedControlModule implements Module {
         this.updateStopSign();
     }
     
-    //Finds stop signs and adds them to stopSigns
+    /**
+	 * A method called every frame by onUpdate(). Checks if we need to be stopping at a stopsign.
+	 * 
+	 * <p> By modifying constants in SpeedCon/Constants.java, you can adjust how the stopping behaves.
+	 * 
+	 * <p>Can be triggered by pressing 'P'
+	 * 
+	 * @return a stopcode, which reads 1 if we are clear to keep driving, -1 if we are slowing down, and 0 if we need to be stopped
+	 */
     public void updateStopSign() {
 
         for(MovingBlob i : currentBlobs)
@@ -215,7 +281,15 @@ public class SpeedControlModule implements Module {
             }
 
 
-    //Finds stopLights, if red or yellow, adds to stopLight list
+    /**
+	 * A method called every frame by onUpdate(). Checks if we need to be stopping at a stoplight.
+	 * 
+	 * <p>By modifying constants in SpeedCon/Constants.java, you can adjust how the stopping behaves.
+	 * 
+	 * <p>Can be triggered by pressing 'O', and released by pressing 'I'
+	 * 
+	 * @return a stopcode, which reads 1 if we are clear to keep driving, -1 if we are slowing down, and 0 if we need to be stopped
+	 */
     public void updateStopLight() {
 
         for(MovingBlob i : currentBlobs)
@@ -246,7 +320,14 @@ public class SpeedControlModule implements Module {
         return (int) desiredSpeed;
     }
 
-    // Checks a given blob for the properties of a stopsign (size, age, position, color)
+    /**
+	 * Checks a given blob for the properties of a stopsign (size, age, position, color)
+	 * 
+	 * <p>These properties are stored in the blob, and you probably will not need to worry about setting them.
+	 * 
+	 * @param blob the blob that we want to check
+	 * @return true if the blob is recognized to be a stopsign, otherwise false
+	 */
     public boolean detectStopSign(MovingBlob blob) {
         if (blob.age > Constants.BLOB_AGE &&
                 blob.height > (3) * Constants.BLOB_MIN_HEIGHT &&
@@ -272,12 +353,19 @@ public class SpeedControlModule implements Module {
         return this.currentBlobs;
     }
 
-    /* Returns an int value corresponding to the color of the light we are looking at
-     * 0 - No light
-     * 1 - Red Light
-     * 2 - Yellow Light
-     * 3 - Green Light
-     * */
+    /** Returns an int value corresponding to the color of the light we are looking at
+	 * <p>0 - No light
+	 * <p>1 - Red Light
+	 * <p>2 - Yellow Light
+	 * <p>3 - Green Light
+	 * 
+	 * <p>It is crucial that this method be given a list of blobs to iterate through, as it recognizes
+	 * a configuration of blobs to be a light by looking for black around and overlapping a color, rather than just one blob
+	 * 
+	 * @param blob our guess for a light, blob color is ALWAYS red, green, or yellow
+	 * @param bloblist all of the blobs on screen
+	 * @return returns a light code, see above for light codes
+	 */
 
     public int detectLight(MovingBlob blob, List<MovingBlob> bloblist) {
         int lightColor = 0;
