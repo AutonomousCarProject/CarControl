@@ -156,11 +156,11 @@ public class SpeedControlModule implements Module {
     }
 
 
-    //Calculates when the car should start to stop.
+    //Calculates when the car should start to stop, then reduces its speed.
     private void determineStop(MovingBlob closestBlob)
     {
         double blobRealSize = getStopReal(closestBlob); //Gets real size
-        double distToBlob = cameraCalibrator.distanceToObj(blobRealSize, closestBlob.width);
+        double distToBlob = cameraCalibrator.distanceToObj(blobRealSize/cameraCalibrator.relativeWorldScale, closestBlob.width);   //Finds distance to closest blob based on real wrold size and pixel size
         if(cameraCalibrator.getStopTime(distToBlob - Constants.MIN_STOP_DISTANCE, getEstimatedSpeed()) <= Constants.MIN_STOP_TIME)  //If amount of time needed to stop is <= min stop time, starts to stop
         {
             go = false;

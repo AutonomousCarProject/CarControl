@@ -37,19 +37,18 @@ public class CameraCalibration {
     private PedestrianDetector pedDetect;
 
     //Camera information
-    private double cameraFocalLength = 35;
+    private double cameraFocalLength = 35;   //If used in sim, leave at 35, if testing IRL leave blank and use calibrateCamera
     private double signWidth;           //The width of a standared stop sign in mm
 
     private MovingBlob testBlob;
     private double testBlobWidthHeight = 9; //the width and height of a square used to calibrate the camera
     private double testBlobDistance = 20;    //The distance the test blob is away from the camera
-    private double relativeWorldScale;  //The scale of the world (if 1/3 scale, set to 3)
+    public double relativeWorldScale;  //The scale of the world (if 1/3 scale, set to 3)
 
     //Used to set world scale, and width of known objects
     public CameraCalibration() {
 
         relativeWorldScale = 8;
-        signWidth = 75 / relativeWorldScale; //sign width in centi meters
 
         this.pedDetect = new PedestrianDetector();
 
@@ -83,7 +82,7 @@ public class CameraCalibration {
     //Calculates the distance to a blob if the real world size is known
     public double distanceToObj(double knownWidth, double objPixelWidth) {
         System.out.print("Distance to object = " + (knownWidth * cameraFocalLength) / objPixelWidth);
-        return (knownWidth * cameraFocalLength) / objPixelWidth;
+        return ( knownWidth * cameraFocalLength) / objPixelWidth;
     }
 
 
