@@ -25,10 +25,8 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     private JPanel panel;
 
     // FIXME breaks if dimensions are not 912x480
-    public volatile static int windowWidth = 912;
-    public volatile static int windowHeight = 480;
-    public volatile static int cameraWidth = 640;
-    public volatile static int cameraHeight = 480;
+    private final int windowWidth = 912;
+    private final int windowHeight = 480;
 
     private MrModule(boolean renderWindow) {
         if (renderWindow) {
@@ -76,18 +74,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         if (control instanceof TrakSimControl) {
             ((TrakSimControl) control).cam.theSim.SimStep(1);
         }
-        if (getWidth() > 0) {
-            windowWidth = getWidth();
-            //cameraWidth = windowWidth;
-            panel.setSize(windowWidth, windowHeight);
 
-        }
-        if (getHeight() > 0) {
-            windowHeight = getHeight();
-            //cameraHeight = windowHeight;
-
-            panel.setSize(windowWidth, windowHeight);
-        }
         control.readCameraImage();
         control.setEdges(getInsets());
         for (Module module : modules) {
@@ -103,8 +90,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
 
         super.paint(g);
 
-        System.out.println(windowHeight);
-        g.drawImage(displayImage, 0, 0, windowWidth, windowHeight, null);
+        g.drawImage(displayImage, 0, 0, getWidth(), getHeight(), null);
 
         int[] renderedImage = ((TrakSimControl) control).getRenderedImage();
 
