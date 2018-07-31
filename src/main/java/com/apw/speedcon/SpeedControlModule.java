@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SpeedControlModule implements Module {
-	private double currentEstimatedSpeed = 1;
-	private double desiredSpeed = 1;
+	private double currentEstimatedSpeed;
+	private double desiredSpeed;
 	private boolean emergencyStop;
 	private boolean go = true; //A toggle to avoid the car from accelerating and decelerating at same time
 	
@@ -153,14 +153,14 @@ public class SpeedControlModule implements Module {
 				i.type = "Stop";
 				i.seen = true;
 				System.out.println("Found a stopsign: " + i);
-				//determineStop(i);
+				determineStop(i);
 			}
 			if (detectLight(i) > 0) {
 				i.type = "StopLightWidth";
 				i.seen = true;
 				System.out.println("Found a " + i.color.getColor() + "light: " + i);
 				if (detectLight(i) == 2 || detectLight(i) == 3) {
-					//determineStop(i);
+					determineStop(i);
 				}
 			}
 		}
@@ -235,6 +235,7 @@ public class SpeedControlModule implements Module {
 		double distToBlob = cameraCalibrator.distanceToObj(blobRealSize/cameraCalibrator.relativeWorldScale, closestBlob.width); //Finds distance to closest blob based on real wrold size and pixel size
 		if(cameraCalibrator.getStopTime(distToBlob - Constants.MIN_STOP_DISTANCE, getEstimatedSpeed()) <= Constants.MIN_STOP_TIME) { //If amount of time needed to stop is <= min stop time, starts to stop
 			go = false;
+			System.out.println("WEIRD STUFF HAPPENS HERE");
 			this.desiredSpeed = desiredSpeed - cameraCalibrator.calcStopRate(getEstimatedSpeed(), cameraCalibrator.getStopTime(distToBlob, getEstimatedSpeed()));
 		}
 		else {
