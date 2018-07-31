@@ -86,6 +86,7 @@ void loop() {
     }
     if (micros()-sinceNoKill > 1800){ //Start up if un-killed
       kill = false;
+      addMessage(3, 0, 1);
     }
     sinceNoKill = 0;
   }
@@ -173,11 +174,11 @@ void loop() {
     }
   }
 
-  int temp = 50-millis()+lastRun;
+  /*int temp = 50-millis()+lastRun;
   if (temp >= 0){
     delayMicroseconds(temp);
   } else {addMessage(0, 0, abs(temp));}
-    
+  */  
   sendMessage();
 }
 
