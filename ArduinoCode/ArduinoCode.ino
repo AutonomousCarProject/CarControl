@@ -76,7 +76,7 @@ void loop() {
   //Read fall of signal
   if (sinceNoKill != 0 && digitalRead(2) == LOW){
     lastNoKill = micros();
-    if (micros()-sinceNoKill < 1600){ //Check difference to find duration of input
+    if (!kill && micros()-sinceNoKill < 1600){ //Check difference to find duration of input
       kill = true;
       wheelDelay = 1500;
       steerDelay = 1500;
@@ -84,7 +84,7 @@ void loop() {
       addMessage(4, 0, 3);
       sendMessage();
     }
-    if (micros()-sinceNoKill > 1800){ //Start up if un-killed
+    if (kill && micros()-sinceNoKill > 1800){ //Start up if un-killed
       kill = false;
       addMessage(3, 0, 1);
     }
