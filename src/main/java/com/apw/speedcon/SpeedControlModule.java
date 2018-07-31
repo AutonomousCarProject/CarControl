@@ -14,8 +14,8 @@ import java.util.List;
 
 public class SpeedControlModule implements Module {
 
-    private double currentEstimatedSpeed;
-    private double desiredSpeed;
+    private double currentEstimatedSpeed = 1;
+    private double desiredSpeed = 1;
     private boolean emergencyStop;
     private boolean go; //A toggle to avoid the car from accelerating and decelerating at same time
 
@@ -50,7 +50,7 @@ public class SpeedControlModule implements Module {
     @Override
     public void update(CarControl control) {
         onUpdate(control);
-        control.accelerate(true, getNextSpeed());
+        control.accelerate(false, getNextSpeed());
 
         System.out.println("Speed: " + getNextSpeed());
     }
