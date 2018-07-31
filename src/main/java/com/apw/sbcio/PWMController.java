@@ -1,7 +1,11 @@
 package com.apw.sbcio;
 
 /**
+ * Interface dedicated to communication with motors and receiving information from hardware
  * Members must conform to a singleton pattern.
+ * 
+ * @author I don't know your name
+ * @author Colton Jelsema
  */
 public interface PWMController {
 
@@ -21,7 +25,7 @@ public interface PWMController {
    *
    * @param pin Non-negative integer representing the pin number. Range dependent on
    * implementation.
-   * @param angle Double from 0 to 180 inclusive representing the angle of the servo.
+   * @param angle int from 0 to 180 inclusive representing the angle of the servo.
    */
   default void setServoAngle(int pin, int angle) {
     setOutputPulseWidth(pin, 1 + angle / 180);
@@ -51,7 +55,7 @@ public interface PWMController {
 
   
   /**
-   * Get any info sent from the other interface
+   * Get any info from the buffer
    * 
    * @return undecided
    */

@@ -17,7 +17,7 @@ byte value;
 unsigned long lastNoKill = 0;
 unsigned long sinceConnect = 0;
 unsigned long sinceNoKill = 0; //Input timing for kill
-unsigned long timeout = 40000000;
+unsigned long timeout = 30000; //microseconds before timeout
 unsigned long lastTime = 0; //timekeeping for 50 hz, 20000 us reset
 unsigned long lastRun = 0; //timekeeping for loop
 
@@ -50,63 +50,60 @@ void addMessage(byte ina, byte inb, byte inc){
   outsize += 3;
 }
 
-//A function run when a pin interrupts.
-void killReader(){
-  addMessage(1, 3, 7); //send test info
-  sinceNoKill = 0;
+void sendMessage(){
+  if (outsize >= 3){
+    byte msg[3] = {out[0], out[1], out[2]};
+    Serial.write(msg, 3); //Send the first 3 items in the out list
+
+    //Move values backwards in the list for the next run
+    for (byte n = 0; n < outsize-3; n++){
+      out[n] = out[n+3];
+    }
+    outsize -= 3;
+  }
 }
+
 
 void loop() {
   lastRun = micros();
-  killed:
-  
-  if (nokill){
-    digitalWrite(13, HIGH);
 
-    //Read rise of signal
-    if (sinceNoKill == 0 && digitalRead(2) == HIGH){
-      sinceNoKill = micros();
-    }
+  //Read rise of signal
+  if (sinceNoKill == 0 && digitalRead(2) == HIGH){
+    sinceNoKill = micros();
+  }
 
-    //Read fall of signal
-    if (sinceNoKill != 0 && digitalRead(2) == LOW){
-      lastNoKill = micros();
-      if (micros()-sinceNoKill < 1600){ //Check difference to find duration of input
-        nokill = false;
-        addMessage(4, 0, 3);
-        Serial.write(out, 3);
-        goto killed; //skip to dead mode
-      }
-         
-      sinceNoKill = 0;
-    }
-
-    if (micros()-lastNoKill > timeout){
+  //Read fall of signal
+  if (sinceNoKill != 0 && digitalRead(2) == LOW){
+    lastNoKill = micros();
+    if (micros()-sinceNoKill < 1600){ //Check difference to find duration of input
       nokill = false;
-      addMessage(4, 0, 4);
-      Serial.write(out, 3);
-      goto killed;
+      wheelDelay = 1500;
+      steerDelay = 1500;
+      //Send message to computer
+      addMessage(4, 0, 3);
+      sendMessage();
     }
-
-    //Timeout check
-    if (Serial.peek() <= 0 && micros()-sinceConnect > timeout){
-      nokill = false;
-      addMessage(4, 0, 5);
-      Serial.write(out, 3);
-      digitalWrite(13, LOW);
+    if (micros()-sinceNoKill > 1800){ //Start up if un-killed
+      nokill = true;
     }
+    sinceNoKill = 0;
+  }
 
-    //Grab info from buffer
-    if (Serial.available() > 0){
-      digitalWrite(13, LOW);
-      type = Serial.read();
-      pin = Serial.read();
-      value = Serial.read();
-      sinceConnect = micros();
-    }
+  if (micros()-lastNoKill > timeout){
+    nokill = false;
+    addMessage(4, 0, 4);
+    sendMessage();
+  }
 
-    //Interpret info if sinceConnect is 0 to prevent multiple readings
-    if (sinceConnect == 0 && pin == 9){
+  //Grab info from buffer
+  if (Serial.available() > 0){
+    digitalWrite(13, LOW);
+    type = Serial.read();
+    pin = Serial.read();
+    value = Serial.read();
+    sinceConnect = micros();
+
+    if (pin == 9){
       if (value != steeringDeg){
         //steerDelay = 1.0+((double) value)/180;
         steerDelay = map(value, 0, 180, 1000, 2000);
@@ -114,94 +111,69 @@ void loop() {
       steeringDeg = value;
     }
     
-    if (sinceConnect == 0 && pin == 10){
+    if (pin == 10){
       if (value != wheelSpeed){
         //wheelDelay = 1.0+((double) value)/180;
         wheelDelay = map(value, 0, 180, 1000, 2000);
       }
       wheelSpeed = value;
     }
+  
+    if (type == 0xFF) { //Restart if a startup signal is recieved
+      sinceConnect = micros();
+      wheelDelay = 1500;
+      steerDelay = 1500;
+      nokill = true;
+    }
+  }
+  
+  //Start next cycle every .02 seconds
+  if (micros()-lastTime >= 20000){
     
-    //Start next cycle every .02 seconds
-    if (micros()-lastTime >= 20000){
-      
-      digitalWrite(13, HIGH);
-      digitalWrite(9, HIGH);
-      digitalWrite(10, HIGH);
-      steerON = true;
-      wheelON = true;
-      
-      lastTime = micros();
-    }
-
-    //Turn off the signal at approximately the correct timing.
-    if (steerON && micros()-lastTime >= steerDelay){
-      digitalWrite(9, LOW);
-      steerON = false;
-    }
-
-    if (wheelON && micros()-lastTime >= wheelDelay){
-      digitalWrite(10, LOW);
-      wheelON = false;
-    }
+    digitalWrite(13, HIGH);
+    digitalWrite(9, HIGH);
+    digitalWrite(10, HIGH);
+    steerON = true;
+    wheelON = true;
     
-    if (outsize >= 3){
-      byte msg[3] = {out[0], out[1], out[2]};
-      Serial.write(msg, 3); //Send the first 3 items in the out list
+    lastTime = micros();
+  }
 
-      //Move values backwards in the list for the next run
-      for (byte n = 0; n < outsize-3; n++){
-        out[n] = out[n+3];
-      }
-      outsize -= 3;
+  //Turn off the signal at approximately the correct timing.
+  if (steerON && micros()-lastTime >= steerDelay){
+    digitalWrite(9, LOW);
+    steerON = false;
+  }
+
+  if (wheelON && micros()-lastTime >= wheelDelay){
+    digitalWrite(10, LOW);
+    wheelON = false;
+  }
+  
+  sendMessage();
+  
+  if (nokill){
+    digitalWrite(13, HIGH);
+
+    //Timeout check
+    if (Serial.peek() <= 0 && micros()-sinceConnect > timeout){
+      nokill = false;
+      addMessage(5, 0, 4);
+      sendMessage();
+      digitalWrite(13, LOW);
     }
 
     //addMessage((byte) micros()-lastRun, 0, 0);
 
   } else {
     
-    //send message to main program once
-    if (sinceConnect < timeout) {
-      sinceConnect = timeout;
-    }
-    
-    //discard info from computer while dead.
-    while (Serial.available() > 0){
-      byte type = Serial.read();
-      
-      if (type != -1 && sinceConnect > timeout) {
-        sinceConnect = 0; //Restart if a startup signal is recieved after a timeout
-        wheelDelay = 1500;
-        steerDelay = 1500;
-        nokill = true;
-        Serial.read();
-        Serial.read();
-      }
-    }
-    
-    if (sinceConnect < timeout){ //Force car to stop instantly if kill switch is flipped
-      digitalWrite(10, HIGH);
-      delayMicroseconds(1500); //timing for wheels
-      digitalWrite(10, LOW);
-      delayMicroseconds(2500); //normalizing timing
-      digitalWrite(13, LOW); //blink main light
-      delay(1000);
+    if (digitalRead(2) == HIGH) {
       digitalWrite(13, HIGH);
-      delay(1000);
     } else {
-      /*digitalWrite(13, LOW); 
-      delay(500); //create idle pulse timing
-      digitalWrite(13, HIGH);
-      delay(100);*/
-
-      if (digitalRead(2) == HIGH) {
-        digitalWrite(13, HIGH);
-      } else {
-        digitalWrite(13, LOW);
-      }
+      digitalWrite(13, LOW);
     }
-    
   }
+    
 }
 
 //jssc

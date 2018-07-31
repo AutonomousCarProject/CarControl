@@ -1,4 +1,4 @@
-/* FakeFirmata -- a simple way to control servos from LattePanda in Java.
+/** FakeFirmata -- a simple way to control servos from LattePanda in Java.
  *
  * This is essentially a translation of (small parts of) LattePanda's Arduino.cs
  * into Java for using the attached Arduino to control servos.
@@ -10,7 +10,16 @@
  *
  * FakeFirmata is designed to work with JSSC (Java Simple Serial Connector),
  * but probably will work with any compatible Java serial port API.
+ * 
+ * This version has been edited to work specifically with the associated Arduino program.
+ * The changes are to the protocol and the used functions, 
+ * mainly removal of unused functions and variables.
+ * 
+ * @author Firmata
+ * @author Tom
+ * @author Colton Jelsema
  */
+
 package com.apw.sbcio.fakefirm;   // 2018 February 10
 
 import com.apw.pwm.fakefirm.SimHookBase;
@@ -30,29 +39,13 @@ public class ArduinoIO implements PWMController { // Adapted to Java from arduin
     public static final String CommPortNo = "COM3";
     public static final int MAX_DATA_BYTES = 16, // =64 in LattePanda's Arduino.cs
             MDB_msk = MAX_DATA_BYTES - 1;
-    public static final int SET_PIN_MODE = 0xF4;
-    // set a pin to INPUT/OUTPUT/PWM/etc
-    public static final int DIGITAL_MESSAGE = 0x90;
-    // send data for a digital port
+    //Message types
     public static final int ANALOG_MESSAGE = 0xE0;
-    // Use these selectors to set listeners..
-    public static final int REPORT_ANALOG = 0xC0;
-    // enable analog input by pin +
-    public static final int REPORT_DIGITAL = 0xD0;
-    // send data for an analog pin (or PWM)
-    // enable digital input by port
-    public static final int REPORT_VERSION = 0xF9;
-    public static final byte LOW = 0;
-    public static final byte HIGH = 1;
-    // report firmware version
-    public static final byte INPUT = 0;
-    public static final byte OUTPUT = 1;
-    public static final byte ANALOG = 2;
-    public static final byte PWM = 3;
-    public static final byte SERVO = 4;
+    public static final int FORCE_START = 0xFF;
+    
     protected static final boolean SpeakEasy = true;
-    protected static boolean GoodOpen = false;
-    protected static SimHookBase DoMore = null; // for extensions
+    protected static boolean PortOpened = false;
+    protected static SimHookBase HookFunctions = null; // for extensions
 
     protected int[] digitalOutputData;
     protected PortObject surrealPort;
@@ -81,7 +74,7 @@ public class ArduinoIO implements PWMController { // Adapted to Java from arduin
      * @param whom An instance of a subclass of SimHookBase
      */
     public static void HookExtend(SimHookBase whom) {
-        DoMore = whom;
+        HookFunctions = whom;
     }
 
     /**
@@ -90,16 +83,18 @@ public class ArduinoIO implements PWMController { // Adapted to Java from arduin
      * @return true if successfully open, false if failed or closed
      */
     public boolean IsOpen() {
-        return GoodOpen;
+        return PortOpened;
     } // true if opened successfully
 
     /**
      * Sets the mode of the specified pin (INPUT or OUTPUT).
+     * Unused in modified version, pin numbers and modes are set arduino side.
      *
      * @param pin  The arduino pin.
      * @param mode Mode Arduino.OUTPUT or Arduino.SERVO
      *             (Arduino.INPUT, Arduino.ANALOG or Arduino.PWM not supported)
      */
+    @Deprecated
     public void pinMode(int pin, byte mode) {
         byte[] msg = new byte[3];
         //if (SpeakEasy) System.out.println("F%%F/pinMode +" + pin + " = " + mode);
@@ -108,33 +103,39 @@ public class ArduinoIO implements PWMController { // Adapted to Java from arduin
         msg[2] = (byte) mode;
         try {
             surrealPort.writeBytes(msg);
-            if (DoMore != null) DoMore.SendBytes(msg, 3);
+            if (HookFunctions != null) HookFunctions.SendBytes(msg, 3);
         } catch (Exception ex) {
             System.out.println(ex);
         }
     } //~pinMode
 
-    
+    /**
+     * Reads any information from the buffer in the connection
+     * with the arduino.
+     * Currently prints into the console.
+     * 
+     * @return void, may be subject to change.
+     */
     public void digitalRead(){
     	try {
 			while (this.surrealPort.getInputBufferBytesCount() >= 3) {
 				byte[] msg = surrealPort.readBytes(3);
-				System.out.println((int) msg[0]);
+				System.out.print((int) msg[0]);
 				System.out.print((int) msg[1]);
-				System.out.print((int) msg[2]);
+				System.out.println((int) msg[2]);
 			}
 		} catch (SerialPortException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.out.println("Servo reading is creating a problem! last read: ");
+			System.out.println("Servo reading is creating a problem!");
 		}
     }
 
     /**
      * [For] controlling [a] servo.
-     * Maximum input of 1 byte numbers.
+     * Limit input to numbers castable to 1 byte.
      *
      * @param pin Servo output pin. Port 9 for steering
+     * @param angle Set angle. Ranges from 0 to 180 where 90 is center.
      */
     public void setServoAngle(int pin, int angle) {
         byte[] msg = new byte[3];
@@ -143,11 +144,19 @@ public class ArduinoIO implements PWMController { // Adapted to Java from arduin
         msg[2] = (byte) (angle); //angle
         try {
             surrealPort.writeBytes(msg);
-            if (DoMore != null) DoMore.SendBytes(msg, 3);
+            if (HookFunctions != null) HookFunctions.SendBytes(msg, 3);
         } catch (Exception ex) {
             System.out.println(ex);
         }
     } //~servoWrite
+    
+    /**
+     * Writes to the buffer with all three bytes as inputs.
+     * 
+     * @param messageType Purpose of message, currently unused.
+     * @param pin second byte to be sent, commonly used to indicate pin
+     * @param angle third byte to be send, commonly used for angle
+     */
     public void Write(int messageType, int pin, int angle) {
         byte[] msg = new byte[3];
         msg[0] = (byte) (messageType); //Type of message. Likely unneeded
@@ -155,14 +164,19 @@ public class ArduinoIO implements PWMController { // Adapted to Java from arduin
         msg[2] = (byte) (angle); //angle
         try {
             surrealPort.writeBytes(msg);
-            if (DoMore != null) DoMore.SendBytes(msg, 3);
+            if (HookFunctions != null) HookFunctions.SendBytes(msg, 3);
         } catch (Exception ex) {
             System.out.println(ex);
         }
     } //~servoWrite
     
+    /**
+     * Allows direct setting of the pulse width modulation,
+     * a redundancy with the arduino protocol.
+     */
     @Override
-	public void setOutputPulseWidth(int pin, double ms) {
+	@Deprecated
+    public void setOutputPulseWidth(int pin, double ms) {
     	setServoAngle(pin, (int) ((ms - 1) * 180));
     }
 
@@ -175,18 +189,18 @@ public class ArduinoIO implements PWMController { // Adapted to Java from arduin
      */
     public void Open() {
         if (SpeakEasy) System.out.println("F%%F/Open..");
-        if (GoodOpen) {
+        if (PortOpened) {
             if (SpeakEasy) System.out.println("... " + CommPortNo + " is already open");
             return;
         } else try {
-            GoodOpen = surrealPort.openPort();
+            PortOpened = surrealPort.openPort();
             surrealPort.setParams(57600, 8, 1, 0);
             this.Write(0xFF, 0, 0); //Send startup message
         } catch (Exception ex) {
             System.out.println(ex);
         }
         if (SpeakEasy) {
-            if (GoodOpen) System.out.println("... " + CommPortNo + " is now open");
+            if (PortOpened) System.out.println("... " + CommPortNo + " is now open");
             else System.out.println("... " + CommPortNo + " failed to open");
         }
     } //~Open
@@ -199,12 +213,12 @@ public class ArduinoIO implements PWMController { // Adapted to Java from arduin
      */
     public void close() {
         if (SpeakEasy) System.out.println("F%%F/Close..");
-        if (GoodOpen) try {
+        if (PortOpened) try {
             surrealPort.closePort();
-            DoMore = null;
+            HookFunctions = null;
         } catch (Exception ex) {
             System.out.println(ex);
         }
-        GoodOpen = false;
+        PortOpened = false;
     } //~Close
 } //~Arduino (fakefirm) (OO)
