@@ -46,7 +46,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     private void headlessInit() {
         executorService = Executors.newSingleThreadScheduledExecutor();
         modules = new ArrayList<>();
-        executorService.scheduleAtFixedRate(this, 0, 1000 / 1000, TimeUnit.MILLISECONDS);
+        executorService.scheduleAtFixedRate(this, 0, 1000 / 15, TimeUnit.MILLISECONDS);
     }
 
     private void setupWindow() {
