@@ -53,4 +53,10 @@ public class Constants {
     public static final int
             DEFAULT_COLOR_MODE = 0,
             NUM_COLOR_MODES = 3;
+    
+    //Other
+    public static final int
+    		SCREEN_WIDTH = 912,
+    		SCREEN_FILTERED_WIDTH = 640,
+    		SCREEN_HEIGHT = 480;
 }

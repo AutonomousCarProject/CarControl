@@ -78,13 +78,17 @@ public class SpeedControlModule implements Module {
         if (control.getProcessedImage() == null) return;
 
         PedestrianDetector pedDetect = new PedestrianDetector();
-        // TODO get rid of hardcoded values
-        final int width = 912;
-        final int height = 480;
-        int vEdit = (height - 480) / 2 - 25;
-        byte[] limitArray = new byte[640 * 480];
-        ImageManipulator.limitTo(limitArray, control.getProcessedImage(), width, height, 640, 480, false);
-        List<MovingBlob> blobs = pedDetect.getAllBlobs(limitArray, 640);
+
+        final int width = Constants.SCREEN_WIDTH;
+        final int filteredWidth = Constants.SCREEN_FILTERED_WIDTH;
+        final int height = Constants.SCREEN_HEIGHT;
+        int vEdit = (height - height) / 2 - 25;
+        byte[] limitArray = new byte[filteredWidth * height];
+        ImageManipulator.limitTo(limitArray, control.getProcessedImage(), width, height, filteredWidth, Constants.BLOB_MAX_HEIGHT, false);
+        List<MovingBlob> blobs = pedDetect.getAllBlobs(limitArray, filteredWidth);
+        List<MovingBlob> potentialPeds = pedDetect.detect(limitArray, filteredWidth);
+        
+        
 
         //We then:
         //A. Display those blobs on screen as empty rectangular boxes of the correct color
@@ -95,22 +99,20 @@ public class SpeedControlModule implements Module {
         //as we need to convert from IPixel colors to Java.awt colors for display reasons
         if (Settings.blobsOn) {
             for (MovingBlob i : blobs) {
-                if (true) {
-                    if (i.color.getColor() == com.apw.pedestrians.image.Color.BLACK) {
-                        g.setColor(java.awt.Color.BLACK);
-                    } else if (i.color.getColor() == com.apw.pedestrians.image.Color.GREY) {
-                        g.setColor(java.awt.Color.GRAY);
-                    } else if (i.color.getColor() == com.apw.pedestrians.image.Color.WHITE) {
-                        g.setColor(java.awt.Color.WHITE);
-                    } else if (i.color.getColor() == com.apw.pedestrians.image.Color.RED) {
-                        g.setColor(java.awt.Color.RED);
-                    } else if (i.color.getColor() == com.apw.pedestrians.image.Color.GREEN) {
-                        g.setColor(java.awt.Color.GREEN);
-                    } else if (i.color.getColor() == com.apw.pedestrians.image.Color.BLUE) {
-                        g.setColor(java.awt.Color.BLUE);
-                    }
-                    g.drawRect(i.x + 8, i.y + 40 + vEdit, i.width, i.height);
+                if (i.color.getColor() == com.apw.pedestrians.image.Color.BLACK) {
+                    g.setColor(java.awt.Color.BLACK);
+                } else if (i.color.getColor() == com.apw.pedestrians.image.Color.GREY) {
+                    g.setColor(java.awt.Color.GRAY);
+                } else if (i.color.getColor() == com.apw.pedestrians.image.Color.WHITE) {
+                    g.setColor(java.awt.Color.WHITE);
+                } else if (i.color.getColor() == com.apw.pedestrians.image.Color.RED) {
+                    g.setColor(java.awt.Color.RED);
+                } else if (i.color.getColor() == com.apw.pedestrians.image.Color.GREEN) {
+                    g.setColor(java.awt.Color.GREEN);
+                } else if (i.color.getColor() == com.apw.pedestrians.image.Color.BLUE) {
+                    g.setColor(java.awt.Color.BLUE);
                 }
+                g.drawRect(i.x + 8, i.y + 40 + vEdit, i.width, i.height);
             }
         }
     }
