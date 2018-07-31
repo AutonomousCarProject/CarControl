@@ -172,6 +172,11 @@ void loop() {
       digitalWrite(13, LOW);
     }
   }
+
+  int temp = 50-millis();
+  if (temp >= 0){
+    delayMicroseconds(temp);
+  } else {addMessage(0, 0, abs(temp));}
     
   sendMessage();
 }
