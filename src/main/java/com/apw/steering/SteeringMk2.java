@@ -68,7 +68,6 @@ public class SteeringMk2 extends SteeringBase {
         clearArrays();
         int midX = cameraWidth / 2; // midX is where the car thinks is the middle of the road
         double distanceAhead = 1.8; // how far ahead the car looks for road. (Eventually dynamic?)
-        int averageLumanance = 0;
 
 
         // Iterate through each row in camera

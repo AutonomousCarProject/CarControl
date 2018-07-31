@@ -87,7 +87,7 @@ public class SteeringModule implements Module {
 
 		locX = locX + (double) Math.cos(Math.toRadians(sumOfAngles)) * (double) DriverCons.D_FrameTime/1000.0 * (double) DriverCons.D_fMinSpeed;
 		
-   		
+
    		locY = locY + (double) Math.sin(Math.toRadians(sumOfAngles)) * (double) DriverCons.D_FrameTime/1000.0 * (double) DriverCons.D_fMinSpeed;
 		if (frameCount < 100) frameCount++;
    		if (frameCount >= 100 && Math.abs(locX) < 15 && Math.abs(locY) < 15 && Math.abs(tempDeg) < 3 && !drawnMap && (Math.abs(sumOfAngles%360) < 10)) {
@@ -114,40 +114,16 @@ public class SteeringModule implements Module {
    				System.setOut(console);
    			}
    		}
-   		
-
    }
    
-    		
-        g.setColor(Color.RED);
-
-        if (DriverCons.D_DrawPredicted) {
-            for (int idx = 0; idx < steering.midPoints.size(); idx++) {
-                if (idx >= steering.startTarget && idx <= steering.endTarget) {
-                    g.setColor(Color.red);
-                    g.fillRect(steering.midPoints.get(idx).x, steering.midPoints.get(idx).y + control.getEdges().top, 5, 5);
-                } else {
-                    g.setColor(Color.BLUE);
-                    g.fillRect(steering.midPoints.get(idx).x, steering.midPoints.get(idx).y + control.getEdges().top, 5, 5);
-                }
-            }
-        }
-
-
-        if (DriverCons.D_DrawOnSides) {
-            for (Point point : steering.leftPoints) {
-                g.setColor(Color.YELLOW);
-                g.fillRect(point.x + control.getEdges().left, point.y + control.getEdges().top, 5, 5);
-            }
-            for (Point point : steering.rightPoints) {
-                g.fillRect(point.x + control.getEdges().left, point.y + control.getEdges().top, 5, 5);
-            }
-        }
-
-        // Draw midPoints
         for (int idx = 0; idx < steering.midPoints.size(); idx++) {
-            g.setColor(Color.blue);
-            g.fillRect(steering.midPoints.get(idx).x, steering.midPoints.get(idx).y, 3, 3);
+            if (idx >= steering.startTarget && idx <= steering.endTarget) {
+                control.rectFill(0x0000FF00, steering.midPoints.get(idx).y, steering.midPoints.get(idx).x,
+                        steering.midPoints.get(idx).y + 5, steering.midPoints.get(idx).x + 5);
+            } else {
+                control.rectFill(0x000000ff, steering.midPoints.get(idx).y, steering.midPoints.get(idx).x,
+                        steering.midPoints.get(idx).y + 5, steering.midPoints.get(idx).x + 5);
+            }
         }
 
         // Draw left and right sides
