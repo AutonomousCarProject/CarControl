@@ -5,8 +5,8 @@ import com.apw.sbcio.PWMController;
 import com.apw.sbcio.fakefirm.ArduinoIO;
 import com.apw.sbcio.fakefirm.ArduinoModule;
 import com.apw.speedcon.SpeedControlModule;
-import com.apw.steering.SteeringModule;
 
+import com.apw.steering.SteeringModule;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -22,70 +22,84 @@ import java.util.concurrent.TimeUnit;
 public class MrModule extends JFrame implements Runnable, KeyListener {
 
     private ScheduledExecutorService executorService;
-    private ArrayList<Module> modules;
-    private TrakSimControl trakSimControl;
     private BufferedImage displayImage, bufferImage;
-    private ImageIcon displayIcon;
+    private GraphicsDevice graphicsDevice;
     private PWMController driveSys = new ArduinoIO();
+    private ArrayList<Module> modules;
+    private ImageIcon displayIcon;
+    private CarControl control;
+    private boolean fullscreen;
 
     // FIXME breaks if dimensions are not 912x480
-    private final int width = 912;
-    private final int height = 480;
+    private final int windowWidth = 912;
+    private final int windowHeight = 480;
 
-    private MrModule() {
-        init();
-        setupWindow();
+    private MrModule(boolean renderWindow) {
+        if (renderWindow) {
+            control = new TrakSimControl(driveSys);
+            headlessInit();
+            setupWindow();
+        } else {
+            control = null;
+            headlessInit();
+        }
+
         createModules();
     }
 
-    private void init() {
+    private void headlessInit() {
         executorService = Executors.newSingleThreadScheduledExecutor();
-        displayImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        bufferImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        displayIcon = new ImageIcon(displayImage);
-        trakSimControl = new TrakSimControl(driveSys);
         modules = new ArrayList<>();
+        executorService.scheduleAtFixedRate(this, 0, 1000 / 15, TimeUnit.MILLISECONDS);
     }
 
     private void setupWindow() {
-        executorService.scheduleAtFixedRate(this, 0, 1000 / 60, TimeUnit.MILLISECONDS);
+        graphicsDevice = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        displayImage = new BufferedImage(windowWidth, windowHeight, BufferedImage.TYPE_INT_RGB);
+        bufferImage = new BufferedImage(windowWidth, windowHeight, BufferedImage.TYPE_INT_RGB);
+        displayIcon = new ImageIcon(displayImage);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(width, height + 25);
+        setSize(windowWidth, windowHeight + 25);
         setResizable(true);
         setVisible(true);
         addKeyListener(this);
-        add(new JLabel(displayIcon));
     }
-
     private void createModules() {
-        modules.add(new ImageManagementModule(width, height));
+        modules.add(new ImageManagementModule(windowWidth, windowHeight));
         modules.add(new SpeedControlModule());
         modules.add(new SteeringModule());
         modules.add(new ArduinoModule(driveSys)); //Arduino mode
 
-        for (Module module : modules) {
-            module.initialize(trakSimControl);
-        }
+        for (Module module : modules)
+            module.initialize(control);
     }
 
     private void update() {
-        trakSimControl.cam.theSim.SimStep(1);
-        trakSimControl.readCameraImage();
-        trakSimControl.setEdges(getInsets());
+        if (control instanceof TrakSimControl) {
+            ((TrakSimControl) control).cam.theSim.SimStep(1);
+        }
+
+        control.readCameraImage();
+        control.setEdges(getInsets());
         for (Module module : modules) {
-        	//System.out.println(module.getClass().getSimpleName());
-            module.update(trakSimControl);
+            module.update(control);
         }
     }
 
     @Override
     public void paint(Graphics g) {
+        if (!(control instanceof TrakSimControl)) {
+            return;
+        }
+
         super.paint(g);
 
-        int[] renderedImage = trakSimControl.getRenderedImage();
+        g.drawImage(displayImage, 0, 0, getWidth(), getHeight(), null);
 
-        if(renderedImage != null) {
+        int[] renderedImage = ((TrakSimControl) control).getRenderedImage();
+
+        if (renderedImage != null) {
             int[] displayPixels = ((DataBufferInt) bufferImage.getRaster().getDataBuffer()).getData();
             System.arraycopy(renderedImage, 0, displayPixels, 0, renderedImage.length);
 
@@ -97,9 +111,10 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         }
 
         for (Module module : modules) {
-            module.paint(trakSimControl, g);
+            module.paint(control, g);
         }
     }
+
 
     @Override
     public void run() {
@@ -108,12 +123,34 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     }
 
     public static void main(String[] args) {
-        new MrModule();
+        boolean renderWindow = true;
+        if(args.length > 0 && args[0].toLowerCase().equals("nosim")) {
+            renderWindow = false;
+        }
+        new MrModule(renderWindow);
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        for (Map.Entry<Integer, Runnable> binding : trakSimControl.keyBindings.entrySet()) {
+        if (!(control instanceof TrakSimControl)) {
+            return;
+        }
+
+        if (e.getKeyCode() == KeyEvent.VK_F) {
+            fullscreen = !fullscreen;
+            setVisible(false);
+            dispose();
+            setUndecorated(fullscreen);
+            if (fullscreen) {
+                graphicsDevice.setFullScreenWindow(this);
+                validate();
+            } else {
+                graphicsDevice.setFullScreenWindow(null);
+                setVisible(true);
+            }
+        }
+
+        for (Map.Entry<Integer, Runnable> binding : ((TrakSimControl) control).keyBindings.entrySet()) {
             if (e.getKeyCode() == binding.getKey()) {
                 binding.getValue().run();
             }

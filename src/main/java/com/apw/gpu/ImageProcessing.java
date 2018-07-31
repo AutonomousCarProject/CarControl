@@ -1,8 +1,8 @@
 package com.apw.gpu;
 
 import com.aparapi.Range;
-import com.apw.imagemanagement.ImageManipulator;
 
+import com.apw.imagemanagement.ImageManipulator;
 import java.time.Duration;
 import java.time.Instant;
 

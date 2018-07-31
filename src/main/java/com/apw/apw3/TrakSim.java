@@ -16,12 +16,10 @@
  */
 package com.apw.apw3;                                       // 2018 June 13
 
-
-import java.io.File;
-import java.io.FileInputStream;
-
 import com.apw.pwm.fakefirm.SimHookBase;
 import com.apw.sbcio.fakefirm.ArduinoIO;
+import java.io.File;
+import java.io.FileInputStream;
 
 /**
  * The main TrakSim Car Simulator class..
@@ -152,16 +150,16 @@ public class TrakSim {
     private static int[] BreadCrumbs = null;
     private static int[] GridLocTable = null;
     private static double[] RasterMap = null;
-    final int[] TinyBits = {	//    *       *     * *     * *         *   * * *     * *   * * *
-            0x25552, 0x22227,  	//  *   *     *         *       *   *   *   *       *           *
-            0x61247, 0x61216,  	//  *   *     *       *       *     *   *   * *     * *       *
-            0x15571, 0x74616,  	//  *   *     *     *           *   * * *       *   *   *   *
-            0x34652, 0x71244,  	//    *     * * *   * * *   * *         *   * *       *     *
-            0x25252, 0x25316,  	//    *       *     *       *  * * *     * *  *       *  0x11244 *
+    final int[] TinyBits = {//    *       *     * *     * *         *   * * *     * *   * * *
+            0x25552, 0x22227,  //  *   *     *         *       *   *   *   *       *           *
+            0x61247, 0x61216,  //  *   *     *       *       *     *   *   * *     * *       *
+            0x15571, 0x74616,  //  *   *     *     *           *   * * *       *   *   *   *
+            0x34652, 0x71244,  //    *     * * *   * * *   * *         *   * *       *     *
+            0x25252, 0x25316,  //    *       *     *       *  * * *     * *  *       *  0x11244 *
             0x49D9B9, 0x74647,  //  *   *   *   *   * *     *  *       *      *       *          *
-            					//    *       * *   *   *   *  * *       *    *   *   *        *
+            //    *       * *   *   *   *  * *       *    *   *   *        *
             0x34216, 0x699996,  //  *   *       *   *     * *  *           *  *   *   *      *
-            2, 0x00700};  		//    *     * *     *       *  * * *   * *      *   *    *   *
+            2, 0x00700};  //    *     * *     *       *  * * *   * *      *   *    *   *
     // + " 60     55 78 274^172 36~16=16 -- BlueCar front\n"
     // + " 32+45  54 157 190^2  36~17=16 -- BlueCar right-front\n"
     // + " 60+90  54 155 352^114 36~18=16 -- BlueCar right\n"
@@ -5495,7 +5493,7 @@ public class TrakSim {
             GasBrake = 0;
             NuData++;
             SerialCalls = new SimHookX();
-            ArduinoIO.HookExtend(SerialCalls); //Specifies arduino mode. Does this interfere with RPI version?
+            ArduinoIO.HookExtend(SerialCalls);
         }
         nClients++;
     } //~StartPatty

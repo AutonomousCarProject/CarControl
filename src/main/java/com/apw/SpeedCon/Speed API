@@ -1,0 +1,71 @@
+
+----------------------------------------------------------------------------------------------------------------------------------------------------
+
+	double getEstimatedSpeed();
+
+* Returns the current estimated speed based on gasPedal. The value is a internal number and not a measure in meters.
+ 
+ ---------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+ 	double getStopRate(double targetDist, double currentSpeed)
+ 
+ * Gives the rate the car needs to decelerate given a distance from stop point and the current speed. Gives
+ in linear manner. 
+ 
+ Unit: Meter/Second
+ 
+ ---------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+    double calcStopDist(double targetStopDist, double speed)
+
+ * Gives the needed distance to stop at given location at given speed. Can be used to do something when the car
+ can't stop to avoid hitting what ever is identified.
+ 
+ Unit: Meters
+ 
+ ---------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ DARK DUNGEON OF SAD FUNCTIONS WHO NO LONGER MAY NOT SEE THE LIGHT OF DAY MAYBE
+ 
+ 	//Given object of specific size at specific distance, with the image, the controller will find needed information about the camera.
+	public void calibrateController(double objectRealWidth, double objectDistance, int imageArray[]) {
+		
+		
+		
+	}
+=======
+  
+ Obj size in img = obj size * focal length / object distance
+>>>>>>> b00f5ca3d40c0dc3157ffc47eaf55a42b801db8c
