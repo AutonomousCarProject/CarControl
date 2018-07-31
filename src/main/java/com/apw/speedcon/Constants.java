@@ -32,25 +32,31 @@ public class Constants {
 			MIN_SPEED_INCREMENT = 10,		//Min increment amount between current and next frame speed
 			MAX_SPEED_INCREMENT = 20,		//Max increment amount between current and next frame speed
 
-	//Blob Filters
-	BLOB_MIN_HEIGHT = 4,			//Filtered minimum height of a blob in pixels
-			BLOB_MAX_HEIGHT = 20,			//Filtered maximum height of a blob in pixels
-			BLOB_MIN_WIDTH = 4,				//Filtered minimum width of a blob in pixels
-			BLOB_MAX_WIDTH = 20,			//Filtered maximum width of a blob in pixels
-			BLOB_AGE = 1,					//Filtered age of a blob in frames
-			STOPLIGHT_MIN_Y = 0,			//Filtered position of a blob in pixels
-			STOPLIGHT_MAX_Y = 240,			//Filtered position of a blob in pixels
-			STOPLIGHT_MIN_X = 160,			//Filtered position of a blob in pixels
-			STOPLIGHT_MAX_X = 480,			//Filtered position of a blob in pixels
-			STOPSIGN_MIN_Y = 0,				//Filtered position of a blob in pixels
-			STOPSIGN_MAX_Y = 480,			//Filtered position of a blob in pixels
-			STOPSIGN_MIN_X = 400,			//Filtered position of a blob in pixels
-			STOPSIGN_MAX_X = 640;			//Filtered position of a blob in pixels
-	public static final double
-			BLOB_RATIO_DIF = 0.9,
-			DISPLAY_AGE_MAX = 5,
-			DISPLAY_AGE_MIN = 0;
-	public static final int
-			DEFAULT_COLOR_MODE = 0,
-			NUM_COLOR_MODES = 3;
+    //Blob Filters
+    BLOB_MIN_HEIGHT = 4,            //Filtered minimum height of a blob in pixels
+            BLOB_MAX_HEIGHT = 20,            //Filtered maximum height of a blob in pixels
+            BLOB_MIN_WIDTH = 4,                //Filtered minimum width of a blob in pixels
+            BLOB_MAX_WIDTH = 20,            //Filtered maximum width of a blob in pixels
+            BLOB_AGE = 1,                    //Filtered age of a blob in frames
+            STOPLIGHT_MIN_Y = 0,            //Filtered position of a blob in pixels
+            STOPLIGHT_MAX_Y = 240,            //Filtered position of a blob in pixels
+            STOPLIGHT_MIN_X = 160,            //Filtered position of a blob in pixels
+            STOPLIGHT_MAX_X = 480,            //Filtered position of a blob in pixels
+            STOPSIGN_MIN_Y = 0,                //Filtered position of a blob in pixels
+            STOPSIGN_MAX_Y = 480,            //Filtered position of a blob in pixels
+            STOPSIGN_MIN_X = 400,            //Filtered position of a blob in pixels
+            STOPSIGN_MAX_X = 640;            //Filtered position of a blob in pixels
+    public static final double
+            BLOB_RATIO_DIF = 0.9,
+            DISPLAY_AGE_MAX = 5,
+            DISPLAY_AGE_MIN = 0;
+    public static final int
+            DEFAULT_COLOR_MODE = 0,
+            NUM_COLOR_MODES = 3;
+    
+    //Other
+    public static final int
+    		SCREEN_WIDTH = 912,
+    		SCREEN_FILTERED_WIDTH = 640,
+    		SCREEN_HEIGHT = 480;
 }
