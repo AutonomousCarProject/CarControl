@@ -7,7 +7,7 @@ import java.awt.*;
 
 public class ImageManagementModule implements Module {
 
-    private int viewType = 4;
+    private int viewType = 5;
     private int width, height;
     private int[] imagePixels;
     private byte mono[];
@@ -128,8 +128,18 @@ public class ImageManagementModule implements Module {
     }
     
     public int[] getRoad(byte[] pixels){
-        ImageManipulator.findRoad(pixels, rgb, height, width);
-        return rgb;
+        int road[] = new int[width*height];
+        byte temp[] = new byte[width*height];
+        byte mono[] = new byte[width*height];
+        ImageManipulator.convertToBlackWhiteRaster(pixels, mono, height, width, tile);
+        if(removeNoise) {
+        	ImageManipulator.removeNoise(mono, temp, height, width);
+        	ImageManipulator.findRoad(temp, road, height, width);
+        }
+        else {
+        	ImageManipulator.findRoad(mono, road, height, width);
+        }
+        return road;
     }
 
     @Override

@@ -287,7 +287,7 @@ public class ImageManipulator {
     		boolean endFound = false;
 
     		for(int row = nrows-1; row > 0; row--){
-				if(col >= 640 || row < 240 || row > 455){
+				if(col > 638 || row < 240 || row > 455){
 					output[row*ncols+col] = 0;
 				} else if(mono[row*ncols+col] == 1){
 					endFound = true;
