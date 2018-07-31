@@ -12,7 +12,7 @@ public class CameraCalibration {
     /**
      * Camera Calibration is used to find the focal length and then distance of an object.
      * To use, you need to create a square the size of testBlobWidthHeight at the distance testBlobDistance, then begine calibration which takes a picure
-     * and measures the the square thus filling needed variables. After calibration, you can find the distance of an object
+     * and measures the the square thus filling needed variables. After calibration, you can find the tance of an object
      * if you know its real world size along with picture information.
      * <p>
      * -----
@@ -81,7 +81,7 @@ public class CameraCalibration {
 
     //Calculates the distance to a blob if the real world size is known
     public double distanceToObj(double knownWidth, double objPixelWidth) {
-        System.out.print("Distance to object = " + (knownWidth * cameraFocalLength) / objPixelWidth);
+        //System.out.print("Distance to object = " + (knownWidth * cameraFocalLength) / objPixelWidth);
         return ( knownWidth * cameraFocalLength) / objPixelWidth;
     }
 
