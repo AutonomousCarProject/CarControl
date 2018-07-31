@@ -1,6 +1,6 @@
 package com.apw.speedcon;
 
-import java.awt.List;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -17,6 +17,7 @@ public class SizeConstants {
 	
 	//Order of variable types within categories (boolean -> int -> double)
 	//Add more if need be
+
 	
 	public static final double
 	HEIGHT_HUMAN = 1.69,
@@ -63,111 +64,110 @@ public class SizeConstants {
 	 * 'Overhead' means mounted on a streetlight or something similar.
 	 */
 	
-	public static final Map<String, ArrayList<Double>> SIGN_INFO = new HashMap<String, ArrayList<Double>>(){{
-		put("Stop", (ArrayList<Double>) Arrays.asList(3.0, .750, .900, .0, .600, 1.200));
-		put("StopLightWidth", (ArrayList<Double>) Arrays.asList(3.0, .300, .00, .0, .200, 0.0));
-		put("Stop", (ArrayList<Double>) Arrays.asList(3.0, .750, .900, .0, .600, 1.200));
-		put("Yield", (ArrayList<Double>) Arrays.asList(1.0, .900, 1.200, 1.500, .750, 0.0));
-		put("4Way", (ArrayList<Double>) Arrays.asList(0.0, .300, .150, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
-		put("AllWay", (ArrayList<Double>) Arrays.asList(0.0, .450, .150, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
-		put("SpeedLimit", (ArrayList<Double>) Arrays.asList(0.0, .600, .750, 0.900, 1.200, 1.200, 1.500, 0.0, 0.0, 0.0, 0.0));
-		put("TruckSpeedLimit", (ArrayList<Double>) Arrays.asList(0.0, .600, .600, 0.900, 0.900, 1.200, 1.200, 0.0, 0.0, 0.0, 0.0));
-		put("NightSpeedLimit", (ArrayList<Double>) Arrays.asList(0.0, .600, .600, 0.900, 0.900, 1.200, 1.200, 0.0, 0.0, 0.0, 0.0));
-		put("MinimumSpeedLimit", (ArrayList<Double>) Arrays.asList(0.0, .600, .750, 0.900, 1.200, 1.200, 1.500, 0.0, 0.0, 0.0, 0.0));
-		put("CombinedSpeedLimit", (ArrayList<Double>) Arrays.asList(0.0, .600, .1200, 0.900, 1.800, 1.200, 2.400, 0.0, 0.0, 0.0, 0.0));
-		put("ReducedSpeedAhead", (ArrayList<Double>) Arrays.asList(0.0, .600, .750, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
-		put("TurnProhibition", (ArrayList<Double>) Arrays.asList(0.0, .600, .600, 0.900, 0.900, 0.0, 0.0, 0.0, 0.0, 1.200, 1.200));
-		put("MandatoryMovementLaneControl", (ArrayList<Double>) Arrays.asList(0.0, .750, .900, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
-		put("MandatoryMovementLaneControl2", (ArrayList<Double>) Arrays.asList(0.0, .750, .750, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
-		put("OptionalMovementLaneControl", (ArrayList<Double>) Arrays.asList(0.0, .750, .900, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
-		//Advance Intersection Lane Control has a variable width, so good luck with sizing that
-		//put("AdvanceIntersectionLaneControl", (ArrayList<Double>) Arrays.asList(0.0, 1.800, 1.500, 2.400, 1.800, 2.700, 1.100, 0.0, 0.0, 0.0, 0.0));
-		put("TwoWayLeftTurnOnlyOverhead", (ArrayList<Double>) Arrays.asList(0.0, .750, .900, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
-		put("TwoWayLeftTurnOnlyGround", (ArrayList<Double>) Arrays.asList(0.0, .600, .900, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.900, 1.200));
-		put("ReversibleLaneControl", (ArrayList<Double>) Arrays.asList(0.0, 2.700, .900, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
-		put("EndReverseLane", (ArrayList<Double>) Arrays.asList(0.0, 2.700, 1.200, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
-		put("HOV2+LaneAheadGround", (ArrayList<Double>) Arrays.asList(0.0, .750, 1.050, 0.900, 1.500, 1.200, 1.100, 0.0, 0.0, 0.0, 0.0));
-		put("CenterLaneHOV2+OnlyPost", (ArrayList<Double>) Arrays.asList(0.0, .750, 1.050, 0.0, 0.0, 1.400, 1.100, 0.0, 0.0, 0.0, 0.0));
-		put("HOV2+LaneEndsPost", (ArrayList<Double>) Arrays.asList(0.0, .750, 1.050, 0.900, 1.500, 1.200, 1.100, 0.0, 0.0, 0.0, 0.0));
-		put("HOV2+LaneAheadOverhead", (ArrayList<Double>) Arrays.asList(0.0, 1.650, 0.900, 2.100, 1.200, 2.550, 1.500, 0.0, 0.0, 0.0, 0.0));
-		put("HOV2+OnlyOverhead", (ArrayList<Double>) Arrays.asList(0.0, 1.800, 1.500, 2.400, 1.800, 2.700, 1.100, 0.0, 0.0, 0.0, 0.0));
-		put("HOV2+LaneEndsOverhead", (ArrayList<Double>) Arrays.asList(0.0, 1.650, 0.900, 2.100, 1.200, 2.550, 1.500, 0.0, 0.0, 0.0, 0.0));
-		put("BicycleLaneAhead", (ArrayList<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
-		put("BicycleLaneEnds", (ArrayList<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
-		put("RightLaneBicycleOnly", (ArrayList<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
-		put("BicycleLaneWithVehicleParking", (ArrayList<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
-		put("DoNotPass", (ArrayList<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.900, 1.200, 1.200, 1.500, 0.450, 0.600, 0.0, 0.0));
-		put("PassWithCare", (ArrayList<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.900, 1.200, 1.200, 1.500, 0.450, 0.600, 0.0, 0.0));
-		put("SlowerTrafficKeepRight", (ArrayList<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.900, 1.200, 1.200, 1.500, 0.0, 0.0, 0.0, 0.0));
-		put("TrucksUseRightLane", (ArrayList<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.900, 1.200, 1.200, 1.500, 0.0, 0.0, 0.0, 0.0));
-		put("TruckLane500Feet", (ArrayList<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.900, 1.200, 1.200, 1.500, 0.0, 0.0, 0.0, 0.0));
-		put("KeepRight", (ArrayList<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.900, 1.200, 1.200, 1.500, 0.450, 0.600, 0.0, 0.0));
-		put("KeepLeft", (ArrayList<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.900, 1.200, 1.200, 1.500, 0.450, 0.600, 0.0, 0.0));
-		put("DoNotEnter", (ArrayList<Double>) Arrays.asList(0.0, 0.750, 0.750, 0.900, 0.900, 1.200, 1.200, 0.0, 0.0, 0.0, 0.0));
-		put("WrongWay", (ArrayList<Double>) Arrays.asList(0.0, 0.900, 0.600, 0.900, 0.600, 1.050, 0.750, 0.0, 0.0, 0.0, 0.0));
-		put("NoTrucks", (ArrayList<Double>) Arrays.asList(0.0, 0.600, 0.600, 0.750, 0.750, 0.900, 0.900, 0.0, 0.0, 1.200, 1.200));
-		put("MotorVehicleProhibition", (ArrayList<Double>) Arrays.asList(0.0, 0.600, 0.600, 0.000, 0.000, 0.000, 0.000, 0.0, 0.0, 0.000, 0.000));
-		put("CommercialVehiclesExcluded", (ArrayList<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.900, 1.200, 1.200, 1.500, 0.0, 0.0, 0.000, 0.000));
-		put("VehiclesWithLugsProhibited", (ArrayList<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.900, 1.200, 1.200, 1.500, 0.0, 0.0, 0.000, 0.000));
-		put("NoBicycles", (ArrayList<Double>) Arrays.asList(0.0, 0.600, 0.600, 0.750, 0.750, 0.900, 0.900, 0.0, 0.0, 1.200, 1.200));
-		put("NonmotorizedTrafficProhibited", (ArrayList<Double>) Arrays.asList(0.0, 0.750, 0.600, 1.050, 0.600, 1.200, 0.750, 0.0, 0.0, 0.0, 0.0));
-		put("MotorDrivenCyclesProhibited", (ArrayList<Double>) Arrays.asList(0.0, 0.750, 0.600, 1.050, 0.600, 1.200, 0.750, 0.0, 0.0, 0.0, 0.0));
-		put("PedestriansBicyclesMotorDrivenCyclesProhibited", (ArrayList<Double>) Arrays.asList(0.0, 0.750, 0.900, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
-		put("PedestriansBicyclesProhibited", (ArrayList<Double>) Arrays.asList(0.0, 0.750, 0.450, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
-		put("PedestriansProhibited", (ArrayList<Double>) Arrays.asList(0.0, 0.600, 0.300, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
-		put("OneWay", (ArrayList<Double>) Arrays.asList(0.0, 0.900, 0.300, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
-		put("OneWay2", (ArrayList<Double>) Arrays.asList(0.0, 0.450, 0.600, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.600, 0.750));
-		put("DividedHighwayCrossing", (ArrayList<Double>) Arrays.asList(0.0, 0.600, 0.450, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
-		put("NoParking", (ArrayList<Double>) Arrays.asList(0.0, 0.300, 0.450, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
-		put("NoParkingTransitLogo", (ArrayList<Double>) Arrays.asList(0.0, 0.300, 0.750, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
-		put("NoParkingRestrictedParking", (ArrayList<Double>) Arrays.asList(0.0, 0.500, 0.450, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
-		put("TowAwayZone", (ArrayList<Double>) Arrays.asList(0.0, 0.300, 0.150, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
-		put("ThisSideOfSign", (ArrayList<Double>) Arrays.asList(0.0, 0.300, 0.165, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
-		put("NoParkingPavement", (ArrayList<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.900, 1.200, 1.200, 1.500, 0.0, 0.0, 0.0, 0.0));
-		put("NoParkingOnShoulder", (ArrayList<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.900, 1.200, 1.200, 1.500, 0.0, 0.0, 0.0, 0.0));
-		put("NoParking", (ArrayList<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.900, 1.200, 1.200, 1.500, 0.450, 0.600, 0.0, 0.0));
-		put("NoParkingSymbol", (ArrayList<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.900, 0.900, 1.200, 1.200, 0.300, 0.300, 0.0, 0.0));
-		put("EmergencyParking", (ArrayList<Double>) Arrays.asList(0.0, 0.750, 0.600, 0.750, 0.600, 1.200, 0.900, 0.000, 0.000, 0.0, 0.0));
-		put("DoNotStopOnTracks", (ArrayList<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.900, 1.200, 1.200, 1.500, 0.0, 0.0, 0.0, 0.0));
-		put("WalkOnLeft", (ArrayList<Double>) Arrays.asList(0.0, 0.450, 0.600, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
-		put("CrossOnlyAtCrosswalk", (ArrayList<Double>) Arrays.asList(0.0, 0.300, 0.450, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
-		put("PedestriansProhibited2", (ArrayList<Double>) Arrays.asList(0.0, 0.300, 0.450, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
-		put("PedestriansProhibitedSymbol", (ArrayList<Double>) Arrays.asList(0.0, 0.450, 0.450, 0.600, 0.600, 0.750, 0.750, 0.0, 0.0, 0.0, 0.0));
-		put("UseCrosswalk", (ArrayList<Double>) Arrays.asList(0.0, 0.450, 0.300, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
-		put("NoHitchHiking", (ArrayList<Double>) Arrays.asList(0.0, 0.450, 0.600, 0.0, 0.0, 0.0, 0.0, 0.450, 0.450, 0.0, 0.0));
-		put("NoHitchHikingSymbol", (ArrayList<Double>) Arrays.asList(0.0, 0.450, 0.450, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
-		put("BicyclistsUsePedSignal", (ArrayList<Double>) Arrays.asList(0.0, 0.300, 0.450, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
-		put("BicyclistsYieldToPeds", (ArrayList<Double>) Arrays.asList(0.0, 0.400, 0.450, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
-		put("KeepLeftRightToPedestriansBicyclists", (ArrayList<Double>) Arrays.asList(0.0, 0.300, 0.450, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
-		put("PedestrianCrosswalk", (ArrayList<Double>) Arrays.asList(0.0, 0.600, 0.300, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
-		put("SidewalkClosed", (ArrayList<Double>) Arrays.asList(0.0, 0.600, 0.300, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
-		put("SidewalkClosedUseOtherSide", (ArrayList<Double>) Arrays.asList(0.0, 0.600, 0.300, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
-		put("SidewalkClosedAheadCrossHere", (ArrayList<Double>) Arrays.asList(0.0, 0.600, 0.300, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
-		put("PedestrianTrafficSignalSign", (ArrayList<Double>) Arrays.asList(0.0, 0.300, 0.450, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
-		put("PedestrianTrafficSignalSign2", (ArrayList<Double>) Arrays.asList(0.0, 0.225, 0.300, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
-		put("LeftOnGreenArrowOnly", (ArrayList<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.200, 1.500));
-		put("StopHereOnRed", (ArrayList<Double>) Arrays.asList(0.0, 0.600, 0.900, 0.0, 0.0, 0.0, 0.0, 0.600, 0.750, 0.0, 0.0));
-		put("DoNotBlockIntersection", (ArrayList<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
-		put("UseLaneWithGreenArrow", (ArrayList<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.900, 1.050, 0.0, 0.0, 0.0, 0.0, 1.500, 1.800));
-		put("LeftRightTurnSignal", (ArrayList<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.900, 1.050, 0.0, 0.0, 0.0, 0.0, 1.500, 1.800));
-		put("NoTurnOnRed", (ArrayList<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.200, 1.200));
-		put("NoTurnOnRed2", (ArrayList<Double>) Arrays.asList(0.0, 0.600, 0.600, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.750, 0.750));
-		put("LeftTurnYieldOnGreen", (ArrayList<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.000, 0.000));
-		put("EmergencySignal", (ArrayList<Double>) Arrays.asList(0.0, 0.900, 0.600, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.000, 0.000));
-		put("KeepOffMedian", (ArrayList<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.000, 0.000));
-		put("RoadClosed", (ArrayList<Double>) Arrays.asList(0.0, 1.200, 0.750, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.000, 0.000));
-		put("RoadClosedLocalTraffic", (ArrayList<Double>) Arrays.asList(0.0, 1.500, 0.750, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.000, 0.000));
-		put("WeightLimit", (ArrayList<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.900, 1.200));
-		put("WeightLimit2", (ArrayList<Double>) Arrays.asList(0.0, 0.600, 0.900, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
-		put("WeightLimit3", (ArrayList<Double>) Arrays.asList(0.0, 0.750, 0.600, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
-		put("WeightLimit4", (ArrayList<Double>) Arrays.asList(0.0, 0.600, 0.900, 0.900, 1.200, 1.200, 1.500, 0.0, 0.0, 0.0, 0.0));
-		put("WeighStation", (ArrayList<Double>) Arrays.asList(0.0, 1.800, 1.200, 2.400, 1.650, 3.000, 1.100, 0.0, 0.0, 0.0, 0.000));
-		put("TruckRoute", (ArrayList<Double>) Arrays.asList(0.0, 0.600, 0.450, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.000, 0.000));
-		put("HazardousCargo", (ArrayList<Double>) Arrays.asList(0.0, 0.600, 0.600, 0.750, 0.750, 0.900, 0.900, 0.0, 0.0, 1.050, 1.050));
-		put("NationalNetwork", (ArrayList<Double>) Arrays.asList(0.0, 0.600, 0.600, 0.750, 0.750, 0.900, 0.900, 0.0, 0.0, 1.050, 1.050));
-		put("SeatBeltSymbol", (ArrayList<Double>) Arrays.asList(0.0, 0.375, 0.500, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.000, 0.000));
-	}};
-		
+	public final Map<String, List<Double>> SIGN_INFO = new HashMap<String, List<Double>>();
 	
-
+	public SizeConstants() {
+		SIGN_INFO.put("Stop", (List<Double>) Arrays.asList(3.0, .750, .900, .0, .600, 1.200));
+		SIGN_INFO.put("StopLightWidth", (List<Double>) Arrays.asList(3.0, .300, .00, .0, .200, 0.0));
+		SIGN_INFO.put("Stop", (List<Double>) Arrays.asList(3.0, .750, .900, .0, .600, 1.200));
+		SIGN_INFO.put("Yield", (List<Double>) Arrays.asList(1.0, .900, 1.200, 1.500, .750, 0.0));
+		SIGN_INFO.put("4Way", (List<Double>) Arrays.asList(0.0, .300, .150, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("AllWay", (List<Double>) Arrays.asList(0.0, .450, .150, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("SpeedLimit", (List<Double>) Arrays.asList(0.0, .600, .750, 0.900, 1.200, 1.200, 1.500, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("TruckSpeedLimit", (List<Double>) Arrays.asList(0.0, .600, .600, 0.900, 0.900, 1.200, 1.200, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("NightSpeedLimit", (List<Double>) Arrays.asList(0.0, .600, .600, 0.900, 0.900, 1.200, 1.200, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("MinimumSpeedLimit", (List<Double>) Arrays.asList(0.0, .600, .750, 0.900, 1.200, 1.200, 1.500, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("CombinedSpeedLimit", (List<Double>) Arrays.asList(0.0, .600, .1200, 0.900, 1.800, 1.200, 2.400, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("ReducedSpeedAhead", (List<Double>) Arrays.asList(0.0, .600, .750, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("TurnProhibition", (List<Double>) Arrays.asList(0.0, .600, .600, 0.900, 0.900, 0.0, 0.0, 0.0, 0.0, 1.200, 1.200));
+		SIGN_INFO.put("MandatoryMovementLaneControl", (List<Double>) Arrays.asList(0.0, .750, .900, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("MandatoryMovementLaneControl2", (List<Double>) Arrays.asList(0.0, .750, .750, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("OptionalMovementLaneControl", (List<Double>) Arrays.asList(0.0, .750, .900, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+		//Advance Intersection Lane Control has a variable width, so good luck with sizing that
+		//SIGN_INFO.put("AdvanceIntersectionLaneControl", (List<Double>) Arrays.asList(0.0, 1.800, 1.500, 2.400, 1.800, 2.700, 1.100, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("TwoWayLeftTurnOnlyOverhead", (List<Double>) Arrays.asList(0.0, .750, .900, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("TwoWayLeftTurnOnlyGround", (List<Double>) Arrays.asList(0.0, .600, .900, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.900, 1.200));
+		SIGN_INFO.put("ReversibleLaneControl", (List<Double>) Arrays.asList(0.0, 2.700, .900, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("EndReverseLane", (List<Double>) Arrays.asList(0.0, 2.700, 1.200, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("HOV2+LaneAheadGround", (List<Double>) Arrays.asList(0.0, .750, 1.050, 0.900, 1.500, 1.200, 1.100, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("CenterLaneHOV2+OnlyPost", (List<Double>) Arrays.asList(0.0, .750, 1.050, 0.0, 0.0, 1.400, 1.100, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("HOV2+LaneEndsPost", (List<Double>) Arrays.asList(0.0, .750, 1.050, 0.900, 1.500, 1.200, 1.100, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("HOV2+LaneAheadOverhead", (List<Double>) Arrays.asList(0.0, 1.650, 0.900, 2.100, 1.200, 2.550, 1.500, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("HOV2+OnlyOverhead", (List<Double>) Arrays.asList(0.0, 1.800, 1.500, 2.400, 1.800, 2.700, 1.100, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("HOV2+LaneEndsOverhead", (List<Double>) Arrays.asList(0.0, 1.650, 0.900, 2.100, 1.200, 2.550, 1.500, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("BicycleLaneAhead", (List<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("BicycleLaneEnds", (List<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("RightLaneBicycleOnly", (List<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("BicycleLaneWithVehicleParking", (List<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("DoNotPass", (List<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.900, 1.200, 1.200, 1.500, 0.450, 0.600, 0.0, 0.0));
+		SIGN_INFO.put("PassWithCare", (List<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.900, 1.200, 1.200, 1.500, 0.450, 0.600, 0.0, 0.0));
+		SIGN_INFO.put("SlowerTrafficKeepRight", (List<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.900, 1.200, 1.200, 1.500, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("TrucksUseRightLane", (List<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.900, 1.200, 1.200, 1.500, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("TruckLane500Feet", (List<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.900, 1.200, 1.200, 1.500, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("KeepRight", (List<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.900, 1.200, 1.200, 1.500, 0.450, 0.600, 0.0, 0.0));
+		SIGN_INFO.put("KeepLeft", (List<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.900, 1.200, 1.200, 1.500, 0.450, 0.600, 0.0, 0.0));
+		SIGN_INFO.put("DoNotEnter", (List<Double>) Arrays.asList(0.0, 0.750, 0.750, 0.900, 0.900, 1.200, 1.200, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("WrongWay", (List<Double>) Arrays.asList(0.0, 0.900, 0.600, 0.900, 0.600, 1.050, 0.750, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("NoTrucks", (List<Double>) Arrays.asList(0.0, 0.600, 0.600, 0.750, 0.750, 0.900, 0.900, 0.0, 0.0, 1.200, 1.200));
+		SIGN_INFO.put("MotorVehicleProhibition", (List<Double>) Arrays.asList(0.0, 0.600, 0.600, 0.000, 0.000, 0.000, 0.000, 0.0, 0.0, 0.000, 0.000));
+		SIGN_INFO.put("CommercialVehiclesExcluded", (List<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.900, 1.200, 1.200, 1.500, 0.0, 0.0, 0.000, 0.000));
+		SIGN_INFO.put("VehiclesWithLugsProhibited", (List<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.900, 1.200, 1.200, 1.500, 0.0, 0.0, 0.000, 0.000));
+		SIGN_INFO.put("NoBicycles", (List<Double>) Arrays.asList(0.0, 0.600, 0.600, 0.750, 0.750, 0.900, 0.900, 0.0, 0.0, 1.200, 1.200));
+		SIGN_INFO.put("NonmotorizedTrafficProhibited", (List<Double>) Arrays.asList(0.0, 0.750, 0.600, 1.050, 0.600, 1.200, 0.750, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("MotorDrivenCyclesProhibited", (List<Double>) Arrays.asList(0.0, 0.750, 0.600, 1.050, 0.600, 1.200, 0.750, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("PedestriansBicyclesMotorDrivenCyclesProhibited", (List<Double>) Arrays.asList(0.0, 0.750, 0.900, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("PedestriansBicyclesProhibited", (List<Double>) Arrays.asList(0.0, 0.750, 0.450, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("PedestriansProhibited", (List<Double>) Arrays.asList(0.0, 0.600, 0.300, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("OneWay", (List<Double>) Arrays.asList(0.0, 0.900, 0.300, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("OneWay2", (List<Double>) Arrays.asList(0.0, 0.450, 0.600, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.600, 0.750));
+		SIGN_INFO.put("DividedHighwayCrossing", (List<Double>) Arrays.asList(0.0, 0.600, 0.450, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("NoParking", (List<Double>) Arrays.asList(0.0, 0.300, 0.450, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("NoParkingTransitLogo", (List<Double>) Arrays.asList(0.0, 0.300, 0.750, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("NoParkingRestrictedParking", (List<Double>) Arrays.asList(0.0, 0.500, 0.450, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("TowAwayZone", (List<Double>) Arrays.asList(0.0, 0.300, 0.150, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("ThisSideOfSign", (List<Double>) Arrays.asList(0.0, 0.300, 0.165, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("NoParkingPavement", (List<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.900, 1.200, 1.200, 1.500, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("NoParkingOnShoulder", (List<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.900, 1.200, 1.200, 1.500, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("NoParking", (List<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.900, 1.200, 1.200, 1.500, 0.450, 0.600, 0.0, 0.0));
+		SIGN_INFO.put("NoParkingSymbol", (List<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.900, 0.900, 1.200, 1.200, 0.300, 0.300, 0.0, 0.0));
+		SIGN_INFO.put("EmergencyParking", (List<Double>) Arrays.asList(0.0, 0.750, 0.600, 0.750, 0.600, 1.200, 0.900, 0.000, 0.000, 0.0, 0.0));
+		SIGN_INFO.put("DoNotStopOnTracks", (List<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.900, 1.200, 1.200, 1.500, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("WalkOnLeft", (List<Double>) Arrays.asList(0.0, 0.450, 0.600, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("CrossOnlyAtCrosswalk", (List<Double>) Arrays.asList(0.0, 0.300, 0.450, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("PedestriansProhibited2", (List<Double>) Arrays.asList(0.0, 0.300, 0.450, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("PedestriansProhibitedSymbol", (List<Double>) Arrays.asList(0.0, 0.450, 0.450, 0.600, 0.600, 0.750, 0.750, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("UseCrosswalk", (List<Double>) Arrays.asList(0.0, 0.450, 0.300, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("NoHitchHiking", (List<Double>) Arrays.asList(0.0, 0.450, 0.600, 0.0, 0.0, 0.0, 0.0, 0.450, 0.450, 0.0, 0.0));
+		SIGN_INFO.put("NoHitchHikingSymbol", (List<Double>) Arrays.asList(0.0, 0.450, 0.450, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("BicyclistsUsePedSignal", (List<Double>) Arrays.asList(0.0, 0.300, 0.450, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("BicyclistsYieldToPeds", (List<Double>) Arrays.asList(0.0, 0.400, 0.450, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("KeepLeftRightToPedestriansBicyclists", (List<Double>) Arrays.asList(0.0, 0.300, 0.450, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("PedestrianCrosswalk", (List<Double>) Arrays.asList(0.0, 0.600, 0.300, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("SidewalkClosed", (List<Double>) Arrays.asList(0.0, 0.600, 0.300, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("SidewalkClosedUseOtherSide", (List<Double>) Arrays.asList(0.0, 0.600, 0.300, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("SidewalkClosedAheadCrossHere", (List<Double>) Arrays.asList(0.0, 0.600, 0.300, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("PedestrianTrafficSignalSign", (List<Double>) Arrays.asList(0.0, 0.300, 0.450, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("PedestrianTrafficSignalSign2", (List<Double>) Arrays.asList(0.0, 0.225, 0.300, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("LeftOnGreenArrowOnly", (List<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.200, 1.500));
+		SIGN_INFO.put("StopHereOnRed", (List<Double>) Arrays.asList(0.0, 0.600, 0.900, 0.0, 0.0, 0.0, 0.0, 0.600, 0.750, 0.0, 0.0));
+		SIGN_INFO.put("DoNotBlockIntersection", (List<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("UseLaneWithGreenArrow", (List<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.900, 1.050, 0.0, 0.0, 0.0, 0.0, 1.500, 1.800));
+		SIGN_INFO.put("LeftRightTurnSignal", (List<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.900, 1.050, 0.0, 0.0, 0.0, 0.0, 1.500, 1.800));
+		SIGN_INFO.put("NoTurnOnRed", (List<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.200, 1.200));
+		SIGN_INFO.put("NoTurnOnRed2", (List<Double>) Arrays.asList(0.0, 0.600, 0.600, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.750, 0.750));
+		SIGN_INFO.put("LeftTurnYieldOnGreen", (List<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.000, 0.000));
+		SIGN_INFO.put("EmergencySignal", (List<Double>) Arrays.asList(0.0, 0.900, 0.600, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.000, 0.000));
+		SIGN_INFO.put("KeepOffMedian", (List<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.000, 0.000));
+		SIGN_INFO.put("RoadClosed", (List<Double>) Arrays.asList(0.0, 1.200, 0.750, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.000, 0.000));
+		SIGN_INFO.put("RoadClosedLocalTraffic", (List<Double>) Arrays.asList(0.0, 1.500, 0.750, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.000, 0.000));
+		SIGN_INFO.put("WeightLimit", (List<Double>) Arrays.asList(0.0, 0.600, 0.750, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.900, 1.200));
+		SIGN_INFO.put("WeightLimit2", (List<Double>) Arrays.asList(0.0, 0.600, 0.900, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("WeightLimit3", (List<Double>) Arrays.asList(0.0, 0.750, 0.600, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("WeightLimit4", (List<Double>) Arrays.asList(0.0, 0.600, 0.900, 0.900, 1.200, 1.200, 1.500, 0.0, 0.0, 0.0, 0.0));
+		SIGN_INFO.put("WeighStation", (List<Double>) Arrays.asList(0.0, 1.800, 1.200, 2.400, 1.650, 3.000, 1.100, 0.0, 0.0, 0.0, 0.000));
+		SIGN_INFO.put("TruckRoute", (List<Double>) Arrays.asList(0.0, 0.600, 0.450, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.000, 0.000));
+		SIGN_INFO.put("HazardousCargo", (List<Double>) Arrays.asList(0.0, 0.600, 0.600, 0.750, 0.750, 0.900, 0.900, 0.0, 0.0, 1.050, 1.050));
+		SIGN_INFO.put("NationalNetwork", (List<Double>) Arrays.asList(0.0, 0.600, 0.600, 0.750, 0.750, 0.900, 0.900, 0.0, 0.0, 1.050, 1.050));
+		SIGN_INFO.put("SeatBeltSymbol", (List<Double>) Arrays.asList(0.0, 0.375, 0.500, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.000, 0.000));
+	}
 }

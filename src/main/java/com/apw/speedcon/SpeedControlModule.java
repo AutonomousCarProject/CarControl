@@ -24,12 +24,15 @@ public class SpeedControlModule implements Module {
 
     private List<MovingBlob> currentBlobs;
     private ArrayList<MovingBlob> stopObjects;
+    
+    private SizeConstants sizeCons;
 
     public SpeedControlModule() {
         this.pedDetect = new PedestrianDetector();
         this.currentBlobs = new ArrayList<>();
         this.cameraCalibrator = new CameraCalibration();
         this.stopObjects = new ArrayList<>();
+        this.sizeCons = new SizeConstants();
     }
 
     @Override
@@ -176,7 +179,7 @@ public class SpeedControlModule implements Module {
     //Returns the real size of the object to find distance to it
     private double getStopReal(MovingBlob stopBlob)
     {
-        return SizeConstants.SIGN_INFO.get(stopBlob.type).get(1);
+        return sizeCons.SIGN_INFO.get(stopBlob.type).get(1);
     }
 
 
