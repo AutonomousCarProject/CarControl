@@ -18,28 +18,29 @@ import java.util.concurrent.TimeUnit;
 
 public class MrModule extends JFrame implements Runnable, KeyListener {
     private ScheduledExecutorService executorService;
+    private BufferedImage displayImage, bufferImage;
     private ArrayList<Module> modules;
     private CarControl control;
-    private BufferedImage displayImage, bufferImage;
     private ImageIcon displayIcon;
+    private JPanel panel;
 
     // FIXME breaks if dimensions are not 912x480
-    private final int width = 912;
-    private final int height = 480;
+    public volatile static int windowWidth = 912;
+    public volatile static int windowHeight = 480;
+    public volatile static int cameraWidth = 640;
+    public volatile static int cameraHeight = 480;
 
     private MrModule(boolean renderWindow) {
-        if(renderWindow) {
+        if (renderWindow) {
             control = new TrakSimControl();
             headlessInit();
             setupWindow();
-        }
-        else {
+        } else {
             control = null;
             headlessInit();
         }
 
         createModules();
-
     }
 
     private void headlessInit() {
@@ -49,20 +50,21 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     }
 
     private void setupWindow() {
-        displayImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        bufferImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        displayImage = new BufferedImage(windowWidth, windowHeight, BufferedImage.TYPE_INT_RGB);
+        bufferImage = new BufferedImage(windowWidth, windowHeight, BufferedImage.TYPE_INT_RGB);
         displayIcon = new ImageIcon(displayImage);
+        panel = new JPanel();
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(width, height + 25);
+        setSize(windowWidth, windowHeight + 25);
         setResizable(true);
         setVisible(true);
         addKeyListener(this);
-        add(new JLabel(displayIcon));
+        add(panel);
     }
 
     private void createModules() {
-        modules.add(new ImageManagementModule(width, height));
+        modules.add(new ImageManagementModule(windowWidth, windowHeight));
         modules.add(new SpeedControlModule());
         modules.add(new SteeringModule());
 
@@ -71,8 +73,20 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     }
 
     private void update() {
-        if(control instanceof TrakSimControl) {
+        if (control instanceof TrakSimControl) {
             ((TrakSimControl) control).cam.theSim.SimStep(1);
+        }
+        if (getWidth() > 0) {
+            windowWidth = getWidth();
+            //cameraWidth = windowWidth;
+            panel.setSize(windowWidth, windowHeight);
+
+        }
+        if (getHeight() > 0) {
+            windowHeight = getHeight();
+            //cameraHeight = windowHeight;
+
+            panel.setSize(windowWidth, windowHeight);
         }
         control.readCameraImage();
         control.setEdges(getInsets());
@@ -83,15 +97,18 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
 
     @Override
     public void paint(Graphics g) {
-        if(!(control instanceof TrakSimControl)) {
+        if (!(control instanceof TrakSimControl)) {
             return;
         }
 
         super.paint(g);
 
+        System.out.println(windowHeight);
+        g.drawImage(displayImage, 0, 0, windowWidth, windowHeight, null);
+
         int[] renderedImage = ((TrakSimControl) control).getRenderedImage();
 
-        if(renderedImage != null) {
+        if (renderedImage != null) {
             int[] displayPixels = ((DataBufferInt) bufferImage.getRaster().getDataBuffer()).getData();
             System.arraycopy(renderedImage, 0, displayPixels, 0, renderedImage.length);
 
@@ -123,7 +140,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if(!(control instanceof TrakSimControl)) {
+        if (!(control instanceof TrakSimControl)) {
             return;
         }
 
