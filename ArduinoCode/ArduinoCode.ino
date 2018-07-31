@@ -173,7 +173,7 @@ void loop() {
     }
   }
 
-  int temp = 50-millis();
+  int temp = 50-millis()+lastRun;
   if (temp >= 0){
     delayMicroseconds(temp);
   } else {addMessage(0, 0, abs(temp));}
