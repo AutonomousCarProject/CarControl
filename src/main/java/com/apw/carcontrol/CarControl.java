@@ -36,6 +36,11 @@ public interface CarControl {
     void setProcessedImage(byte[] image);
 
     int[] getRGBImage();
+    
+    
+    int getImageWidth();
+    
+    int getImageHeight();
 
     /**
      * Sets the image to be rendered on the screen.

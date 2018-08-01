@@ -1,5 +1,7 @@
 package com.apw.steering;
 
+import com.apw.carcontrol.CarControl;
+
 import com.apw.sbcio.fakefirm.ArduinoIO;
 
 /**
@@ -13,12 +15,22 @@ import com.apw.sbcio.fakefirm.ArduinoIO;
  */
 public class SteeringMk2 extends SteeringBase {
 
+	private int SteerPin;
+	private boolean haveNewPixels = false;
     private boolean leftSideFound = false;
     private boolean rightSideFound = false;
 
-    public SteeringMk2(int cameraWidth, int cameraHeight) {
+    public SteeringMk2(int cameraWidth, int cameraHeight, int screenWidth) {
         this.cameraWidth = cameraWidth;
         this.cameraHeight = cameraHeight;
+        this.screenWidth = screenWidth;
+        origin = new Point(cameraWidth / 2, cameraHeight);
+    }
+
+    public SteeringMk2(CarControl control) {
+        this.cameraWidth = control.getImageWidth();
+        this.cameraHeight = control.getImageHeight();
+        this.screenWidth = this.cameraWidth;
         origin = new Point(cameraWidth / 2, cameraHeight);
     }
 
@@ -38,11 +50,11 @@ public class SteeringMk2 extends SteeringBase {
     /**
      * This gets called every 50ms, writes to the car servos. (drives the car)
      */
-//    public void makeTurnAdjustment(ArduinoIO servos) {
-//        if (haveNewPixels) {
-//            servos.setServoAngle(SteerPin, getDegreeOffset() + 90);
-//        }
-//    }
+    public void makeTurnAdjustment(ArduinoIO servos) {
+        if (haveNewPixels) {
+            servos.setServoAngle(SteerPin, getDegreeOffset() + 90);
+        }
+    }
 
     /**
      * Process the camera image, and fill leftPoints, rightPoints, and midPoints.
@@ -121,8 +133,8 @@ public class SteeringMk2 extends SteeringBase {
      */
     private void averagePoints() {
 
-        startTarget = (int) (midPoints.size() * 0.1);
-        endTarget = (int) (midPoints.size() * 0.9);
+        startTarget = (int) (midPoints.size() * 0.5);
+        endTarget = (int) (midPoints.size() * 0.7);
 
         double ySum = 0;
         double xSum = 0;

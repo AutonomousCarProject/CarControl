@@ -225,8 +225,8 @@ public class SpeedControlModule implements Module {
 		this.calculateEstimatedSpeed(gasAmount);
 		this.calculateDesiredSpeed(steerDegs, manualSpeed);
 		
-		List<MovingBlob> blobs = this.pedDetect.getAllBlobs(control.getProcessedImage(), 912);
-		List<MovingBlob> peds = this.pedDetect.detect(control.getProcessedImage(), 912);
+		List<MovingBlob> blobs = this.pedDetect.getAllBlobs(control.getProcessedImage(), control.getImageWidth());
+		List<MovingBlob> peds = this.pedDetect.detect(control.getProcessedImage(), control.getImageWidth());
 		this.currentBlobs = blobs;
 		this.currentPeds = peds;
 
