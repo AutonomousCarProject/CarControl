@@ -56,7 +56,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     private void headlessInit() {
         executorService = Executors.newSingleThreadScheduledExecutor();
         modules = new ArrayList<>();
-        executorService.scheduleAtFixedRate(this, 0, 1000 / 20, TimeUnit.MILLISECONDS);
+        executorService.scheduleAtFixedRate(this, 0, 1000 / 4, TimeUnit.MILLISECONDS);
     }
     
     private void setupWindow() {
@@ -109,8 +109,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         }
 
         if (renderedImage != null) {
-            int[] displayPixels =
-                ((DataBufferInt) bufferImage.getRaster().getDataBuffer()).getData();
+            int[] displayPixels = ((DataBufferInt) bufferImage.getRaster().getDataBuffer()).getData();
             System.arraycopy(renderedImage, 0, displayPixels, 0, renderedImage.length);
             
             BufferedImage tempImage = displayImage;
