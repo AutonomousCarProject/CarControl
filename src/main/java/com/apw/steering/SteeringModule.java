@@ -48,12 +48,14 @@ public class SteeringModule implements Module {
     @Override
     public void update(CarControl control) {
         angle = steering.drive(control.getRGBImage());
+        System.out.println(angle);
         control.steer(true, angle);
     }
 
 
     @Override
     public void paint(CarControl control, Graphics g) {
+
         double widthMultiplier = (1.0 * control.getWindowWidth() / steering.screenWidth);
         double heightMultiplier = (1.0 * control.getWindowHeight() / steering.cameraHeight);
         int tempDeg = angle;
@@ -139,14 +141,14 @@ public class SteeringModule implements Module {
         if (DriverCons.D_DrawOnSides) {
             g.setColor(Color.yellow);
             for (Point point : steering.leftPoints) {
-                int xL = point.x - 2;
-                int yL = point.y - 2;
-                g.fillRect((int) (xL * widthMultiplier), (int) (yL * heightMultiplier) + 10, 4, 4);
+                int xL = point.x - 4;
+                int yL = point.y - 4;
+                g.fillRect((int) (xL * widthMultiplier), (int) (yL * heightMultiplier) + 10, 8, 8);
             }
             for (Point point : steering.rightPoints) {
-                int xR = point.x - 2;
-                int yR = point.y - 2;
-                g.fillRect((int) (xR * widthMultiplier), (int) (yR * heightMultiplier) + 10, 4, 4);
+                int xR = point.x - 4;
+                int yR = point.y - 4;
+                g.fillRect((int) (xR * widthMultiplier), (int) (yR * heightMultiplier) + 10, 8, 8);
             }
         }
         g.setColor(Color.cyan);

@@ -3,7 +3,7 @@ package com.apw.steering;
 import com.apw.carcontrol.CarControl;
 
 import com.apw.sbcio.fakefirm.ArduinoIO;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.ArrayList;
 
 /**
  * <p>Version 2 of steering. This version improves center detection by adding the
@@ -20,6 +20,8 @@ public class SteeringMk2 extends SteeringBase {
 	private boolean haveNewPixels = false;
     private boolean leftSideFound = false;
     private boolean rightSideFound = false;
+    private ArrayList<Integer> previousHeadings = new ArrayList<>();
+    private int numPrevious = 10;
 
     public SteeringMk2(int cameraWidth, int cameraHeight, int screenWidth) {
         this.cameraWidth = cameraWidth;
@@ -33,6 +35,9 @@ public class SteeringMk2 extends SteeringBase {
         this.cameraHeight = control.getImageHeight();
         this.screenWidth = this.cameraWidth;
         origin = new Point(cameraWidth / 2, cameraHeight);
+        for (int count = 0; count < numPrevious; count ++) {
+            previousHeadings.add(0);
+        }
     }
 
     /**
@@ -45,7 +50,15 @@ public class SteeringMk2 extends SteeringBase {
     public int drive(int pixels[]) {
         findPoints(pixels);
         averagePoints();
-        return getDegreeOffset();
+        int frameDeg = getDegreeOffset();
+        double averageDeg = 0;
+
+        previousHeadings.add(frameDeg);
+        previousHeadings.remove(0);
+        for (Integer deg : previousHeadings) {
+            averageDeg += deg;
+        }
+        return (int)(averageDeg / numPrevious);
     }
 
     /**
