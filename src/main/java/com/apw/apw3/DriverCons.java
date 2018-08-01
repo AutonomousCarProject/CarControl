@@ -31,7 +31,7 @@ public abstract class DriverCons { // TrakSim constant parameters
             D_PrimaryViewOn = true,    // T: make the main window open up
             D_LiveCam = false,       // F: omit connecting to FlyCamera
             D_StartLive = false,    // T: start in live camera if possible
-            D_FixedSpeed = true,    // ignore speed control, assume fMinSpeed
+            D_FixedSpeed = false,    // ignore speed control, assume fMinSpeed
             D_StayInTrack = false,   // ignore steering control, stay centered in track
             D_ShoTrkTstPts = false, // T: show test points used to calc StayInTrack
             D_ShoClikGrid = true,  // T: to see where to click to steer/accelerate
@@ -52,7 +52,7 @@ public abstract class DriverCons { // TrakSim constant parameters
             D_RampA = 140,     // Initial orient'n for car, c-wise degrees from north
             D_Zoom35 = 35,     // 35mm-equivalent focal length for "camera"
             D_BayTile = 1,     // Bayer8 tiling code (RG/GB) as defined by Pt.Grey
-            D_FrameTime = 100, // =5/fps, nominal frame rate for camera (must >= 20ms)
+            D_FrameTime = 50, // =5/fps, nominal frame rate for camera (must >= 20ms)
             D_nServoTests = 0, // number of times to run through test (1: no ESC)
             D_ServoMsgPos = 200 * 0x10000 + 0, // position of warning in image file,
             D_ServoMsgTL = 40 * 0x10001, D_ServoMsgSiz = 40 * 0x10000 + 80, // posn on screen

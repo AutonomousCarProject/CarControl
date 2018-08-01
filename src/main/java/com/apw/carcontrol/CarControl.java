@@ -129,6 +129,16 @@ public interface CarControl {
      * @see com.apw.apw3.TrakSim#RectFill(int, int, int, int, int)
      */
     void rectFill(int colo, int rx, int cx, int rz, int c);
+    
+    /**
+     * Draws a line that you could totally do on your own if you actually used traksim
+     * @param color
+     * @param rx
+     * @param cx
+     * @param rz
+     * @param cz
+     */
+    void drawLine(int color, int rx, int cx, int rz, int cz);
 
     /**
      * Registers a key event.

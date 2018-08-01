@@ -190,6 +190,11 @@ public class TrakSimControl implements CarControl {
     public void rectFill(int colo, int rx, int cx, int rz, int c) {
         cam.theSim.RectFill(colo, rx, cx, rz, c);
     }
+    
+    @Override
+    public void drawLine(int colo, int rx, int cx, int rz, int cz) {
+    	cam.theSim.DrawLine(colo, rx, cx, rz, cz);
+    }
 
     @Override
     public void addKeyEvent(int keyCode, Runnable action) {

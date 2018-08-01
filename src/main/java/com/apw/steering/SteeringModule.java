@@ -122,7 +122,7 @@ public class SteeringModule extends SteeringBase implements Module {
                     g.setColor(Color.BLUE);
                 }
             }
-            System.out.println(tempY / (1.0 * (endTarget - startTarget)));
+            //System.out.println(tempY / (1.0 * (endTarget - startTarget)));
         }
 
         if (DriverCons.D_DrawOnSides) {
