@@ -68,6 +68,33 @@ void sendMessage(){
 void loop() {
   lastRun = micros();
 
+  //Read rise of signal
+  if (sinceNoKill == 0 && digitalRead(2) == HIGH){
+    sinceNoKill = micros();
+  }
+
+  //Read fall of signal
+  if (sinceNoKill != 0 && digitalRead(2) == LOW){
+    lastNoKill = micros();
+    if (!kill && micros()-sinceNoKill < 1550){ //Check difference to find duration of input
+      kill = true;
+      //Send message to computer
+      addMessage(4, 0, 3);
+      sendMessage();
+    }
+    if (kill && micros()-sinceNoKill > 1650){ //Start up if un-killed
+      kill = false;
+      addMessage(3, 0, 1);
+    }
+    sinceNoKill = 0;
+  }
+
+  if (micros()-lastNoKill > timeout){
+    kill = true;
+    addMessage(4, 0, 4);
+    sendMessage();
+  }
+  
   //Grab info from buffer
   if (Serial.available() > 0){
     digitalWrite(13, LOW);
@@ -76,7 +103,7 @@ void loop() {
     value = Serial.read();
     sinceConnect = micros();
 
-    if (!kill && pin == 9){
+    if (pin == 9){
       if (value != steeringDeg){
         //steerDelay = 1.0+((double) value)/180;
         steerDelay = map(value, 0, 180, 1000, 2000);
@@ -84,7 +111,7 @@ void loop() {
       steeringDeg = value;
     }
     
-    if (!kill && pin == 10){
+    if (pin == 10){
       if (value != wheelSpeed){
         //wheelDelay = 1.0+((double) value)/180;
         wheelDelay = map(value, 0, 180, 1000, 2000);
@@ -94,8 +121,6 @@ void loop() {
   
     if (kill && type == 0xFF) { //Restart if a startup signal is recieved
       sinceConnect = micros();
-      wheelDelay = 1500;
-      steerDelay = 1500;
       kill = false;
       timedout = false;
       addMessage(3, 0, 0);

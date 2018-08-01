@@ -14,6 +14,7 @@
  * This version has been edited to work specifically with the associated Arduino program.
  * The changes are to the protocol and the used functions,
  * mainly removal of unused functions and variables.
+ * Current protocol doesn't have a catch for missed bytes.
  *
  * @author Firmata
  * @author Tom
