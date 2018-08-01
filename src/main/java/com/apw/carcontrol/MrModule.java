@@ -83,6 +83,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
 
         control.readCameraImage();
         control.setEdges(getInsets());
+        control.updateWindowDims(getWidth(), getHeight());
         for (Module module : modules) {
             module.update(control);
         }
