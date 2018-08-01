@@ -1,3 +1,4 @@
+
 /**
  * This class contains functions to apply filters and convert images
  * between bayer8 and rgb formats. Functions in this class are only

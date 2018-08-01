@@ -31,7 +31,6 @@ public abstract class SteeringBase implements Steerable {
     public Point[] pathTraveled;
     private List<Double> posLog = new ArrayList<>(); // Array list for logging positions fed into it
 
-
     @Override
     public double curveSteepness(double turnAngle) {
         return Math.abs(turnAngle) / (45);

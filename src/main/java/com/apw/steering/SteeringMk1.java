@@ -19,7 +19,6 @@ public class SteeringMk1 extends SteeringBase {
 
     private final int heightOfArea = 32; // How high the car looks for lines
     private final int startingHeight = 272; // how high the car starts looking for lines
-
     private int startingPoint = 0; // Where the car starts looking for lines on either side.
     private Point[] leadingMidPoints = new Point[startingHeight + heightOfArea];
     private Point[] pointsAhead = new Point[startingHeight - (cameraHeight / 2)]; //points far ahead
@@ -143,7 +142,7 @@ public class SteeringMk1 extends SteeringBase {
                     break;
                 }
             }
-
+          
             if(weightLane && midPoints != null){
                 averageMidpoints();
                 checkPointsAhead(pixels);
@@ -217,7 +216,6 @@ public class SteeringMk1 extends SteeringBase {
         //Next, calculate the roadpoint
 
         int count = 0;
-
         for (int i = startingHeight; i > cameraHeight / 2; i--) {
             for (int j = roadMiddle / 2; j >= 0; j--) {
                 if (pixels[cameraWidth * i + j] == 16777215) {
@@ -269,8 +267,6 @@ public class SteeringMk1 extends SteeringBase {
             else turnRightAhead = false;
         } else turnAhead = false;
     }
-
-
 
     /**
      * Average the midpoints, and assign the average to steerPoint.

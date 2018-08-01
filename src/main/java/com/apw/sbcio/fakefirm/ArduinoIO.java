@@ -14,6 +14,7 @@
  * This version has been edited to work specifically with the associated Arduino program.
  * The changes are to the protocol and the used functions,
  * mainly removal of unused functions and variables.
+ * Current protocol doesn't have a catch for missed bytes.
  *
  * @author Firmata
  * @author Tom
@@ -34,7 +35,7 @@ import jssc.SerialPortException;
 
 public class ArduinoIO implements PWMController { // Adapted to Java from arduino.cs ... (FakeFirmata)
   // (subclass this to add input capability)
-  public static final boolean UseServos = false;
+  public static final boolean UseServos = true;
 
   public static final String CommPortNo = "COM3";
   public static final int MAX_DATA_BYTES = 16, // =64 in LattePanda's Arduino.cs

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SpeedControlModule implements Module {
+
   
 	private double currentEstimatedSpeed;
 	private double desiredSpeed;
