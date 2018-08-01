@@ -9,18 +9,21 @@ import java.awt.*;
 import java.util.HashMap;
 
 public class TrakSimControl implements CarControl {
-    private final int SteerPin, GasPin;
-    private final double LefScaleSt, RitScaleSt;
-    protected SimCamera cam;
     protected HashMap<Integer, Runnable> keyBindings;
     private PWMController driveSys;
+    protected SimCamera cam;
     private Insets edges;
+
     private byte[] cameraImage = null;
     private byte[] processedImage = null;
     private int[] renderedImage = null;
     private int currentSteering = 0;
     private int currentVelocity = 0;
     private int currentManualSpeed = 0;
+    private int windowWidth, windowHeight;
+
+    private final double LefScaleSt, RitScaleSt;
+    private final int SteerPin, GasPin;
 
     public TrakSimControl(PWMController drivesys) {
         cam = new SimCamera();
@@ -199,6 +202,22 @@ public class TrakSimControl implements CarControl {
     @Override
     public void addKeyEvent(int keyCode, Runnable action) {
         keyBindings.put(keyCode, action);
+    }
+
+    @Override
+    public void updateWindowDims(int width, int height) {
+        windowWidth = width;
+        windowHeight = height;
+    }
+
+    @Override
+    public int getWindowHeight() {
+        return windowHeight;
+    }
+
+    @Override
+    public int getWindowWidth() {
+        return windowWidth;
     }
 
 }

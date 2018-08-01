@@ -146,4 +146,24 @@ public interface CarControl {
      * @param action The action to trigger when the key is pressed.
      */
     void addKeyEvent(int keyCode, Runnable action);
+
+    /**
+     * Updates the window width and height to the provided values, should only be called from
+     * MrModule.
+     * @param width The new window width.
+     * @param height The new window height.
+     */
+    void updateWindowDims(int width, int height);
+
+    /**
+     * Returns the height of the JFrame created in MrModule.
+     * @return Window height.
+     */
+    int getWindowHeight();
+
+    /**
+     * Returns the width of the JFrame created in MrModule
+     * @return window width.
+     */
+    int getWindowWidth();
 }
