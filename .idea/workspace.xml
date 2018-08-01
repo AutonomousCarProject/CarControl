@@ -2,20 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bca2f92c-07c8-4908-accd-152efe473806" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/apw/gpu/ImageProcessing.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/apw/imagemanagement/SimpleThresholds.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/apw3/DriverCons.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/apw3/DriverCons.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/carcontrol/CarControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/carcontrol/CarControl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/carcontrol/MrModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/carcontrol/MrModule.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/carcontrol/TrakSimControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/carcontrol/TrakSimControl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/fly2cam/FlyCamera.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/fly2cam/FlyCamera.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/imagemanagement/ImageManagementModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/imagemanagement/ImageManagementModule.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/imagemanagement/ImageManipulator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/imagemanagement/ImageManipulator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/speedcon/SpeedControlModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/speedcon/SpeedControlModule.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/steering/SteeringBase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/steering/SteeringBase.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/steering/SteeringMk1.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/steering/SteeringMk1.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/steering/SteeringMk2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/steering/SteeringMk2.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/steering/SteeringModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/steering/SteeringModule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/gpu/GPUImageModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/gpu/GPUImageModule.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/gpu/target/" />
@@ -65,6 +54,7 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
+          <entry key="gitignore" value="1" />
           <entry key="gradle" value="1" />
           <entry key="java" value="81" />
           <entry key="yml" value="1" />
@@ -72,6 +62,7 @@
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
+          <entry key="Git file" value="1" />
           <entry key="Groovy" value="1" />
           <entry key="JAVA" value="81" />
           <entry key="YAML" value="1" />
@@ -81,14 +72,14 @@
         <counts>
           <entry key="dummy" value="9" />
           <entry key="gradle" value="102" />
-          <entry key="java" value="4397" />
+          <entry key="java" value="4398" />
           <entry key="yml" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="Groovy" value="102" />
-          <entry key="JAVA" value="4397" />
+          <entry key="JAVA" value="4398" />
           <entry key="PLAIN_TEXT" value="9" />
           <entry key="YAML" value="1" />
         </counts>
@@ -102,17 +93,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="353">
               <caret line="36" selection-start-line="36" selection-end-line="36" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/fly2cam/FlyCamera.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-7">
-              <folding>
-                <element signature="e#0#6437#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -132,11 +112,22 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/gpu/GPUImageModule.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="444">
-              <caret line="155" column="54" lean-forward="true" selection-start-line="155" selection-start-column="54" selection-end-line="155" selection-end-column="54" />
+            <state relative-caret-position="228">
+              <caret line="61" lean-forward="true" selection-start-line="61" selection-end-line="61" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#2873#2874#0" expanded="true" />
+                <element signature="e#2894#2895#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="3456">
+              <caret line="144" lean-forward="true" selection-start-line="144" selection-end-line="144" />
             </state>
           </provider>
         </entry>
@@ -640,7 +631,6 @@
         <option value="$PROJECT_DIR$/src/main/java/com/apw/gpu/LineSlopeKernel.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/gpu/KernelType.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/gpu/KernelManager.java" />
-        <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/src/test/java/com/apw/ImageManagement/ImageManipulatorTest.groovy" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/apw3/HandyOps.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/pedestrians/blobdetect/PrimitiveBlobDetection.java" />
@@ -687,6 +677,7 @@
         <option value="$PROJECT_DIR$/src/main/java/com/apw/steering/SteeringBase.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/speedcon/SpeedController.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/carcontrol/MrModule.java" />
+        <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/src/main/java/com/apw/gpu/GPUImageModule.java" />
       </list>
     </option>
@@ -1006,7 +997,7 @@
     <property name="Downloaded.Files.Path.Enabled" value="false" />
     <property name="Repository.Attach.JavaDocs" value="false" />
     <property name="Repository.Attach.Sources" value="false" />
-    <property name="SearchEverywhereHistoryKey" value="gradle&#9;FILE&#9;file://C:/JavaProjects/ACPW/CarControl/build.gradle&#10;travis&#9;FILE&#9;file://C:/JavaProjects/ACPW/CarControl/.travis.yml&#10;servowr&#9;PSI&#9;JAVA://com.apw.fakefirm.Arduino#servoWrite&#10;axlr8&#9;PSI&#9;JAVA://com.apw.drivedemo.DrDemo#AxLR8&#10;xlr8&#9;PSI&#9;JAVA://com.apw.drivedemo.DriveTest#AxLR8&#10;setservo&#9;PSI&#9;JAVA://com.apw.apw3.TrakSim#SetServo&#10;build.gradle&#9;FILE&#9;file://C:/JavaProjects/ACPW/CarControl/build.gradle&#10;ignore&#9;FILE&#9;file://C:/JavaProjects/ACPW/CarControl/.gitignore&#10;mave&#9;ACTION&#9;ActivateMavenProjectsToolWindow&#10;maven&#9;ACTION&#9;ActivateMavenProjectsToolWindow&#10;mav&#9;ACTION&#9;ActivateMavenProjectsToolWindow" />
+    <property name="SearchEverywhereHistoryKey" value="gitignore&#9;FILE&#9;file://C:/JavaProjects/ACPW/CarControl/.gitignore&#10;gradle&#9;FILE&#9;file://C:/JavaProjects/ACPW/CarControl/build.gradle&#10;travis&#9;FILE&#9;file://C:/JavaProjects/ACPW/CarControl/.travis.yml&#10;servowr&#9;PSI&#9;JAVA://com.apw.fakefirm.Arduino#servoWrite&#10;axlr8&#9;PSI&#9;JAVA://com.apw.drivedemo.DrDemo#AxLR8&#10;xlr8&#9;PSI&#9;JAVA://com.apw.drivedemo.DriveTest#AxLR8&#10;setservo&#9;PSI&#9;JAVA://com.apw.apw3.TrakSim#SetServo&#10;build.gradle&#9;FILE&#9;file://C:/JavaProjects/ACPW/CarControl/build.gradle&#10;ignore&#9;FILE&#9;file://C:/JavaProjects/ACPW/CarControl/.gitignore&#10;mave&#9;ACTION&#9;ActivateMavenProjectsToolWindow&#10;maven&#9;ACTION&#9;ActivateMavenProjectsToolWindow&#10;mav&#9;ACTION&#9;ActivateMavenProjectsToolWindow" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="add_unversioned_files" value="$PROJECT_DIR$/src/test/java/com/apw/ImageManagement/ImageManipulatorTest.groovy" />
     <property name="aspect.path.notification.shown" value="true" />
@@ -1369,7 +1360,6 @@
     <option name="LAST_COMMIT_MESSAGE" value="Add .imls for consistency&#10;&#10;See .gitignore for details" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/TrackImg.indx" />
     <entry file="file://$PROJECT_DIR$/TrackImg.tiff">
       <provider selected="true" editor-type-id="images" />
     </entry>
@@ -1378,13 +1368,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/TrakSim.iml" />
     <entry file="file://$PROJECT_DIR$/src/Backup" />
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="226">
-          <caret line="148" lean-forward="true" selection-start-line="148" selection-end-line="148" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/.gradle/wrapper/dists/gradle-4.9-all/491wbe0x5d54n9cojs2p0zv90/gradle-4.9/src/core-api/org/gradle/api/artifacts/dsl/RepositoryHandler.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="297">
@@ -1639,12 +1622,30 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/fly2cam/FlyCamera.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-7">
+          <folding>
+            <element signature="e#0#6437#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3456">
+          <caret line="144" lean-forward="true" selection-start-line="144" selection-end-line="144" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/gpu/GPUImageModule.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="444">
-          <caret line="155" column="54" lean-forward="true" selection-start-line="155" selection-start-column="54" selection-end-line="155" selection-end-column="54" />
+        <state relative-caret-position="228">
+          <caret line="61" lean-forward="true" selection-start-line="61" selection-end-line="61" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#2873#2874#0" expanded="true" />
+            <element signature="e#2894#2895#0" expanded="true" />
           </folding>
         </state>
       </provider>

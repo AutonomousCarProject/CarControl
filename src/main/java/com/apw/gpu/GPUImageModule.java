@@ -69,15 +69,13 @@ public class GPUImageModule implements Module {
   }
 
   public byte[] getMonochrome2Raster(byte[] pixels) {
-    ImageManipulator.convertToMonochrome2Raster(pixels, mono, height, width);
+
     return mono;
   }
 
   public byte[] getBlackWhiteRaster(byte[] pixels) {
 
-    ImageManipulator.convertToBlackWhiteRaster(pixels, mono, height, width);
     return mono;
-
   }
 
   /*Serves color raster encoded in 1D of values 0-5 with
@@ -90,46 +88,30 @@ public class GPUImageModule implements Module {
    */
   public byte[] getSimpleColorRaster(byte[] pixels) {
 
-    ImageManipulator.convertToSimpleColorRaster(pixels, simple, height, width);
     return simple;
-
-
   }
 
   public int[] getRGBRaster(byte[] pixels) {
 
-    ImageManipulator.convertToRGBRaster(pixels, rgb, height, width);
     return rgb;
-
   }
 
   public int[] getSimpleRGBRaster(byte[] pixels) {
 
-    ImageManipulator.convertToSimpleColorRaster(pixels, simple, height, width);
-    ImageManipulator.convertSimpleToRGB(simple, rgb, simple.length);
     return rgb;
-
   }
 
   public int[] getBWRGBRaster(byte[] pixels) {
 
-    ImageManipulator.convertToBlackWhiteRaster(pixels, mono, height, width);
-    ImageManipulator.convertBWToRGB(mono, rgb, mono.length);
     return rgb;
-
   }
 
   public int[] getMonoRGBRaster(byte[] pixels) {
 
-    ImageManipulator.convertToMonochromeRaster(pixels, mono, height, width);
-    ImageManipulator.convertMonotoRGB(mono, rgb, mono.length);
     return rgb;
-
   }
 
   public int[] getMonoRGB2Raster(byte[] pixels) {
-    ImageManipulator.convertToMonochromeRaster(pixels, mono, height, width);
-    ImageManipulator.convertMonotoRGB(mono, rgb, mono.length);
     return rgb;
   }
 
