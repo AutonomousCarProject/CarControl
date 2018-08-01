@@ -3,6 +3,7 @@ package com.apw.carcontrol;
 import com.apw.apw3.DriverCons;
 import com.apw.apw3.MyMath;
 import com.apw.apw3.SimCamera;
+import com.apw.apw3.SimCameraRGB;
 import com.apw.sbcio.PWMController;
 
 import java.awt.*;
@@ -11,7 +12,7 @@ import java.util.HashMap;
 public class TrakSimControl implements CarControl {
     private final int SteerPin, GasPin;
     private final double LefScaleSt, RitScaleSt;
-    protected SimCamera cam;
+    protected SimCameraRGB cam;
     protected HashMap<Integer, Runnable> keyBindings;
     private PWMController driveSys;
     private Insets edges;
@@ -23,7 +24,7 @@ public class TrakSimControl implements CarControl {
     private int currentManualSpeed = 0;
 
     public TrakSimControl(PWMController drivesys) {
-        cam = new SimCamera();
+        cam = new SimCameraRGB();
         cam.Connect(4); // 30 FPS
 
         SteerPin = DriverCons.D_SteerServo;

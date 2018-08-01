@@ -283,6 +283,7 @@ public class ImageManipulator {
 	 * @param tile tiling pattern of the bayer8 image
 	 */
 	public static void convertToRGBRaster(byte[] bayer, int[] rgb, int nrows, int ncols, byte tile) {
+		System.out.println(tile);
 		for (int r = 0; r < nrows; r++) {
 			for (int c = 0; c < ncols; c++) {
 				int R = (bayer[getPos(c,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);
@@ -384,6 +385,25 @@ public class ImageManipulator {
 					output[row*ncols + col] = 0x000000;
 				}
 			}
+		}
+	}
+
+	public static void byteRGB(byte[] bayer, byte[] rgb, int ncols, int nrows, byte tile){
+    	//System.out.println(ncols+", "+nrows);
+
+    	for(int r = 0; r<nrows;r++){
+    		for(int c = 0; c<ncols;c++){
+				(rgb[getPos(c,r,combineTile((byte)0,(byte)4),ncols,nrows)])=(bayer[getPos(c,r,combineTile((byte)0,tile),ncols,nrows)]);
+				(rgb[getPos(c,r,combineTile((byte)1,(byte)4),ncols,nrows)])=(bayer[getPos(c,r,combineTile((byte)1,tile),ncols,nrows)]);
+				(rgb[getPos(c,r,combineTile((byte)3,(byte)4),ncols,nrows)])=(bayer[getPos(c,r,combineTile((byte)3,tile),ncols,nrows)]);
+				//System.out.println(getPos(c,r,combineTile((byte)0,(byte)4),ncols,nrows)+", "+getPos(c,r,combineTile((byte)1,(byte)4),ncols,nrows)+", "+getPos(c,r,combineTile((byte)3,(byte)4),ncols,nrows));
+				//System.out.println(getPos(c,r,combineTile((byte)0,tile),ncols,nrows)+", "+getPos(c,r,combineTile((byte)1,tile),ncols,nrows)+", "+getPos(c,r,combineTile((byte)3,tile),ncols,nrows));
+				//System.out.println();
+			}
+			//System.out.println(getPos(ncols-1,r-1,combineTile((byte)0,tile),ncols,nrows)+", "+getPos(ncols-1,r-1,combineTile((byte)1,tile),ncols,nrows)+", "+getPos(ncols-1,r-1,combineTile((byte)3,tile),ncols,nrows));
+			//System.out.println(getPos(0,r,combineTile((byte)0,tile),ncols,nrows)+", "+getPos(0,r,combineTile((byte)1,tile),ncols,nrows)+", "+getPos(0,r,combineTile((byte)3,tile),ncols,nrows));
+
+			//System.out.println(getPos(0,r,combineTile((byte)0,(byte)4),ncols,nrows)+", "+getPos(0,r,combineTile((byte)1,(byte)4),ncols,nrows)+", "+getPos(0,r,combineTile((byte)3,(byte)4),ncols,nrows));
 		}
 	}
  
