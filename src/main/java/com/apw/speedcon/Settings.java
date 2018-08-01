@@ -9,5 +9,6 @@ public class Settings {
     writeSpeedToConsole = Constants.DEFAULT_WRITE_SPEED_TO_CONSOLE;
 
     public static int
-    colorMode = Constants.DEFAULT_COLOR_MODE;
+    colorMode = Constants.DEFAULT_COLOR_MODE,
+    numColorModes = Constants.NUM_COLOR_MODES;
 }

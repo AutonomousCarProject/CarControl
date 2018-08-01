@@ -63,7 +63,7 @@ public class Constants {
 	BLOBVERLAY_COLORMODE_AGE_4_COLOR = 0x333333,	//Color of the older blobs in overlay
 	BLOBVERLAY_COLORMODE_AGE_3_COLOR = 0x666666,	//Color of the middle-aged blobs in overlay
 	BLOBVERLAY_COLORMODE_AGE_2_COLOR = 0x999999,	//Color of the teenage blobs in overlay
-	LOBVERLAY_COLORMODE_AGE_1_COLOR = 0xcccccc,	//Color of the child blobs in overlay
+	BLOBVERLAY_COLORMODE_AGE_1_COLOR = 0xcccccc,	//Color of the child blobs in overlay
 	BLOBVERLAY_COLORMODE_AGE_0_COLOR = 0xffffff,	//Color of the newborn blobs in overlay
 	BLOBVERLAY_COLORMODE_COLOR_BLACK = 0x000000,	//Black hexvalue
 	BLOBVERLAY_COLORMODE_COLOR_GRAY  = 0xd3d3d3,	//Gray hexvalue

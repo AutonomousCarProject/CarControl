@@ -81,16 +81,11 @@ public class SpeedControlModule implements Module {
 		}
 		
 		PedestrianDetector pedDetect = new PedestrianDetector();
-		// TODO get rid of hardcoded values
-		final int width = 912;
-		final int height = 480;
-		int vEdit = (height - 480) / 2 - 25;
-		byte[] limitArray = new byte[640 * 480];
-		ImageManipulator.limitTo(limitArray, control.getProcessedImage(), width, height, 640, 480, false);
-		List<MovingBlob> blobs = pedDetect.getAllBlobs(limitArray, 640);
-		List<MovingBlob> peds = pedDetect.detect(limitArray, 640);
 		
-		
+		byte[] limitArray = new byte[Constants.SCREEN_FILTERED_WIDTH * Constants.SCREEN_HEIGHT];
+		ImageManipulator.limitTo(limitArray, control.getProcessedImage(), Constants.SCREEN_FILTERED_WIDTH, Constants.SCREEN_HEIGHT, Constants.SCREEN_FILTERED_WIDTH, Constants.SCREEN_HEIGHT, false);
+		List<MovingBlob> blobs = pedDetect.getAllBlobs(limitArray, Constants.SCREEN_FILTERED_WIDTH);
+		List<MovingBlob> peds = pedDetect.detect(limitArray, Constants.SCREEN_FILTERED_WIDTH);
 		
 		if(Settings.overlayOn){
 			//Draw our stoplight hitbox in constant designated color
@@ -195,17 +190,12 @@ public class SpeedControlModule implements Module {
 				else if (i.color.getColor() == com.apw.pedestrians.image.Color.BLUE) {
 					g.setColor(java.awt.Color.BLUE);
 				}
-				g.drawRect(i.x + 8, i.y + 40 + vEdit, i.width, i.height);
-				
-				
-				
-				
-				
+				g.drawRect(i.x + 8, i.y + 40 - 25, i.width, i.height);
 			}
 		}
 		for(MovingBlob i : peds) {
 			g.setColor(java.awt.Color.MAGENTA);
-			g.drawRect(i.x + 8, i.y + 40 + vEdit, i.width, i.height);
+			g.drawRect(i.x + 8, i.y + 40 - 25, i.width, i.height);
 		}
 		
 	}
@@ -470,8 +460,8 @@ public class SpeedControlModule implements Module {
 		int lightColor = 0;
 		
 		if (blob.age >= Constants.BLOB_AGE &&
-			blob.height >= (1) + Constants.BLOB_MIN_HEIGHT &&
-			blob.height <= (1) + Constants.BLOB_MAX_HEIGHT &&
+			blob.height >= (2) + Constants.BLOB_MIN_HEIGHT &&
+			blob.height <= (2) + Constants.BLOB_MAX_HEIGHT &&
 			blob.width >= Constants.BLOB_MIN_WIDTH &&
 			blob.width <= Constants.BLOB_MAX_WIDTH &&
 			blob.x >= Constants.STOPLIGHT_MIN_X &&
