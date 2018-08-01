@@ -165,7 +165,7 @@ public class TrakSimControl implements CarControl {
     }
 
     @Override
-    public int getGas() {
+    public int getVelocity() {
         return currentVelocity;
     }
 
@@ -202,6 +202,11 @@ public class TrakSimControl implements CarControl {
     @Override
     public void addKeyEvent(int keyCode, Runnable action) {
         keyBindings.put(keyCode, action);
+    }
+    
+    @Override
+    public byte getTile() {
+    	return (byte) (cam.PixTile()-1);
     }
 
     @Override

@@ -2,9 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bca2f92c-07c8-4908-accd-152efe473806" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/apw/gpu/GPUImageModule.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/gpu/ImageProcessing.java" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/apw/gpu/ImageProcessing.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/apw/imagemanagement/SimpleThresholds.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/apw3/DriverCons.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/apw3/DriverCons.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/carcontrol/CarControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/carcontrol/CarControl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/carcontrol/MrModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/carcontrol/MrModule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/carcontrol/TrakSimControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/carcontrol/TrakSimControl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/fly2cam/FlyCamera.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/fly2cam/FlyCamera.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/imagemanagement/ImageManagementModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/imagemanagement/ImageManagementModule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/imagemanagement/ImageManipulator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/imagemanagement/ImageManipulator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/speedcon/SpeedControlModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/speedcon/SpeedControlModule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/steering/SteeringBase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/steering/SteeringBase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/steering/SteeringMk1.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/steering/SteeringMk1.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/steering/SteeringMk2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/steering/SteeringMk2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/apw/steering/SteeringModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/apw/steering/SteeringModule.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/gpu/target/" />
@@ -89,8 +100,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/steering/SteeringModule.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-7">
-              <caret line="21" selection-start-line="21" selection-end-line="21" />
+            <state relative-caret-position="353">
+              <caret line="36" selection-start-line="36" selection-end-line="36" />
             </state>
           </provider>
         </entry>
@@ -121,8 +132,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/gpu/GPUImageModule.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="228">
-              <caret line="57" lean-forward="true" selection-start-line="57" selection-end-line="57" />
+            <state relative-caret-position="444">
+              <caret line="155" column="54" lean-forward="true" selection-start-line="155" selection-start-column="54" selection-end-line="155" selection-end-column="54" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -165,7 +176,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/imagemanagement/ImageManagementModule.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="396">
-              <caret line="136" column="21" selection-end-line="149" />
+              <caret line="166" column="21" selection-end-line="179" />
             </state>
           </provider>
         </entry>
@@ -185,8 +196,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/imagemanagement/ImageManipulator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2712">
-              <caret line="113" column="45" lean-forward="true" selection-start-line="113" selection-start-column="45" selection-end-line="113" selection-end-column="45" />
+            <state relative-caret-position="5016">
+              <caret line="209" column="45" lean-forward="true" selection-start-line="209" selection-start-column="45" selection-end-line="209" selection-end-column="45" />
             </state>
           </provider>
         </entry>
@@ -1585,15 +1596,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/steering/SteeringModule.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-7">
-          <caret line="21" selection-start-line="21" selection-end-line="21" />
+        <state relative-caret-position="353">
+          <caret line="36" selection-start-line="36" selection-end-line="36" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/imagemanagement/ImageManipulator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2712">
-          <caret line="113" column="45" lean-forward="true" selection-start-line="113" selection-start-column="45" selection-end-line="113" selection-end-column="45" />
+        <state relative-caret-position="5016">
+          <caret line="209" column="45" lean-forward="true" selection-start-line="209" selection-start-column="45" selection-end-line="209" selection-end-column="45" />
         </state>
       </provider>
     </entry>
@@ -1617,7 +1628,7 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/imagemanagement/ImageManagementModule.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="396">
-          <caret line="136" column="21" selection-end-line="149" />
+          <caret line="166" column="21" selection-end-line="179" />
         </state>
       </provider>
     </entry>
@@ -1630,8 +1641,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/apw/gpu/GPUImageModule.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="57" lean-forward="true" selection-start-line="57" selection-end-line="57" />
+        <state relative-caret-position="444">
+          <caret line="155" column="54" lean-forward="true" selection-start-line="155" selection-start-column="54" selection-end-line="155" selection-end-column="54" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

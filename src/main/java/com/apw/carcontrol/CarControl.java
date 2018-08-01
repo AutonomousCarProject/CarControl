@@ -88,7 +88,7 @@ public interface CarControl {
      * @return The curremt gas/velocity value.
      * @see #accelerate(boolean, int)
      */
-    int getGas();
+    int getVelocity();
 
     /**
      * Gets the current steering angle of the car
@@ -146,6 +146,8 @@ public interface CarControl {
      * @param action The action to trigger when the key is pressed.
      */
     void addKeyEvent(int keyCode, Runnable action);
+
+    byte getTile();
 
     /**
      * Updates the window width and height to the provided values, should only be called from
