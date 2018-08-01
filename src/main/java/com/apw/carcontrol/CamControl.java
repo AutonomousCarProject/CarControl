@@ -184,11 +184,6 @@ public class CamControl implements CarControl {
     }
 
     @Override
-    public int getGas() {
-        return currentVelocity;
-    }
-
-    @Override
     public int getSteering() {
         return currentSteering;
     }
@@ -218,6 +213,40 @@ public class CamControl implements CarControl {
         keyBindings.put(keyCode, action);
     }
 
+	@Override
+	public int getVelocity() {
+		return currentVelocity;
+	}
+
+	@Override
+	public void drawLine(int color, int rx, int cx, int rz, int cz) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public byte getTile() {
+		// TODO Auto-generated method stub
+		return (byte) (cam.PixTile()-1);
+	}
+
+	@Override
+	public void updateWindowDims(int width, int height) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int getWindowHeight() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getWindowWidth() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 
 }

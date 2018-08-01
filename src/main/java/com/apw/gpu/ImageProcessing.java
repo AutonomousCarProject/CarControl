@@ -29,7 +29,7 @@ public class ImageProcessing {
 
         Instant start = Instant.now();
 
-        ImageManipulator.convertToSimpleColorRaster(bayer, simple, nrows, ncols);
+        ImageManipulator.convertToSimpleColorRaster(bayer, simple, nrows, ncols, (byte) 1);
 
         System.out.println(Duration.between(start, Instant.now()).toMillis());
 
