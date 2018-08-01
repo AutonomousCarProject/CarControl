@@ -88,7 +88,7 @@ public interface CarControl {
      * @return The curremt gas/velocity value.
      * @see #accelerate(boolean, int)
      */
-    int getGas();
+    int getVelocity();
 
     /**
      * Gets the current steering angle of the car

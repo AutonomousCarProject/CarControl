@@ -1,8 +1,8 @@
 package com.apw.gpu;
 
 import com.aparapi.Range;
-import com.apw.ImageManagement.ImageManipulator;
 
+import com.apw.imagemanagement.ImageManipulator;
 import java.time.Duration;
 import java.time.Instant;
 
@@ -29,7 +29,7 @@ public class ImageProcessing {
 
         Instant start = Instant.now();
 
-        ImageManipulator.convertToSimpleColorRaster(bayer, simple, nrows, ncols);
+        ImageManipulator.convertToSimpleColorRaster(bayer, simple, nrows, ncols, (byte) 1);
 
         System.out.println(Duration.between(start, Instant.now()).toMillis());
 
