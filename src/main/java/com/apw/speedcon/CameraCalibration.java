@@ -109,6 +109,4 @@ public class CameraCalibration {
 	}
 
 	// End Of Brake Rate Math
-
-
 }
