@@ -21,9 +21,9 @@ import jssc.SerialPort;
 
 public class Arduino { // Adapted to Java from arduino.cs ... (FakeFirmata)
     // (subclass this to add input capability)
-    public static final boolean UseServos = false;
+    public static final boolean UseServos = true;
 
-    public static final String CommPortNo = "COM3";
+    public static final String CommPortNo = "COM5";
     public static final int MAX_DATA_BYTES = 16, // =64 in LattePanda's Arduino.cs
             MDB_msk = MAX_DATA_BYTES - 1;
     public static final int SET_PIN_MODE = 0xF4;

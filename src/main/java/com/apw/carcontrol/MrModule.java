@@ -30,17 +30,18 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     private MrModule(boolean renderWindow) {
         if(renderWindow) {
             control = new TrakSimControl();
-            headlessInit();
-            setupWindow();
         }
         else {
             control = new CamControl();
-            headlessInit();
-            setupWindow();
         }
 
         width = control.getImageWidth();
         height = control.getImageHeight();
+        
+        headlessInit();
+        setupWindow();
+        
+        System.out.println(width + "************X************" + height);
         
         createModules();
 
@@ -49,7 +50,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     private void headlessInit() {
         executorService = Executors.newSingleThreadScheduledExecutor();
         modules = new ArrayList<>();
-        executorService.scheduleAtFixedRate(this, 0, 1000 / 15, TimeUnit.MILLISECONDS);
+        executorService.scheduleAtFixedRate(this, 1000, 1000 / 15, TimeUnit.MILLISECONDS);
     }
 
     private void setupWindow() {
@@ -94,7 +95,8 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
             renderedImage = ((TrakSimControl) control).getRenderedImage();
         }
         else if (control instanceof CamControl) {
-        	renderedImage = ((CamControl) control).getRGBImage();
+        	return;
+        	//renderedImage = ((CamControl) control).getRGBImage();
         }
 
         super.paint(g);
@@ -107,7 +109,10 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
             displayImage = bufferImage;
             bufferImage = tempImage;
 
-            displayIcon.setImage(displayImage);
+//            displayIcon.setImage(displayImage);
+        }
+        else {
+        	System.out.println("Rendered Image is null");
         }
 
         for (Module module : modules) {
@@ -117,10 +122,11 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
 
     @Override
     public void run() {
+    	System.out.println("HEY");
         update();
-        System.out.println("HEY");
-        repaint();
         System.out.println("HEYO");
+//        repaint();
+        //System.out.println("HEYO");
     }
 
     public static void main(String[] args) {
@@ -128,7 +134,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         if(args.length > 0 && args[0].toLowerCase().equals("nosim")) {
             renderWindow = false;
         }
-        new MrModule(true);
+        new MrModule(false);
     }
 
     @Override

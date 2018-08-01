@@ -50,8 +50,11 @@ public class SpeedControlModule implements Module {
 
     @Override
     public void update(CarControl control) {
+    	System.out.println("SCM update");
         onUpdate(control);
+        System.out.println("SCM done culcuations");
         control.accelerate(true, getNextSpeed());
+        System.out.println("SCM update end");
     }
 
     @Override
@@ -109,7 +112,7 @@ public class SpeedControlModule implements Module {
         this.calculateEstimatedSpeed(gasAmount);
         this.calculateDesiredSpeed(steerDegs, manualSpeed);
 
-        List<MovingBlob> blobs = this.pedDetect.getAllBlobs(control.getProcessedImage(), 912);
+        List<MovingBlob> blobs = this.pedDetect.getAllBlobs(control.getProcessedImage(), 640);
 
         for (MovingBlob i : blobs) {
             /* Returns an int value corresponding to the color of the light we are looking at

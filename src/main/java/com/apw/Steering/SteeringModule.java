@@ -48,8 +48,11 @@ public class SteeringModule implements Module {
 
     @Override
     public void update(CarControl control) {
+    	System.out.println("SM update");
         angle = steering.drive(control.getRGBImage());
+        System.out.println("SM done calculation");
         control.steer(true, angle);
+        System.out.println("SM update end");
     }
 
 
@@ -83,7 +86,6 @@ public class SteeringModule implements Module {
             //if (sumOfAngles > 360) sumOfAngles = sumOfAngles - 360;
             //if (sumOfAngles < 0) sumOfAngles = sumOfAngles + 360;
             //}
-
 
             locX = locX + (double) Math.cos(Math.toRadians(sumOfAngles)) * (double) DriverCons.D_FrameTime/1000.0 * (double) DriverCons.D_fMinSpeed;
 

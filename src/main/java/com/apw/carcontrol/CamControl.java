@@ -146,6 +146,9 @@ public class CamControl implements CarControl {
 
     @Override
     public void steer(boolean absolute, int angle) {
+        System.out.println("ANgle to steer: " + angle);
+
+    	
         if (!absolute) {
             angle = currentSteering + angle;
         }
@@ -164,9 +167,11 @@ public class CamControl implements CarControl {
             }
         }
         if (driveSys == null) {
+        	System.out.println("Dsys null");
             return;
         }
         driveSys.servoWrite(SteerPin, angle + 90);
+        System.out.println("Steered");
     }
 
     @Override
