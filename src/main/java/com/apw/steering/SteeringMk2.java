@@ -1,7 +1,6 @@
 package com.apw.steering;
 
-import com.apw.fakefirm.Arduino;
-
+import com.apw.sbcio.fakefirm.ArduinoIO;
 
 /**
  * <p>Version 2 of steering. This version improves center detection by adding the
@@ -39,9 +38,9 @@ public class SteeringMk2 extends SteeringBase {
     /**
      * This gets called every 50ms, writes to the car servos. (drives the car)
      */
-    public void makeTurnAdjustment(Arduino servos) {
+    public void makeTurnAdjustment(ArduinoIO servos) {
         if (haveNewPixels) {
-            servos.servoWrite(SteerPin, getDegreeOffset() + 90);
+            servos.setServoAngle(SteerPin, getDegreeOffset() + 90);
         }
     }
 

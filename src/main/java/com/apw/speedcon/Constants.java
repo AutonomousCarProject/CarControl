@@ -1,7 +1,7 @@
 package com.apw.speedcon;
 
 public class Constants {
-	
+  
 	//Default Debug Overlays
 	public static final boolean
 	DEFAULT_OVERLAY = false,		//Sets the default state as to the display of blob detection boxes

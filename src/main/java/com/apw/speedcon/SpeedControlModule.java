@@ -1,8 +1,8 @@
 package com.apw.speedcon;
 
-import com.apw.imagemanagement.ImageManipulator;
 import com.apw.carcontrol.CarControl;
 import com.apw.carcontrol.Module;
+import com.apw.imagemanagement.ImageManipulator;
 import com.apw.pedestrians.PedestrianDetector;
 import com.apw.pedestrians.blobtrack.MovingBlob;
 import com.apw.pedestrians.image.Color;
@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SpeedControlModule implements Module {
+  
 	private double currentEstimatedSpeed;
 	private double desiredSpeed;
 	private boolean emergencyStop;

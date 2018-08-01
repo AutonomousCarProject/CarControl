@@ -2,6 +2,7 @@ package com.apw.speedcon;
 
 public class Settings {
     public static boolean
+      
     //Initializing KeyBind Booleans To Default Debug Overlays
     overlayOn = Constants.DEFAULT_OVERLAY,
     blobsOn = Constants.DEFAULT_BLOBS,
