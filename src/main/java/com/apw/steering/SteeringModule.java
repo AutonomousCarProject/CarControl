@@ -54,6 +54,8 @@ public class SteeringModule implements Module {
 
     @Override
     public void paint(CarControl control, Graphics g) {
+        double widthMultiplier = (1.0 * control.getWindowWidth() / steering.screenWidth);
+        double heightMultiplier = (1.0 * control.getWindowHeight() / steering.cameraHeight);
         int tempDeg = angle;
         if (speed.getNextSpeed() > 0) {
 
@@ -117,12 +119,16 @@ public class SteeringModule implements Module {
         for (int idx = 0; idx < steering.midPoints.size(); idx++) {
             if (idx >= steering.startTarget && idx <= steering.endTarget) {
                 g.setColor(Color.green);
-                g.fillRect(steering.midPoints.get(idx).x - 1, steering.midPoints.get(idx).y - 1, 2, 2);
+                g.fillRect((int) ((steering.midPoints.get(idx).x - 2) * widthMultiplier),
+                        (int) ((steering.midPoints.get(idx).y - 2) * heightMultiplier),
+                        4, 4);
                 //control.rectFill(0x0000FF00, steering.midPoints.get(idx).y, steering.midPoints.get(idx).x,
                 //steering.midPoints.get(idx).y + 5, steering.midPoints.get(idx).x + 5);
             } else {
                 g.setColor(Color.blue);
-                g.fillRect(steering.midPoints.get(idx).x - 1, steering.midPoints.get(idx).y - 1, 2, 2);
+                g.fillRect((int)((steering.midPoints.get(idx).x - 2) * widthMultiplier),
+                        (int)((steering.midPoints.get(idx).y - 2) * heightMultiplier),
+                        4, 4);
                 //control.rectFill(0x000000ff, steering.midPoints.get(idx).y, steering.midPoints.get(idx).x,
                 //steering.midPoints.get(idx).y + 5, steering.midPoints.get(idx).x + 5);
             }
@@ -131,19 +137,20 @@ public class SteeringModule implements Module {
         // Draw left and right sides
         g.setColor(Color.yellow);
         if (DriverCons.D_DrawOnSides) {
+            g.setColor(Color.yellow);
             for (Point point : steering.leftPoints) {
-                int xL = point.x;
-                int yL = point.y;
-                g.fillRect(xL, yL, 3, 3);
+                int xL = point.x - 2;
+                int yL = point.y - 2;
+                g.fillRect((int) (xL * widthMultiplier), (int) (yL * heightMultiplier), 4, 4);
             }
             for (Point point : steering.rightPoints) {
-                int xR = point.x;
-                int yR = point.y;
-                g.fillRect(xR, yR, 3, 3);
+                int xR = point.x - 2;
+                int yR = point.y - 2;
+                g.fillRect((int) (xR * widthMultiplier), (int) (yR * heightMultiplier), 4, 4);
             }
         }
-        // Draw steerPoint on screen
-        g.setColor(Color.CYAN);
-        g.fillRect(steering.steerPoint.x, steering.steerPoint.y, 10, 10);
+        g.setColor(Color.cyan);
+        g.fillRect((int) ((steering.steerPoint.x - 5) * widthMultiplier),
+                (int) ((steering.steerPoint.y - 5) * heightMultiplier), 10, 10);
     }
 }
