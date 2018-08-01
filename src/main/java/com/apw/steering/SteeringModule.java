@@ -141,16 +141,16 @@ public class SteeringModule implements Module {
             for (Point point : steering.leftPoints) {
                 int xL = point.x - 2;
                 int yL = point.y - 2;
-                g.fillRect((int) (xL * widthMultiplier), (int) (yL * heightMultiplier), 4, 4);
+                g.fillRect((int) (xL * widthMultiplier), (int) (yL * heightMultiplier) + 10, 4, 4);
             }
             for (Point point : steering.rightPoints) {
                 int xR = point.x - 2;
                 int yR = point.y - 2;
-                g.fillRect((int) (xR * widthMultiplier), (int) (yR * heightMultiplier), 4, 4);
+                g.fillRect((int) (xR * widthMultiplier), (int) (yR * heightMultiplier) + 10, 4, 4);
             }
         }
         g.setColor(Color.cyan);
         g.fillRect((int) ((steering.steerPoint.x - 5) * widthMultiplier),
-                (int) ((steering.steerPoint.y - 5) * heightMultiplier), 10, 10);
+                (int) ((steering.steerPoint.y - 5) * heightMultiplier) + 10, 10, 10);
     }
 }
