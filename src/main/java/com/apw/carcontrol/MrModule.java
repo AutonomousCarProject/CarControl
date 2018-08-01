@@ -1,9 +1,14 @@
 package com.apw.carcontrol;
 
-import com.apw.ImageManagement.ImageManagementModule;
-import com.apw.SpeedCon.SpeedControlModule;
-import com.apw.Steering.SteeringModule;
+import com.apw.imagemanagement.ImageManagementModule;
+import com.apw.sbcio.PWMController;
+import com.apw.sbcio.fakefirm.ArduinoIO;
+import com.apw.sbcio.fakefirm.ArduinoModule;
+import com.apw.speedcon.SpeedControlModule;
 
+import com.apw.steering.SteeringModule;
+import java.awt.image.Raster;
+import java.awt.image.WritableRaster;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -17,34 +22,35 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class MrModule extends JFrame implements Runnable, KeyListener {
+
     private ScheduledExecutorService executorService;
+    private BufferedImage displayImage, bufferImage;
+    private GraphicsDevice graphicsDevice;
+    private PWMController driveSys = new ArduinoIO();
     private ArrayList<Module> modules;
     private CarControl control;
-    private BufferedImage displayImage, bufferImage;
-    private ImageIcon displayIcon;
+    private boolean fullscreen;
 
     // FIXME breaks if dimensions are not 912x480
-    private int width = 912;
-    private int height = 480;
+    private int windowWidth = 912;
+    private int windowHeight = 480;
 
     private MrModule(boolean renderWindow) {
-        if(renderWindow) {
-            control = new TrakSimControl();
-        }
-        else {
-            control = new CamControl();
+        if (renderWindow) {
+            control = new TrakSimControl(driveSys);
+        } else {
+            control = new CamControl(driveSys);
         }
 
-        width = control.getImageWidth();
-        height = control.getImageHeight();
+        windowWidth = control.getImageWidth();
+        windowHeight = control.getImageHeight();
         
         headlessInit();
         setupWindow();
         
-        System.out.println(width + "************X************" + height);
+        System.out.println(windowWidth + "************X************" + windowHeight);
         
         createModules();
-
     }
 
     private void headlessInit() {
@@ -54,31 +60,33 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     }
 
     private void setupWindow() {
-        displayImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        bufferImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        displayIcon = new ImageIcon(displayImage);
+        graphicsDevice = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        displayImage = new BufferedImage(windowWidth, windowHeight, BufferedImage.TYPE_INT_RGB);
+        bufferImage = new BufferedImage(windowWidth, windowHeight, BufferedImage.TYPE_INT_RGB);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(width, height + 25);
+        setSize(windowWidth, windowHeight + 25);
         setResizable(true);
         setVisible(true);
         addKeyListener(this);
-        add(new JLabel(displayIcon));
+        setIgnoreRepaint(true);
     }
-
     private void createModules() {
-        modules.add(new ImageManagementModule(width, height));
-        modules.add(new SpeedControlModule());
-        modules.add(new SteeringModule((SpeedControlModule) modules.get(1)));
+        modules.add(new ImageManagementModule(windowWidth, windowHeight));
+        SpeedControlModule scm = new SpeedControlModule();
+        modules.add(scm);
+        modules.add(new SteeringModule(scm));
+        modules.add(new ArduinoModule(driveSys));
 
         for (Module module : modules)
             module.initialize(control);
     }
 
     private void update() {
-        if(control instanceof TrakSimControl) {
+        if (control instanceof TrakSimControl) {
             ((TrakSimControl) control).cam.theSim.SimStep(1);
         }
+
         control.readCameraImage();
         control.setEdges(getInsets());
         for (Module module : modules) {
@@ -86,33 +94,30 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         }
     }
 
-    @Override
-    public void paint(Graphics g) {
-    	int[] renderedImage = null;
 
-    	
-        if(control instanceof TrakSimControl) {
-            renderedImage = ((TrakSimControl) control).getRenderedImage();
+    private void paint() {
+    	int[] renderedImage = null;
+        Graphics g;
+        g = this.getGraphics();
+        
+        if (control instanceof TrakSimControl) {
+        	renderedImage = ((TrakSimControl) control).getRenderedImage();
         }
         else if (control instanceof CamControl) {
-        	return;
-        	//renderedImage = ((CamControl) control).getRGBImage();
+        	renderedImage = ((CamControl) control).getRenderedImage();
         }
 
-        super.paint(g);
-
-        if(renderedImage != null) {
-            int[] displayPixels = ((DataBufferInt) bufferImage.getRaster().getDataBuffer()).getData();
+        if (renderedImage != null) {
+            int[] displayPixels =
+                ((DataBufferInt) bufferImage.getRaster().getDataBuffer()).getData();
             System.arraycopy(renderedImage, 0, displayPixels, 0, renderedImage.length);
 
             BufferedImage tempImage = displayImage;
             displayImage = bufferImage;
             bufferImage = tempImage;
 
-//            displayIcon.setImage(displayImage);
-        }
-        else {
-        	System.out.println("Rendered Image is null");
+
+            g.drawImage(displayImage, 0, 0, getWidth(), getHeight(), null);
         }
 
         for (Module module : modules) {
@@ -120,13 +125,12 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         }
     }
 
+
     @Override
     public void run() {
     	System.out.println("HEY");
         update();
-        System.out.println("HEYO");
-//        repaint();
-        //System.out.println("HEYO");
+        paint();
     }
 
     public static void main(String[] args) {
@@ -139,8 +143,22 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if(!(control instanceof TrakSimControl)) {
+        if (!(control instanceof TrakSimControl)) {
             return;
+        }
+
+        if (e.getKeyCode() == KeyEvent.VK_F) {
+            fullscreen = !fullscreen;
+            setVisible(false);
+            dispose();
+            setUndecorated(fullscreen);
+            if (fullscreen) {
+                graphicsDevice.setFullScreenWindow(this);
+                validate();
+            } else {
+                graphicsDevice.setFullScreenWindow(null);
+                setVisible(true);
+            }
         }
 
         for (Map.Entry<Integer, Runnable> binding : ((TrakSimControl) control).keyBindings.entrySet()) {

@@ -5,15 +5,16 @@ import java.util.HashMap;
 
 import com.apw.apw3.DriverCons;
 import com.apw.apw3.MyMath;
-import com.apw.fakefirm.Arduino;
 import com.apw.fly2cam.FlyCamera;
+import com.apw.sbcio.PWMController;
+import com.apw.sbcio.fakefirm.ArduinoIO;
 
 public class CamControl implements CarControl {
     private final int SteerPin, GasPin;
     private final double LefScaleSt, RitScaleSt;
     protected FlyCamera cam;
     protected HashMap<Integer, Runnable> keyBindings;
-    private Arduino driveSys;
+    private PWMController driveSys;
     private Insets edges;
     private byte[] cameraImage = null;
     private byte[] processedImage = null;
@@ -23,7 +24,7 @@ public class CamControl implements CarControl {
     private int currentManualSpeed = 0;
     private int nrows, ncols;
 	
-    public CamControl() {
+    public CamControl(PWMController driveSys) {
         cam = new FlyCamera();
         cam.Connect(4); // 30 FPS
         nrows = cam.Dimz() >> 16;
@@ -34,9 +35,7 @@ public class CamControl implements CarControl {
         LefScaleSt = ((double) DriverCons.D_LeftSteer) / 90.0;
         RitScaleSt = ((double) DriverCons.D_RiteSteer) / 90.0;
 
-        driveSys = new Arduino();
-        driveSys.pinMode(SteerPin, Arduino.SERVO);
-        driveSys.pinMode(GasPin, Arduino.SERVO);
+        this.driveSys = driveSys;
 
         keyBindings = new HashMap<>();
     }
@@ -114,7 +113,7 @@ public class CamControl implements CarControl {
                 cam.Finish();
             }
             if (driveSys != null) {
-                driveSys.Close();
+                driveSys.close();
             }
         } catch (Exception ignored) {
         }
@@ -141,7 +140,7 @@ public class CamControl implements CarControl {
         if (driveSys == null) {
             return;
         }
-        driveSys.servoWrite(GasPin, velocity + 90);
+        driveSys.setServoAngle(GasPin, velocity + 90);
     }
 
     @Override
@@ -170,7 +169,7 @@ public class CamControl implements CarControl {
         	System.out.println("Dsys null");
             return;
         }
-        driveSys.servoWrite(SteerPin, angle + 90);
+        driveSys.setServoAngle(SteerPin, angle + 90);
         System.out.println("Steered");
     }
 
