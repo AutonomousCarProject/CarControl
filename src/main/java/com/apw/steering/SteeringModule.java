@@ -118,6 +118,8 @@ public class SteeringModule implements Module {
                     g.setColor(Color.BLUE);
                 }
             }
+
+            //System.out.println(tempY / (1.0 * (endTarget - startTarget)));
         }
 //        g.drawImage(displayImage, getInsets().left, getInsets().top, getWidth() - getInsets().left - getInsets().right, getHeight() - getInsets().top - getInsets().bottom , null);
 

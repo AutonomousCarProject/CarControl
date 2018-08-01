@@ -129,6 +129,16 @@ public interface CarControl {
      * @see com.apw.apw3.TrakSim#RectFill(int, int, int, int, int)
      */
     void rectFill(int colo, int rx, int cx, int rz, int c);
+    
+    /**
+     * Draws a line that you could totally do on your own if you actually used traksim
+     * @param color
+     * @param rx
+     * @param cx
+     * @param rz
+     * @param cz
+     */
+    void drawLine(int color, int rx, int cx, int rz, int cz);
 
     /**
      * Registers a key event.
@@ -136,6 +146,26 @@ public interface CarControl {
      * @param action The action to trigger when the key is pressed.
      */
     void addKeyEvent(int keyCode, Runnable action);
-    
+
     byte getTile();
+
+    /**
+     * Updates the window width and height to the provided values, should only be called from
+     * MrModule.
+     * @param width The new window width.
+     * @param height The new window height.
+     */
+    void updateWindowDims(int width, int height);
+
+    /**
+     * Returns the height of the JFrame created in MrModule.
+     * @return Window height.
+     */
+    int getWindowHeight();
+
+    /**
+     * Returns the width of the JFrame created in MrModule
+     * @return window width.
+     */
+    int getWindowWidth();
 }
