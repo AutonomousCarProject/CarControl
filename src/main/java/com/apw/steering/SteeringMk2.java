@@ -30,6 +30,7 @@ public class SteeringMk2 extends SteeringBase {
     public SteeringMk2(CarControl control) {
         this.cameraWidth = control.getImageWidth();
         this.cameraHeight = control.getImageHeight();
+        this.screenWidth = this.cameraWidth;
         origin = new Point(cameraWidth / 2, cameraHeight);
     }
 

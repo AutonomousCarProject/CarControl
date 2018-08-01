@@ -119,24 +119,21 @@ public class SteeringModule implements Module {
         }
 
         for (int idx = 0; idx < steering.midPoints.size(); idx++) {
-            if (idx >= steering.startTarget && idx <= steering.endTarget) {
-                control.rectFill(0x0000FF00, steering.midPoints.get(idx).y, steering.midPoints.get(idx).x,
-                        steering.midPoints.get(idx).y + 5, steering.midPoints.get(idx).x + 5);
-            } else {
-                control.rectFill(0x000000ff, steering.midPoints.get(idx).y, steering.midPoints.get(idx).x,
-                        steering.midPoints.get(idx).y + 5, steering.midPoints.get(idx).x + 5);
-            }
+            g.setColor(Color.blue);
+        	g.fillRect(steering.midPoints.get(idx).x, steering.midPoints.get(idx).y, 3, 3);
         }
         if (DriverCons.D_DrawOnSides) {
             for (Point point : steering.leftPoints) {
+                g.setColor(Color.yellow);
                 int xL = point.x;
                 int yL = point.y;
-                control.rectFill(16776960, yL, xL, yL + 5, xL + 5);
+                g.fillRect(xL, yL, 3, 3);
             }
             for (Point point : steering.rightPoints) {
                 int xR = point.x;
                 int yR = point.y;
-                control.rectFill(16776960, yR, xR, yR + 5, xR + 5);
+                g.setColor(Color.yellow);
+                g.fillRect(xR, yR, 3, 3);
             }
         }
     }
