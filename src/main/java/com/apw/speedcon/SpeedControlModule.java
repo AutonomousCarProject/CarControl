@@ -66,9 +66,7 @@ public class SpeedControlModule implements Module {
 	 */
 	@Override
 	public void update(CarControl control) {
-		System.out.println("SCM update");
 		onUpdate(control);
-		System.out.println("onUpdate done");
 		control.accelerate(true, getNextSpeed());
 		System.out.println("Speed: " + getNextSpeed());
 	}

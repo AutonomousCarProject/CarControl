@@ -129,7 +129,6 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
   
     @Override
     public void run() {
-    	System.out.println("HEY");
         update();
         paint();
     }
@@ -139,7 +138,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         if(args.length > 0 && args[0].toLowerCase().equals("nosim")) {
             renderWindow = true;
         }
-        new MrModule(false);
+        new MrModule(renderWindow);
     }
     
     @Override

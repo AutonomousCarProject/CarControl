@@ -148,7 +148,6 @@ public class ImageManagementModule implements Module {
 
     @Override
     public void update(CarControl control) {
-    	System.out.println("IMM update");
         imagePixels = null;
         switch (viewType) {
             case 1:
@@ -172,8 +171,6 @@ public class ImageManagementModule implements Module {
 
         control.setRenderedImage(imagePixels);
         control.setProcessedImage(getSimpleColorRaster(control.getRecentCameraImage()));
-    
-        System.out.println("IMM update end");
     }
 
     @Override

@@ -145,7 +145,7 @@ public class CamControl implements CarControl {
 
     @Override
     public void steer(boolean absolute, int angle) {
-        System.out.println("ANgle to steer: " + angle);
+        System.out.println("Angle to steer: " + angle);
 
     	
         if (!absolute) {

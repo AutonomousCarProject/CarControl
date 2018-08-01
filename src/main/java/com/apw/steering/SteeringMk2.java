@@ -42,11 +42,8 @@ public class SteeringMk2 extends SteeringBase {
      */
     @Override
     public int drive(int pixels[]) {
-    	System.out.println("Started drive");
         findPoints(pixels);
-    	System.out.println("Found Points");
         averagePoints();
-    	System.out.println("Averaged Ponts");
         return getDegreeOffset();
     }
 
