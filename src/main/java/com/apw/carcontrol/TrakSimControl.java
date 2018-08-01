@@ -9,18 +9,21 @@ import java.awt.*;
 import java.util.HashMap;
 
 public class TrakSimControl implements CarControl {
-    private final int SteerPin, GasPin;
-    private final double LefScaleSt, RitScaleSt;
-    protected SimCamera cam;
     protected HashMap<Integer, Runnable> keyBindings;
     private PWMController driveSys;
+    protected SimCamera cam;
     private Insets edges;
+
     private byte[] cameraImage = null;
     private byte[] processedImage = null;
     private int[] renderedImage = null;
     private int currentSteering = 0;
     private int currentVelocity = 0;
     private int currentManualSpeed = 0;
+    private int windowWidth, windowHeight;
+
+    private final double LefScaleSt, RitScaleSt;
+    private final int SteerPin, GasPin;
 
     public TrakSimControl(PWMController drivesys) {
         cam = new SimCamera();
@@ -162,7 +165,7 @@ public class TrakSimControl implements CarControl {
     }
 
     @Override
-    public int getGas() {
+    public int getVelocity() {
         return currentVelocity;
     }
 
@@ -190,10 +193,36 @@ public class TrakSimControl implements CarControl {
     public void rectFill(int colo, int rx, int cx, int rz, int c) {
         cam.theSim.RectFill(colo, rx, cx, rz, c);
     }
+    
+    @Override
+    public void drawLine(int colo, int rx, int cx, int rz, int cz) {
+    	cam.theSim.DrawLine(colo, rx, cx, rz, cz);
+    }
 
     @Override
     public void addKeyEvent(int keyCode, Runnable action) {
         keyBindings.put(keyCode, action);
+    }
+    
+    @Override
+    public byte getTile() {
+    	return (byte) (cam.PixTile()-1);
+    }
+
+    @Override
+    public void updateWindowDims(int width, int height) {
+        windowWidth = width;
+        windowHeight = height;
+    }
+
+    @Override
+    public int getWindowHeight() {
+        return windowHeight;
+    }
+
+    @Override
+    public int getWindowWidth() {
+        return windowWidth;
     }
 
 }
