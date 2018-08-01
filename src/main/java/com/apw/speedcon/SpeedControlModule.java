@@ -215,7 +215,7 @@ public class SpeedControlModule implements Module {
 	 * @param dtest the DriveTest object that we feed to our blob detection, which gets displayed in a separate window
 	 */
 	public void onUpdate(CarControl control) {
-		int gasAmount = control.getGas();
+		int gasAmount = control.getVelocity();
 		int steerDegs = control.getSteering();
 		int manualSpeed = control.getManualSpeed();
 		

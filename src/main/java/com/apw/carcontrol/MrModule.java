@@ -68,13 +68,14 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         setIgnoreRepaint(true);
     }
     private void createModules() {
-        modules.add(new ImageManagementModule(windowWidth, windowHeight));
+        modules.add(new ImageManagementModule(windowWidth, windowHeight, control.getTile()));
         modules.add(new SpeedControlModule());
         modules.add(new SteeringModule());
         modules.add(new ArduinoModule(driveSys));
-      
-        for (Module module : modules)
+
+        for (Module module : modules) {
             module.initialize(control);
+        }
     }
     
     private void update() {
@@ -107,8 +108,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
             BufferedImage tempImage = displayImage;
             displayImage = bufferImage;
             bufferImage = tempImage;
-
-            g.drawImage(displayImage, 0, 0, getWidth(), getHeight(), null);
+            g.drawImage(displayImage, getInsets().left, getInsets().top, getWidth() - getInsets().left - getInsets().right, getHeight() - getInsets().top - getInsets().bottom , null);
         }
         
         for (Module module : modules) {
