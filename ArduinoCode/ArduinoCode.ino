@@ -82,7 +82,6 @@ void loop() {
       steerDelay = 1500;
       //Send message to computer
       addMessage(4, 0, 3);
-      sendMessage();
     }
     if (kill && micros()-sinceNoKill > 1800){ //Start up if un-killed
       kill = false;
@@ -94,7 +93,6 @@ void loop() {
   if (micros()-lastNoKill > timeout){
     kill = true;
     addMessage(4, 0, 4);
-    sendMessage();
   }
 
   //Grab info from buffer
@@ -126,9 +124,9 @@ void loop() {
       wheelDelay = 1500;
       steerDelay = 1500;
       kill = false;
-      timedout = false;
       addMessage(3, 0, 0);
     }
+    timedout = false;
   }
   
   //Start next cycle every .02 seconds
