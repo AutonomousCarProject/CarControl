@@ -30,9 +30,9 @@ void setup() {
   //set pins to input/output
   pinMode(9, OUTPUT); //steering
   pinMode(10, OUTPUT); //speed
-  pinMode(11, INPUT); //speed getter
+  pinMode(11, INPUT); //Dead man's switch
   
-  //pinMode(2, INPUT); //Dead man's switch
+  //pinMode(2, INPUT); 
   
   pinMode(13, OUTPUT); //testing light
   digitalWrite(13, HIGH);
@@ -69,12 +69,12 @@ void loop() {
   lastRun = micros();
 
   //Read rise of signal
-  if (sinceNoKill == 0 && digitalRead(2) == HIGH){
+  if (sinceNoKill == 0 && digitalRead(11) == HIGH){
     sinceNoKill = micros();
   }
 
   //Read fall of signal
-  if (sinceNoKill != 0 && digitalRead(2) == LOW){
+  if (sinceNoKill != 0 && digitalRead(11) == LOW){
     lastNoKill = micros();
     if (!kill && micros()-sinceNoKill < 1600){ //Check difference to find duration of input
       kill = true;
@@ -167,7 +167,7 @@ void loop() {
 
   } else {
     
-    if (digitalRead(2) == HIGH) {
+    if (digitalRead(11) == HIGH) {
       digitalWrite(13, HIGH);
     } else {
       digitalWrite(13, LOW);
