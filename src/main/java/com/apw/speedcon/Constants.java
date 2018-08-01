@@ -31,11 +31,7 @@ public class Constants {
 	
 	//Stop Frames
 	public static final int
-	DRIFT_TO_STOPSIGN_FRAMES = 0,	//Frames to drift forward after stopsign detected
 	WAIT_AT_STOPSIGN_FRAMES = 50,	//Frames to wait at stopsign once stopped
-	STOPSIGN_DRIFT_SPEED = 12,		//Speed at which the car pulls up to a stopsign
-	DRIFT_TO_STOPLIGHT_FRAMES = 0,	//Frames to drift forward after stoplight detected
-	STOPLIGHT_DRIFT_SPEED = 12,		//Speed at which the car pulls up to a stoplight
 	MIN_SPEED_INCREMENT = 10,		//Min increment amount between current and next frame speed
 	MAX_SPEED_INCREMENT = 20;		//Max increment amount between current and next frame speed
 	

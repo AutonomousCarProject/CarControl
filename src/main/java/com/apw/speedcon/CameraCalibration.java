@@ -37,13 +37,13 @@ public class CameraCalibration {
 	private PedestrianDetector pedDetect;
 
 	//Camera information
-	private double cameraFocalLength = 450;   //If used in sim, leave at 35, if testing IRL leave blank and use calibrateCamera
-	private double signWidth;		   //The width of a standared stop sign in mm
+	private double cameraFocalLength = 800;	//If used in sim, leave at 35, if testing IRL leave blank and use calibrateCamera
+	private double signWidth;				//The width of a standared stop sign in mm
 
 	private MovingBlob testBlob;
-	private double testBlobWidthHeight = 9; //the width and height of a square used to calibrate the camera
+	private double testBlobWidthHeight = 9;	//the width and height of a square used to calibrate the camera
 	private double testBlobDistance = 20;	//The distance the test blob is away from the camera
-	public double relativeWorldScale;  //The scale of the world (if 1/3 scale, set to 3)
+	public double relativeWorldScale;		//The scale of the world (if 1/3 scale, set to 3)
 
 	//Used to set world scale, and width of known objects
 	public CameraCalibration() {
