@@ -71,6 +71,10 @@ public class SpeedControlModule implements Module {
 	
 	@Override
 	public void paint(CarControl control, Graphics g) {
+		
+		
+		
+		
 		if (control.getProcessedImage() == null) {
 			return;
 		}
@@ -83,6 +87,83 @@ public class SpeedControlModule implements Module {
 		byte[] limitArray = new byte[640 * 480];
 		ImageManipulator.limitTo(limitArray, control.getProcessedImage(), width, height, 640, 480, false);
 		List<MovingBlob> blobs = pedDetect.getAllBlobs(limitArray, 640);
+		List<MovingBlob> peds = pedDetect.detect(limitArray, 640);
+		
+		
+		
+		if(Settings.overlayOn){
+			//Draw our stoplight hitbox in constant designated color
+			int color = Constants.OVERLAY_STOPLIGHT_HITBOX_COLOR;
+			control.drawLine(color, Constants.STOPLIGHT_MIN_Y, Constants.STOPLIGHT_MIN_X, Constants.STOPLIGHT_MIN_Y, Constants.STOPLIGHT_MAX_X);
+			control.drawLine(color, Constants.STOPLIGHT_MIN_Y, Constants.STOPLIGHT_MAX_X, Constants.STOPLIGHT_MAX_Y, Constants.STOPLIGHT_MAX_X);
+			control.drawLine(color, Constants.STOPLIGHT_MAX_Y, Constants.STOPLIGHT_MAX_X, Constants.STOPLIGHT_MAX_Y, Constants.STOPLIGHT_MIN_X);
+			control.drawLine(color, Constants.STOPLIGHT_MAX_Y, Constants.STOPLIGHT_MIN_X, Constants.STOPLIGHT_MIN_Y, Constants.STOPLIGHT_MIN_X);
+			
+			//Draw our stopsign hitbox in constant designated color
+			color = Constants.OVERLAY_STOPSIGN_HITBOX_COLOR;
+			control.drawLine(color, Constants.STOPSIGN_MIN_Y, Constants.STOPSIGN_MIN_X, Constants.STOPSIGN_MIN_Y, Constants.STOPSIGN_MAX_X);
+			control.drawLine(color, Constants.STOPSIGN_MIN_Y, Constants.STOPSIGN_MAX_X, Constants.STOPSIGN_MAX_Y, Constants.STOPSIGN_MAX_X);
+			control.drawLine(color, Constants.STOPSIGN_MAX_Y, Constants.STOPSIGN_MAX_X, Constants.STOPSIGN_MAX_Y, Constants.STOPSIGN_MIN_X);
+			control.drawLine(color, Constants.STOPSIGN_MAX_Y, Constants.STOPSIGN_MIN_X, Constants.STOPSIGN_MIN_Y, Constants.STOPSIGN_MIN_X);
+		}
+		
+		/*if (Settings.blobsOn) {
+			for(MovingBlob b:this.speedControl.getBlobs()){
+				if ((((double) b.height / (double) b.width) < 1 + Constants.BLOB_RATIO_DIF && ((double) b.height / (double) b.width) > 1 - Constants.BLOB_RATIO_DIF)) {
+					int velocity = (int)(100*Math.sqrt(b.velocityX*b.velocityX + b.velocityY*b.velocityY));
+					int color = Constants.BLOBVERLAY_COLORMODE_AGE_5_COLOR;
+					
+					//If colormode is 0, set displayed blob color based upon age, so that older ones are darker
+					if (Settings.colorMode == 0) {
+						if (b.age >= Constants.DISPLAY_AGE_MAX) {
+							color = Constants.BLOBVERLAY_COLORMODE_AGE_5_COLOR;
+						}
+						else if (b.age >= (4 * (Constants.DISPLAY_AGE_MAX - Constants.DISPLAY_AGE_MIN) / 5) + Constants.DISPLAY_AGE_MIN) {
+							color = Constants.BLOBVERLAY_COLORMODE_AGE_4_COLOR;
+						}
+						else if (b.age >= (3 * (Constants.DISPLAY_AGE_MAX - Constants.DISPLAY_AGE_MIN) / 5) + Constants.DISPLAY_AGE_MIN) {
+							color = Constants.BLOBVERLAY_COLORMODE_AGE_3_COLOR;
+						}
+						else if (b.age >= (2 * (Constants.DISPLAY_AGE_MAX - Constants.DISPLAY_AGE_MIN) / 5) + Constants.DISPLAY_AGE_MIN) {
+							color = Constants.BLOBVERLAY_COLORMODE_AGE_2_COLOR;
+						}
+						else if (b.age >= ((Constants.DISPLAY_AGE_MAX - Constants.DISPLAY_AGE_MIN) / 5) + Constants.DISPLAY_AGE_MIN) {
+							color = Constants.BLOBVERLAY_COLORMODE_AGE_1_COLOR;
+						}
+						else if (b.age <= Constants.DISPLAY_AGE_MIN) {
+							color = Constants.BLOBVERLAY_COLORMODE_AGE_0_COLOR;
+						}
+					}
+					//If colormode is 1, set displayed blob color to the color of the blob we are looking at
+					//A conversion is needed here, as the stored colors in blobs are not hex values, and they need to be
+					else if (Settings.colorMode == 1) {
+						if (b.color.getColor() == com.apw.pedestrians.image.Color.BLACK) {
+			                color = Constants.BLOBVERLAY_COLORMODE_COLOR_BLACK;
+			            } else if (b.color.getColor() == com.apw.pedestrians.image.Color.GREY) {
+			            	color = Constants.BLOBVERLAY_COLORMODE_COLOR_GRAY;
+			            } else if (b.color.getColor() == com.apw.pedestrians.image.Color.WHITE) {
+			            	color = Constants.BLOBVERLAY_COLORMODE_COLOR_WHITE;
+			            } else if (b.color.getColor() == com.apw.pedestrians.image.Color.RED) {
+			            	color = Constants.BLOBVERLAY_COLORMODE_COLOR_RED;
+			            } else if (b.color.getColor() == com.apw.pedestrians.image.Color.GREEN) {
+			            	color = Constants.BLOBVERLAY_COLORMODE_COLOR_GREEN;
+			            } else if (b.color.getColor() == com.apw.pedestrians.image.Color.BLUE) {
+			            	color = Constants.BLOBVERLAY_COLORMODE_COLOR_BLUE;
+			            }
+					}
+					//If colormode is 2, set displayed blob color to be based upon velocity
+					else if (Settings.colorMode == 2) {
+						color = (velocity << 16) + (velocity << 8) + velocity;	
+					}
+					
+					//Draw our current blob on screen
+					this.theSim.DrawLine(color, b.y, b.x, b.y+b.height, b.x);
+					this.theSim.DrawLine(color, b.y, b.x, b.y, b.x+b.width);
+					this.theSim.DrawLine(color, b.y+b.height, b.x, b.y+b.height, b.x+b.width);
+					this.theSim.DrawLine(color, b.y, b.x+b.width, b.y+b.height, b.x+b.width);
+				}
+			}
+		}*/
 		
 		
 		
@@ -114,11 +195,21 @@ public class SpeedControlModule implements Module {
 					g.setColor(java.awt.Color.BLUE);
 				}
 				g.drawRect(i.x + 8, i.y + 40 + vEdit, i.width, i.height);
+				
+				
+				
+				
+				
 			}
 		}
+		for(MovingBlob i : peds) {
+			g.setColor(java.awt.Color.MAGENTA);
+			g.drawRect(i.x + 8, i.y + 40 + vEdit, i.width, i.height);
+		}
+		
 	}
 	
-	//A method to be called every frame. Calculates desired speed and actual speed
+//A method to be called every frame. Calculates desired speed and actual speed
 	//Also takes stopping into account
 	/**
 	 * This is a method that is called on every frame update by DrDemo. It is responsible for calculating
@@ -256,10 +347,10 @@ public class SpeedControlModule implements Module {
 		System.out.println("Subsequent cycles");
 		double blobRealSize = getStopReal(closestBlob); //Gets real size
 		double distToBlob = cameraCalibrator.distanceToObj(blobRealSize/cameraCalibrator.relativeWorldScale, closestBlob.width); //Finds distance to closest blob based on real wrold size and pixel size			System.out.println("WEIRD STUFF HAPPENS HERE");
-		System.out.println("desiredSpeed: " + desiredSpeed);
-		System.out.println("getEstimatedSpeed: " + getEstimatedSpeed());
-		System.out.println("distToBlob: " + distToBlob);
-		System.out.println(desiredSpeed - cameraCalibrator.calcStopRate(getEstimatedSpeed(), cameraCalibrator.getStopTime(distToBlob, getEstimatedSpeed())));
+		//System.out.println("desiredSpeed: " + desiredSpeed);
+		//System.out.println("getEstimatedSpeed: " + getEstimatedSpeed());
+		//System.out.println("distToBlob: " + distToBlob);
+		//System.out.println(desiredSpeed - cameraCalibrator.calcStopRate(getEstimatedSpeed(), cameraCalibrator.getStopTime(distToBlob, getEstimatedSpeed())));
 		this.desiredSpeed = desiredSpeed - cameraCalibrator.calcStopRate(getEstimatedSpeed(), cameraCalibrator.getStopTime(distToBlob, getEstimatedSpeed()));
 		//if (desiredSpeed < -5) {
 		//	desiredSpeed = -5;
@@ -324,9 +415,11 @@ public class SpeedControlModule implements Module {
 	}
 	
 	public boolean determinePedStop(MovingBlob ped) {
+		//System.out.println("Ped Width "+ped.width+" Ped X "+ped.x+" Ped Y "+ped.y);
 		if(ped.width >= Constants.PED_MIN_SIZE &&
 			ped.x >= Constants.PED_MIN_X &&
 			ped.x <= Constants.PED_MAX_X) {
+			System.out.println(ped);
 			return true;
 		}
 		return false;
