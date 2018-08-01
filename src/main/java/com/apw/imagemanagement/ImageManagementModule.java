@@ -7,7 +7,7 @@ import java.awt.*;
 
 public class ImageManagementModule implements Module {
 
-    private int viewType = 5;
+    private int viewType = 1;
     private int width, height;
     private int[] imagePixels;
     private byte mono[];

@@ -23,7 +23,8 @@ public class SteeringModule implements Module {
     public SteeringModule() {
         if (DriverCons.D_steeringVersion == 1) {
             steering = new SteeringMk1(640, 480);
-        } else if (DriverCons.D_steeringVersion == 2) {
+        } 
+        else if (DriverCons.D_steeringVersion == 2) {
             steering = new SteeringMk2(640, 480);
         }
     }
@@ -118,14 +119,16 @@ public class SteeringModule implements Module {
                 }
             }
         }
+//        g.drawImage(displayImage, getInsets().left, getInsets().top, getWidth() - getInsets().left - getInsets().right, getHeight() - getInsets().top - getInsets().bottom , null);
 
         if (DriverCons.D_DrawOnSides) {
             for (Point point : steering.leftPoints) {
                 g.setColor(Color.YELLOW);
-                g.fillRect(point.x + control.getEdges().left, point.y + control.getEdges().top, 5, 5);
+                g.fillRect(point.x + control.getEdges().left, point.y + 25, 5, 5);
+                
             }
             for (Point point : steering.rightPoints) {
-                g.fillRect(point.x + control.getEdges().left, point.y + control.getEdges().top, 5, 5);
+                g.fillRect(point.x + control.getEdges().left, point.y + 25, 5, 5);
             }
         }
 
