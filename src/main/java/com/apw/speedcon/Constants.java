@@ -9,8 +9,8 @@ public class Constants {
 			DEFAULT_WRITE_SPEED_TO_CONSOLE = false;
 	public static final double
 			//Speed Related Constants
-			MAX_SPEED = 20,					//Car's maximum speed
-			MIN_SPEED = 10,					//Car's minimum speed
+			MAX_SPEED = 15,					//Car's maximum speed
+			MIN_SPEED = 5,					//Car's minimum speed
 			PIN_TO_METER_PER_SECOND = 0.4,	//Conversion for motor position to m/s. DO NOT TOUCH
 			MAX_OBJECT_WIDTH = 320,			//Maximum width in pixels of object height before car slows
 			MAX_OBJECT_HEIGHT = 200,		//Maximum height of in pixels of an object before car slows

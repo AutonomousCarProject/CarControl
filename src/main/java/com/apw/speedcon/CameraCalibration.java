@@ -37,7 +37,7 @@ public class CameraCalibration {
 	private PedestrianDetector pedDetect;
 
 	//Camera information
-	private double cameraFocalLength = 35;   //If used in sim, leave at 35, if testing IRL leave blank and use calibrateCamera
+	private double cameraFocalLength = 450;   //If used in sim, leave at 35, if testing IRL leave blank and use calibrateCamera
 	private double signWidth;		   //The width of a standared stop sign in mm
 
 	private MovingBlob testBlob;
