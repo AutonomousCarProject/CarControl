@@ -4,10 +4,11 @@ import com.apw.carcontrol.CarControl;
 import com.apw.carcontrol.Module;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 
 public class ImageManagementModule implements Module {
 
-    private int viewType = 1;
+    private int viewType = 4;
     private int width, height;
     private int[] imagePixels;
     private byte mono[];
@@ -143,7 +144,12 @@ public class ImageManagementModule implements Module {
 
     @Override
     public void initialize(CarControl control) {
-
+    	control.addKeyEvent(KeyEvent.VK_SPACE, () -> changeFilter());
+    }
+    
+    public void changeFilter() {
+    	viewType = (viewType) % 5 + 1; 
+    	System.out.println(viewType);
     }
 
     @Override
