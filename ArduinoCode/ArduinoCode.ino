@@ -177,7 +177,7 @@ void loop() {
     digitalWrite(13, HIGH);
 
     //Timeout check
-    if (Serial.peek() <= 0 && micros()-sinceConnect > timeout){
+    if (!timedout && Serial.peek() <= 0 && micros()-sinceConnect > timeout){
       timedout = true;
       addMessage(5, 0, 4);
       sendMessage();
