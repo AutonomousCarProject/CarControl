@@ -146,8 +146,10 @@ void loop() {
   //Turn off the signal at approximately the correct timing.
   //int timing = micros()-lastTime;
   if (wheelON && (micros()-lastTime >= wheelDelay)){
+    digitalWrite(13, HIGH);
     delayMicroseconds(max(overtimeFix - (micros() - lastTime - wheelDelay), 1));
     digitalWrite(10, LOW);
+    digitalWrite(13, LOW);
     wheelON = false;
     
     /*if (timing - wheelDelay > overtime) {
