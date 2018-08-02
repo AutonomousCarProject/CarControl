@@ -73,12 +73,18 @@ public class CamControl implements CarControl {
         return renderedImage;
     }
 
+    @Override
+    public void setRGBImage(int[] image) {
+        renderedImage = image;
+    }
+
     /**
      * Gets the image to be rendered on the screen. Normally should not be used by any class except the renderer itself.
      *
      * @return The image to be rendered on the TrakSim window.
      */
-    protected int[] getRenderedImage() {
+    @Override
+    public int[] getRenderedImage() {
         return renderedImage;
     }
 

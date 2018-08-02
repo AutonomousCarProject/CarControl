@@ -41,7 +41,9 @@ public interface CarControl {
      * return image The rgb image in the form of a rgb raster array.
      */
     int[] getRGBImage();
-    
+
+    int[] getRenderedImage();
+
     /**
      * Sets the rgb image.
      *
