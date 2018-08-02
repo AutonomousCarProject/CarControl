@@ -93,7 +93,7 @@ void loop() {
     sinceNoKill = 0;
   }
 
-  if (!kill && micros()-lastNoKill > timeout){
+  if (!kill && lastNoKill != 0 && micros()-lastNoKill > timeout){
     kill = true;
     addMessage(4, 0, 4);
   }
@@ -173,7 +173,7 @@ void loop() {
     steerON = false;
   }
   
-  if (!kill && !timedout){
+  if (!kill){
     digitalWrite(13, HIGH);
 
     //Timeout check
