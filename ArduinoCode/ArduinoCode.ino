@@ -145,8 +145,8 @@ void loop() {
 
   //Turn off the signal at approximately the correct timing.
   //int timing = micros()-lastTime;
-  if (wheelON && micros()-lastTime >= wheelDelay){
-    delayMicroseconds(max(overtimeFix - (micros() - lastTime - wheelDelay), 0));
+  if (wheelON && (micros()-lastTime >= wheelDelay)){
+    delayMicroseconds(max(overtimeFix - (micros() - lastTime - wheelDelay), 1));
     digitalWrite(10, LOW);
     wheelON = false;
     
@@ -158,8 +158,8 @@ void loop() {
     }*/
   }
   
-  if (steerON && micros()-lastTime >= steerDelay){
-    delayMicroseconds(max(overtimeFix - (micros() - lastTime - steerDelay), 0)); //an attempt to normalize timing
+  if (steerON && (micros()-lastTime >= steerDelay)){
+    delayMicroseconds(max(overtimeFix - (micros() - lastTime - steerDelay), 1)); //an attempt to normalize timing
     digitalWrite(9, LOW);
     steerON = false;
   }
