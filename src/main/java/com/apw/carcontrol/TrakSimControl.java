@@ -16,6 +16,7 @@ public class TrakSimControl implements CarControl {
 
     private byte[] cameraImage = null;
     private byte[] processedImage = null;
+    private int[] rgbImage = null;
     private int[] renderedImage = null;
     private int currentSteering = 0;
     private int currentVelocity = 0;
@@ -72,7 +73,12 @@ public class TrakSimControl implements CarControl {
 
     @Override
     public int[] getRGBImage() {
-        return renderedImage;
+        return rgbImage;
+    }
+    
+    @Override
+    public void setRGBImage(int[] rgbImage) {
+        this.rgbImage = rgbImage;
     }
 
     /**
