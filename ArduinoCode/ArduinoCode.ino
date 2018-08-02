@@ -4,8 +4,8 @@ bool timedout = false;
 byte steeringDeg, wheelSpeed;
 bool wheelON, steerON;
 int offf = 0;
-int wheelDelay = 1500;
-int steerDelay = 1500;
+unsigned long wheelDelay = 1500;
+unsigned long steerDelay = 1500;
 int normalDelay = 1000;
 
 byte out[] = {0, 0, 0};
