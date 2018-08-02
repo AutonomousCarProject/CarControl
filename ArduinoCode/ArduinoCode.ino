@@ -21,7 +21,7 @@ int overtimeFix = 65;
 unsigned long lastNoKill = 0;
 unsigned long sinceConnect = 0;
 unsigned long sinceNoKill = 0; //Input timing for kill
-unsigned long timeout = 300000; //microseconds before timeout
+unsigned long timeout = 30000; //microseconds before timeout
 unsigned long lastTime = 0; //timekeeping for 50 hz, 20000 us reset
 unsigned long lastRun = 0; //timekeeping for loop
 
@@ -93,7 +93,7 @@ void loop() {
     sinceNoKill = 0;
   }
 
-  if (micros()-lastNoKill > timeout){
+  if (!kill && micros()-lastNoKill > timeout){
     kill = true;
     addMessage(4, 0, 4);
   }
@@ -153,7 +153,6 @@ void loop() {
         delayMicroseconds(temp);
       } else {
         delayMicroseconds(overtimeFix);
-        addMessage(7, 0, temp);
       }
     }
     digitalWrite(10, LOW);
