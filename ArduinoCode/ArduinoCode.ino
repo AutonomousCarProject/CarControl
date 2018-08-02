@@ -110,7 +110,7 @@ void loop() {
     if (!kill && pin == 9){
       if (value != steeringDeg){
         //steerDelay = 1.0+((double) value)/180;
-        steerDelay = map(value, 0, 180, 1000, 2000) - overtimeFix;
+        steerDelay = min(max(map(value, 0, 180, 1000, 2000), 1000), 2000) - overtimeFix;
       }
       steeringDeg = value;
     }
@@ -118,7 +118,7 @@ void loop() {
     if (!kill && pin == 10){
       if (value != wheelSpeed){
         //wheelDelay = 1.0+((double) value)/180;
-        wheelDelay = map(value, 0, 180, 1000, 2000) - overtimeFix;
+        wheelDelay = min(max(map(value, 0, 180, 1000, 2000), 1000), 2000) - overtimeFix;
       }
       wheelSpeed = value;
     }
@@ -186,11 +186,12 @@ void loop() {
     }
 
   } else {
-    
-    if (digitalRead(11) == HIGH) {
-      digitalWrite(13, HIGH);
-    } else {
-      digitalWrite(13, LOW);
+    if (timedout){
+      if (digitalRead(11) == HIGH) {
+        digitalWrite(13, HIGH);
+      } else {
+        digitalWrite(13, LOW);
+      }
     }
   }
 
