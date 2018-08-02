@@ -176,6 +176,7 @@ public class ImageManagementModule implements Module {
         }
 
         control.setRenderedImage(imagePixels);
+        control.setRGBImage(getBWRGBRaster(control.getRecentCameraImage()));
         control.setProcessedImage(getSimpleColorRaster(control.getRecentCameraImage()));
     }
 
