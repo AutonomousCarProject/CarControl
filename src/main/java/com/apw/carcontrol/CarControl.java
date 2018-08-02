@@ -48,6 +48,10 @@ public interface CarControl {
      * @param image The rgb image in the form of a rgb raster array.
      */
     void setRGBImage(int[] image);
+    
+    int getImageWidth();
+    
+    int getImageHeight();
 
     /**
      * Sets the image to be rendered on the screen.

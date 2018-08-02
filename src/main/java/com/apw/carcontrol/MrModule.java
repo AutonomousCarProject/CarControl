@@ -33,18 +33,22 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     private boolean fullscreen;
 
     // FIXME breaks if dimensions are not 912x480
-    private final int windowWidth = 912;
-    private final int windowHeight = 480;
+    private int windowWidth = 912;
+    private int windowHeight = 480;
 
     private MrModule(boolean renderWindow) {
         if (renderWindow) {
             control = new TrakSimControl(driveSys);
-            headlessInit();
-            setupWindow();
         } else {
-            control = null;
-            headlessInit();
+            control = new CamControl(driveSys);
         }
+        windowWidth = control.getImageWidth();
+        windowHeight = control.getImageHeight();
+        
+        headlessInit();
+        setupWindow();
+        
+        System.out.println(windowWidth + "************X************" + windowHeight);
         
         createModules();
     }
@@ -52,7 +56,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     private void headlessInit() {
         executorService = Executors.newSingleThreadScheduledExecutor();
         modules = new ArrayList<>();
-        executorService.scheduleAtFixedRate(this, 0, 1000 / 15, TimeUnit.MILLISECONDS);
+        executorService.scheduleAtFixedRate(this, 1000, 1000 / 5, TimeUnit.MILLISECONDS);
     }
     
     private void setupWindow() {
@@ -68,9 +72,11 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         setIgnoreRepaint(true);
     }
     private void createModules() {
-        modules.add(new ImageManagementModule(windowWidth, windowHeight, control.getTile()));
-        modules.add(new SpeedControlModule());
-        modules.add(new SteeringModule());
+		modules.add(new ImageManagementModule(windowWidth, windowHeight, control.getTile()));
+        SpeedControlModule scm = new SpeedControlModule();
+        modules.add(scm);
+        modules.add(new SteeringModule(scm));
+
         modules.add(new ArduinoModule(driveSys));
 
         for (Module module : modules) {
@@ -91,14 +97,18 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         }
     }
 
+
     private void paint() {
+    	int[] renderedImage = null;
         Graphics g;
         g = this.getGraphics();
-        if (!(control instanceof TrakSimControl)) {
-            return;
+        
+        if (control instanceof TrakSimControl) {
+        	renderedImage = ((TrakSimControl) control).getRenderedImage();
         }
-
-        int[] renderedImage = ((TrakSimControl) control).getRenderedImage();
+        else if (control instanceof CamControl) {
+        	renderedImage = ((CamControl) control).getRenderedImage();
+        }
 
         if (renderedImage != null) {
             int[] displayPixels =
@@ -108,6 +118,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
             BufferedImage tempImage = displayImage;
             displayImage = bufferImage;
             bufferImage = tempImage;
+
             g.drawImage(displayImage, getInsets().left, getInsets().top, getWidth() - getInsets().left - getInsets().right, getHeight() - getInsets().top - getInsets().bottom , null);
         }
         
@@ -125,7 +136,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     public static void main(String[] args) {
         boolean renderWindow = true;
         if(args.length > 0 && args[0].toLowerCase().equals("nosim")) {
-            renderWindow = false;
+            renderWindow = true;
         }
         new MrModule(renderWindow);
     }

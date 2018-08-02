@@ -30,9 +30,9 @@ void setup() {
   //set pins to input/output
   pinMode(9, OUTPUT); //steering
   pinMode(10, OUTPUT); //speed
-  pinMode(11, INPUT); //speed getter
+  pinMode(11, INPUT); //Dead man's switch
   
-  //pinMode(2, INPUT); //Dead man's switch
+  //pinMode(2, INPUT); 
   
   pinMode(13, OUTPUT); //testing light
   digitalWrite(13, HIGH);
@@ -69,12 +69,12 @@ void loop() {
   lastRun = micros();
 
   //Read rise of signal
-  if (sinceNoKill == 0 && digitalRead(2) == HIGH){
+  if (sinceNoKill == 0 && digitalRead(11) == HIGH){
     sinceNoKill = micros();
   }
 
   //Read fall of signal
-  if (sinceNoKill != 0 && digitalRead(2) == LOW){
+  if (sinceNoKill != 0 && digitalRead(11) == LOW){
     lastNoKill = micros();
     if (!kill && micros()-sinceNoKill < 1600){ //Check difference to find duration of input
       kill = true;
@@ -82,7 +82,6 @@ void loop() {
       steerDelay = 1500;
       //Send message to computer
       addMessage(4, 0, 3);
-      sendMessage();
     }
     if (kill && micros()-sinceNoKill > 1800){ //Start up if un-killed
       kill = false;
@@ -94,7 +93,6 @@ void loop() {
   if (micros()-lastNoKill > timeout){
     kill = true;
     addMessage(4, 0, 4);
-    sendMessage();
   }
 
   //Grab info from buffer
@@ -126,9 +124,9 @@ void loop() {
       wheelDelay = 1500;
       steerDelay = 1500;
       kill = false;
-      timedout = false;
       addMessage(3, 0, 0);
     }
+    timedout = false;
   }
   
   //Start next cycle every .02 seconds
@@ -167,7 +165,7 @@ void loop() {
 
   } else {
     
-    if (digitalRead(2) == HIGH) {
+    if (digitalRead(11) == HIGH) {
       digitalWrite(13, HIGH);
     } else {
       digitalWrite(13, LOW);
