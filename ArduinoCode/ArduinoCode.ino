@@ -24,7 +24,7 @@ unsigned long sinceConnect = 0;
 unsigned long sinceNoKill = 0; //Input timing for kill
 unsigned long lastTime = 0; //timekeeping for 50 hz, 20000 us reset
 unsigned long lastRun = 0; //timekeeping for loop
-const unsigned long timeout = 30000; //microseconds before timeout
+const unsigned long timeout = 300000; //microseconds before timeout
 
 //#define NOT_AN_INTERRUPT -1
 //where 1ms is considered full left or full reverse, and 2ms is considered full forward or full right.
@@ -94,7 +94,7 @@ void loop() {
     sinceNoKill = 0;
   }
 
-  if (!kill && lastNoKill != 0 && micros()-lastNoKill > timeout){
+  if (!kill && micros()-lastNoKill > timeout){
     kill = true;
     addMessage(4, 0, 4);
   }
@@ -179,7 +179,7 @@ void loop() {
     digitalWrite(13, HIGH);
 
     //Timeout check
-    if (!timedout && Serial.peek() <= 0 && micros()-sinceConnect > timeout){
+    if (!timedout && Serial.peek() <= 0 && (micros()-sinceConnect) > timeout){
       timedout = true;
       addMessage(5, 0, 4);
       digitalWrite(13, LOW);
