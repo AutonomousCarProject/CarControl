@@ -2,7 +2,7 @@
 bool kill = false;
 bool timedout = false;
 byte steeringDeg, wheelSpeed;
-bool wheelON, steerON;
+bool speedON, steerON;
 int offf = 0;
 int normalDelay = 1000;
 
@@ -110,7 +110,7 @@ void loop() {
     if (!kill && pin == 9){
       if (value != steeringDeg){
         //steerDelay = 1.0+((double) value)/180;
-        steerDelay = min(max(map(value, 0, 180, 1000, 2000), 1000), 2000) - overtimeFix;
+        steerDelay = map(constrain(value, 0, 180), 0, 180, 1000, 2000) - overtimeFix;
       }
       steeringDeg = value;
     }
@@ -118,7 +118,7 @@ void loop() {
     if (!kill && pin == 10){
       if (value != wheelSpeed){
         //wheelDelay = 1.0+((double) value)/180;
-        wheelDelay = min(max(map(value, 0, 180, 1000, 2000), 1000), 2000) - overtimeFix;
+        wheelDelay = map(constrain(value, 0, 180), 0, 180, 1000, 2000) - overtimeFix;
       }
       wheelSpeed = value;
     }
@@ -139,14 +139,14 @@ void loop() {
     digitalWrite(9, HIGH);
     digitalWrite(10, HIGH);
     steerON = true;
-    wheelON = true;
+    speedON = true;
     
     lastTime = micros();
   }
 
   //Turn off the signal at approximately the correct timing.
   //int timing = micros()-lastTime;
-  if (wheelON && (micros()-lastTime >= wheelDelay)){
+  if (speedON && (micros()-lastTime >= wheelDelay)){
     digitalWrite(13, HIGH);
     int temp = overtimeFix - (micros() - lastTime - wheelDelay);
     if (temp > 2){
@@ -159,7 +159,7 @@ void loop() {
     }
     digitalWrite(10, LOW);
     digitalWrite(13, LOW);
-    wheelON = false;
+    speedON = false;
     
     /*if (timing - wheelDelay > overtime) {
       overtime = timing - wheelDelay;
@@ -185,7 +185,7 @@ void loop() {
       digitalWrite(13, LOW);
     }
 
-  } else {
+  } /*else {
     if (timedout){
       if (digitalRead(11) == HIGH) {
         digitalWrite(13, HIGH);
@@ -193,7 +193,7 @@ void loop() {
         digitalWrite(13, LOW);
       }
     }
-  }
+  }*/
 
   /*int temp = 50-millis()+lastRun;
   if (temp >= 0){
