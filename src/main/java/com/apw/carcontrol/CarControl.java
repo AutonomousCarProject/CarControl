@@ -35,8 +35,19 @@ public interface CarControl {
      */
     void setProcessedImage(byte[] image);
 
+    /**
+     * Gets the rgb image.
+     *
+     * return image The rgb image in the form of a rgb raster array.
+     */
     int[] getRGBImage();
     
+    /**
+     * Sets the rgb image.
+     *
+     * @param image The rgb image in the form of a rgb raster array.
+     */
+    void setRGBImage(int[] image);
     
     int getImageWidth();
     
