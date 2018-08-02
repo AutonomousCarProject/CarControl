@@ -147,7 +147,15 @@ void loop() {
   //int timing = micros()-lastTime;
   if (wheelON && (micros()-lastTime >= wheelDelay)){
     digitalWrite(13, HIGH);
-    delayMicroseconds(max(overtimeFix - (micros() - lastTime - wheelDelay), 1));
+    int temp = overtimeFix - (micros() - lastTime - wheelDelay);
+    if (temp > 2){
+      if (temp < overtimeFix){
+        delayMicroseconds(temp);
+      } else {
+        delayMicroseconds(overtimeFix);
+        addMessage(7, 0, temp);
+      }
+    }
     digitalWrite(10, LOW);
     digitalWrite(13, LOW);
     wheelON = false;
