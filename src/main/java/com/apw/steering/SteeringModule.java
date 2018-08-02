@@ -114,23 +114,27 @@ public class SteeringModule implements Module {
                 }
             }
         }
+        
+     // Draw steering.steerPoint on screen
+        g.setColor(Color.CYAN);
+        g.fillRect(steering.steerPoint.x, steering.steerPoint.y + 25, 7, 7);
 
         for (int idx = 0; idx < steering.midPoints.size(); idx++) {
             g.setColor(Color.blue);
-        	g.fillRect(steering.midPoints.get(idx).x, steering.midPoints.get(idx).y, 3, 3);
+        	g.fillRect(steering.midPoints.get(idx).x, steering.midPoints.get(idx).y + 25, 3, 3);
         }
         if (DriverCons.D_DrawOnSides) {
             for (Point point : steering.leftPoints) {
                 g.setColor(Color.yellow);
                 int xL = point.x;
                 int yL = point.y;
-                g.fillRect(xL, yL, 3, 3);
+                g.fillRect(xL, yL + 25, 3, 3);
             }
             for (Point point : steering.rightPoints) {
                 int xR = point.x;
                 int yR = point.y;
                 g.setColor(Color.yellow);
-                g.fillRect(xR, yR, 3, 3);
+                g.fillRect(xR, yR + 25, 3, 3);
             }
         }
     }
