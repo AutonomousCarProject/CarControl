@@ -1,8 +1,11 @@
 package com.apw.steering;
 
 import com.apw.apw3.DriverCons;
+import com.apw.carcontrol.CamControl;
 import com.apw.carcontrol.CarControl;
 import com.apw.carcontrol.Module;
+import com.apw.speedcon.SpeedControlModule;
+import com.apw.steering.Point;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -11,6 +14,7 @@ import java.io.PrintStream;
 public class SteeringModule implements Module {
 
     private SteeringBase steering;
+    private SpeedControlModule speed;
     private double sumOfAngles = 0;
     private double locX = 0;
     private double locY = 0;
@@ -20,19 +24,26 @@ public class SteeringModule implements Module {
     private int frameCount = 0;
 
 
-    public SteeringModule() {
-        if (DriverCons.D_steeringVersion == 1) {
-            steering = new SteeringMk1(640, 480);
-        } 
-        else if (DriverCons.D_steeringVersion == 2) {
-            steering = new SteeringMk2(640, 480);
-        }
+    public SteeringModule(SpeedControlModule speed) {
+        this.speed = speed;
     }
 
     @Override
     public void initialize(CarControl control) {
         control.addKeyEvent(KeyEvent.VK_LEFT, () -> control.steer(false, -5));
         control.addKeyEvent(KeyEvent.VK_RIGHT, () -> control.steer(false, 5));
+
+        if (control instanceof CamControl) {
+           if (DriverCons.D_steeringVersion == 1) {
+               steering = new SteeringMk1(control);
+           } else if (DriverCons.D_steeringVersion == 2) {
+               steering = new SteeringMk2(control);
+           }
+        } else if (DriverCons.D_steeringVersion == 1) {
+                steering = new SteeringMk1(640, 480, 912);
+        } else if (DriverCons.D_steeringVersion == 2) {
+                steering = new SteeringMk2(640, 480, 912);
+        }
     }
 
     @Override
@@ -45,7 +56,7 @@ public class SteeringModule implements Module {
     @Override
     public void paint(CarControl control, Graphics g) {
         int tempDeg = angle;
-        if (control.getVelocity() > 0) {
+        if (speed.getNextSpeed() > 0) {
 
             double inRadiusAngle = .57/2 * (double) tempDeg ;
             double outRadiusAngle = .38/2 * (double) tempDeg;
@@ -72,7 +83,6 @@ public class SteeringModule implements Module {
             //if (sumOfAngles > 360) sumOfAngles = sumOfAngles - 360;
             //if (sumOfAngles < 0) sumOfAngles = sumOfAngles + 360;
             //}
-
 
             locX = locX + (double) Math.cos(Math.toRadians(sumOfAngles)) * (double) DriverCons.D_FrameTime/1000.0 * (double) DriverCons.D_fMinSpeed;
 
@@ -105,55 +115,22 @@ public class SteeringModule implements Module {
             }
         }
 
-        g.setColor(Color.RED);
-
-        if (DriverCons.D_DrawPredicted) {
-            int tempY = 0;
-            for (int idx = 0; idx < steering.midPoints.size(); idx++) {
-                if (idx >= steering.startTarget && idx <= steering.endTarget) {
-                    g.setColor(Color.red);
-                    tempY += steering.midPoints.get(idx).y;
-                    g.fillRect(steering.midPoints.get(idx).x, steering.midPoints.get(idx).y + control.getEdges().top, 5, 5);
-                } else {
-                    g.setColor(Color.BLUE);
-                }
-            }
-
-            //System.out.println(tempY / (1.0 * (endTarget - startTarget)));
-        }
-//        g.drawImage(displayImage, getInsets().left, getInsets().top, getWidth() - getInsets().left - getInsets().right, getHeight() - getInsets().top - getInsets().bottom , null);
-
-        if (DriverCons.D_DrawOnSides) {
-            for (Point point : steering.leftPoints) {
-                g.setColor(Color.YELLOW);
-                g.fillRect(point.x + control.getEdges().left, point.y + 25, 5, 5);
-                
-            }
-            for (Point point : steering.rightPoints) {
-                g.fillRect(point.x + control.getEdges().left, point.y + 25, 5, 5);
-            }
-        }
-
-        // Draw steering.steerPoint on screen
-        g.setColor(Color.CYAN);
-        g.fillRect(steering.steerPoint.x, steering.steerPoint.y, 7, 7);
-
-        //Draw predicted points and detected lines
-        for (Point point : steering.midPoints) {
-            if (DriverCons.D_DrawPredicted) {
-                control.rectFill(255, point.y, point.x, point.y + 5, point.x + 5);
-            }
+        for (int idx = 0; idx < steering.midPoints.size(); idx++) {
+            g.setColor(Color.blue);
+        	g.fillRect(steering.midPoints.get(idx).x, steering.midPoints.get(idx).y, 3, 3);
         }
         if (DriverCons.D_DrawOnSides) {
             for (Point point : steering.leftPoints) {
+                g.setColor(Color.yellow);
                 int xL = point.x;
                 int yL = point.y;
-                control.rectFill(16776960, yL, xL, yL + 5, xL + 5);
+                g.fillRect(xL, yL, 3, 3);
             }
             for (Point point : steering.rightPoints) {
                 int xR = point.x;
                 int yR = point.y;
-                control.rectFill(16776960, yR, xR, yR + 5, xR + 5);
+                g.setColor(Color.yellow);
+                g.fillRect(xR, yR, 3, 3);
             }
         }
     }

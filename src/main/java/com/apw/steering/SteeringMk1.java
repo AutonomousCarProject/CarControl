@@ -1,7 +1,6 @@
 package com.apw.steering;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.apw.carcontrol.CarControl;
 
 
 /**
@@ -20,7 +19,6 @@ public class SteeringMk1 extends SteeringBase {
 
     private final int heightOfArea = 32; // How high the car looks for lines
     private final int startingHeight = 272; // how high the car starts looking for lines
-
     private int startingPoint = 0; // Where the car starts looking for lines on either side.
     private Point[] leadingMidPoints = new Point[startingHeight + heightOfArea];
     private Point[] pointsAhead = new Point[startingHeight - (cameraHeight / 2)]; //points far ahead
@@ -33,7 +31,22 @@ public class SteeringMk1 extends SteeringBase {
     /**
      * Constructor that Initializes all points in array.
      */
-    public SteeringMk1(int cameraWidth, int cameraHeight) {
+    SteeringMk1(int cameraWidth, int cameraHeight, int screenWidth) {
+        initializeArrays();
+        this.cameraWidth = cameraWidth;
+        this.cameraHeight = cameraHeight;
+        this.screenWidth = screenWidth;
+        origin = new Point(cameraWidth / 2, cameraHeight);
+    }
+
+    SteeringMk1(CarControl control) {
+        initializeArrays();
+        this.cameraWidth = control.getImageWidth();
+        this.cameraHeight = control.getImageHeight();
+        origin = new Point(cameraWidth / 2, cameraHeight);
+    }
+
+    private void initializeArrays() {
         for (int i = 0; i < heightOfArea; i++) {
             leftPoints.add(new Point(0, 0));
             rightPoints.add(new Point(0, 0));
@@ -42,9 +55,6 @@ public class SteeringMk1 extends SteeringBase {
         for (int i = 0; i < leadingMidPoints.length; i++) {
             leadingMidPoints[i] = new Point(0, 0);
         }
-        this.cameraWidth = cameraWidth;
-        this.cameraHeight = cameraHeight;
-        origin = new Point(cameraWidth / 2, cameraHeight);
     }
 
     /**
@@ -132,7 +142,7 @@ public class SteeringMk1 extends SteeringBase {
                     break;
                 }
             }
-
+          
             if(weightLane && midPoints != null){
                 averageMidpoints();
                 checkPointsAhead(pixels);
@@ -206,7 +216,6 @@ public class SteeringMk1 extends SteeringBase {
         //Next, calculate the roadpoint
 
         int count = 0;
-
         for (int i = startingHeight; i > cameraHeight / 2; i--) {
             for (int j = roadMiddle / 2; j >= 0; j--) {
                 if (pixels[cameraWidth * i + j] == 16777215) {
@@ -258,8 +267,6 @@ public class SteeringMk1 extends SteeringBase {
             else turnRightAhead = false;
         } else turnAhead = false;
     }
-
-
 
     /**
      * Average the midpoints, and assign the average to steerPoint.

@@ -101,7 +101,7 @@ public class ImageManagementModule implements Module {
         return rgb;
 
     }
-
+  
     public int[] getBWRGBRaster(byte[] pixels) {
         byte[] output = new byte[width * height];
         int[] rgb = new int[width*height];
