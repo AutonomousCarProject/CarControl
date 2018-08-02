@@ -4,8 +4,6 @@ bool timedout = false;
 byte steeringDeg, wheelSpeed;
 bool wheelON, steerON;
 int offf = 0;
-unsigned long wheelDelay = 1500;
-unsigned long steerDelay = 1500;
 int normalDelay = 1000;
 
 byte out[] = {0, 0, 0};
@@ -16,14 +14,17 @@ byte pin;
 byte value;
 
 unsigned long overtime = 20;
-int overtimeFix = 65;
+const int overtimeFix = 80;
+
+unsigned long wheelDelay = 1500 - overtimeFix;
+unsigned long steerDelay = 1500 - overtimeFix;
 
 unsigned long lastNoKill = 0;
 unsigned long sinceConnect = 0;
 unsigned long sinceNoKill = 0; //Input timing for kill
-unsigned long timeout = 30000; //microseconds before timeout
 unsigned long lastTime = 0; //timekeeping for 50 hz, 20000 us reset
 unsigned long lastRun = 0; //timekeeping for loop
+const unsigned long timeout = 30000; //microseconds before timeout
 
 //#define NOT_AN_INTERRUPT -1
 //where 1ms is considered full left or full reverse, and 2ms is considered full forward or full right.
@@ -79,16 +80,16 @@ void loop() {
   //Read fall of signal
   if (sinceNoKill != 0 && digitalRead(11) == LOW){
     lastNoKill = micros();
-    if (!kill && micros()-sinceNoKill < 1600){ //Check difference to find duration of input
-      kill = true;
-      wheelDelay = 1500;
-      steerDelay = 1500;
-      //Send message to computer
-      addMessage(4, 0, 3);
-    }
     if (kill && micros()-sinceNoKill > 1800){ //Start up if un-killed
       kill = false;
       addMessage(3, 0, 1);
+    }
+    if (!kill && micros()-sinceNoKill < 1600){ //Check difference to find duration of input
+      kill = true;
+      wheelDelay = 1500 - overtimeFix;
+      steerDelay = 1500 - overtimeFix;
+      //Send message to computer
+      addMessage(4, 0, 3);
     }
     sinceNoKill = 0;
   }
@@ -123,8 +124,8 @@ void loop() {
     }
   
     if (kill && type == 0xFF) { //Restart if a startup signal is recieved
-      wheelDelay = 1500;
-      steerDelay = 1500;
+      wheelDelay = 1500 - overtimeFix;
+      steerDelay = 1500 - overtimeFix;
       kill = false;
       addMessage(3, 0, 0);
     }
@@ -153,6 +154,7 @@ void loop() {
         delayMicroseconds(temp);
       } else {
         delayMicroseconds(overtimeFix);
+        addMessage(6, 6, 6);
       }
     }
     digitalWrite(10, LOW);
@@ -180,7 +182,6 @@ void loop() {
     if (!timedout && Serial.peek() <= 0 && micros()-sinceConnect > timeout){
       timedout = true;
       addMessage(5, 0, 4);
-      sendMessage();
       digitalWrite(13, LOW);
     }
 
