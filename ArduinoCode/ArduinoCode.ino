@@ -16,6 +16,7 @@ byte pin;
 byte value;
 
 unsigned long overtime = 20;
+int overtimeFix = 65;
 
 unsigned long lastNoKill = 0;
 unsigned long sinceConnect = 0;
@@ -108,7 +109,7 @@ void loop() {
     if (!kill && pin == 9){
       if (value != steeringDeg){
         //steerDelay = 1.0+((double) value)/180;
-        steerDelay = map(value, 0, 180, 1000, 2000);
+        steerDelay = map(value, 0, 180, 1000, 2000) - overtimeFix;
       }
       steeringDeg = value;
     }
@@ -116,13 +117,12 @@ void loop() {
     if (!kill && pin == 10){
       if (value != wheelSpeed){
         //wheelDelay = 1.0+((double) value)/180;
-        wheelDelay = map(value, 0, 180, 1000, 2000);
+        wheelDelay = map(value, 0, 180, 1000, 2000) - overtimeFix;
       }
       wheelSpeed = value;
     }
   
     if (kill && type == 0xFF) { //Restart if a startup signal is recieved
-      sinceConnect = micros();
       wheelDelay = 1500;
       steerDelay = 1500;
       kill = false;
@@ -143,30 +143,25 @@ void loop() {
     lastTime = micros();
   }
 
-  int timing = micros()-lastTime;
   //Turn off the signal at approximately the correct timing.
-  if (steerON && timing >= steerDelay){
-    digitalWrite(9, LOW);
-    steerON = false;
-
-    if (timing - steerDelay > overtime) {
-      overtime = timing - steerDelay;
-      if (overtime < 255){
-        addMessage(8, 0, overtime);
-      } else {addMessage(9, 0, overtime);}
-    }
-  }
-
-  if (wheelON && timing >= wheelDelay){
+  //int timing = micros()-lastTime;
+  if (wheelON && micros()-lastTime >= wheelDelay){
+    delayMicroseconds(max(overtimeFix - (micros() - lastTime - wheelDelay), 0));
     digitalWrite(10, LOW);
     wheelON = false;
     
-    if (timing - wheelDelay > overtime) {
+    /*if (timing - wheelDelay > overtime) {
       overtime = timing - wheelDelay;
       if (overtime < 255){
-        addMessage(8, 1, overtime);
-      } else {addMessage(9, 1, overtime);}
-    }
+        addMessage(8, 0, overtime);
+      } else {addMessage(9, 0, overtime);}
+    }*/
+  }
+  
+  if (steerON && micros()-lastTime >= steerDelay){
+    delayMicroseconds(max(overtimeFix - (micros() - lastTime - steerDelay), 0)); //an attempt to normalize timing
+    digitalWrite(9, LOW);
+    steerON = false;
   }
   
   if (!kill && !timedout){
