@@ -1,7 +1,6 @@
 package com.apw.steering;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.apw.carcontrol.CarControl;
 
 
 /**
@@ -20,10 +19,9 @@ public class SteeringMk1 extends SteeringBase {
 
     private final int heightOfArea = 32; // How high the car looks for lines
     private final int startingHeight = 272; // how high the car starts looking for lines
-    private List<Double> posLog = new ArrayList<>(); // Array list for logging positions fed into it
     private int startingPoint = 0; // Where the car starts looking for lines on either side.
     private Point[] leadingMidPoints = new Point[startingHeight + heightOfArea];
-    private Point[] pointsAhead = new Point[startingHeight - (screenHeight / 2)]; //points far ahead
+    private Point[] pointsAhead = new Point[startingHeight - (cameraHeight / 2)]; //points far ahead
     private double weight = 1.0; // >1 = right lane, <1 = left lane
     private boolean weightLane = false;
     private boolean turnAhead = false;
@@ -33,7 +31,22 @@ public class SteeringMk1 extends SteeringBase {
     /**
      * Constructor that Initializes all points in array.
      */
-    public SteeringMk1() {
+    SteeringMk1(int cameraWidth, int cameraHeight, int screenWidth) {
+        initializeArrays();
+        this.cameraWidth = cameraWidth;
+        this.cameraHeight = cameraHeight;
+        this.screenWidth = screenWidth;
+        origin = new Point(cameraWidth / 2, cameraHeight);
+    }
+
+    SteeringMk1(CarControl control) {
+        initializeArrays();
+        this.cameraWidth = control.getImageWidth();
+        this.cameraHeight = control.getImageHeight();
+        origin = new Point(cameraWidth / 2, cameraHeight);
+    }
+
+    private void initializeArrays() {
         for (int i = 0; i < heightOfArea; i++) {
             leftPoints.add(new Point(0, 0));
             rightPoints.add(new Point(0, 0));
@@ -69,46 +82,42 @@ public class SteeringMk1 extends SteeringBase {
         int roadMiddle = cameraWidth;
         int leftSideTemp = 0;
         int rightSideTemp = 0;
-        int count = 0;
-        long averageLuminance = 0;
-        Boolean found;
-        Boolean leftSideFound;
-        Boolean rightSideFound;
         startingPoint = 0;
-
-        // Find average luminance
-        for (int i = cameraWidth * screenHeight - 1; i > startingHeight * cameraWidth; i--) {
+        long averageLuminance = 0;
+        Boolean leftSideFound = false;
+        Boolean rightSideFound = false;
+        Boolean first = true;
+        Boolean found = false;
+        int count = 0;
+        //first before first, find average luminance
+        for (int i = cameraWidth * cameraHeight - 1; i > startingHeight * cameraWidth; i--) {
             averageLuminance = averageLuminance + pixels[i];
             count++;
         }
-        averageLuminance = (long) (averageLuminance / count * 1.5);
-        System.out.println("average luminance " + averageLuminance);
+        averageLuminance = (long) (averageLuminance/count * 1.5);
+        count = 0;
 
-        // Find where road starts on both sides
+        //first, find where road starts on both sides
         leftSideFound = false;
         rightSideFound = false;
-        // Iterate over every row of pixels
-        for (int row = screenHeight - 22; row > startingHeight + heightOfArea; row--) {
-            // Iterate over the pixel columns on left half of camera
-            for (int column = roadMiddle / 2; column >= 0; column--) {
-                // If the pixel is brighter than average, left side found.
-                if (pixels[(screenWidth * (row)) + column] >= averageLuminance) {
+        for (int i = cameraHeight - 22; i>startingHeight + heightOfArea; i--) {
+            for (int j = roadMiddle/2; j>=0; j--) {
+                if (pixels[(screenWidth * (i)) + j] >= averageLuminance) {
                     leftSideFound = true;
                     break;
                 }
             }
-            // Iterate over the pixel columns on right half of camera
-            for (int column = roadMiddle / 2; column < cameraWidth; column++) {
-                // If the pixel is brighter than average, right side found.
-                if (pixels[(screenWidth * (row)) + column] >= averageLuminance) {
+            for (int j = roadMiddle/2; j<cameraWidth; j++) {
+                if (pixels[(screenWidth * (i)) + j] >= averageLuminance) {
                     rightSideFound = true;
                     break;
                 }
             }
 
-            // Set starting point at the first place both line are found.
             if (leftSideFound && rightSideFound) {
-                startingPoint = row;
+                startingPoint = i;
+                leftSideFound = false;
+                rightSideFound = false;
                 break;
             }
 
@@ -116,51 +125,47 @@ public class SteeringMk1 extends SteeringBase {
             rightSideFound = false;
         }
 
-        //Next, calculate the roadPoint
+        //Next, calculate the roadpoint
+
         count = 0;
 
-        // Iterate over rows between startingPoint, and startingHeight.
-        for (int row = startingPoint; row > startingHeight + heightOfArea; row--) {
-            // Iterate over the pixel columns on left half of camera
-            for (int column = roadMiddle / 2; column >= 0; column--) {
-                // If the pixel is brighter than average, right side found.
-                if (pixels[screenWidth * row + column] >= averageLuminance) {
-                    leftSideTemp = column;
+        for (int i = startingPoint; i > startingHeight + heightOfArea; i--) {
+            for (int j = roadMiddle/2; j>=0; j--) {
+                if (pixels[screenWidth * i + j]  >= averageLuminance) {
+                    leftSideTemp = j;
                     break;
                 }
             }
-            // Iterate over the pixel columns on right half of camera
-            for (int column = roadMiddle / 2; column < cameraWidth; column++) {
-                // If the pixel is brighter than average, right side found.
-                if (pixels[screenWidth * row + column] >= averageLuminance) {
-                    rightSideTemp = column;
+            for (int j = roadMiddle/2; j<cameraWidth; j++) {
+                if (pixels[screenWidth * i + j]  >= averageLuminance) {
+                    rightSideTemp = j;
                     break;
                 }
             }
-
-            // Drift to one side of the lane when upcoming turn.
-            if (weightLane && midPoints != null) {
+          
+            if(weightLane && midPoints != null){
                 averageMidpoints();
                 checkPointsAhead(pixels);
-                if (turnAhead) {
-                    if (turnRightAhead) weight = 1.25;
+                if(turnAhead){
+                    if(turnRightAhead) weight = 1.25;
                     else weight = 0.85;
-                } else weight = 1;
+                }
+                else weight = 1;
             }
 
-            leadingMidPoints[count].x = weightLane ? ((int) ((double) roadMiddle / 2.0 * weight)) : roadMiddle / 2;
-            leadingMidPoints[count].y = row;
+            leadingMidPoints[count].x = weightLane?( (int) ((double) roadMiddle / 2.0 * weight)):roadMiddle/2;
+            leadingMidPoints[count].y = i;
             count++;
             roadMiddle = leftSideTemp + rightSideTemp;
         }
-
+        int tempCount = count;
         count = 0;
-        for (int i = startingHeight + heightOfArea; i > startingHeight; i--) {
+        for (int i = startingHeight + heightOfArea; i>startingHeight; i--) {
             //center to left
             found = false;
             leftPoints.get(count).y = i;
 
-            for (int j = roadMiddle / 2; j >= 0; j--) {
+            for (int j = roadMiddle/2; j>=0; j--) {
                 if (pixels[screenWidth * i + j] >= averageLuminance) {
                     leftPoints.get(count).x = j;
                     found = true;
@@ -176,7 +181,7 @@ public class SteeringMk1 extends SteeringBase {
             //center to right
             found = false;
             rightPoints.get(count).y = leftPoints.get(count).y;
-            for (int j = roadMiddle / 2; j < cameraWidth; j++) {
+            for (int j = roadMiddle/2; j<cameraWidth; j++) {
                 if (pixels[screenWidth * i + j] >= averageLuminance) {
                     rightPoints.get(count).x = j;
                     found = true;
@@ -188,7 +193,7 @@ public class SteeringMk1 extends SteeringBase {
                 rightPoints.get(count).x = cameraWidth;
             }
 
-            midPoints.get(count).x = roadMiddle / 2;
+            midPoints.get(count).x = roadMiddle/2;
             midPoints.get(count).y = (leftPoints.get(count).y);
             roadMiddle = (leftPoints.get(count).x + rightPoints.get(count).x);
             count++;
@@ -211,16 +216,15 @@ public class SteeringMk1 extends SteeringBase {
         //Next, calculate the roadpoint
 
         int count = 0;
-
-        for (int i = startingHeight; i > screenHeight / 2; i--) {
+        for (int i = startingHeight; i > cameraHeight / 2; i--) {
             for (int j = roadMiddle / 2; j >= 0; j--) {
-                if (pixels[screenWidth * i + j] == 16777215) {
+                if (pixels[cameraWidth * i + j] == 16777215) {
                     leftSideTemp = j;
                     break;
                 }
             }
             for (int j = roadMiddle / 2; j < cameraWidth; j++) {
-                if (pixels[screenWidth * i + j] == 16777215) {
+                if (pixels[cameraWidth * i + j] == 16777215) {
                     rightSideTemp = j;
                     break;
                 }
@@ -251,7 +255,7 @@ public class SteeringMk1 extends SteeringBase {
     }
 
     /**
-     * I have no idea
+     * Checks the average point above the target area to see if a turn is coming up and which direction the turn is going
      *
      * @param pixels Array of pixels (The Image)
      */
@@ -262,40 +266,6 @@ public class SteeringMk1 extends SteeringBase {
             if (ahead.x - origin.x > 0) turnRightAhead = true;
             else turnRightAhead = false;
         } else turnAhead = false;
-    }
-
-    /**
-     * Not sure what this does
-     *
-     * @param x       x coordinate
-     * @param y       y coordinate
-     * @param heading idk
-     */
-    public void updatePosLog(double x, double y, double heading) { // Reference positions by doing point# * 3 + (0 for x, 1 for y, 2 for heading)
-        posLog.add(x);
-        posLog.add(y);
-        posLog.add(heading);
-    }
-
-    public void drawMapArrays() {
-        int length = posLog.size() / 3;
-        double laneWidth = 4; // Needs to be measured
-        Point[] leftEdge = new Point[length];
-        Point[] rightEdge = new Point[length];
-        Point[] pathTraveled = new Point[length];
-        for (int i = 0; i < length; i++) {
-            leftEdge[i] = new Point(0, 0);
-            rightEdge[i] = new Point(0, 0);
-            pathTraveled[i] = new Point(0, 0);
-        }
-        for (int i = 0; i <= length; i++) {
-            leftEdge[i].x = (int) (posLog.get(i * 3) + laneWidth / 2 * Math.cos(posLog.get(i * 3 + 2) + (Math.PI / 2)));
-            leftEdge[i].y = (int) (posLog.get(i * 3 + 1) + laneWidth / 2 * Math.sin(posLog.get(i * 3 + 2) + (Math.PI / 2)));
-            rightEdge[i].x = (int) (posLog.get(i * 3) + laneWidth / 2 * Math.cos(posLog.get(i * 3 + 2) - (Math.PI / 2)));
-            rightEdge[i].y = (int) (posLog.get(i * 3 + 1) + laneWidth / 2 * Math.sin(posLog.get(i * 3 + 2) - (Math.PI / 2)));
-            pathTraveled[i].x = (int) ((double) posLog.get(i * 3));
-            pathTraveled[i].y = (int) ((double) posLog.get(i * 3 + 1));
-        }
     }
 
     /**
