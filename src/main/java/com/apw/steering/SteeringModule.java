@@ -48,7 +48,7 @@ public class SteeringModule implements Module {
     @Override
     public void update(CarControl control) {
         angle = steering.drive(control.getRGBImage());
-        System.out.println(angle);
+        //System.out.println(angle);
         control.steer(true, angle);
     }
 

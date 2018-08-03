@@ -23,7 +23,7 @@ public abstract class SteeringBase implements Steerable {
     public int cameraWidth = 0;
     public int screenWidth = 912;
     Point origin;
-    boolean usePID = true;
+    boolean usePID = false;
     private double integral, // The integral of the
             previousError;  // PID
     public Point[] leftEdge;
