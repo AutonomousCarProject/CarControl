@@ -89,6 +89,8 @@ void loop() {
       kill = true;
       speedDelay = 1500 - overtimeFix;
       steerDelay = 1500 - overtimeFix;
+      steeringDeg = 90;
+      wheelSpeed = 90;
       //Send message to computer
       addMessage(4, 0, 3);
     }
