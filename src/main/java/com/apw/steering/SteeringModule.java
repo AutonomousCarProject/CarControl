@@ -120,17 +120,13 @@ public class SteeringModule implements Module {
             if (idx >= steering.startTarget && idx <= steering.endTarget) {
                 g.setColor(Color.green);
                 g.fillRect((int) ((steering.midPoints.get(idx).x - 2) * widthMultiplier),
-                        (int) ((steering.midPoints.get(idx).y - 2) * heightMultiplier),
+                        (int) ((steering.midPoints.get(idx).y + 10) * heightMultiplier),
                         4, 4);
-                //control.rectFill(0x0000FF00, steering.midPoints.get(idx).y, steering.midPoints.get(idx).x,
-                //steering.midPoints.get(idx).y + 5, steering.midPoints.get(idx).x + 5);
             } else {
                 g.setColor(Color.blue);
                 g.fillRect((int)((steering.midPoints.get(idx).x - 2) * widthMultiplier),
-                        (int)((steering.midPoints.get(idx).y - 2) * heightMultiplier),
+                        (int)((steering.midPoints.get(idx).y + 10) * heightMultiplier),
                         4, 4);
-                //control.rectFill(0x000000ff, steering.midPoints.get(idx).y, steering.midPoints.get(idx).x,
-                //steering.midPoints.get(idx).y + 5, steering.midPoints.get(idx).x + 5);
             }
         }
 

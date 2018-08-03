@@ -17,9 +17,9 @@ import java.util.ArrayList;
 public class SteeringMk2 extends SteeringBase {
 
     private final int NUM_PREVIOUS = 5;
-    private final int MAX_DIFF = 10;
-    private final double MIN_DIST_LOOK = 0.3;
-    private final double MAX_DIST_LOOK = 0.7;
+    private final int MAX_DIFF = 5;
+    private final double MIN_DIST_LOOK = 0.7;
+    private final double MAX_DIST_LOOK = 0.9;
     private final int LINE_TRANSLATION = 300;
 
     private boolean leftSideFound = false;
@@ -31,7 +31,11 @@ public class SteeringMk2 extends SteeringBase {
         this.cameraWidth = cameraWidth;
         this.cameraHeight = cameraHeight;
         this.screenWidth = screenWidth;
+        for (int count = 0; count < NUM_PREVIOUS; count ++) {
+            previousHeadings.add(0);
+        }
         origin = new Point(cameraWidth / 2, cameraHeight);
+        furthestY = (int) (cameraHeight / 1.8);
     }
 
     public SteeringMk2(CarControl control) {
@@ -63,6 +67,7 @@ public class SteeringMk2 extends SteeringBase {
         for (Integer deg : previousHeadings) {
             averageDeg += deg;
         }
+        System.out.println(averageDeg / NUM_PREVIOUS);
         return (int)(averageDeg / NUM_PREVIOUS);
     }
 
