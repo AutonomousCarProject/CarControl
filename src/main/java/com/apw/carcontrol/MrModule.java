@@ -74,7 +74,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     private void createModules() {
 		modules.add(new ImageManagementModule(windowWidth, windowHeight, control.getTile()));
         modules.add(new SpeedControlModule());
-        modules.add(new SteeringModule((SpeedControlModule) modules.get(1)));
+        modules.add(new SteeringModule());
         modules.add(new ArduinoModule(driveSys));
 
         for (Module module : modules) {

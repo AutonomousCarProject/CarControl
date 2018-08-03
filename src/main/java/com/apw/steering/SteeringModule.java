@@ -14,7 +14,6 @@ public class SteeringModule implements Module {
 
     PrintStream o;
     private SteeringBase steering;
-    private SpeedControlModule speed;
     private double sumOfAngles = 0;
     private double locX = 0;
     private double locY = 0;
@@ -23,8 +22,7 @@ public class SteeringModule implements Module {
     private int frameCount = 0;
 
 
-    public SteeringModule(SpeedControlModule speed) {
-        this.speed = speed;
+    public SteeringModule() {
     }
 
     @Override
@@ -59,7 +57,7 @@ public class SteeringModule implements Module {
         double widthMultiplier = (1.0 * control.getWindowWidth() / steering.screenWidth);
         double heightMultiplier = (1.0 * control.getWindowHeight() / steering.cameraHeight);
         int tempDeg = angle;
-        if (speed.getNextSpeed() > 0) {
+        if (control.getVelocity() > 0) {
 
             double inRadiusAngle = .57 / 2 * (double) tempDeg;
             double outRadiusAngle = .38 / 2 * (double) tempDeg;
