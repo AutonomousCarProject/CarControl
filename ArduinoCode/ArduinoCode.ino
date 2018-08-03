@@ -14,7 +14,7 @@ byte pin;
 byte value;
 
 unsigned long overtime = 20;
-const int overtimeFix = 80;
+const int overtimeFix = 150;
 
 unsigned long wheelDelay = 1500 - overtimeFix;
 unsigned long steerDelay = 1500 - overtimeFix;
