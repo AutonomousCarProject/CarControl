@@ -187,11 +187,6 @@ public class SpeedControlModule implements Module {
 		
 		for (MovingBlob blob : currentPeds) {
 			if (stopType == 4) {
-				System.out.println("Color setting");
-				blob.color.setColor(com.apw.pedestrians.image.Color.BLUE);
-				
-				System.out.println("Printing");
-				System.out.println(blob.color.getColor());
 				System.out.println("Found a pedestrian: " + blob);
 				
 				g.setColor(java.awt.Color.MAGENTA);
@@ -236,7 +231,7 @@ public class SpeedControlModule implements Module {
 				cycleStopping = true;
 				
 				blob.type = "Stop";
-				System.out.println("Found a stopsign: " + blob);
+				System.out.println("Found a stopsign: " + "Color: " + blob.color.getColor() + blob);
 				
 				determineStop(blob);
 				
@@ -248,7 +243,7 @@ public class SpeedControlModule implements Module {
 				cycleStopping = true;
 				
 				blob.type = "StopLightWidth";
-				System.out.println("Found a " + blob.color.getColor() + "light: " + blob);
+				System.out.println("Found a " + blob.color.getColor() + "light: " + "Color: " + blob.color.getColor() + blob);
 				
 				determineStop(blob);
 				
@@ -260,7 +255,7 @@ public class SpeedControlModule implements Module {
 				cycleStopping = true;
 				
 				blob.type = "StopLightWidth";
-				System.out.println("Found a " + blob.color.getColor() + "light: " + blob);
+				System.out.println("Found a " + blob.color.getColor() + "light: " + "Color: " + blob.color.getColor() + blob);
 				
 				determineStop(blob);
 				
@@ -273,7 +268,7 @@ public class SpeedControlModule implements Module {
 				}
 				
 				blob.type = "StopLightWidth";
-				System.out.println("Found a " + blob.color.getColor() + "light: " + blob);
+				System.out.println("Found a " + blob.color.getColor() + "light: " + "Color: " + blob.color.getColor() + blob);
 				blob.seen = true;
 			}
 		}
@@ -288,8 +283,6 @@ public class SpeedControlModule implements Module {
 		
 		for(MovingBlob blob : currentPeds) {
 			if (determinePedStop(blob)) {
-				
-				//System.out.println("Found a pedestrian: " + blob);
 				stopType = 4;	
 				
 				//cycleStopping = true;

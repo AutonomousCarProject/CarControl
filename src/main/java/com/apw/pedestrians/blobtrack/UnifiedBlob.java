@@ -20,7 +20,7 @@ public class UnifiedBlob extends MovingBlob {
 
         //find averages and other values
         for (MovingBlob movingBlob : movingBlobs) {
-            minAgeOffScreen = Math.min(minAgeOffScreen, movingBlob.ageOffScreen);
+            minAgeOffScreen = Math.max(minAgeOffScreen, movingBlob.ageOffScreen);
 
             totalVelocityX += movingBlob.velocityX;
             totalVelocityY += movingBlob.velocityY;
