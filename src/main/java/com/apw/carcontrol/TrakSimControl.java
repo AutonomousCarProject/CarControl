@@ -3,12 +3,15 @@ package com.apw.carcontrol;
 import com.apw.apw3.DriverCons;
 import com.apw.apw3.MyMath;
 import com.apw.apw3.SimCamera;
+import com.apw.apw3.SimCameraRGB;
 import com.apw.sbcio.PWMController;
 
 import java.awt.*;
 import java.util.HashMap;
 
 public class TrakSimControl implements CarControl {
+
+
     protected HashMap<Integer, Runnable> keyBindings;
     private PWMController driveSys;
     protected SimCamera cam;
