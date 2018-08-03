@@ -4,7 +4,6 @@ bool timedout = false;
 byte steeringDeg, wheelSpeed;
 bool speedON, steerON;
 int offf = 0;
-int normalDelay = 1000;
 
 byte out[] = {0, 0, 0};
 byte outsize = 3;
@@ -16,13 +15,14 @@ byte value;
 unsigned long overtime = 20;
 const int overtimeFix = 80;
 
-unsigned long wheelDelay = 1500 - overtimeFix;
+unsigned long speedDelay = 1500 - overtimeFix;
 unsigned long steerDelay = 1500 - overtimeFix;
+unsigned long lastTime = 0; //timekeeping for 50 hz, 20000 us reset
+unsigned long midDelay = 0;
 
 unsigned long lastNoKill = 0;
 unsigned long sinceConnect = 0;
 unsigned long sinceNoKill = 0; //Input timing for kill
-unsigned long lastTime = 0; //timekeeping for 50 hz, 20000 us reset
 unsigned long lastRun = 0; //timekeeping for loop
 const unsigned long timeout = 300000; //microseconds before timeout
 
@@ -88,7 +88,7 @@ void loop() {
     }
     if (!kill && micros()-sinceNoKill < 1600){ //Check difference to find duration of input
       kill = true;
-      wheelDelay = 1500 - overtimeFix;
+      speedDelay = 1500 - overtimeFix;
       steerDelay = 1500 - overtimeFix;
       //Send message to computer
       addMessage(4, 0, 3);
@@ -119,14 +119,14 @@ void loop() {
     
     if (!kill && pin == 10){
       if (value != wheelSpeed){
-        //wheelDelay = 1.0+((double) value)/180;
-        wheelDelay = map(constrain(value, 0, 180), 0, 180, 1000, 2000) - overtimeFix;
+        //speedDelay = 1.0+((double) value)/180;
+        speedDelay = map(constrain(value, 0, 180), 0, 180, 1000, 2000) - overtimeFix;
       }
       wheelSpeed = value;
     }
   
     if (kill && type == 0xFF) { //Restart if a startup signal is recieved
-      wheelDelay = 1500 - overtimeFix;
+      speedDelay = 1500 - overtimeFix;
       steerDelay = 1500 - overtimeFix;
       kill = false;
       addMessage(3, 0, 0);
@@ -138,9 +138,7 @@ void loop() {
   if (micros()-lastTime >= 20000){
     
     //digitalWrite(13, HIGH);
-    digitalWrite(9, HIGH);
     digitalWrite(10, HIGH);
-    steerON = true;
     speedON = true;
     
     lastTime = micros();
@@ -148,9 +146,9 @@ void loop() {
 
   //Turn off the signal at approximately the correct timing.
   //int timing = micros()-lastTime;
-  if (speedON && (micros()-lastTime >= wheelDelay)){
+  if (speedON && (micros()-lastTime >= speedDelay)){
     digitalWrite(13, HIGH);
-    int temp = overtimeFix - (micros() - lastTime - wheelDelay);
+    int temp = overtimeFix - (micros() - lastTime - speedDelay);
     if (temp > 2){
       if (temp < overtimeFix){
         delayMicroseconds(temp);
@@ -162,18 +160,25 @@ void loop() {
     digitalWrite(10, LOW);
     digitalWrite(13, LOW);
     speedON = false;
-    
-    /*if (timing - wheelDelay > overtime) {
-      overtime = timing - wheelDelay;
-      if (overtime < 255){
-        addMessage(8, 0, overtime);
-      } else {addMessage(9, 0, overtime);}
-    }*/
+
+    digitalWrite(9, HIGH); //Start timing for steering
+    midDelay = millis();
+    steerON = true;
   }
   
-  if (steerON && (micros()-lastTime >= steerDelay)){
-    delayMicroseconds(max(overtimeFix - (micros() - lastTime - steerDelay), 1)); //an attempt to normalize timing
+  if (steerON && (micros()-midDelay >= steerDelay)){
+    digitalWrite(13, HIGH);
+    int temp = overtimeFix - (micros() - midDelay - steerDelay);
+    if (temp > 2){
+      if (temp < overtimeFix){
+        delayMicroseconds(temp);
+      } else {
+        delayMicroseconds(overtimeFix);
+        addMessage(7, 6, 6);
+      }
+    }
     digitalWrite(9, LOW);
+    digitalWrite(13, LOW);
     steerON = false;
   }
   
