@@ -1,10 +1,12 @@
 package com.apw.steering;
 import com.apw.apw3.DriverCons;
+import com.apw.carcontrol.CarControl;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Steering base is the base code for all child steering objects.
+ * steering base is the base code for all child steering objects.
  *
  * @author kevin
  * @author carl
@@ -21,14 +23,13 @@ public abstract class SteeringBase implements Steerable {
     public int cameraWidth = 0;
     public int screenWidth = 912;
     Point origin;
-    boolean usePID = true;
+    boolean usePID = false;
     private double integral, // The integral of the
             previousError;  // PID
     public Point[] leftEdge;
     public Point[] rightEdge;
     public Point[] pathTraveled;
-    private List<Double> posLog = new ArrayList<>(); // Array list for logging positions fed into it
-
+    List<Double> posLog = new ArrayList<>(); // Array list for logging positions fed into it
 
     @Override
     public double curveSteepness(double turnAngle) {
@@ -85,6 +86,7 @@ public abstract class SteeringBase implements Steerable {
      * @param pixels An array of pixels
      */
     public abstract void findPoints(int[] pixels);
+
 
     /**
      * Not sure what this does

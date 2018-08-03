@@ -16,6 +16,7 @@ public class PrimitiveBlobDetection implements IBlobDetection {
     public static final int MAXIMUM_DIFFERENCE_IN_WIDTH_BETWEEN_TWO_BLOBS_IN_ORDER_TO_JOIN = 75;
     private static final int BIP_TYPE = 0, BIP_TOP = 1, BIP_LEFT = 2, BIP_BOTTOM = 3, BIP_RIGHT = 4, BIP_COLOR = 5, BIP_NUMFIELDS = 6;
     private static final int BIP_TYPE_NULL = 0, BIP_TYPE_VALUE = 1, BIP_TYPE_REFERENCE = 2;
+    
     //creates data structures to organize different stages of blobs
     private int[] bips;
     private List<Blob> blobs = new LinkedList<>();

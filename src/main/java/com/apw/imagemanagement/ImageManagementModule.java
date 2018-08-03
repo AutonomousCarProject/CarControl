@@ -4,6 +4,7 @@ import com.apw.carcontrol.CarControl;
 import com.apw.carcontrol.Module;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 
 public class ImageManagementModule implements Module {
 
@@ -100,7 +101,7 @@ public class ImageManagementModule implements Module {
         return rgb;
 
     }
-
+  
     public int[] getBWRGBRaster(byte[] pixels) {
         //byte[] output = new byte[width * height];
         //int[] rgb = new int[width*height];
@@ -149,7 +150,12 @@ public class ImageManagementModule implements Module {
 
     @Override
     public void initialize(CarControl control) {
-
+    	control.addKeyEvent(KeyEvent.VK_SPACE, () -> changeFilter());
+    }
+    
+    public void changeFilter() {
+    	viewType = (viewType) % 5 + 1; 
+    	System.out.println(viewType);
     }
 
     @Override
@@ -176,6 +182,7 @@ public class ImageManagementModule implements Module {
         }
 
         control.setRenderedImage(imagePixels);
+        control.setRGBImage(getBWRGBRaster(control.getRecentCameraImage()));
         control.setProcessedImage(getSimpleColorRaster(control.getRecentCameraImage()));
     }
 

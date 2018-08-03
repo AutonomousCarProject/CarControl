@@ -1,3 +1,4 @@
+
 /**
  * This class contains functions to apply filters and convert images
  * between bayer8 and rgb formats. Functions in this class are only
@@ -362,24 +363,36 @@ public class ImageManipulator {
         }
     }
 
-    /** Converts a bayer8 image to a black white image with a colored road
+    /** Converts a black and white image to a black white image with a colored road
 	 *
-	 * @param bayer bayer8 image
+	 * @param bw black and white
 	 * @param output image output in int[]
 	 * @param nrows	number of rows of pixels in the image
 	 * @param ncols number og columns of pixels in the image
 	 */
-    public static void findRoad(byte[] bayer, int[] output, int nrows, int ncols){
+    public static void findRoad(byte[] bw, int[] output, int nrows, int ncols){
+    	int rightEnd = 640, leftEnd = 0;
+    	for(int i = ncols/2; i < ncols; i++){
+			if(bw[454*ncols + i] == 1){
+				rightEnd = i;
+			}
+		}
+
+		for(int i = ncols/2; i > 0; i--){
+			if(bw[454*ncols + i] == 1){
+				leftEnd = i;
+			}
+		}
     	for(int col = 0; col < ncols; col++){
     		boolean endFound = false;
 
     		for(int row = nrows-1; row > 0; row--){
 				if(col > 638 || row < 240 || row > 455){
 					output[row*ncols+col] = 0;
-				} else if(bayer[row*ncols+col] == 1){
+				} else if(bw[row*ncols+col] == 1){
 					endFound = true;
 					output[row*ncols+col] = 0xFFFFFF;
-				}else if(!endFound){
+				}else if(!endFound && col > leftEnd && col < rightEnd){
 					output[row*ncols + col] = 0xF63FFC;
 				}else{
 					output[row*ncols + col] = 0x000000;
