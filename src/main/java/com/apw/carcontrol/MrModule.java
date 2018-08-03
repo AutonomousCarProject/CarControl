@@ -4,6 +4,8 @@ import com.apw.imagemanagement.ImageManagementModule;
 import com.apw.sbcio.PWMController;
 import com.apw.sbcio.fakefirm.ArduinoIO;
 import com.apw.sbcio.fakefirm.ArduinoModule;
+import com.apw.speedcon.Constants;
+import com.apw.speedcon.Settings;
 import com.apw.speedcon.SpeedControlModule;
 
 import com.apw.steering.SteeringModule;
@@ -81,7 +83,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         if (control instanceof TrakSimControl) {
             ((TrakSimControl) control).cam.theSim.SimStep(1);
         }
-
+        
         control.readCameraImage();
         control.setEdges(getInsets());
         for (Module module : modules) {

@@ -61,5 +61,4 @@ public class UnifiedBlob extends MovingBlob {
     public float getDensity() {
         return this.density;
     }
-
 }

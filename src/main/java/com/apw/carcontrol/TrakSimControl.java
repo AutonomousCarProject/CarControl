@@ -177,6 +177,11 @@ public class TrakSimControl implements CarControl {
     }
 
     @Override
+    public double getPosition(boolean horizontal) {
+    	return cam.theSim.GetPosn(horizontal);
+    }
+    
+    @Override
     public Insets getEdges() {
         return edges;
     }

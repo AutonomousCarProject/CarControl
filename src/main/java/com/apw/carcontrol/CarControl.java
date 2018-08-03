@@ -96,7 +96,7 @@ public interface CarControl {
      * @see #steer(boolean, int)
      */
     int getSteering();
-
+    
     /**
      * Gets the manual speed control of the car.
      * @return The current manual speed control value.
@@ -104,6 +104,13 @@ public interface CarControl {
      */
     int getManualSpeed();
 
+    /**
+     * Gets the current position of the car.
+     * @return The current position of the car.
+     * @see #getPosition(boolean)
+     */
+    double getPosition(boolean horizontal);
+    
     /**
      * Gets the edges of the screen (if one exists).
      * @return The edges of the rendering window as a Java AWT Insets object.
@@ -146,4 +153,5 @@ public interface CarControl {
      * @param action The action to trigger when the key is pressed.
      */
     void addKeyEvent(int keyCode, Runnable action);
+
 }

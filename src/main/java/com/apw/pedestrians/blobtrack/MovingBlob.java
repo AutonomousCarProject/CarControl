@@ -76,7 +76,7 @@ public class MovingBlob extends Blob {
 
     @Override
     public String toString() {
-        return "Moving blob: Color: " + color.getColor() + " X: " + x + " Y: " + y + " vX: " + velocityX +
+        return "Moving blob: " + "Color: " + color.getColor() + " X: " + x + " Y: " + y + " vX: " + velocityX +
                 " vY: " + velocityY + " pX: " + predictedX + " pY: " + predictedY + " w: " + width + " h: " + height
                 + " age: " + age + " ageoff: " + ageOffScreen + " seen: " + seen;
     }
