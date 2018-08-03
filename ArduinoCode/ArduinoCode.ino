@@ -162,7 +162,7 @@ void loop() {
     speedON = false;
 
     digitalWrite(9, HIGH); //Start timing for steering
-    midDelay = millis();
+    midDelay = micros();
     steerON = true;
   }
   
