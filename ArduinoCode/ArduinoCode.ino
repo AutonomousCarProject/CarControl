@@ -3,7 +3,6 @@ bool kill = false;
 bool timedout = false;
 byte steeringDeg, wheelSpeed;
 bool speedON, steerON;
-int offf = 0;
 
 byte out[] = {0, 0, 0};
 byte outsize = 3;
