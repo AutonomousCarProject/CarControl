@@ -5,7 +5,6 @@ import com.apw.carcontrol.CamControl;
 import com.apw.carcontrol.CarControl;
 import com.apw.carcontrol.Module;
 import com.apw.speedcon.SpeedControlModule;
-import com.apw.steering.Point;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -13,19 +12,17 @@ import java.io.PrintStream;
 
 public class SteeringModule implements Module {
 
+    PrintStream o;
     private SteeringBase steering;
-    private SpeedControlModule speed;
     private double sumOfAngles = 0;
     private double locX = 0;
     private double locY = 0;
     private Boolean drawnMap = false;
-    PrintStream o;
     private int angle = 0;
     private int frameCount = 0;
 
 
-    public SteeringModule(SpeedControlModule speed) {
-        this.speed = speed;
+    public SteeringModule() {
     }
 
     @Override
@@ -49,25 +46,29 @@ public class SteeringModule implements Module {
     @Override
     public void update(CarControl control) {
         angle = steering.drive(control.getRGBImage());
+        //System.out.println(angle);
         control.steer(true, angle);
     }
 
 
     @Override
     public void paint(CarControl control, Graphics g) {
-        int tempDeg = angle;
-        if (speed.getNextSpeed() > 0) {
 
-            double inRadiusAngle = .57/2 * (double) tempDeg ;
-            double outRadiusAngle = .38/2 * (double) tempDeg;
+        double widthMultiplier = (1.0 * control.getWindowWidth() / steering.screenWidth);
+        double heightMultiplier = (1.0 * control.getWindowHeight() / steering.cameraHeight);
+        int tempDeg = angle;
+        if (control.getVelocity() > 0) {
+
+            double inRadiusAngle = .57 / 2 * (double) tempDeg;
+            double outRadiusAngle = .38 / 2 * (double) tempDeg;
             if (tempDeg < 0) {
-                outRadiusAngle = .45/2 * tempDeg;
-                inRadiusAngle=0.7/2 * (double) tempDeg;
+                outRadiusAngle = .45 / 2 * tempDeg;
+                inRadiusAngle = 0.7 / 2 * (double) tempDeg;
             }
 
             double turnRadiusIn = 2.68 / Math.tan(Math.toRadians(tempDeg * 0.76 - 3.02)) + .5 * (1.976);
             double turnRadiusOut = 2.68 / Math.tan(Math.toRadians(tempDeg * 0.56 - 2.4)) - .5 * (1.976);
-            double averageTurnRadius = (turnRadiusIn + turnRadiusOut)/2;
+            double averageTurnRadius = (turnRadiusIn + turnRadiusOut) / 2;
             double angleTurned = ((double) DriverCons.D_FrameTime / 1000.0) * DriverCons.D_fMinSpeed / averageTurnRadius;
 
             angleTurned = Math.toDegrees(angleTurned);
@@ -84,17 +85,17 @@ public class SteeringModule implements Module {
             //if (sumOfAngles < 0) sumOfAngles = sumOfAngles + 360;
             //}
 
-            locX = locX + (double) Math.cos(Math.toRadians(sumOfAngles)) * (double) DriverCons.D_FrameTime/1000.0 * (double) DriverCons.D_fMinSpeed;
+
+            locX = locX + (double) Math.cos(Math.toRadians(sumOfAngles)) * (double) DriverCons.D_FrameTime / 1000.0 * (double) DriverCons.D_fMinSpeed;
 
 
-            locY = locY + (double) Math.sin(Math.toRadians(sumOfAngles)) * (double) DriverCons.D_FrameTime/1000.0 * (double) DriverCons.D_fMinSpeed;
+            locY = locY + (double) Math.sin(Math.toRadians(sumOfAngles)) * (double) DriverCons.D_FrameTime / 1000.0 * (double) DriverCons.D_fMinSpeed;
             if (frameCount < 100) frameCount++;
-            if (frameCount >= 100 && Math.abs(locX) < 15 && Math.abs(locY) < 15 && Math.abs(tempDeg) < 3 && !drawnMap && (Math.abs(sumOfAngles%360) < 10)) {
+            if (frameCount >= 100 && Math.abs(locX) < 15 && Math.abs(locY) < 15 && Math.abs(tempDeg) < 3 && !drawnMap && (Math.abs(sumOfAngles % 360) < 10)) {
                 System.out.println("found origin");
                 steering.drawMapArrays();
                 drawnMap = true;
-            }
-            else if (!drawnMap){
+            } else if (!drawnMap) {
                 steering.updatePosLog(locX, locY, sumOfAngles);
             }
             g.setColor(Color.RED);
@@ -116,22 +117,36 @@ public class SteeringModule implements Module {
         }
 
         for (int idx = 0; idx < steering.midPoints.size(); idx++) {
-            g.setColor(Color.blue);
-        	g.fillRect(steering.midPoints.get(idx).x, steering.midPoints.get(idx).y, 3, 3);
+            if (idx >= steering.startTarget && idx <= steering.endTarget) {
+                g.setColor(Color.green);
+                g.fillRect((int) ((steering.midPoints.get(idx).x - 2) * widthMultiplier),
+                        (int) ((steering.midPoints.get(idx).y + 10) * heightMultiplier),
+                        4, 4);
+            } else {
+                g.setColor(Color.blue);
+                g.fillRect((int)((steering.midPoints.get(idx).x - 2) * widthMultiplier),
+                        (int)((steering.midPoints.get(idx).y + 10) * heightMultiplier),
+                        4, 4);
+            }
         }
+
+        // Draw left and right sides
+        g.setColor(Color.yellow);
         if (DriverCons.D_DrawOnSides) {
+            g.setColor(Color.yellow);
             for (Point point : steering.leftPoints) {
-                g.setColor(Color.yellow);
-                int xL = point.x;
-                int yL = point.y;
-                g.fillRect(xL, yL, 3, 3);
+                int xL = point.x - 4;
+                int yL = point.y - 4;
+                g.fillRect((int) (xL * widthMultiplier), (int) (yL * heightMultiplier) + 10, 8, 8);
             }
             for (Point point : steering.rightPoints) {
-                int xR = point.x;
-                int yR = point.y;
-                g.setColor(Color.yellow);
-                g.fillRect(xR, yR, 3, 3);
+                int xR = point.x - 4;
+                int yR = point.y - 4;
+                g.fillRect((int) (xR * widthMultiplier), (int) (yR * heightMultiplier) + 10, 8, 8);
             }
         }
+        g.setColor(Color.cyan);
+        g.fillRect((int) ((steering.steerPoint.x - 5) * widthMultiplier),
+                (int) ((steering.steerPoint.y - 5) * heightMultiplier) + 10, 10, 10);
     }
 }
