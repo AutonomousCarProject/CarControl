@@ -56,7 +56,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     private void headlessInit() {
         executorService = Executors.newSingleThreadScheduledExecutor();
         modules = new ArrayList<>();
-        executorService.scheduleAtFixedRate(this, 1000, 1000 / 5, TimeUnit.MILLISECONDS);
+        executorService.scheduleAtFixedRate(this, 0, 1000 / 20, TimeUnit.MILLISECONDS);
     }
     
     private void setupWindow() {
@@ -73,10 +73,8 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     }
     private void createModules() {
 		modules.add(new ImageManagementModule(windowWidth, windowHeight, control.getTile()));
-        SpeedControlModule scm = new SpeedControlModule();
-        modules.add(scm);
-        modules.add(new SteeringModule(scm));
-
+        modules.add(new SpeedControlModule());
+        modules.add(new SteeringModule());
         modules.add(new ArduinoModule(driveSys));
 
         for (Module module : modules) {
@@ -111,8 +109,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         }
 
         if (renderedImage != null) {
-            int[] displayPixels =
-                ((DataBufferInt) bufferImage.getRaster().getDataBuffer()).getData();
+            int[] displayPixels = ((DataBufferInt) bufferImage.getRaster().getDataBuffer()).getData();
             System.arraycopy(renderedImage, 0, displayPixels, 0, renderedImage.length);
             
             BufferedImage tempImage = displayImage;

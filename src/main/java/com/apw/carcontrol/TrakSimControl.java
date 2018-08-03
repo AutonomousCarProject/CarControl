@@ -86,7 +86,8 @@ public class TrakSimControl implements CarControl {
      *
      * @return The image to be rendered on the TrakSim window.
      */
-    protected int[] getRenderedImage() {
+    @Override
+    public int[] getRenderedImage() {
         return renderedImage;
     }
     

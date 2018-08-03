@@ -11,6 +11,7 @@ import java.awt.Graphics;
 import com.apw.carcontrol.CarControl;
 import com.apw.carcontrol.Module;
 import com.apw.sbcio.PWMController;
+import com.apw.speedcon.Constants;
 
 public class ArduinoModule implements Module{
     private PWMController driveSys;
@@ -31,7 +32,7 @@ public class ArduinoModule implements Module{
 	@Override
 	public void update(CarControl control) {
 
-		driveSys.digitalRead();
+		if (Constants.readMessages) driveSys.digitalRead();
 		
 		driveSys.Write(0, 0, 0);
 		
