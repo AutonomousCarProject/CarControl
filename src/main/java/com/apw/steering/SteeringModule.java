@@ -117,6 +117,7 @@ public class SteeringModule implements Module {
         }
 
         for (int idx = 0; idx < steering.midPoints.size(); idx++) {
+
             if (idx >= steering.startTarget && idx <= steering.endTarget) {
                 g.setColor(Color.green);
                 g.fillRect((int) ((steering.midPoints.get(idx).x - 2) * widthMultiplier),
@@ -128,6 +129,7 @@ public class SteeringModule implements Module {
                         (int)((steering.midPoints.get(idx).y + 10) * heightMultiplier),
                         4, 4);
             }
+
         }
 
         // Draw left and right sides
@@ -135,6 +137,7 @@ public class SteeringModule implements Module {
         if (DriverCons.D_DrawOnSides) {
             g.setColor(Color.yellow);
             for (Point point : steering.leftPoints) {
+
                 int xL = point.x - 4;
                 int yL = point.y - 4;
                 g.fillRect((int) (xL * widthMultiplier), (int) (yL * heightMultiplier) + 10, 8, 8);
@@ -143,6 +146,7 @@ public class SteeringModule implements Module {
                 int xR = point.x - 4;
                 int yR = point.y - 4;
                 g.fillRect((int) (xR * widthMultiplier), (int) (yR * heightMultiplier) + 10, 8, 8);
+
             }
         }
         g.setColor(Color.cyan);

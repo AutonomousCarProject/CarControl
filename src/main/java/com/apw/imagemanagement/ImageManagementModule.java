@@ -8,7 +8,11 @@ import java.awt.event.KeyEvent;
 
 public class ImageManagementModule implements Module {
 
+	//adjustable variables
     private int viewType = 1;
+    private int blackWhiteRasterVersion = 1;
+    private double luminanceMultiplier = 2.5;
+    
     private int width, height;
     private int[] imagePixels;
     private byte mono[];
@@ -25,6 +29,7 @@ public class ImageManagementModule implements Module {
         simple = new byte[width * height];
         rgb = new int[width * height];
         tile = newtile;
+        ImageManipulator.setLuminanceMultiplier(luminanceMultiplier);
     }
 
     public int getWidth() {
@@ -103,11 +108,16 @@ public class ImageManagementModule implements Module {
     }
   
     public int[] getBWRGBRaster(byte[] pixels) {
-        //byte[] output = new byte[width * height];
-        //int[] rgb = new int[width*height];
-        //int[] cameraInt = new int[cameraWidth*cameraHeight];
-        //byte[] cameraByte = new byte[cameraWidth*cameraHeight];
-        ImageManipulator.convertToBlackWhiteRaster(pixels, mono, height, width, tile);
+        byte[] output = new byte[width * height];
+        int[] rgb = new int[width*height];
+//        int[] cameraInt = new int[cameraWidth*cameraHeight];
+//        byte[] cameraByte = new byte[cameraWidth*cameraHeight];
+        if(blackWhiteRasterVersion == 2) {
+        	ImageManipulator.convertToBlackWhite2Raster(pixels, output, height, width, tile);
+        }
+        else {
+        	ImageManipulator.convertToBlackWhiteRaster(pixels, output, height, width, tile);
+        }
         if(removeNoise) {
             ImageManipulator.removeNoise(mono, simple, height, width);
             byte[] temp = mono;
