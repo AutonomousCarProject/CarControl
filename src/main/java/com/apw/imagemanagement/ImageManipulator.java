@@ -83,7 +83,7 @@ public class ImageManipulator {
 				int pix =(R1 + R2 + R3 + B1 + B2 + B3 + G1 + G2 + G3)/9;
 //				int pix = (R2 + G2 + B2)/3;
 				if(!(c >= 640 || r < 240 || r > 455)) {
-					if (pix > 2.5 * averageLuminance) {
+					if (pix > 1.8 * averageLuminance) {
 						mono[r * ncols + c] = 1;
 					} else {
 						mono[r * ncols + c] = 0;
@@ -91,6 +91,30 @@ public class ImageManipulator {
 				} else {
 					mono[r * ncols + c] = 0;
 				}
+			}
+		}
+	}
+
+	public static void convertToBlackWhite2Raster(byte[] bayer, byte[] mono, int nrows, int ncols, byte tile) {
+		for (int r = 0; r < nrows; r++) {
+			int averageLuminance = 0;
+			for(int c = 0; c < ncols; c++) {
+				int R = (bayer[getPos(c,r,combineTile((byte)0,tile),ncols,nrows,true)]&0xFF);
+				int G = (bayer[getPos(c,r,combineTile((byte)1,tile),ncols,nrows,true)]&0xFF);
+				int B = (bayer[getPos(c,r,combineTile((byte)3,tile),ncols,nrows,true)]&0xFF);
+				if(c == 0){
+					averageLuminance = (R+G+B)/3;
+				}
+				if(!(c >= 640 || r < 240 || r > 455)) {
+					if ((averageLuminance + (R+G+B)/3)/2 > averageLuminance * 1.5) {
+						mono[r * ncols + c] = 1;
+					} else {
+						mono[r * ncols + c] = 0;
+					}
+				} else {
+					mono[r * ncols + c] = 0;
+				}
+				averageLuminance = (averageLuminance + (R+G+B)/3)/2;
 			}
 		}
 	}

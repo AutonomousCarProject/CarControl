@@ -8,7 +8,7 @@ import java.awt.event.KeyEvent;
 
 public class ImageManagementModule implements Module {
 
-    private int viewType = 4;
+    private int viewType = 1;
     private int width, height;
     private int[] imagePixels;
     private byte mono[];
@@ -107,7 +107,7 @@ public class ImageManagementModule implements Module {
         int[] rgb = new int[width*height];
         //int[] cameraInt = new int[cameraWidth*cameraHeight];
         //byte[] cameraByte = new byte[cameraWidth*cameraHeight];
-        output = getBlackWhiteRasterFull(pixels);
+        ImageManipulator.convertToBlackWhite2Raster(pixels, output, height, width, tile);
         if(removeNoise) {
         	output = ImageManipulator.removeNoise(output, height, width);
         }
