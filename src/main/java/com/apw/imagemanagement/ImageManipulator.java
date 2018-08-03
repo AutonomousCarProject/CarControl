@@ -130,8 +130,8 @@ public class ImageManipulator {
 	 * @param ncols number of columns of pixels in the image
 	 * @return byte[] of eroded image
 	 */
-	public static void removeNoise(byte[] pixels,byte[] output, int nrows, int ncols) {
-		//byte[] output = new byte[nrows * ncols];
+	public static byte[] removeNoise(byte[] pixels, int nrows, int ncols) {
+		byte[] output = new byte[nrows * ncols];
 		for (int r = 0; r < nrows; r++) {
 			for (int c = 0; c < ncols; c++) {
 				if(pixels[r * ncols + c] == 1) {
@@ -177,7 +177,7 @@ public class ImageManipulator {
 				}
 			}
 		}
-		//return output;
+		return output;
 	}
 	
 	/** dilation filter used on pixels in a byte[]
@@ -187,8 +187,8 @@ public class ImageManipulator {
 	 * @param ncols number of columns of pixels in the image
 	 * @return byte[] of dilated image
 	 */
-	public static void dilate(byte[] pixels, byte[] output, int nrows, int ncols) {
-		//byte[] output = new byte[nrows * ncols];
+	public static byte[] dilate(byte[] pixels, int nrows, int ncols) {
+		byte[] output = new byte[nrows * ncols];
 		for (int r = 0; r < nrows; r++) {
 			for (int c = 0; c < ncols; c++) {
 				if(pixels[r * ncols + c] == 0) {
@@ -230,7 +230,7 @@ public class ImageManipulator {
 				}
 			}
 		}
-		//return output;
+		return output;
 	}
 
     public static void convertToRGBRaster(byte[] bayer, int[] rgb, int nrows, int ncols) {

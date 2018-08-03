@@ -11,13 +11,10 @@ public class ImageManagementModule implements Module {
 	//adjustable variables
     private int viewType = 1;
     private int blackWhiteRasterVersion = 1;
-    private double luminanceMultiplier = 2.5;
+    private double luminanceMultiplier = 1.6;
     
     private int width, height;
     private int[] imagePixels;
-    private byte mono[];
-    private byte simple[];
-    private int rgb[];
     private byte tile;
     boolean removeNoise = false;
     boolean dilate = true;
@@ -25,9 +22,6 @@ public class ImageManagementModule implements Module {
     public ImageManagementModule(int width, int height, byte newtile) {
         this.width = width;
         this.height = height;
-        mono = new byte[width * height];
-        simple = new byte[width * height];
-        rgb = new int[width * height];
         tile = newtile;
         ImageManipulator.setLuminanceMultiplier(luminanceMultiplier);
     }
@@ -51,18 +45,20 @@ public class ImageManagementModule implements Module {
     /*Serves monochrome raster of camera feed
      * Formatted in 1D array of bytes*/
     public byte[] getMonochromeRaster(byte[] pixels) {
+    	byte[] mono = new byte[width * height];
         ImageManipulator.convertToMonochromeRaster(pixels, mono, height, width, tile);
         return mono;
 
     }
 
     public byte[] getMonochrome2Raster(byte[] pixels) {
+    	byte[] mono = new byte[width * height];
         ImageManipulator.convertToMonochrome2Raster(pixels, mono, height, width, tile);
         return mono;
     }
 
     public byte[] getBlackWhiteRaster(byte[] pixels) {
-
+    	byte[] mono = new byte[width * height];
         ImageManipulator.convertToBlackWhiteRaster(pixels, mono, height, width, tile);
         return mono;
 
@@ -77,7 +73,7 @@ public class ImageManagementModule implements Module {
      * 5 = BLACK
      */
     public byte[] getSimpleColorRaster(byte[] pixels) {
-
+    	byte[] simple = new byte[width * height];
         ImageManipulator.convertToSimpleColorRaster(pixels, simple, height, width, tile);
         return simple;
 
@@ -85,14 +81,15 @@ public class ImageManagementModule implements Module {
     }
 
     public int[] getRGBRaster(byte[] pixels) {
-
+    	int[] rgb = new int[width*height];
         ImageManipulator.convertToRGBRaster(pixels, rgb, height, width, tile);
         return rgb;
 
     }
     
     public int[] getMonoRGBRaster(byte[] pixels) {
-
+    	int[] rgb = new int[width*height];
+    	byte[] mono = new byte[width * height];
         ImageManipulator.convertToMonochromeRaster(pixels, mono, height, width, tile);
         ImageManipulator.convertMonotoRGB(mono, rgb, mono.length);
         return rgb;
@@ -100,7 +97,8 @@ public class ImageManagementModule implements Module {
     }
 
     public int[] getSimpleRGBRaster(byte[] pixels) {
-
+    	int[] rgb = new int[width*height];
+    	byte[] simple = new byte[width * height];
         ImageManipulator.convertToSimpleColorRaster(pixels, simple, height, width, tile);
         ImageManipulator.convertSimpleToRGB(simple, rgb, simple.length);
         return rgb;
@@ -110,8 +108,6 @@ public class ImageManagementModule implements Module {
     public int[] getBWRGBRaster(byte[] pixels) {
         byte[] output = new byte[width * height];
         int[] rgb = new int[width*height];
-//        int[] cameraInt = new int[cameraWidth*cameraHeight];
-//        byte[] cameraByte = new byte[cameraWidth*cameraHeight];
         if(blackWhiteRasterVersion == 2) {
         	ImageManipulator.convertToBlackWhite2Raster(pixels, output, height, width, tile);
         }
@@ -119,42 +115,27 @@ public class ImageManagementModule implements Module {
         	ImageManipulator.convertToBlackWhiteRaster(pixels, output, height, width, tile);
         }
         if(removeNoise) {
-            ImageManipulator.removeNoise(mono, simple, height, width);
-            byte[] temp = mono;
-            mono = simple;
-            simple = temp;
+            output = ImageManipulator.removeNoise(output, height, width);
         }
         if(dilate) {
-        	ImageManipulator.dilate(mono, simple, height, width);
-        	byte[] temp = mono;
-        	mono = simple;
-        	simple = temp;
+        	output = ImageManipulator.dilate(output, height, width);
         }
-        ImageManipulator.convertBWToRGB(mono, rgb, mono.length);
+        ImageManipulator.convertBWToRGB(output, rgb, output.length);
         return rgb;
 
     }
     
     public int[] getRoad(byte[] pixels){
-        byte[] mono = new byte[width*height];
-        byte[] simple = new byte[width*height];
+        byte[] output = new byte[width*height];
         int[] rgb = new int[width*height];
-        //int road[] = new int[width*height];
-        //byte temp[] = new byte[width*height];
-        ImageManipulator.convertToBlackWhiteRaster(pixels, mono, height, width, tile);
+        ImageManipulator.convertToBlackWhiteRaster(pixels, output, height, width, tile);
         if(removeNoise) {
-        	ImageManipulator.removeNoise(mono,simple, height, width);
-            byte[] temp = mono;
-            mono = simple;
-            simple = temp;
+        	ImageManipulator.removeNoise(output, height, width);
         }
         if(dilate) {
-        	ImageManipulator.dilate(mono,simple, height, width);
-            byte[] temp = mono;
-            mono = simple;
-            simple = temp;
+        	ImageManipulator.dilate(output, height, width);
         }
-        ImageManipulator.findRoad(mono, rgb, height, width);
+        ImageManipulator.findRoad(output, rgb, height, width);
         return rgb;
     }
 
