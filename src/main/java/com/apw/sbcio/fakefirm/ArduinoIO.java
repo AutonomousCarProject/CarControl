@@ -25,6 +25,7 @@ package com.apw.sbcio.fakefirm;   // 2018 February 10
 
 import com.apw.pwm.fakefirm.SimHookBase;
 import com.apw.sbcio.PWMController;
+import com.apw.speedcon.Constants;
 
 import jssc.SerialPort;
 import jssc.SerialPortException;
@@ -35,7 +36,6 @@ import jssc.SerialPortException;
 
 public class ArduinoIO implements PWMController { // Adapted to Java from arduino.cs ... (FakeFirmata)
   // (subclass this to add input capability)
-  public static final boolean UseServos = true;
 
   public static final String CommPortNo = "COM3";
   public static final int MAX_DATA_BYTES = 16, // =64 in LattePanda's Arduino.cs
@@ -55,7 +55,7 @@ public class ArduinoIO implements PWMController { // Adapted to Java from arduin
   private int readAngle;
 
   public ArduinoIO() { // outer class constructor..
-    surrealPort = (UseServos) ? new SerialPort(CommPortNo) : new SerialPortDump(CommPortNo);
+    surrealPort = (Constants.useServos) ? new SerialPort(CommPortNo) : new SerialPortDump(CommPortNo);
     System.out.println("new Arduino " + CommPortNo + " " + (surrealPort != null));
     digitalOutputData = new int[MAX_DATA_BYTES];
     Open();

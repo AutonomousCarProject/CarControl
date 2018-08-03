@@ -2,6 +2,11 @@ package com.apw.speedcon;
 
 public class Constants {
     public static final boolean
+    		//Arduino settings
+			useServos = false,
+			readMessages = false;
+    
+    public static final boolean
             //Default Debug Overlays
             DEFAULT_OVERLAY = false,
             DEFAULT_BLOBS = false,
@@ -51,4 +56,5 @@ public class Constants {
     public static int
             DEFAULT_COLOR_MODE = 0,
             NUM_COLOR_MODES = 3;
+    
 }
