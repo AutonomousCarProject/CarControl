@@ -103,10 +103,6 @@ public class CamControl implements CarControl {
         this.renderedImage = renderedImage;
     }
 
-    public void setRGBImage(int[] renderedImage) {
-
-    }
-
     @Override
     public boolean willPaint() {
         return true;
