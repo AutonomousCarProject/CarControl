@@ -115,10 +115,6 @@ public class SteeringModule implements Module {
                 }
             }
         }
-        
-     // Draw steering.steerPoint on screen
-        g.setColor(Color.CYAN);
-        g.fillRect(steering.steerPoint.x, steering.steerPoint.y + 25, 7, 7);
 
         for (int idx = 0; idx < steering.midPoints.size(); idx++) {
 
