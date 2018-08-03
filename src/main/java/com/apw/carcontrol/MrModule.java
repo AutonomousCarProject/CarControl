@@ -18,9 +18,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 public class MrModule extends JFrame implements Runnable, KeyListener {
 
@@ -30,6 +28,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     private PWMController driveSys = new ArduinoIO();
     private ArrayList<Module> modules;
     private CarControl control;
+    private Future executionTask;
     private boolean fullscreen;
 
     // FIXME breaks if dimensions are not 912x480
@@ -44,21 +43,25 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         }
         windowWidth = control.getImageWidth();
         windowHeight = control.getImageHeight();
-        
+
         headlessInit();
         setupWindow();
-        
+
         System.out.println(windowWidth + "************X************" + windowHeight);
-        
+
         createModules();
     }
-    
+
     private void headlessInit() {
         executorService = Executors.newSingleThreadScheduledExecutor();
         modules = new ArrayList<>();
-        executorService.scheduleAtFixedRate(this, 0, 1000 / 20, TimeUnit.MILLISECONDS);
+        try {
+            executorService.scheduleAtFixedRate(this, 0, 1000 / 20, TimeUnit.MILLISECONDS).get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
     }
-    
+
     private void setupWindow() {
         graphicsDevice = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         displayImage = new BufferedImage(windowWidth, windowHeight, BufferedImage.TYPE_INT_RGB);
@@ -72,7 +75,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         setIgnoreRepaint(true);
     }
     private void createModules() {
-		modules.add(new ImageManagementModule(windowWidth, windowHeight, control.getTile()));
+        modules.add(new ImageManagementModule(windowWidth, windowHeight, control.getTile()));
         modules.add(new SpeedControlModule());
         modules.add(new SteeringModule());
         modules.add(new ArduinoModule(driveSys));
@@ -81,7 +84,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
             module.initialize(control);
         }
     }
-    
+
     private void update() {
         if (control instanceof TrakSimControl) {
             ((TrakSimControl) control).cam.theSim.SimStep(1);
@@ -97,39 +100,45 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
 
 
     private void paint() {
-    	int[] renderedImage = null;
+        int[] renderedImage = null;
         Graphics g;
         g = this.getGraphics();
-        
+
         if (control instanceof TrakSimControl) {
-        	renderedImage = ((TrakSimControl) control).getRenderedImage();
+            renderedImage = ((TrakSimControl) control).getRenderedImage();
         }
         else if (control instanceof CamControl) {
-        	renderedImage = ((CamControl) control).getRenderedImage();
+            renderedImage = ((CamControl) control).getRenderedImage();
         }
 
         if (renderedImage != null) {
             int[] displayPixels = ((DataBufferInt) bufferImage.getRaster().getDataBuffer()).getData();
             System.arraycopy(renderedImage, 0, displayPixels, 0, renderedImage.length);
-            
+
             BufferedImage tempImage = displayImage;
             displayImage = bufferImage;
             bufferImage = tempImage;
 
             g.drawImage(displayImage, getInsets().left, getInsets().top, getWidth() - getInsets().left - getInsets().right, getHeight() - getInsets().top - getInsets().bottom , null);
         }
-        
+
         for (Module module : modules) {
             module.paint(control, g);
         }
     }
-  
+
     @Override
     public void run() {
-        update();
-        paint();
+        try {
+            System.out.println(Thread.currentThread().getName() + " -> " + System.currentTimeMillis());
+            update();
+            paint();
+        } catch (RuntimeException e) {
+            Thread t = Thread.currentThread();
+            t.getUncaughtExceptionHandler().uncaughtException(t, e);
+        }
     }
-    
+
     public static void main(String[] args) {
         boolean renderWindow = true;
         if(args.length > 0 && args[0].toLowerCase().equals("nosim")) {
@@ -137,7 +146,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         }
         new MrModule(renderWindow);
     }
-    
+
     @Override
     public void keyPressed(KeyEvent e) {
         if (!(control instanceof TrakSimControl)) {
@@ -157,17 +166,17 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
                 setVisible(true);
             }
         }
-      
+
         for (Map.Entry<Integer, Runnable> binding : ((TrakSimControl) control).keyBindings.entrySet()) {
             if (e.getKeyCode() == binding.getKey()) {
                 binding.getValue().run();
             }
         }
     }
-    
+
     @Override
     public void keyTyped(KeyEvent e) {  }
-    
+
     @Override
     public void keyReleased(KeyEvent e) {  }
 }
