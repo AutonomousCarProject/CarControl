@@ -29,7 +29,7 @@ public abstract class DriverCons { // TrakSim constant parameters
 
     public static final boolean // options & diagnostic switches..
             D_PrimaryViewOn = true,    // T: make the main window open up
-            D_LiveCam = false,       // F: omit connecting to FlyCamera
+            D_LiveCam = true,       // F: omit connecting to FlyCamera
             D_StartLive = false,    // T: start in live camera if possible
             D_FixedSpeed = false,    // ignore speed control, assume fMinSpeed
             D_StayInTrack = false,   // ignore steering control, stay centered in track
@@ -39,7 +39,7 @@ public abstract class DriverCons { // TrakSim constant parameters
             D_DoCloseUp = true,     // T: show close-up map if there is room
             D_RampServos = false,   // T: servos take time to arrive at setting
             D_TrakNoPix = false,    // T: draw track only, omit artifacts & trees
-            D_UseTexTrak = false,    // T: use text file to build track to drive
+            D_UseTexTrak = true,    // T: use text file to build track to drive
             D_Reversible = false,   // T: allow reverse (untested)
             D_StartInCalibrate = false, // T: use this to calibrate servo limits
             D_Log_Draw = false, D_Log_Log = false, D_Fax_Log = false,
@@ -58,7 +58,7 @@ public abstract class DriverCons { // TrakSim constant parameters
             D_ServoMsgTL = 40 * 0x10001, D_ServoMsgSiz = 40 * 0x10000 + 80, // posn on screen
             D_ImHi = 480, D_ImWi = 640, // Camera image (and display window) size
             D_HalfTall = 100, D_HalfMap = 128,  // 2x2 grid map size (in 2m units)
-            D_DrawDash = 12,                    // dashboard height at bottom of image
+            D_DrawDash = 0,                    // dashboard height at bottom of image
             D_SteerServo = 9, D_GasServo = 10,  // FakeArduino output pins for servos
             D_MinESCact = 10, D_MaxESCact = 22, // active range of ESC, in steps +90
             D_LeftSteer = 33, D_RiteSteer = 44, // (measured) full range (33,44)

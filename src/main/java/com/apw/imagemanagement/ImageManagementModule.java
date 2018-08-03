@@ -103,43 +103,49 @@ public class ImageManagementModule implements Module {
     }
   
     public int[] getBWRGBRaster(byte[] pixels) {
-        byte[] output = new byte[width * height];
-        int[] rgb = new int[width*height];
+        //byte[] output = new byte[width * height];
+        //int[] rgb = new int[width*height];
         //int[] cameraInt = new int[cameraWidth*cameraHeight];
         //byte[] cameraByte = new byte[cameraWidth*cameraHeight];
-        ImageManipulator.convertToBlackWhite2Raster(pixels, output, height, width, tile);
+        ImageManipulator.convertToBlackWhiteRaster(pixels, mono, height, width, tile);
         if(removeNoise) {
-        	output = ImageManipulator.removeNoise(output, height, width);
+            ImageManipulator.removeNoise(mono, simple, height, width);
+            byte[] temp = mono;
+            mono = simple;
+            simple = temp;
         }
         if(dilate) {
-        	output = ImageManipulator.dilate(output, height, width);
+        	ImageManipulator.dilate(mono, simple, height, width);
+        	byte[] temp = mono;
+        	mono = simple;
+        	simple = temp;
         }
-        ImageManipulator.convertBWToRGB(output, rgb, output.length);
+        ImageManipulator.convertBWToRGB(mono, rgb, mono.length);
         return rgb;
 
     }
     
-    public byte[] getBlackWhiteRasterFull(byte[] pixels){
-        byte[] mono = new byte[width * height];
-        //int[] rgb = new int[nrows*ncols];
-        //int[] cameraInt = new int[cameraWidth*cameraHeight];
-        //byte[] cameraByte = new byte[cameraWidth*cameraHeight];
-        ImageManipulator.convertToBlackWhiteRaster(pixels, mono, height, width, tile);
-        return mono;
-    }
-    
     public int[] getRoad(byte[] pixels){
-        int road[] = new int[width*height];
-        byte temp[] = new byte[width*height];
-        temp = getBlackWhiteRasterFull(pixels);
+        byte[] mono = new byte[width*height];
+        byte[] simple = new byte[width*height];
+        int[] rgb = new int[width*height];
+        //int road[] = new int[width*height];
+        //byte temp[] = new byte[width*height];
+        ImageManipulator.convertToBlackWhiteRaster(pixels, mono, height, width, tile);
         if(removeNoise) {
-        	temp = ImageManipulator.removeNoise(temp, height, width);
+        	ImageManipulator.removeNoise(mono,simple, height, width);
+            byte[] temp = mono;
+            mono = simple;
+            simple = temp;
         }
         if(dilate) {
-        	temp = ImageManipulator.dilate(temp, height, width);
+        	ImageManipulator.dilate(mono,simple, height, width);
+            byte[] temp = mono;
+            mono = simple;
+            simple = temp;
         }
-        ImageManipulator.findRoad(temp, road, height, width);
-        return road;
+        ImageManipulator.findRoad(mono, rgb, height, width);
+        return rgb;
     }
 
     @Override

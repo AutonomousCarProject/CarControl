@@ -3518,6 +3518,7 @@ public class TrakSim {
     } //~SeeOnScrnPaint
 
     private void BuildFrame() { // no early return, always logs
+        RectFill(0x0000FF,0,0,10,10);
         double ledge, Vat = Vposn, Hat = Hposn, fHafIm = ((double) FltWi) * 0.5 + 1.0,
                 GridTall = (double) HalfTall, GridWide = (double) HalfMap,
                 Vbase, Hbase, Vpx, Hpx, ftmp; // Mconst, Kconst,
