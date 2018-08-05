@@ -28,7 +28,6 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     private PWMController driveSys = new ArduinoIO();
     private ArrayList<Module> modules;
     private CarControl control;
-    private Future executionTask;
     private boolean fullscreen;
 
     // FIXME breaks if dimensions are not 912x480
@@ -46,17 +45,18 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
 
         headlessInit();
         setupWindow();
-
-        System.out.println(windowWidth + "************X************" + windowHeight);
-
         createModules();
     }
 
     private void headlessInit() {
-        executorService = Executors.newSingleThreadScheduledExecutor();
         modules = new ArrayList<>();
+        executorService = Executors.newSingleThreadScheduledExecutor();
+        executorService.scheduleAtFixedRate(this, 0, 1000 / 20, TimeUnit.MILLISECONDS);
+
+        Future run = executorService.submit(this);
+
         try {
-            executorService.scheduleAtFixedRate(this, 0, 1000 / 20, TimeUnit.MILLISECONDS).get();
+            run.get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
@@ -130,7 +130,6 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     @Override
     public void run() {
         try {
-            System.out.println(Thread.currentThread().getName() + " -> " + System.currentTimeMillis());
             update();
             paint();
         } catch (RuntimeException e) {
