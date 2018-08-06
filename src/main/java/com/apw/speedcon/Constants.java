@@ -4,7 +4,7 @@ public class Constants {
   //Arduino settings
   public static final boolean
 	useServos = false,
-	readMessages = false;
+	readMessages = true;
   
 	//Default Debug Overlays
 	public static final boolean
