@@ -5,8 +5,11 @@ import com.apw.apw3.MyMath;
 import com.apw.apw3.SimCamera;
 import com.apw.apw3.SimCameraRGB;
 import com.apw.sbcio.PWMController;
+import com.apw.steering.Point;
 
 import java.awt.*;
+import java.awt.geom.Line2D;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class TrakSimControl implements CarControl {
@@ -16,6 +19,7 @@ public class TrakSimControl implements CarControl {
     private PWMController driveSys;
     protected SimCamera cam;
     private Insets edges;
+    private ArrayList<ColoredLine> lines;
 
     private byte[] cameraImage = null;
     private byte[] processedImage = null;
@@ -41,6 +45,7 @@ public class TrakSimControl implements CarControl {
         driveSys = drivesys;
 
         keyBindings = new HashMap<>();
+        lines = new ArrayList<>();
     }
 
     @Override
@@ -215,8 +220,18 @@ public class TrakSimControl implements CarControl {
     }
     
     @Override
-    public void drawLine(int colo, int rx, int cx, int rz, int cz) {
-    	cam.theSim.DrawLine(colo, rx, cx, rz, cz);
+    public void drawLine(int color, int x1, int y1, int x2, int y2) {
+        lines.add(new ColoredLine(x1, y1, x2, y2, color));
+    }
+
+    @Override
+    public ArrayList<ColoredLine> getLines() {
+        return lines;
+    }
+
+    @Override
+    public void clearLines() {
+        lines.clear();
     }
 
     @Override
