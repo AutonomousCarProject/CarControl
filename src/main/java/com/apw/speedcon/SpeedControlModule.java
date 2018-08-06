@@ -355,7 +355,7 @@ public class SpeedControlModule implements Module {
 		//System.out.println("distToBlob: " + distToBlob);
 		//System.out.println(desiredSpeed - cameraCalibrator.calcStopRate(getEstimatedSpeed(), cameraCalibrator.getStopTime(distToBlob, getEstimatedSpeed())));
 		
-		this.desiredSpeed = desiredSpeed - cameraCalibrator.calcStopRate(getEstimatedSpeed(), cameraCalibrator.getStopTime(distToBlob, getEstimatedSpeed()));
+//		this.desiredSpeed = desiredSpeed - cameraCalibrator.calcStopRate(getEstimatedSpeed(), cameraCalibrator.getStopTime(distToBlob, getEstimatedSpeed()));
 		
 		if (frameWait == 0) {
 			stopType = 0;

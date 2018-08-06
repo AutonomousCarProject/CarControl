@@ -16,8 +16,8 @@ public class ImageManagementModule implements Module {
     private int width, height;
     private int[] imagePixels;
     private byte tile;
-    boolean removeNoise = false;
-    boolean dilate = true;
+    boolean removeNoise = true;
+    boolean dilate = false;
 
     public ImageManagementModule(int width, int height, byte newtile) {
         this.width = width;
@@ -156,7 +156,7 @@ public class ImageManagementModule implements Module {
     
     public void changeFilter() {
     	viewType = (viewType) % 6 + 1; 
-    	System.out.println(viewType);
+    	System.out.println("view changed to " + viewType);
     }
 
     @Override
