@@ -5,6 +5,12 @@ import com.apw.pedestrians.PedestrianDetector;
 import com.apw.pedestrians.blobtrack.MovingBlob;
 import com.apw.pedestrians.image.Color;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
+
 import java.util.List;
 
 public class CameraCalibration {
@@ -44,6 +50,8 @@ public class CameraCalibration {
 	private double testBlobWidthHeight;	//the width and height of a square used to calibrate the camera
 	public double testBlobDistance;	//The distance the test blob is away from the camera
 	public double relativeWorldScale;		//The scale of the world (if 1/3 scale, set to 3)
+	private FileWriter fileWriter;
+	private FileReader fileReader;
 
 	//Used to set world scale, and width of known objects
 	public CameraCalibration() {
@@ -52,6 +60,24 @@ public class CameraCalibration {
 		relativeWorldScale = 8;
 
 		this.pedDetect = new PedestrianDetector();
+
+
+		//Tries to find a file containing the focal length
+		try{
+
+		fileReader = new FileReader("calibrationData.txt");
+		BufferedReader reader = new BufferedReader(fileReader);
+
+		String line;
+		if ((line = reader.readLine()) != null) {
+			System.out.println("Found focal length " + line);
+			cameraFocalLength = Double.parseDouble(line);
+			System.out.println("Set Focal Length To " + cameraFocalLength);
+		}
+		reader.close();
+		}catch(IOException e){
+			e.printStackTrace();
+		}
 
 	}
 
@@ -72,6 +98,18 @@ public class CameraCalibration {
 
 		//Used to test distance to found test blob, should be same as testBlobDistance
 		distanceToObj(testBlobWidthHeight, testBlob.width);
+
+
+		//Saves the camera calibration data, only needed once or when changing cameras
+		try{
+			fileWriter = new FileWriter("calibrationData.txt");
+			fileWriter.write(Double.toString(cameraFocalLength));
+			fileWriter.close();
+			
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+
 	}
 	
 
