@@ -4,12 +4,21 @@ bool timedout = false;
 byte steeringDeg, wheelSpeed;
 bool speedON, steerON;
 
+const int speedPin = 10;
+const int steerPin = 9;
+const int killPin = 11;
+const int rpmPin = 14;
+
+unsigned long sinceRpm = 0;
+
 byte out[] = {0, 0, 0};
 byte outsize = 3;
 
 byte type;
 byte pin;
 byte value;
+
+unsigned long misc;
 
 unsigned long overtime = 20;
 const int overtimeFix = 150;
@@ -23,7 +32,8 @@ unsigned long lastNoKill = 0;
 unsigned long sinceConnect = 0;
 unsigned long sinceNoKill = 0; //Input timing for kill
 unsigned long lastRun = 0; //timekeeping for loop
-const unsigned long timeout = 300000; //microseconds before timeout
+const unsigned long timeout = 3800000; //microseconds before timeout
+
 
 //#define NOT_AN_INTERRUPT -1
 //where 1ms is considered full left or full reverse, and 2ms is considered full forward or full right.
@@ -31,9 +41,9 @@ const unsigned long timeout = 300000; //microseconds before timeout
 void setup() {
   // put your setup code here, to run once:
   //set pins to input/output
-  pinMode(9, OUTPUT); //steering
-  pinMode(10, OUTPUT); //speed
-  pinMode(11, INPUT); //Dead man's switch
+  pinMode(steerPin, OUTPUT); //steering
+  pinMode(speedPin, OUTPUT); //speed
+  pinMode(killPin, INPUT); //Dead man's switch
   
   //pinMode(2, INPUT); 
   
@@ -43,9 +53,16 @@ void setup() {
   Serial.begin(57600);
   Serial.setTimeout(1000); //Default value. available for change
 
-  addMessage(1, 2, 6);
-  
 }
+
+/*
+ * addmessage sends 3 bytes to the host computer.
+ * byte one is the type of message, 100 for debug and >150 for info.
+ * byte 2 is the type of info, byte 3 is the details.
+ * debug:
+ * 3: startup. 4: host. 5: timeout. 6: kill.
+ * 151: rpm
+ */
 
 void addMessage(byte ina, byte inb, byte inc){
   out[outsize] = ina;
@@ -73,17 +90,29 @@ void sendMessage(){
 void loop() {
   lastRun = micros();
 
+  /*if (sinceRpm == 0 && digitalRead(rpmPin) == LOW){
+    sinceRpm = micros();
+  }
+
+  if (sinceRpm != 0 && digitalRead(rpmPin) == HIGH){
+    misc = micros() - sinceRpm;
+
+    addMessage(121, (misc & 0xFF), (misc >> 8));
+    sinceRpm = 0;
+  }*/
+
   //Read rise of signal
-  if (sinceNoKill == 0 && digitalRead(11) == HIGH){
+  if (sinceNoKill == 0 && digitalRead(killPin) == HIGH){
     sinceNoKill = micros();
   }
 
   //Read fall of signal
-  if (sinceNoKill != 0 && digitalRead(11) == LOW){
+  if (sinceNoKill != 0 && digitalRead(killPin) == LOW){
     lastNoKill = micros();
     if (kill && micros()-sinceNoKill > 1800){ //Start up if un-killed
       kill = false;
-      addMessage(3, 0, 1);
+      addMessage(100, 6, 3);
+      addMessage(111, 50, 100);
     }
     if (!kill && micros()-sinceNoKill < 1600){ //Check difference to find duration of input
       kill = true;
@@ -92,15 +121,17 @@ void loop() {
       steeringDeg = 90;
       wheelSpeed = 90;
       //Send message to computer
-      addMessage(4, 0, 3);
+      addMessage(100, 6, 6);
     }
     sinceNoKill = 0;
   }
 
   if (!kill && micros()-lastNoKill > timeout){
     kill = true;
-    addMessage(4, 0, 4);
+    addMessage(100, 6, 5);
   }
+
+  
 
   //Grab info from buffer
   if (Serial.available() > 0){
@@ -110,6 +141,10 @@ void loop() {
     value = Serial.read();
     sinceConnect = micros();
 
+    if (type != 0){
+      addMessage(122, pin, value);
+    }
+    
     if (!kill && pin == 9){
       if (value != steeringDeg){
         //steerDelay = 1.0+((double) value)/180;
@@ -130,7 +165,7 @@ void loop() {
       speedDelay = 1500 - overtimeFix;
       steerDelay = 1500 - overtimeFix;
       kill = false;
-      addMessage(3, 0, 0);
+      addMessage(100, 4, 3);
     }
     timedout = false;
   }
@@ -139,7 +174,7 @@ void loop() {
   if (micros()-lastTime >= 20000){
     
     //digitalWrite(13, HIGH);
-    digitalWrite(10, HIGH);
+    digitalWrite(speedPin, HIGH);
     speedON = true;
     
     lastTime = micros();
@@ -155,14 +190,13 @@ void loop() {
         delayMicroseconds(temp);
       } else {
         delayMicroseconds(overtimeFix);
-        addMessage(6, 6, 6);
       }
     }
-    digitalWrite(10, LOW);
+    digitalWrite(speedPin, LOW);
     digitalWrite(13, LOW);
     speedON = false;
 
-    digitalWrite(9, HIGH); //Start timing for steering
+    digitalWrite(steerPin, HIGH); //Start timing for steering
     midDelay = micros();
     steerON = true;
   }
@@ -175,10 +209,9 @@ void loop() {
         delayMicroseconds(temp);
       } else {
         delayMicroseconds(overtimeFix);
-        addMessage(7, 6, 6);
       }
     }
-    digitalWrite(9, LOW);
+    digitalWrite(steerPin, LOW);
     digitalWrite(13, LOW);
     steerON = false;
   }
@@ -189,7 +222,7 @@ void loop() {
     //Timeout check
     if (!timedout && Serial.peek() <= 0 && (micros()-sinceConnect) > timeout){
       timedout = true;
-      addMessage(5, 0, 4);
+      addMessage(100, 4, 5);
       digitalWrite(13, LOW);
     }
 
