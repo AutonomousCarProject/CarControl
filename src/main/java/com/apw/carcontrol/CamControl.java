@@ -1,6 +1,7 @@
 package com.apw.carcontrol;
 
 import java.awt.Insets;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.apw.apw3.DriverCons;
@@ -253,6 +254,14 @@ public class CamControl implements CarControl {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-	
+
+    @Override
+    public ArrayList<ColoredLine> getLines() {
+        return new ArrayList<>();
+    }
+
+    @Override
+    public void clearLines() { }
+
 
 }

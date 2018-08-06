@@ -74,10 +74,7 @@ public class SpeedControlModule implements Module {
 	
 	@Override
 	public void paint(CarControl control, Graphics g) {
-		
-		
-		
-		
+
 		if (control.getProcessedImage() == null) {
 			return;
 		}
