@@ -69,15 +69,12 @@ public class SpeedControlModule implements Module {
 	public void update(CarControl control) {
 		onUpdate(control);
 		control.accelerate(true, getNextSpeed());
-		System.out.println("Speed: " + getNextSpeed());
+		//System.out.println("Speed: " + getNextSpeed());
 	}
 	
 	@Override
 	public void paint(CarControl control, Graphics g) {
-		
-		
-		
-		
+
 		if (control.getProcessedImage() == null) {
 			return;
 		}

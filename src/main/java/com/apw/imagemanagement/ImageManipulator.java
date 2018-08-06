@@ -15,6 +15,8 @@
 package com.apw.imagemanagement;
 
 public class ImageManipulator {
+	
+	private static double luminanceMultiplier = 1;
 
 	/** Converts a bayer8 image to a monochrome image, uses the green value of the bayer8
 	 *
@@ -38,9 +40,9 @@ public class ImageManipulator {
         for (int r = 0; r < nrows; r++) {
             for (int c = 0; c < ncols; c++) {
 
-				int R = (bayer[getPos(c,r,combineTile((byte)0,tile),ncols,nrows,true)]&0xFF);
-				int G = (bayer[getPos(c,r,combineTile((byte)1,tile),ncols,nrows,true)]&0xFF);
-				int B = (bayer[getPos(c,r,combineTile((byte)3,tile),ncols,nrows,true)]&0xFF);
+				int R = (bayer[getPos(c,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);
+				int G = (bayer[getPos(c,r,combineTile((byte)1,tile),ncols,nrows)]&0xFF);
+				int B = (bayer[getPos(c,r,combineTile((byte)3,tile),ncols,nrows)]&0xFF);
 				//double Y = R *  .299000 + G *  .587000 + B *  .114000;
 
 				double Y = (R+G+B)/3;
@@ -61,29 +63,29 @@ public class ImageManipulator {
 		for (int r = 0; r < nrows; r++) {
     		int averageLuminance = 0;
         	for(int c = 0; c < ncols; c++) {
-				int R = (bayer[getPos(c,r,combineTile((byte)0,tile),ncols,nrows,true)]&0xFF);
-				int G = (bayer[getPos(c,r,combineTile((byte)1,tile),ncols,nrows,true)]&0xFF);
-				int B = (bayer[getPos(c,r,combineTile((byte)3,tile),ncols,nrows,true)]&0xFF);
+				int R = (bayer[getPos(c,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);
+				int G = (bayer[getPos(c,r,combineTile((byte)1,tile),ncols,nrows)]&0xFF);
+				int B = (bayer[getPos(c,r,combineTile((byte)3,tile),ncols,nrows)]&0xFF);
 				averageLuminance += (R + G + B)/3;
 			}
         	averageLuminance /= ncols;
 
             for (int c = 1; c < ncols-1; c++) {
 
-				int R1 = (bayer[getPos(c-1,r,combineTile((byte)0,tile),ncols,nrows,true)]&0xFF);
-				int G1 = (bayer[getPos(c-1,r,combineTile((byte)1,tile),ncols,nrows,true)]&0xFF);
-				int B1 = (bayer[getPos(c-1,r,combineTile((byte)3,tile),ncols,nrows,true)]&0xFF);
-				int R2 = (bayer[getPos(c,r,combineTile((byte)0,tile),ncols,nrows,true)]&0xFF);
-				int G2 = (bayer[getPos(c,r,combineTile((byte)1,tile),ncols,nrows,true)]&0xFF);
-				int B2 = (bayer[getPos(c,r,combineTile((byte)3,tile),ncols,nrows,true)]&0xFF);
-				int R3 = (bayer[getPos(c+1,r,combineTile((byte)0,tile),ncols,nrows,true)]&0xFF);
-				int G3 = (bayer[getPos(c+1,r,combineTile((byte)1,tile),ncols,nrows,true)]&0xFF);
-				int B3 = (bayer[getPos(c+1,r,combineTile((byte)3,tile),ncols,nrows,true)]&0xFF);
+				int R1 = (bayer[getPos(c-1,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);
+				int G1 = (bayer[getPos(c-1,r,combineTile((byte)1,tile),ncols,nrows)]&0xFF);
+				int B1 = (bayer[getPos(c-1,r,combineTile((byte)3,tile),ncols,nrows)]&0xFF);
+				int R2 = (bayer[getPos(c,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);
+				int G2 = (bayer[getPos(c,r,combineTile((byte)1,tile),ncols,nrows)]&0xFF);
+				int B2 = (bayer[getPos(c,r,combineTile((byte)3,tile),ncols,nrows)]&0xFF);
+				int R3 = (bayer[getPos(c+1,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);
+				int G3 = (bayer[getPos(c+1,r,combineTile((byte)1,tile),ncols,nrows)]&0xFF);
+				int B3 = (bayer[getPos(c+1,r,combineTile((byte)3,tile),ncols,nrows)]&0xFF);
 
 				int pix =(R1 + R2 + R3 + B1 + B2 + B3 + G1 + G2 + G3)/9;
 //				int pix = (R2 + G2 + B2)/3;
 				if(!(c >= 640 || r < 240 || r > 455)) {
-					if (pix > 2.5 * averageLuminance) {
+					if (pix > luminanceMultiplier * averageLuminance) {
 						mono[r * ncols + c] = 1;
 					} else {
 						mono[r * ncols + c] = 0;
@@ -94,11 +96,46 @@ public class ImageManipulator {
 			}
 		}
 	}
+
+	public static void convertToBlackWhite2Raster(byte[] bayer, byte[] mono, int nrows, int ncols, byte tile) {
+		for (int r = 0; r < nrows; r++) {
+			int averageLuminance = 0;
+			for(int c = 0; c < ncols; c++) {
+				int R = (bayer[getPos(c,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);
+				int G = (bayer[getPos(c,r,combineTile((byte)1,tile),ncols,nrows)]&0xFF);
+				int B = (bayer[getPos(c,r,combineTile((byte)3,tile),ncols,nrows)]&0xFF);
+				if(c == 0){
+					averageLuminance = (R+G+B)/3;
+				}
+				if(!(c >= 640 || r < 240 || r > 455)) {
+					if ((averageLuminance + (R+G+B)/3)/2 > averageLuminance * 1.5) {
+						mono[r * ncols + c] = 1;
+					} else {
+						mono[r * ncols + c] = 0;
+					}
+				} else {
+					mono[r * ncols + c] = 0;
+				}
+				averageLuminance = (averageLuminance + (R+G+B)/3)/2;
+			}
+		}
+	}
+	
+	public static void convertToRobertsCrossRaster(int[] input, int[] output, int nrows, int ncols) {
+		for (int r = 0; r < nrows - 1; r++) {
+			for(int c = 0; c < ncols - 1; c++) {
+				output[r * ncols + c] = Math.abs(input[r * ncols + c] - input[(r+1) * ncols + (c+1)])
+						+ Math.abs(input[r * ncols + (c+1)] - input[(r+1) * ncols + c]);
+				
+			}
+		}
+	}
 	
 	
 	/** erosion filter used on pixels in a byte[]
 	 *
 	 * @param pixels image to be eroded
+	 * @param output where the image will be written
 	 * @param nrows	number of rows of pixels in the image
 	 * @param ncols number of columns of pixels in the image
 	 * @return byte[] of eroded image
@@ -206,18 +243,6 @@ public class ImageManipulator {
 		return output;
 	}
 
-    public static void convertToRGBRaster(byte[] bayer, int[] rgb, int nrows, int ncols) {
-        for (int r = 0; r < nrows; r++) {
-            for (int c = 0; c < ncols; c++) {
-                int R = ((((int) bayer[(r * ncols * 2 + c) * 2]) & 0xFF));                //Top left (red)
-                int G = ((((int) bayer[(r * ncols * 2 + c) * 2 + 1]) & 0xFF));            //Top right (green)
-                int B = (((int) bayer[(r * ncols * 2 + c) * 2 + 1 + 2 * ncols]) & 0xFF);            //Bottom right (blue)
-                int pix = (R << 16) + (G << 8) + B;
-                rgb[r * ncols + c] = pix;
-            }
-        }
-    }
-
 	/** Converts a bayer8 image to a simple color image, the simple colors are red, green, blue, yellow, white, grey and black
 	 *
 	 * @param bayer bayer8 image
@@ -240,9 +265,9 @@ public class ImageManipulator {
 		*/
 		for(int r = 0; r < nrows; r++){
 			for(int c = 0; c < ncols; c++){
-				int R = (bayer[getPos(c,r,combineTile((byte)0,tile),ncols,nrows,true)]&0xFF);
-				int G = (bayer[getPos(c,r,combineTile((byte)1,tile),ncols,nrows,true)]&0xFF);
-				int B = (bayer[getPos(c,r,combineTile((byte)3,tile),ncols,nrows,true)]&0xFF);
+				int R = (bayer[getPos(c,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);
+				int G = (bayer[getPos(c,r,combineTile((byte)1,tile),ncols,nrows)]&0xFF);
+				int B = (bayer[getPos(c,r,combineTile((byte)3,tile),ncols,nrows)]&0xFF);
 				//int B = (((int)bayer[(r*ncols*2 + c)*2 + 1+2*ncols-ncols*2*getBit(tile,1)-getBit(tile,0)])&0xFF);			//Bottom right (blue)
                 double Y = R *  .299000 + G *  .587000 + B *  .114000;
 				double U  = R * -.168736 + G * -.331264 + B *  .500000 + 128;
@@ -285,9 +310,9 @@ public class ImageManipulator {
 	public static void convertToRGBRaster(byte[] bayer, int[] rgb, int nrows, int ncols, byte tile) {
 		for (int r = 0; r < nrows; r++) {
 			for (int c = 0; c < ncols; c++) {
-				int R = (bayer[getPos(c,r,combineTile((byte)0,tile),ncols,nrows,true)]&0xFF);
-				int G = (bayer[getPos(c,r,combineTile((byte)1,tile),ncols,nrows,true)]&0xFF);
-				int B = (bayer[getPos(c,r,combineTile((byte)3,tile),ncols,nrows,true)]&0xFF);
+				int R = (bayer[getPos(c,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);
+				int G = (bayer[getPos(c,r,combineTile((byte)1,tile),ncols,nrows)]&0xFF);
+				int B = (bayer[getPos(c,r,combineTile((byte)3,tile),ncols,nrows)]&0xFF);
 				int pix =(R<<16)+(G<<8)+B;
 				rgb[r*ncols + c] = pix;
 			}
@@ -398,6 +423,25 @@ public class ImageManipulator {
 			}
 		}
 	}
+
+	public static void byteRGB(byte[] bayer, byte[] rgb, int ncols, int nrows, byte tile){
+    	//System.out.println(ncols+", "+nrows);
+
+    	for(int r = 0; r<nrows;r++){
+    		for(int c = 0; c<ncols;c++){
+				(rgb[getPos(c,r,combineTile((byte)0,(byte)4),ncols,nrows)])=(bayer[getPos(c,r,combineTile((byte)0,tile),ncols,nrows)]);
+				(rgb[getPos(c,r,combineTile((byte)1,(byte)4),ncols,nrows)])=(bayer[getPos(c,r,combineTile((byte)1,tile),ncols,nrows)]);
+				(rgb[getPos(c,r,combineTile((byte)3,(byte)4),ncols,nrows)])=(bayer[getPos(c,r,combineTile((byte)3,tile),ncols,nrows)]);
+				//System.out.println(getPos(c,r,combineTile((byte)0,(byte)4),ncols,nrows)+", "+getPos(c,r,combineTile((byte)1,(byte)4),ncols,nrows)+", "+getPos(c,r,combineTile((byte)3,(byte)4),ncols,nrows));
+				//System.out.println(getPos(c,r,combineTile((byte)0,tile),ncols,nrows)+", "+getPos(c,r,combineTile((byte)1,tile),ncols,nrows)+", "+getPos(c,r,combineTile((byte)3,tile),ncols,nrows));
+				//System.out.println();
+			}
+			//System.out.println(getPos(ncols-1,r-1,combineTile((byte)0,tile),ncols,nrows)+", "+getPos(ncols-1,r-1,combineTile((byte)1,tile),ncols,nrows)+", "+getPos(ncols-1,r-1,combineTile((byte)3,tile),ncols,nrows));
+			//System.out.println(getPos(0,r,combineTile((byte)0,tile),ncols,nrows)+", "+getPos(0,r,combineTile((byte)1,tile),ncols,nrows)+", "+getPos(0,r,combineTile((byte)3,tile),ncols,nrows));
+
+			//System.out.println(getPos(0,r,combineTile((byte)0,(byte)4),ncols,nrows)+", "+getPos(0,r,combineTile((byte)1,(byte)4),ncols,nrows)+", "+getPos(0,r,combineTile((byte)3,(byte)4),ncols,nrows));
+		}
+	}
  
 
 
@@ -424,20 +468,24 @@ public class ImageManipulator {
 
 	}
     
+    public static void setLuminanceMultiplier(double multiplier) {
+		luminanceMultiplier = multiplier;
+	}
+    
 	public static int getBit(byte tile, int pos){
         return (tile >> pos) & 1;
     }
     public static int boolBit(boolean check){
-    	if(true) return 1;
+    	if(check) return 1;
     	return 0;
 	}
 
     public static void smooth(byte[] input,byte[] output, int ncols, int nrows, byte tile){
     	for(int r = 0; r<nrows;r++){
-			output[getPos(0,r,combineTile((byte)0,tile),ncols,nrows,true)] = input[getPos(0,r,combineTile((byte)0,tile),ncols,nrows,true)];
-			int R2 = (input[getPos(0,r,combineTile((byte)0,tile),ncols,nrows,true)]&0xFF);
-			int G2 = (input[getPos(0,r,combineTile((byte)1,tile),ncols,nrows,true)]&0xFF);
-			int B2 = (input[getPos(0,r,combineTile((byte)3,tile),ncols,nrows,true)]&0xFF);
+			output[getPos(0,r,combineTile((byte)0,tile),ncols,nrows)] = input[getPos(0,r,combineTile((byte)0,tile),ncols,nrows)];
+			int R2 = (input[getPos(0,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);
+			int G2 = (input[getPos(0,r,combineTile((byte)1,tile),ncols,nrows)]&0xFF);
+			int B2 = (input[getPos(0,r,combineTile((byte)3,tile),ncols,nrows)]&0xFF);
 			double Y2 = R2 *  .299000 + G2 *  .587000 + B2 *  .114000;
 			double Y = Y2;
 			//output[getPos(ncols-1,r,combineTile((byte)0,tile),ncols,nrows,true)] = input[getPos(ncols-1,r,combineTile((byte)0,tile),ncols,nrows,true)];
@@ -445,9 +493,9 @@ public class ImageManipulator {
 				//int R1 = (input[getPos(c-1,r,combineTile((byte)0,tile),ncols,nrows,true)]&0xFF);
 				//int G1 = (input[getPos(c-1,r,combineTile((byte)1,tile),ncols,nrows,true)]&0xFF);
 				//int B1 = (input[getPos(c-1,r,combineTile((byte)3,tile),ncols,nrows,true)]&0xFF);
-				R2 = (input[getPos(c,r,combineTile((byte)0,tile),ncols,nrows,true)]&0xFF);
-				G2 = (input[getPos(c,r,combineTile((byte)1,tile),ncols,nrows,true)]&0xFF);
-				B2 = (input[getPos(c,r,combineTile((byte)3,tile),ncols,nrows,true)]&0xFF);
+				R2 = (input[getPos(c,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);
+				G2 = (input[getPos(c,r,combineTile((byte)1,tile),ncols,nrows)]&0xFF);
+				B2 = (input[getPos(c,r,combineTile((byte)3,tile),ncols,nrows)]&0xFF);
 				//int R3 = (input[getPos(c+1,r,combineTile((byte)0,tile),ncols,nrows,true)]&0xFF);
 				//int G3 = (input[getPos(c+1,r,combineTile((byte)1,tile),ncols,nrows,true)]&0xFF);
 				//int B3 = (input[getPos(c+1,r,combineTile((byte)3,tile),ncols,nrows,true)]&0xFF);
@@ -462,10 +510,10 @@ public class ImageManipulator {
 				double R = Y + 1.4075 * (V - 128);
 				double G = Y - 0.3455 * (U - 128) - (0.7169 * (V - 128));
 				double B = Y + 1.7790 * (U - 128);
-				output[getPos(c,r,combineTile((byte)0,tile),ncols,nrows,true)] = (byte)R;
-				output[getPos(c,r,combineTile((byte)1,tile),ncols,nrows,true)] = (byte)G;
-				output[getPos(c,r,combineTile((byte)2,tile),ncols,nrows,true)] = (byte)G;
-				output[getPos(c,r,combineTile((byte)3,tile),ncols,nrows,true)] = (byte)B;
+				output[getPos(c,r,combineTile((byte)0,tile),ncols,nrows)] = (byte)R;
+				output[getPos(c,r,combineTile((byte)1,tile),ncols,nrows)] = (byte)G;
+				output[getPos(c,r,combineTile((byte)2,tile),ncols,nrows)] = (byte)G;
+				output[getPos(c,r,combineTile((byte)3,tile),ncols,nrows)] = (byte)B;
 			}
 		}
 	}
@@ -480,8 +528,9 @@ public class ImageManipulator {
 	 * @param nrows
 	 * @return
 	 */
-	public static int getPos(int x, int y, byte tile, int ncols, int nrows, boolean bayer){
-		return (y*ncols*(3*boolBit(bayer)+1)+2*x+getBit(tile,1)*(boolBit(bayer)+1)*ncols+getBit(tile,0))%((3*boolBit(bayer)+1)*ncols*nrows);
+	public static int getPos(int x, int y, byte tile, int ncols, int nrows){
+		//return (y*ncols*(3*boolBit(bayer)+1)+2*x+getBit(tile,1)*(boolBit(bayer)+1)*ncols+getBit(tile,0))%((3*boolBit(bayer)+1)*ncols*nrows);
+		return (y*ncols*(4-getBit(tile,2))+(2+getBit(tile,2))*x+getBit(tile,1)*(2*ncols-(2*ncols-1)*getBit(tile,2))+getBit(tile,0))%((4-getBit(tile,2))*ncols*nrows);
 	}
 	public static byte combineTile(byte tile1, byte tile2){
 		return (byte)(((int)tile1)^((int)tile2));
