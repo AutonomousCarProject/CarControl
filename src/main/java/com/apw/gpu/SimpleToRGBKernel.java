@@ -30,6 +30,8 @@ public class SimpleToRGBKernel extends Kernel {
         this.length = length;
     }
 
+    public SimpleToRGBKernel() {}
+
     /**
      * Sets all member variables of <code>SimpleToRGBKernel</code>.
      *
@@ -63,5 +65,6 @@ public class SimpleToRGBKernel extends Kernel {
         else if (simpleByte[i] == 3) simpleRGB[i] = 0xFFFFFF;
         else if (simpleByte[i] == 4) simpleRGB[i] = 0x808080;
         else if (simpleByte[i] == 5) simpleRGB[i] = 0x000000;
+        else if (simpleByte[i] == 6) simpleRGB[i] = 0xDDDD00;
     }
 }

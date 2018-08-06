@@ -26,6 +26,7 @@ public class GPUImageModule implements Module {
     private RGBRasterKernel rgbRasterKernel;
     private MonochromeRasterKernel monochromeRasterKernel;
     private MonoToRGBKernel monoToRGBKernel;
+    private SimpleToRGBKernel simpleToRGBKernel;
 
     public GPUImageModule(int width, int height, byte newtile) {
         this.width = width;
@@ -43,6 +44,7 @@ public class GPUImageModule implements Module {
         rgbRasterKernel = new RGBRasterKernel();
         monochromeRasterKernel = new MonochromeRasterKernel();
         monoToRGBKernel = new MonoToRGBKernel();
+        simpleToRGBKernel = new SimpleToRGBKernel();
     }
 
 
@@ -113,7 +115,7 @@ public class GPUImageModule implements Module {
         int[] rgb = new int[width*height];
         byte[] mono = new byte[width * height];
         monochromeRasterKernel.setValues(pixels, mono, height, width, tile);
-        monoToRGBKernel.setValues(mono, rgb, mono.length);
+        monoToRGBKernel.setValues(mono, rgb, monochromeRasterKernel.getMono().length);
         monochromeRasterKernel.execute(Range.create2D(height, width));
         monoToRGBKernel.execute(Range.create(monochromeRasterKernel.getMono().length));
         return monoToRGBKernel.getRGB();
@@ -122,8 +124,10 @@ public class GPUImageModule implements Module {
     public int[] getSimpleRGBRaster(byte[] pixels) {
         int[] rgb = new int[width*height];
         byte[] simple = new byte[width * height];
-        ImageManipulator.convertToSimpleColorRaster(pixels, simple, height, width, tile);
-        ImageManipulator.convertSimpleToRGB(simple, rgb, simple.length);
+        simpleColorRasterKernel.setValues(pixels, simple, height, width, tile);
+        simpleToRGBKernel.setValues(simple, rgb, simpleColorRasterKernel.getSimple().length);
+        simpleColorRasterKernel.execute(Range.create2D(height, width));
+        simpleToRGBKernel.execute(Range.create(simpleColorRasterKernel.getSimple().length));
         return rgb;
 
     }
