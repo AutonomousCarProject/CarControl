@@ -124,14 +124,29 @@ public class ArduinoIO implements PWMController { // Adapted to Java from arduin
     try {
       while (this.surrealPort.getInputBufferBytesCount() >= 3) {
         byte[] msg = surrealPort.readBytes(3);
-        System.out.println("----ARDUINO IN");
-        System.out.println((int) msg[0]);
-        System.out.println((int) msg[1]);
-        System.out.println((int) msg[2]);
+        
+        if (msg[0] == 100 && Constants.readMessages){
+        	System.out.println("----ARDUINO DEBUG");
+        	System.out.print((int) msg[1]);
+        	System.out.println((int) msg[2]);
+        }
+        else if (msg[0] >= 150){
+        	System.out.println("----ARDUINO INFO");
+        	System.out.println((byte) msg[1]);
+        	System.out.println((byte) msg[2]);
+        	
+            //msg[1] = (byte) (angle & 0x7F);
+            //msg[2] = (byte) (angle >> 7);
+        	System.out.println((int) (msg[2] << 8) + (msg[1]));
+        }
+        else {
+        	System.out.println("----Arduino gave unexpected info!");
+        }
+        
       }
     } catch (SerialPortException e) {
       e.printStackTrace();
-      System.out.println("Servo reading is creating a problem!");
+      System.out.println("Arduino reading is creating a problem! is useServos set correctly?");
     }
   }
 
