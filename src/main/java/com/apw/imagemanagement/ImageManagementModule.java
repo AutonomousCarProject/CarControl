@@ -18,6 +18,7 @@ public class ImageManagementModule implements Module {
 	//adjustable variables
     private int viewType = 4;
     private int blackWhiteRasterVersion = 1;
+
     private double luminanceMultiplier = 1.6;
 
     //internal variables
