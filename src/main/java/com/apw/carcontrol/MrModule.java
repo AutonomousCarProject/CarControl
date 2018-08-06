@@ -1,5 +1,6 @@
 package com.apw.carcontrol;
 
+import com.apw.gpu.GPUImageModule;
 import com.apw.imagemanagement.ImageManagementModule;
 import com.apw.sbcio.PWMController;
 import com.apw.sbcio.fakefirm.ArduinoIO;
@@ -75,7 +76,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         setIgnoreRepaint(true);
     }
     private void createModules() {
-        modules.add(new ImageManagementModule(windowWidth, windowHeight, control.getTile()));
+        modules.add(new GPUImageModule(windowWidth, windowHeight, control.getTile()));
         modules.add(new SpeedControlModule());
         modules.add(new SteeringModule());
         modules.add(new ArduinoModule(driveSys));
