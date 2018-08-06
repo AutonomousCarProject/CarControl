@@ -20,6 +20,7 @@ public class SteeringModule implements Module {
     private Boolean drawnMap = false;
     private int angle = 0;
     private int frameCount = 0;
+    private Boolean disablePaint = false;
 
 
     public SteeringModule() {
@@ -53,6 +54,10 @@ public class SteeringModule implements Module {
 
     @Override
     public void paint(CarControl control, Graphics g) {
+    	
+    	if(disablePaint) {
+    		return;
+    	}
 
         double widthMultiplier = (1.0 * control.getWindowWidth() / steering.screenWidth);
         double heightMultiplier = (1.0 * control.getWindowHeight() / steering.cameraHeight);
