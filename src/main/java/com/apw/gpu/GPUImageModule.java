@@ -22,6 +22,7 @@ public class GPUImageModule implements Module {
     boolean dilate = true;
 
     SimpleColorRasterKernel simpleColorRasterKernel;
+    BlackWhiteRaster2Kernel blackWhiteRaster2Kernel;
 
     public GPUImageModule(int width, int height, byte newtile) {
         this.width = width;
@@ -35,6 +36,7 @@ public class GPUImageModule implements Module {
         control.addKeyEvent(KeyEvent.VK_SPACE, this::changeFilter);
 
         simpleColorRasterKernel = new SimpleColorRasterKernel();
+        blackWhiteRaster2Kernel = new BlackWhiteRaster2Kernel();
     }
 
 

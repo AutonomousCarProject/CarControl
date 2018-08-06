@@ -2,6 +2,7 @@ package com.apw.gpu;
 
 import com.aparapi.Kernel;
 import com.apw.imagemanagement.SimpleThresholds;
+
 /**
  * The <code>MonochromeRasterKernel</code> subclass describes a {@link com.aparapi.Kernel Kernel}
  * that creates a simple color raster from a bayer rgb byte array.
