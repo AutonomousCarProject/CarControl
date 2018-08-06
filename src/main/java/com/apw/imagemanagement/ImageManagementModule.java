@@ -101,7 +101,7 @@ public class ImageManagementModule implements Module {
      */
     public byte[] getBlackWhiteRaster(byte[] pixels) {
     	byte[] mono = new byte[width * height];
-        ImageManipulator.convertToBlackWhiteRaster(pixels, mono, height, width, tile);
+        //ImageManipulator.convertToBlackWhiteRaster(pixels, mono, height, width, tile);
         return mono;
 
     }
@@ -202,21 +202,21 @@ public class ImageManagementModule implements Module {
      * @return black and white image
      */
     public int[] getBWRGBRaster(byte[] pixels) {
-        byte[] output = new byte[width * height];
+        int[] output = new int[width * height];
         int[] rgb = new int[width*height];
         if(blackWhiteRasterVersion == 2) {
-        	ImageManipulator.convertToBlackWhite2Raster(pixels, output, height, width, tile);
+        	//ImageManipulator.convertToBlackWhite2Raster(pixels, output, height, width, tile);
         }
         else {
-        	ImageManipulator.convertToBlackWhiteRaster(pixels, output, height, width, tile);
+        	ImageManipulator.convertToBlackWhiteRaster(pixels, rgb, height, width, tile);
         }
         if(removeNoise) {
-            output = ImageManipulator.removeNoise(output, height, width);
+            rgb = ImageManipulator.removeNoise(rgb, height, width);
         }
         if(dilate) {
-        	output = ImageManipulator.dilate(output, height, width);
+        	rgb = ImageManipulator.dilate(rgb, height, width);
         }
-        ImageManipulator.convertBWToRGB(output, rgb, output.length);
+        //ImageManipulator.convertBWToRGB(output, rgb, output.length);
         return rgb;
 
     }
@@ -243,7 +243,7 @@ public class ImageManagementModule implements Module {
      * @return road finding image
      */
     public int[] getRoad(byte[] pixels){
-        byte[] output = new byte[width*height];
+        int[] output = new int[width*height];
         int[] rgb = new int[width*height];
         ImageManipulator.convertToBlackWhiteRaster(pixels, output, height, width, tile);
         if(removeNoise) {
