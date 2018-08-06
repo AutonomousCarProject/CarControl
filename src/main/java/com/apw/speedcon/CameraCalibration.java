@@ -37,7 +37,7 @@ public class CameraCalibration {
 	private PedestrianDetector pedDetect;
 
 	//Camera information
-	private double cameraFocalLength = 160;	//If used in sim, leave at 35, if testing IRL leave blank and use calibrateCamera
+	private double cameraFocalLength;	//If used in sim, leave at 35, if testing IRL leave blank and use calibrateCamera
 	private double signWidth;				//The width of a standared stop sign in mm
 
 	private MovingBlob testBlob;
@@ -47,7 +47,8 @@ public class CameraCalibration {
 
 	//Used to set world scale, and width of known objects
 	public CameraCalibration() {
-
+		
+		cameraFocalLength = 140;
 		relativeWorldScale = 8;
 
 		this.pedDetect = new PedestrianDetector();
