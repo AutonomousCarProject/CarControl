@@ -1,6 +1,7 @@
 package com.apw.carcontrol;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * Wraps control of the car through either TrakSim or real-world car control.
@@ -186,4 +187,8 @@ public interface CarControl {
      * @return window width.
      */
     int getWindowWidth();
+
+    ArrayList<ColoredLine> getLines();
+
+    void clearLines();
 }
