@@ -16,7 +16,7 @@ import java.awt.event.KeyEvent;
 public class ImageManagementModule implements Module {
 
 	//adjustable variables
-    private int viewType = 1;
+    private int viewType = 6;
     private int blackWhiteRasterVersion = 1;
     private double luminanceMultiplier = 1.6;
 
@@ -220,6 +220,16 @@ public class ImageManagementModule implements Module {
         return rgb;
 
     }
+    
+    public int[] getRobertsCross(byte[] pixels) {
+    	byte[] mono = new byte[width * height];
+    	int[] rgb = new int[width * height];
+    	int[] output = new int[width * height];
+    	ImageManipulator.convertToMonochrome2Raster(pixels, mono, height, width, tile);
+    	ImageManipulator.convertMonotoRGB(mono, rgb, mono.length);
+    	ImageManipulator.convertToRobertsCrossRaster(rgb, output, height, width);
+    	return output;
+    }
 
     /**
      * Converts into road supported by window
@@ -252,7 +262,7 @@ public class ImageManagementModule implements Module {
     }
     
     public void changeFilter() {
-    	viewType = (viewType) % 5 + 1; 
+    	viewType = (viewType) % 6 + 1; 
     	System.out.println(viewType);
     }
 
@@ -275,6 +285,9 @@ public class ImageManagementModule implements Module {
             case 5:
                 imagePixels = getRoad(control.getRecentCameraImage());
                 break;
+            case 6:
+            	imagePixels = getRobertsCross(control.getRecentCameraImage());
+            	break;
             default:
                 throw new IllegalStateException("No image management viewType: " + viewType);
         }

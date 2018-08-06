@@ -121,6 +121,16 @@ public class ImageManipulator {
 		}
 	}
 	
+	public static void convertToRobertsCrossRaster(int[] input, int[] output, int nrows, int ncols) {
+		for (int r = 0; r < nrows - 1; r++) {
+			for(int c = 0; c < ncols - 1; c++) {
+				output[r * ncols + c] = Math.abs(input[r * ncols + c] - input[(r+1) * ncols + (c+1)])
+						+ Math.abs(input[r * ncols + (c+1)] - input[(r+1) * ncols + c]);
+				
+			}
+		}
+	}
+	
 	
 	/** erosion filter used on pixels in a byte[]
 	 *
@@ -233,18 +243,6 @@ public class ImageManipulator {
 		return output;
 	}
 
-    public static void convertToRGBRaster(byte[] bayer, int[] rgb, int nrows, int ncols) {
-        for (int r = 0; r < nrows; r++) {
-            for (int c = 0; c < ncols; c++) {
-                int R = ((((int) bayer[(r * ncols * 2 + c) * 2]) & 0xFF));                //Top left (red)
-                int G = ((((int) bayer[(r * ncols * 2 + c) * 2 + 1]) & 0xFF));            //Top right (green)
-                int B = (((int) bayer[(r * ncols * 2 + c) * 2 + 1 + 2 * ncols]) & 0xFF);            //Bottom right (blue)
-                int pix = (R << 16) + (G << 8) + B;
-                rgb[r * ncols + c] = pix;
-            }
-        }
-    }
-
 	/** Converts a bayer8 image to a simple color image, the simple colors are red, green, blue, yellow, white, grey and black
 	 *
 	 * @param bayer bayer8 image
@@ -310,7 +308,6 @@ public class ImageManipulator {
 	 * @param tile tiling pattern of the bayer8 image
 	 */
 	public static void convertToRGBRaster(byte[] bayer, int[] rgb, int nrows, int ncols, byte tile) {
-		System.out.println(tile);
 		for (int r = 0; r < nrows; r++) {
 			for (int c = 0; c < ncols; c++) {
 				int R = (bayer[getPos(c,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);
