@@ -135,9 +135,9 @@ public class CamControl implements CarControl {
         }
         if (velocity != 0) {
             velocity = MyMath.iMax(MyMath.iMin(velocity, 90), -90);
-            if (velocity == currentVelocity) {
-                return;
-            }
+//            if (velocity == currentVelocity) {
+//                return;	
+//            }
         }
         if (velocity == 0 && !absolute && currentVelocity == 0) {
             return;

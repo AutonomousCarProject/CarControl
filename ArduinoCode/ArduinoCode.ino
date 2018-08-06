@@ -97,7 +97,7 @@ void loop() {
   if (sinceRpm != 0 && digitalRead(rpmPin) == HIGH){
     misc = micros() - sinceRpm;
 
-    addMessage(151, (misc & 0xFF), (misc >> 8));
+    addMessage(121, (misc & 0xFF), (misc >> 8));
     sinceRpm = 0;
   }*/
 
@@ -112,7 +112,7 @@ void loop() {
     if (kill && micros()-sinceNoKill > 1800){ //Start up if un-killed
       kill = false;
       addMessage(100, 6, 3);
-      addMessage(151, 200, 100);
+      addMessage(111, 50, 100);
     }
     if (!kill && micros()-sinceNoKill < 1600){ //Check difference to find duration of input
       kill = true;
@@ -142,7 +142,7 @@ void loop() {
     sinceConnect = micros();
 
     if (type != 0){
-      addMessage(160, pin, value);
+      addMessage(122, pin, value);
     }
     
     if (!kill && pin == 9){
