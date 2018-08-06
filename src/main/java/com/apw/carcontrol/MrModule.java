@@ -125,9 +125,14 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
                 g.setColor(line.getColor());
                 g.drawLine(line.getStart().x, line.getStart().y, line.getEnd().x, line.getEnd().y);
             }
+            for (ColoredRect rect : control.getRects()) {
+                g.setColor(rect.getColor());
+                g.drawRect(rect.getPosition().x, rect.getPosition().y, rect.getWidth(), rect.getHeight());
+            }
         }
 
         control.clearLines();
+        control.clearRects();
         for (Module module : modules) {
             module.paint(control, g);
         }

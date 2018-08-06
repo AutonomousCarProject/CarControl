@@ -261,7 +261,15 @@ public class CamControl implements CarControl {
     }
 
     @Override
+    public ArrayList<ColoredRect> getRects() {
+        return new ArrayList<>();
+    }
+
+    @Override
     public void clearLines() { }
+
+    @Override
+    public void clearRects() { }
 
 
 }

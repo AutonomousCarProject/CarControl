@@ -190,5 +190,9 @@ public interface CarControl {
 
     ArrayList<ColoredLine> getLines();
 
+    ArrayList<ColoredRect> getRects();
+
     void clearLines();
+
+    void clearRects();
 }
