@@ -126,8 +126,12 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
   
     @Override
     public void run() {
-        update();
-        paint();
+        try {
+            update();
+            paint();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
     
     public static void main(String[] args) {
