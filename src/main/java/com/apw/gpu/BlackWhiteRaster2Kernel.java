@@ -3,77 +3,89 @@ package com.apw.gpu;
 import com.aparapi.Kernel;
 
 /**
- * The <code>RGBRasterKernel</code> subclass describes a {@link com.aparapi.Kernel Kernel}
- * that converts a bayer rgb byte array into an rgb raster of the same array.
+ * The <code>BlackWhiteRaster2Kernel</code> subclass describes a {@link com.aparapi.Kernel Kernel}
+ * that converts a bayer rgb byte array into a black and white bayer byte array.
  */
-public class RGBRasterKernel extends Kernel {
+public class BlackWhiteRaster2Kernel extends Kernel {
 
     private int nrows, ncols;
 
-    private byte[] bayer;
-
-    private int[] rgb;
+    private byte[] bayer, mono;
 
     private byte tile;
 
+    private int averageLuminance;
+
     /**
-     * Constructs an <code>RGBRasterKernel</code> Aparapi {@link com.aparapi.opencl.OpenCL OpenCL} kernel.
+     * Constructs an <code>BlackWhiteRaster2Kernel</code> Aparapi {@link com.aparapi.opencl.OpenCL OpenCL} kernel.
      *
      * @param bayer Array of bayer arranged rgb colors
+     * @param mono  Monochrome copy of the bayer array
      * @param nrows Number of rows to filter
      * @param ncols Number of columns to filter
-     * @param rgb   rgb raster of the bayer array
      */
-    public RGBRasterKernel(byte[] bayer, int[] rgb, int nrows, int ncols, byte tile) {
+    public BlackWhiteRaster2Kernel(byte[] bayer, byte[] mono, int nrows, int ncols, byte tile) {
         this.bayer = bayer;
-        this.rgb = rgb;
+        this.mono = mono;
         this.nrows = nrows;
         this.ncols = ncols;
         this.tile = tile;
     }
 
-    public RGBRasterKernel() {
+    public BlackWhiteRaster2Kernel() {
     }
 
     /**
-     * Sets all member variables of <code>RGBRasterKernel</code>.
+     * Sets all member variables of <code>BlackWhiteRaster2Kernel</code>.
      *
      * @param bayer Array of bayer arranged rgb colors
+     * @param mono  Monochrome copy of the bayer array
      * @param nrows Number of rows to filter
      * @param ncols Number of columns to filter
-     * @param rgb   rgb raster of the bayer array
      */
-    public void setValues(byte[] bayer, int[] rgb, int nrows, int ncols, byte tile) {
+    public void setValues(byte[] bayer, byte[] mono, int nrows, int ncols, byte tile) {
         this.bayer = bayer;
-        this.rgb = rgb;
+        this.mono = mono;
         this.nrows = nrows;
         this.ncols = ncols;
         this.tile = tile;
     }
 
     /**
-     * Returns an rgb raster of a bayer byte array,
+     * Returns a monochrome bayer byte array,
      * Should be called to retrieve result after kernel is executed.
      *
-     * @return Bayer rgb raster int array
+     * @return Monochrome bayer byte array
      */
-    public int[] getRgb() {
-        return rgb;
+    public byte[] getMono() {
+        return mono;
     }
 
     @Override
     public void run() {
-
+        System.out.println("BlackWhite2RasterKernel.run");
         int row = getGlobalId(0);
         int col = getGlobalId(1);
 
+        if (col == 0)
+            averageLuminance = 0;
         int R = (bayer[getPos(col, row, combineTile((byte) 0, tile), ncols, nrows)] & 0xFF);
         int G = (bayer[getPos(col, row, combineTile((byte) 1, tile), ncols, nrows)] & 0xFF);
         int B = (bayer[getPos(col, row, combineTile((byte) 3, tile), ncols, nrows)] & 0xFF);
 
-        int pix = (R << 16) + (G << 8) + B;
+        if (col == 0)
+            averageLuminance = (R + G + B) / 3;
 
-        rgb[row * ncols + col] = pix;
+        if (!(col >= 640 || row < 240 || row > 455)) {
+            if ((averageLuminance + (R + G + B) / 3) / 2 > averageLuminance * 1.5) {
+                mono[row * ncols + col] = 1;
+            } else {
+                mono[row * ncols + col] = 0;
+            }
+        } else {
+            mono[row * ncols + col] = 0;
+        }
+        averageLuminance = (averageLuminance + (R + G + B) / 3) / 2;
     }
 
     private int getBit(byte tile, int pos) {

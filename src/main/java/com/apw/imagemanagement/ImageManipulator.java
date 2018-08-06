@@ -135,7 +135,6 @@ public class ImageManipulator {
 	/** erosion filter used on pixels in a byte[]
 	 *
 	 * @param pixels image to be eroded
-	 * @param output where the image will be written
 	 * @param nrows	number of rows of pixels in the image
 	 * @param ncols number of columns of pixels in the image
 	 * @return byte[] of eroded image

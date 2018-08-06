@@ -28,6 +28,8 @@ public class BWToRGBKernel extends Kernel {
         this.length = length;
     }
 
+    public BWToRGBKernel() {}
+
     /**
      * Sets all member variables of <code>BWToRGBKernel</code>.
      *
@@ -47,7 +49,7 @@ public class BWToRGBKernel extends Kernel {
      *
      * @return Simple color raster byte array
      */
-    public int[] getMono() {
+    public int[] getRgb() {
         return mono;
     }
 

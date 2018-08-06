@@ -3,7 +3,7 @@ package com.apw.gpu;
 import com.aparapi.Kernel;
 
 /**
- * The <code>MonochromeRasterKernel</code> subclass describes a {@link com.aparapi.Kernel Kernel}
+ * The <code>BlackWhiteRasterKernel</code> subclass describes a {@link com.aparapi.Kernel Kernel}
  * that converts a bayer rgb byte array into a black and white bayer byte array.
  */
 public class BlackWhiteRasterKernel extends Kernel {
@@ -11,6 +11,12 @@ public class BlackWhiteRasterKernel extends Kernel {
     private int nrows, ncols;
 
     private byte[] bayer, mono;
+
+    private byte tile;
+
+    private int averageLuminance;
+
+    private final int luminanceMultiplier = 1;
 
     /**
      * Constructs an <code>BlackWhiteRasterKernel</code> Aparapi {@link com.aparapi.opencl.OpenCL OpenCL} kernel.
@@ -20,11 +26,15 @@ public class BlackWhiteRasterKernel extends Kernel {
      * @param nrows Number of rows to filter
      * @param ncols Number of columns to filter
      */
-    public BlackWhiteRasterKernel(byte[] bayer, byte[] mono, int nrows, int ncols) {
+    public BlackWhiteRasterKernel(byte[] bayer, byte[] mono, int nrows, int ncols, byte tile) {
         this.bayer = bayer;
         this.mono = mono;
         this.nrows = nrows;
         this.ncols = ncols;
+        this.tile = tile;
+    }
+
+    public BlackWhiteRasterKernel() {
     }
 
     /**
@@ -35,11 +45,13 @@ public class BlackWhiteRasterKernel extends Kernel {
      * @param nrows Number of rows to filter
      * @param ncols Number of columns to filter
      */
-    public void setValues(byte[] bayer, byte[] mono, int nrows, int ncols) {
+    public void setValues(byte[] bayer, byte[] mono, int nrows, int ncols, byte tile) {
         this.bayer = bayer;
         this.mono = mono;
         this.nrows = nrows;
         this.ncols = ncols;
+        this.tile = tile;
+        averageLuminance = 0;
     }
 
     /**
@@ -54,17 +66,59 @@ public class BlackWhiteRasterKernel extends Kernel {
 
     @Override
     public void run() {
+        int row = getGlobalId(0);
+        int col = getGlobalId(1);
 
-        int rows = getGlobalId(0);
-        int cols = getGlobalId(1);
+        if (col == 0)
+            averageLuminance = 0;
+        int R = (bayer[getPos(col, row, combineTile((byte) 0, tile), ncols, nrows)] & 0xFF);
+        int G = (bayer[getPos(col, row, combineTile((byte) 1, tile), ncols, nrows)] & 0xFF);
+        int B = (bayer[getPos(col, row, combineTile((byte) 3, tile), ncols, nrows)] & 0xFF);
+        averageLuminance += (R + G + B) / 3;
 
-        int R = ((((int) bayer[(rows * ncols * 2 + cols) * 2]) & 0xFF));            //Top left (red)
-        int G = ((((int) bayer[(rows * ncols * 2 + cols) * 2 + 1]) & 0xFF));            //Top right (green)
-        int B = (((int) bayer[(rows * ncols * 2 + cols) * 2 + 1 + 2 * ncols]) & 0xFF);            //Bottom right (blue)
-        int pix = R + G + B;
-        if (pix > 700)
-            mono[rows * ncols + cols] = 1;
-        else
-            mono[rows * ncols + cols] = 0;
+        if (col == 0)
+            averageLuminance /= ncols;
+
+        if (col < ncols) {
+            int R1 = (bayer[getPos(col, row, combineTile((byte) 0, tile), ncols, nrows)] & 0xFF);
+            int G1 = (bayer[getPos(col, row, combineTile((byte) 1, tile), ncols, nrows)] & 0xFF);
+            int B1 = (bayer[getPos(col, row, combineTile((byte) 3, tile), ncols, nrows)] & 0xFF);
+            int R2 = (bayer[getPos(col + 1, row, combineTile((byte) 0, tile), ncols, nrows)] & 0xFF);
+            int G2 = (bayer[getPos(col + 1, row, combineTile((byte) 1, tile), ncols, nrows)] & 0xFF);
+            int B2 = (bayer[getPos(col + 1, row, combineTile((byte) 3, tile), ncols, nrows)] & 0xFF);
+            int R3 = (bayer[getPos(col + 2, row, combineTile((byte) 0, tile), ncols, nrows)] & 0xFF);
+            int G3 = (bayer[getPos(col + 2, row, combineTile((byte) 1, tile), ncols, nrows)] & 0xFF);
+            int B3 = (bayer[getPos(col + 2, row, combineTile((byte) 3, tile), ncols, nrows)] & 0xFF);
+
+            int pix = (R1 + R2 + R3 + B1 + B2 + B3 + G1 + G2 + G3) / 9;
+            // int pix = (R2 + G2 + B2)/3;
+            if (!(col + 1 >= 640 || row < 240 || row > 455)) {
+                if (pix > luminanceMultiplier * averageLuminance) {
+                    mono[row * ncols + col + 1] = 1;
+                } else {
+                    mono[row * ncols + col + 1] = 0;
+                }
+            } else {
+                mono[row * ncols + col + 1] = 0;
+            }
+        }
     }
+
+    private int getBit(byte tile, int pos) {
+        return (tile >> pos) & 1;
+    }
+
+    private int boolBit(boolean check) {
+        if (check) return 1;
+        return 0;
+    }
+
+    private int getPos(int x, int y, byte tile, int ncols, int nrows) {
+        return (y * ncols * (4 - getBit(tile, 2)) + (2 + getBit(tile, 2)) * x + getBit(tile, 1) * (2 * ncols - (2 * ncols - 1) * getBit(tile, 2)) + getBit(tile, 0)) % ((4 - getBit(tile, 2)) * ncols * nrows);
+    }
+
+    private byte combineTile(byte tile1, byte tile2) {
+        return (byte) (((int) tile1) ^ ((int) tile2));
+    }
+
 }
