@@ -100,9 +100,20 @@ public class ImageManagementModule implements Module {
      * @return black and white image
      */
     public byte[] getBlackWhiteRaster(byte[] pixels) {
-    	byte[] mono = new byte[width * height];
-        ImageManipulator.convertToBlackWhiteRaster(pixels, mono, height, width, tile);
-        return mono;
+    	byte[] output = new byte[width * height];
+        if(blackWhiteRasterVersion == 2) {
+            ImageManipulator.convertToBlackWhite2Raster(pixels, output, height, width, tile);
+        }
+        else {
+            ImageManipulator.convertToBlackWhiteRaster(pixels, output, height, width, tile);
+        }
+        if(removeNoise) {
+            output = ImageManipulator.removeNoise(output, height, width);
+        }
+        if(dilate) {
+            output = ImageManipulator.dilate(output, height, width);
+        }
+        return output;
 
     }
 
@@ -158,8 +169,7 @@ public class ImageManagementModule implements Module {
      */
     public int[] getMonoRGBRaster(byte[] pixels) {
     	int[] rgb = new int[width*height];
-    	byte[] mono = new byte[width * height];
-        ImageManipulator.convertToMonochromeRaster(pixels, mono, height, width, tile);
+    	byte[] mono = getMonochromeRaster(pixels);
         ImageManipulator.convertMonotoRGB(mono, rgb, mono.length);
         return rgb;
 
@@ -184,8 +194,7 @@ public class ImageManagementModule implements Module {
      */
     public int[] getSimpleRGBRaster(byte[] pixels) {
     	int[] rgb = new int[width*height];
-    	byte[] simple = new byte[width * height];
-        ImageManipulator.convertToSimpleColorRaster(pixels, simple, height, width, tile);
+    	byte[] simple = getSimpleColorRaster(pixels);
         ImageManipulator.convertSimpleToRGB(simple, rgb, simple.length);
         return rgb;
 
@@ -202,20 +211,8 @@ public class ImageManagementModule implements Module {
      * @return black and white image
      */
     public int[] getBWRGBRaster(byte[] pixels) {
-        byte[] output = new byte[width * height];
+        byte[] output = getBlackWhiteRaster(pixels);
         int[] rgb = new int[width*height];
-        if(blackWhiteRasterVersion == 2) {
-        	ImageManipulator.convertToBlackWhite2Raster(pixels, output, height, width, tile);
-        }
-        else {
-        	ImageManipulator.convertToBlackWhiteRaster(pixels, output, height, width, tile);
-        }
-        if(removeNoise) {
-            output = ImageManipulator.removeNoise(output, height, width);
-        }
-        if(dilate) {
-        	output = ImageManipulator.dilate(output, height, width);
-        }
         ImageManipulator.convertBWToRGB(output, rgb, output.length);
         return rgb;
 
@@ -243,15 +240,8 @@ public class ImageManagementModule implements Module {
      * @return road finding image
      */
     public int[] getRoad(byte[] pixels){
-        byte[] output = new byte[width*height];
+        byte[] output = getBlackWhiteRaster(pixels);
         int[] rgb = new int[width*height];
-        ImageManipulator.convertToBlackWhiteRaster(pixels, output, height, width, tile);
-        if(removeNoise) {
-        	ImageManipulator.removeNoise(output, height, width);
-        }
-        if(dilate) {
-        	ImageManipulator.dilate(output, height, width);
-        }
         ImageManipulator.findRoad(output, rgb, height, width);
         return rgb;
     }
