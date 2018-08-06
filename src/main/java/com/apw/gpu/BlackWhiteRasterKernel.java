@@ -16,7 +16,7 @@ public class BlackWhiteRasterKernel extends Kernel {
 
     private int averageLuminance;
 
-    private int luminanceMultiplier = 1;
+    private final int luminanceMultiplier = 1;
 
     /**
      * Constructs an <code>BlackWhiteRasterKernel</code> Aparapi {@link com.aparapi.opencl.OpenCL OpenCL} kernel.
@@ -51,6 +51,7 @@ public class BlackWhiteRasterKernel extends Kernel {
         this.nrows = nrows;
         this.ncols = ncols;
         this.tile = tile;
+        averageLuminance = 0;
     }
 
     /**
@@ -67,6 +68,7 @@ public class BlackWhiteRasterKernel extends Kernel {
     public void run() {
         int row = getGlobalId(0);
         int col = getGlobalId(1);
+
         if (col == 0)
             averageLuminance = 0;
         int R = (bayer[getPos(col, row, combineTile((byte) 0, tile), ncols, nrows)] & 0xFF);
@@ -118,4 +120,5 @@ public class BlackWhiteRasterKernel extends Kernel {
     private byte combineTile(byte tile1, byte tile2) {
         return (byte) (((int) tile1) ^ ((int) tile2));
     }
+
 }

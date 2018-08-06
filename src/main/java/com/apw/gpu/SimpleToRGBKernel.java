@@ -30,7 +30,8 @@ public class SimpleToRGBKernel extends Kernel {
         this.length = length;
     }
 
-    public SimpleToRGBKernel() {}
+    public SimpleToRGBKernel() {
+    }
 
     /**
      * Sets all member variables of <code>SimpleToRGBKernel</code>.
