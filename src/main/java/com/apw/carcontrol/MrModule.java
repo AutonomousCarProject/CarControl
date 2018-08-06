@@ -55,11 +55,8 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     private void headlessInit() {
         executorService = Executors.newSingleThreadScheduledExecutor();
         modules = new ArrayList<>();
-        try {
-            executorService.scheduleAtFixedRate(this, 0, 1000 / 20, TimeUnit.MILLISECONDS).get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
+        executorService.scheduleAtFixedRate(this, 0, 1000 / 20, TimeUnit.MILLISECONDS);
+
     }
 
     private void setupWindow() {
@@ -89,7 +86,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         if (control instanceof TrakSimControl) {
             ((TrakSimControl) control).cam.theSim.SimStep(1);
         }
-
+        //int a = 1/0;
         control.readCameraImage();
         control.setEdges(getInsets());
         control.updateWindowDims(getWidth(), getHeight());
