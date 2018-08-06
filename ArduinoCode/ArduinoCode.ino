@@ -23,7 +23,7 @@ unsigned long lastNoKill = 0;
 unsigned long sinceConnect = 0;
 unsigned long sinceNoKill = 0; //Input timing for kill
 unsigned long lastRun = 0; //timekeeping for loop
-const unsigned long timeout = 300000; //microseconds before timeout
+const unsigned long timeout = 3800000; //microseconds before timeout
 
 //#define NOT_AN_INTERRUPT -1
 //where 1ms is considered full left or full reverse, and 2ms is considered full forward or full right.
