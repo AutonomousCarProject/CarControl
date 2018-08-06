@@ -19,6 +19,7 @@ public class CamControl implements CarControl {
     private Insets edges;
     private byte[] cameraImage = null;
     private byte[] processedImage = null;
+    private int[] rgbImage = null;
     private int[] renderedImage = null;
     private int currentSteering = 0;
     private int currentVelocity = 0;
@@ -71,12 +72,12 @@ public class CamControl implements CarControl {
 
     @Override
     public int[] getRGBImage() {
-        return renderedImage;
+        return rgbImage;
     }
 
     @Override
     public void setRGBImage(int[] image) {
-        renderedImage = image;
+        rgbImage = image;
     }
 
     /**
