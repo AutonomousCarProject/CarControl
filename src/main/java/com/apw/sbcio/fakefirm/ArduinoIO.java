@@ -129,7 +129,7 @@ public class ArduinoIO implements PWMController { // Adapted to Java from arduin
         }
         else if (msg[0] >= 150){
         	System.out.println("----ARDUINO INFO");
-        	System.out.print((byte) msg[1]);
+        	System.out.println((byte) msg[1]);
         	System.out.println((byte) msg[2]);
         	
             //msg[1] = (byte) (angle & 0x7F);

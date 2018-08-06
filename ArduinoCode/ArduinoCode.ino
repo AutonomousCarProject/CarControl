@@ -32,7 +32,7 @@ unsigned long lastNoKill = 0;
 unsigned long sinceConnect = 0;
 unsigned long sinceNoKill = 0; //Input timing for kill
 unsigned long lastRun = 0; //timekeeping for loop
-const unsigned long timeout = 300000; //microseconds before timeout
+const unsigned long timeout = 1000000; //microseconds before timeout
 
 //#define NOT_AN_INTERRUPT -1
 //where 1ms is considered full left or full reverse, and 2ms is considered full forward or full right.
@@ -89,7 +89,7 @@ void sendMessage(){
 void loop() {
   lastRun = micros();
 
-  if (sinceRpm == 0 && digitalRead(rpmPin) == LOW){
+  /*if (sinceRpm == 0 && digitalRead(rpmPin) == LOW){
     sinceRpm = micros();
   }
 
@@ -98,7 +98,7 @@ void loop() {
 
     addMessage(151, (misc & 0xFF), (misc >> 8));
     sinceRpm = 0;
-  }
+  }*/
 
   //Read rise of signal
   if (sinceNoKill == 0 && digitalRead(killPin) == HIGH){
@@ -140,6 +140,10 @@ void loop() {
     value = Serial.read();
     sinceConnect = micros();
 
+    if (type != 0){
+      addMessage(160, pin, value);
+    }
+    
     if (!kill && pin == 9){
       if (value != steeringDeg){
         //steerDelay = 1.0+((double) value)/180;
