@@ -125,6 +125,14 @@ public class ImageManagementModule implements Module {
 
     }
     
+    public int[] getRobertsCross(byte[] pixels) {
+    	int[] output = new int[width * height];
+    	int[] rgb = new int[width * height];
+    	ImageManipulator.convertToRGBRaster(pixels, rgb, height, width);
+    	ImageManipulator.convertToRobertsCrossRaster(rgb, output, height, width, tile);
+    	return output;
+    }
+    
     public int[] getRoad(byte[] pixels){
         byte[] output = new byte[width*height];
         int[] rgb = new int[width*height];
@@ -145,7 +153,7 @@ public class ImageManagementModule implements Module {
     }
     
     public void changeFilter() {
-    	viewType = (viewType) % 5 + 1; 
+    	viewType = (viewType) % 6 + 1; 
     	System.out.println(viewType);
     }
 
@@ -168,6 +176,9 @@ public class ImageManagementModule implements Module {
             case 5:
                 imagePixels = getRoad(control.getRecentCameraImage());
                 break;
+            case 6:
+            	imagePixels = getRobertsCross(control.getRecentCameraImage());
+            	break;
             default:
                 throw new IllegalStateException("No image management viewType: " + viewType);
         }

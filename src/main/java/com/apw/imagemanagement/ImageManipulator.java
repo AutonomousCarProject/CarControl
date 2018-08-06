@@ -121,6 +121,16 @@ public class ImageManipulator {
 		}
 	}
 	
+	public static void convertToRobertsCrossRaster(int[] input, int[] output, int nrows, int ncols, byte tile) {
+		for (int r = 0; r < nrows - 1; r++) {
+			for(int c = 0; c < ncols - 1; c++) {
+				output[r * ncols + c] = Math.abs(input[r * ncols + c] - input[(r+1) * ncols + (c+1)])
+						+ Math.abs(input[r * ncols + (c+1)] - input[(r+1) * ncols + c]);
+				
+			}
+		}
+	}
+	
 	
 	/** erosion filter used on pixels in a byte[]
 	 *
