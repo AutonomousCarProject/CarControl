@@ -163,9 +163,6 @@ public class GPUImageModule implements Module {
         bwToRGBKernel.setValues(output, rgb, output.length);
         bwToRGBKernel.execute(Range.create(output.length));
         return bwToRGBKernel.getRgb();
-        blackWhiteRasterKernel.setValues(pixels, output, height, width, tile);
-        blackWhiteRasterKernel.execute(Range.create2D(height, width));
-        return rgb;
     }
 
     public int[] getRobertsCross(byte[] pixels) {
