@@ -257,13 +257,11 @@ public class CamControl implements CarControl {
 
     @Override
     public ArrayList<ColoredLine> getLines() {
-        return null;
+        return new ArrayList<>();
     }
 
     @Override
-    public void clearLines() {
-
-    }
+    public void clearLines() { }
 
 
 }
