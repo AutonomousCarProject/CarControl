@@ -20,6 +20,7 @@ public class TrakSimControl implements CarControl {
     protected SimCamera cam;
     private Insets edges;
     private ArrayList<ColoredLine> lines;
+    private ArrayList<ColoredRect> rects;
 
     private byte[] cameraImage = null;
     private byte[] processedImage = null;
@@ -46,6 +47,7 @@ public class TrakSimControl implements CarControl {
 
         keyBindings = new HashMap<>();
         lines = new ArrayList<>();
+        rects = new ArrayList<>();
     }
 
     @Override
@@ -230,8 +232,18 @@ public class TrakSimControl implements CarControl {
     }
 
     @Override
+    public ArrayList<ColoredRect> getRects() {
+        return rects;
+    }
+
+    @Override
     public void clearLines() {
         lines.clear();
+    }
+
+    @Override
+    public void clearRects() {
+        rects.clear();
     }
 
     @Override
