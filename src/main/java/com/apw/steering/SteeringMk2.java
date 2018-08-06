@@ -67,7 +67,7 @@ public class SteeringMk2 extends SteeringBase {
         for (Integer deg : previousHeadings) {
             averageDeg += deg;
         }
-        System.out.println(averageDeg / NUM_PREVIOUS);
+//        System.out.println(averageDeg / NUM_PREVIOUS);
         return (int)(averageDeg / NUM_PREVIOUS);
     }
 
