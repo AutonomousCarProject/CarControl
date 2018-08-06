@@ -34,7 +34,8 @@ public class BlackWhiteRasterKernel extends Kernel {
         this.tile = tile;
     }
 
-    public BlackWhiteRasterKernel() {}
+    public BlackWhiteRasterKernel() {
+    }
 
     /**
      * Sets all member variables of <code>BlackWhiteRasterKernel</code>.

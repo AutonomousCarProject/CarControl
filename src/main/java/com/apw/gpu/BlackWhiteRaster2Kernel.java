@@ -32,7 +32,8 @@ public class BlackWhiteRaster2Kernel extends Kernel {
         this.tile = tile;
     }
 
-    public BlackWhiteRaster2Kernel() {}
+    public BlackWhiteRaster2Kernel() {
+    }
 
     /**
      * Sets all member variables of <code>BlackWhiteRaster2Kernel</code>.
