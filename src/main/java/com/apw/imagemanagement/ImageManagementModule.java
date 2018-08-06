@@ -9,7 +9,7 @@ import java.awt.event.KeyEvent;
 public class ImageManagementModule implements Module {
 
 	//adjustable variables
-    private int viewType = 1;
+    private int viewType = 6;
     private int blackWhiteRasterVersion = 1;
     private double luminanceMultiplier = 1.6;
     
@@ -126,10 +126,12 @@ public class ImageManagementModule implements Module {
     }
     
     public int[] getRobertsCross(byte[] pixels) {
-    	int[] output = new int[width * height];
+    	byte[] mono = new byte[width * height];
     	int[] rgb = new int[width * height];
-    	ImageManipulator.convertToRGBRaster(pixels, rgb, height, width);
-    	ImageManipulator.convertToRobertsCrossRaster(rgb, output, height, width, tile);
+    	int[] output = new int[width * height];
+    	ImageManipulator.convertToMonochrome2Raster(pixels, mono, height, width, tile);
+    	ImageManipulator.convertMonotoRGB(mono, rgb, mono.length);
+    	ImageManipulator.convertToRobertsCrossRaster(rgb, output, height, width);
     	return output;
     }
     
