@@ -6,23 +6,41 @@ import com.apw.carcontrol.Module;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
+/**
+ *  Controls how the image is processed after acquisition by CamControl.
+ * @author
+ * @author
+ * @author
+ * @see ImageManipulator
+ */
 public class ImageManagementModule implements Module {
 
 	//adjustable variables
-    private int viewType = 6;
+    private int viewType = 4;
     private int blackWhiteRasterVersion = 1;
+
     private double luminanceMultiplier = 1.6;
-    
+
+    //internal variables
     private int width, height;
     private int[] imagePixels;
     private byte tile;
-    boolean removeNoise = false;
-    boolean dilate = true;
+    boolean removeNoise = true;
+    boolean dilate = false;
 
+    /**
+     * Main constructor for imageManagement
+     * @param width the width of the camera image
+     * @param height the height of the camera image
+     * @param newtile the tiling of the camera: See ImageManipulator.getPos()
+     */
     public ImageManagementModule(int width, int height, byte newtile) {
+        //Set passed values
         this.width = width;
         this.height = height;
         tile = newtile;
+
+        //Tells ImageManipulator what the Black/White threshold is
         ImageManipulator.setLuminanceMultiplier(luminanceMultiplier);
     }
 
@@ -42,8 +60,15 @@ public class ImageManagementModule implements Module {
         this.height = height;
     }
 
-    /*Serves monochrome raster of camera feed
-     * Formatted in 1D array of bytes*/
+    /**
+     * Serves monochrome raster of given image
+     * Formatted in 1D array of bytes
+     *
+     * Uses only the Green Value for image
+     *
+     * @param pixels 1D byte array for an image
+     * @return monochrome image
+     */
     public byte[] getMonochromeRaster(byte[] pixels) {
     	byte[] mono = new byte[width * height];
         ImageManipulator.convertToMonochromeRaster(pixels, mono, height, width, tile);
@@ -51,26 +76,52 @@ public class ImageManagementModule implements Module {
 
     }
 
+    /**
+     * Serves monochrome raster of given image
+     * Formatted in 1D array of bytes
+     *
+     * Averages the RGB values of image
+     *
+     * @param pixels 1D byte array for an image
+     * @return monochrome image
+     */
     public byte[] getMonochrome2Raster(byte[] pixels) {
     	byte[] mono = new byte[width * height];
         ImageManipulator.convertToMonochrome2Raster(pixels, mono, height, width, tile);
         return mono;
     }
 
+    /**
+     * Serves black and white raster of given image
+     * Formatted in 1D array of bytes
+     *
+     * Compares luminance of pixels to those around them
+     *
+     * @param pixels 1D byte array for an image
+     * @return black and white image
+     */
     public byte[] getBlackWhiteRaster(byte[] pixels) {
     	byte[] mono = new byte[width * height];
-        ImageManipulator.convertToBlackWhiteRaster(pixels, mono, height, width, tile);
+        //ImageManipulator.convertToBlackWhiteRaster(pixels, mono, height, width, tile);
         return mono;
 
     }
 
-    /*Serves color raster encoded in 1D of values 0-5 with
-     * 0 = REDnew ImageIcon(displayImage)
-     * 1 = GREEN
-     * 2 = BLUE
-     * 3 = WHITE
-     * 4 = GREY
-     * 5 = BLACK
+    /**
+     * Serves simple raster of given image
+     * Formatted in 1D array of bytes
+     *
+     * Serves color raster encoded in 1D of values 0-6 with
+     *      0 = RED
+     *      1 = GREEN
+     *      2 = BLUE
+     *      3 = WHITE
+     *      4 = GREY
+     *      5 = BLACK
+     *      6 = YELLOW
+     *
+     * @param pixels 1D byte array for an image
+     * @return simple image
      */
     public byte[] getSimpleColorRaster(byte[] pixels) {
     	byte[] simple = new byte[width * height];
@@ -80,13 +131,32 @@ public class ImageManagementModule implements Module {
 
     }
 
+    /**
+     * Serves RGB raster of given image
+     * Formatted in 1D array of ints
+     *
+     * Formatted in 0xRRGGBB
+     *
+     * @param pixels 1D byte array for an image
+     * @return RGB image
+     */
     public int[] getRGBRaster(byte[] pixels) {
     	int[] rgb = new int[width*height];
         ImageManipulator.convertToRGBRaster(pixels, rgb, height, width, tile);
         return rgb;
 
     }
-    
+
+    /**
+     * Converts into monochrome supported by window
+     * Formatted in 1D array of ints
+     *
+     * Uses only the Green Value for image
+     * Formatted in 0xRRGGBB
+     *
+     * @param pixels 1D byte array for an image
+     * @return monochrome image
+     */
     public int[] getMonoRGBRaster(byte[] pixels) {
     	int[] rgb = new int[width*height];
     	byte[] mono = new byte[width * height];
@@ -96,6 +166,23 @@ public class ImageManagementModule implements Module {
 
     }
 
+    /**
+     * Converts into simple colors supported by window
+     * Formatted in 1D array of ints
+     *
+     * Serves color raster encoded in 1D of values 0-6 with
+     *      0 = RED
+     *      1 = GREEN
+     *      2 = BLUE
+     *      3 = WHITE
+     *      4 = GREY
+     *      5 = BLACK
+     *      6 = YELLOW
+     * Formatted in 0xRRGGBB
+     *
+     * @param pixels 1D byte array for an image
+     * @return simple image
+     */
     public int[] getSimpleRGBRaster(byte[] pixels) {
     	int[] rgb = new int[width*height];
     	byte[] simple = new byte[width * height];
@@ -104,23 +191,33 @@ public class ImageManagementModule implements Module {
         return rgb;
 
     }
-  
+
+    /**
+     * Converts into black and white supported by window
+     * Formatted in 1D array of ints
+     *
+     * Compares luminance of pixels to those around them
+     * Formatted in 0xRRGGBB
+     *
+     * @param pixels 1D byte array for an image
+     * @return black and white image
+     */
     public int[] getBWRGBRaster(byte[] pixels) {
-        byte[] output = new byte[width * height];
+        int[] output = new int[width * height];
         int[] rgb = new int[width*height];
         if(blackWhiteRasterVersion == 2) {
-        	ImageManipulator.convertToBlackWhite2Raster(pixels, output, height, width, tile);
+        	//ImageManipulator.convertToBlackWhite2Raster(pixels, output, height, width, tile);
         }
         else {
-        	ImageManipulator.convertToBlackWhiteRaster(pixels, output, height, width, tile);
+        	ImageManipulator.convertToBlackWhiteRaster(pixels, rgb, height, width, tile);
         }
         if(removeNoise) {
-            output = ImageManipulator.removeNoise(output, height, width);
+            rgb = ImageManipulator.removeNoise(rgb, height, width);
         }
         if(dilate) {
-        	output = ImageManipulator.dilate(output, height, width);
+        	rgb = ImageManipulator.dilate(rgb, height, width);
         }
-        ImageManipulator.convertBWToRGB(output, rgb, output.length);
+        //ImageManipulator.convertBWToRGB(output, rgb, output.length);
         return rgb;
 
     }
@@ -134,9 +231,20 @@ public class ImageManagementModule implements Module {
     	ImageManipulator.convertToRobertsCrossRaster(rgb, output, height, width);
     	return output;
     }
-    
+
+    /**
+     * Converts into road supported by window
+     * Formatted in 1D array of ints
+     *
+     * Compares luminance of pixels to those around them
+     * Then makes the road pink by drawing from the bottom of the screen to the first white pixel
+     * Formatted in 0xRRGGBB
+     *
+     * @param pixels 1D byte array for an image
+     * @return road finding image
+     */
     public int[] getRoad(byte[] pixels){
-        byte[] output = new byte[width*height];
+        int[] output = new int[width*height];
         int[] rgb = new int[width*height];
         ImageManipulator.convertToBlackWhiteRaster(pixels, output, height, width, tile);
         if(removeNoise) {
@@ -156,7 +264,7 @@ public class ImageManagementModule implements Module {
     
     public void changeFilter() {
     	viewType = (viewType) % 6 + 1; 
-    	System.out.println(viewType);
+    	System.out.println("view changed to " + viewType);
     }
 
     @Override

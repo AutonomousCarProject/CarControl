@@ -59,34 +59,68 @@ public class ImageManipulator {
 	 * @param ncols number of columns of pixels in the image
 	 * @param tile tiling pattern of the bayer8 image
 	 */
-	public static void convertToBlackWhiteRaster(byte[] bayer, byte[] mono, int nrows, int ncols, byte tile) {
+//	public static void convertToBlackWhiteRaster(byte[] bayer, byte[] mono, int nrows, int ncols, byte tile) {
+//		for (int r = 0; r < nrows; r++) {
+//    		int averageLuminance = 0;
+//        	for(int c = 0; c < ncols; c++) {
+//				int R = (bayer[getPos(c,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);
+//				int G = (bayer[getPos(c,r,combineTile((byte)1,tile),ncols,nrows)]&0xFF);
+//				int B = (bayer[getPos(c,r,combineTile((byte)3,tile),ncols,nrows)]&0xFF);
+//				averageLuminance += (R + G + B)/3;
+//			}
+//        	averageLuminance /= ncols;
+//
+//            for (int c = 1; c < ncols-1; c++) {
+//
+//				int R1 = (bayer[getPos(c-1,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);
+//				int G1 = (bayer[getPos(c-1,r,combineTile((byte)1,tile),ncols,nrows)]&0xFF);
+//				int B1 = (bayer[getPos(c-1,r,combineTile((byte)3,tile),ncols,nrows)]&0xFF);
+//				int R2 = (bayer[getPos(c,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);
+//				int G2 = (bayer[getPos(c,r,combineTile((byte)1,tile),ncols,nrows)]&0xFF);
+//				int B2 = (bayer[getPos(c,r,combineTile((byte)3,tile),ncols,nrows)]&0xFF);
+//				int R3 = (bayer[getPos(c+1,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);
+//				int G3 = (bayer[getPos(c+1,r,combineTile((byte)1,tile),ncols,nrows)]&0xFF);
+//				int B3 = (bayer[getPos(c+1,r,combineTile((byte)3,tile),ncols,nrows)]&0xFF);
+//
+//				int pix =(R1 + R2 + R3 + B1 + B2 + B3 + G1 + G2 + G3)/9;
+////				int pix = (R2 + G2 + B2)/3;
+//				if(!(c >= 640 || r < 240 || r > 455)) {
+//					if (pix > luminanceMultiplier * averageLuminance) {
+//						mono[r * ncols + c] = 1;
+//					} else {
+//						mono[r * ncols + c] = 0;
+//					}
+//				} else {
+//					mono[r * ncols + c] = 0;
+//				}
+//			}
+//		}
+//	}
+	
+	public static void convertToBlackWhiteRaster(byte[] bayer, int[] mono, int nrows, int ncols, byte tile) {
+		int pixelsAveraged = 11;
 		for (int r = 0; r < nrows; r++) {
     		int averageLuminance = 0;
         	for(int c = 0; c < ncols; c++) {
 				int R = (bayer[getPos(c,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);
 				int G = (bayer[getPos(c,r,combineTile((byte)1,tile),ncols,nrows)]&0xFF);
 				int B = (bayer[getPos(c,r,combineTile((byte)3,tile),ncols,nrows)]&0xFF);
-				averageLuminance += (R + G + B)/3;
+				averageLuminance += (R + G + B);
 			}
         	averageLuminance /= ncols;
 
-            for (int c = 1; c < ncols-1; c++) {
-
-				int R1 = (bayer[getPos(c-1,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);
-				int G1 = (bayer[getPos(c-1,r,combineTile((byte)1,tile),ncols,nrows)]&0xFF);
-				int B1 = (bayer[getPos(c-1,r,combineTile((byte)3,tile),ncols,nrows)]&0xFF);
-				int R2 = (bayer[getPos(c,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);
-				int G2 = (bayer[getPos(c,r,combineTile((byte)1,tile),ncols,nrows)]&0xFF);
-				int B2 = (bayer[getPos(c,r,combineTile((byte)3,tile),ncols,nrows)]&0xFF);
-				int R3 = (bayer[getPos(c+1,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);
-				int G3 = (bayer[getPos(c+1,r,combineTile((byte)1,tile),ncols,nrows)]&0xFF);
-				int B3 = (bayer[getPos(c+1,r,combineTile((byte)3,tile),ncols,nrows)]&0xFF);
-
-				int pix =(R1 + R2 + R3 + B1 + B2 + B3 + G1 + G2 + G3)/9;
-//				int pix = (R2 + G2 + B2)/3;
+        	int borderWidth = pixelsAveraged >> 1; //int division
+            for (int c = borderWidth; c < ncols-borderWidth; c++) {
+            	int pix = 0;
+            	for(int i = 0; i < pixelsAveraged; i++) {
+            		pix += (bayer[getPos(c-borderWidth + i,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);
+    				pix += (bayer[getPos(c-borderWidth + i,r,combineTile((byte)1,tile),ncols,nrows)]&0xFF);
+    				pix += (bayer[getPos(c-borderWidth + i,r,combineTile((byte)3,tile),ncols,nrows)]&0xFF);
+            	}
+				pix /= (pixelsAveraged);
 				if(!(c >= 640 || r < 240 || r > 455)) {
 					if (pix > luminanceMultiplier * averageLuminance) {
-						mono[r * ncols + c] = 1;
+						mono[r * ncols + c] = 0xFFFFFF;
 					} else {
 						mono[r * ncols + c] = 0;
 					}
@@ -139,46 +173,46 @@ public class ImageManipulator {
 	 * @param ncols number of columns of pixels in the image
 	 * @return byte[] of eroded image
 	 */
-	public static byte[] removeNoise(byte[] pixels, int nrows, int ncols) {
-		byte[] output = new byte[nrows * ncols];
+	public static int[] removeNoise(int[] pixels, int nrows, int ncols) {
+		int[] output = new int[nrows * ncols];
 		for (int r = 0; r < nrows; r++) {
 			for (int c = 0; c < ncols; c++) {
-				if(pixels[r * ncols + c] == 1) {
+				if(pixels[r * ncols + c] == 0xFFFFFF) {
 					int whiteNeighbors = 0;
 					//top left
-					if((r - 1) > 0 && (c - 1) > 0 && pixels[(r - 1) * ncols + (c - 1)] == 1) {
+					if((r - 1) > 0 && (c - 1) > 0 && pixels[(r - 1) * ncols + (c - 1)] == 0xFFFFFF) {
 						whiteNeighbors++;
 					}
 					//top
-					if((r - 1) > 0 && pixels[(r - 1) * ncols + (c)] == 1) {
+					if((r - 1) > 0 && pixels[(r - 1) * ncols + (c)] == 0xFFFFFF) {
 						whiteNeighbors++;
 					}
 					//top right
-					if((r - 1) > 0 && (c + 1) < ncols && pixels[(r - 1) * ncols + (c + 1)] == 1) {
+					if((r - 1) > 0 && (c + 1) < ncols && pixels[(r - 1) * ncols + (c + 1)] == 0xFFFFFF) {
 						whiteNeighbors++;
 					}
 					//left
-					if((c - 1) > 0 && pixels[(r) * ncols + (c - 1)] == 1) {
+					if((c - 1) > 0 && pixels[(r) * ncols + (c - 1)] == 0xFFFFFF) {
 						whiteNeighbors++;
 					}
 					//right
-					if((c + 1) < ncols && pixels[(r) * ncols + (c + 1)] == 1) {
+					if((c + 1) < ncols && pixels[(r) * ncols + (c + 1)] == 0xFFFFFF) {
 						whiteNeighbors++;
 					}
 					//bot left
-					if((r + 1) < nrows && (c - 1) > 0 && pixels[(r + 1) * ncols + (c - 1)] == 1) {
+					if((r + 1) < nrows && (c - 1) > 0 && pixels[(r + 1) * ncols + (c - 1)] == 0xFFFFFF) {
 						whiteNeighbors++;
 					}
 					//bot
-					if((r + 1) < nrows && pixels[(r + 1) * ncols + (c)] == 1) {
+					if((r + 1) < nrows && pixels[(r + 1) * ncols + (c)] == 0xFFFFFF) {
 						whiteNeighbors++;
 					}
 					//bot right
-					if((r + 1) < nrows && (c + 1) < ncols && pixels[(r + 1) * ncols + (c + 1)] == 1) {
+					if((r + 1) < nrows && (c + 1) < ncols && pixels[(r + 1) * ncols + (c + 1)] == 0xFFFFFF) {
 						whiteNeighbors++;
 					}
 					if(whiteNeighbors > 7) {
-						output[r * ncols + c] = 1;
+						output[r * ncols + c] = 0xFFFFFF;
 					}
 					else {
 						output[r * ncols + c] = 0;
@@ -196,46 +230,46 @@ public class ImageManipulator {
 	 * @param ncols number of columns of pixels in the image
 	 * @return byte[] of dilated image
 	 */
-	public static byte[] dilate(byte[] pixels, int nrows, int ncols) {
-		byte[] output = new byte[nrows * ncols];
+	public static int[] dilate(int[] pixels, int nrows, int ncols) {
+		int[] output = new int[nrows * ncols];
 		for (int r = 0; r < nrows; r++) {
 			for (int c = 0; c < ncols; c++) {
 				if(pixels[r * ncols + c] == 0) {
 					//top left
-					if((r - 1) > 0 && (c - 1) > 0 && pixels[(r - 1) * ncols + (c - 1)] == 1) {
-						output[r * ncols + c] = 1;
+					if((r - 1) > 0 && (c - 1) > 0 && pixels[(r - 1) * ncols + (c - 1)] == 0xFFFFFF) {
+						output[r * ncols + c] = 0xFFFFFF;
 					}
 					//top
-					else if((r - 1) > 0 && pixels[(r - 1) * ncols + (c)] == 1) {
-						output[r * ncols + c] = 1;
+					else if((r - 1) > 0 && pixels[(r - 1) * ncols + (c)] == 0xFFFFFF) {
+						output[r * ncols + c] = 0xFFFFFF;
 					}
 					//top right
-					else if((r - 1) > 0 && (c + 1) < ncols && pixels[(r - 1) * ncols + (c + 1)] == 1) {
-						output[r * ncols + c] = 1;
+					else if((r - 1) > 0 && (c + 1) < ncols && pixels[(r - 1) * ncols + (c + 1)] == 0xFFFFFF) {
+						output[r * ncols + c] = 0xFFFFFF;
 					}
 					//left
-					else if((c - 1) > 0 && pixels[(r) * ncols + (c - 1)] == 1) {
-						output[r * ncols + c] = 1;
+					else if((c - 1) > 0 && pixels[(r) * ncols + (c - 1)] == 0xFFFFFF) {
+						output[r * ncols + c] = 0xFFFFFF;
 					}
 					//right
-					else if((c + 1) < ncols && pixels[(r) * ncols + (c + 1)] == 1) {
-						output[r * ncols + c] = 1;
+					else if((c + 1) < ncols && pixels[(r) * ncols + (c + 1)] == 0xFFFFFF) {
+						output[r * ncols + c] = 0xFFFFFF;
 					}
 					//bot left
-					else if((r + 1) < nrows && (c - 1) > 0 && pixels[(r + 1) * ncols + (c - 1)] == 1) {
-						output[r * ncols + c] = 1;
+					else if((r + 1) < nrows && (c - 1) > 0 && pixels[(r + 1) * ncols + (c - 1)] == 0xFFFFFF) {
+						output[r * ncols + c] = 0xFFFFFF;
 					}
 					//bot
-					else if((r + 1) < nrows && pixels[(r + 1) * ncols + (c)] == 1) {
-						output[r * ncols + c] = 1;
+					else if((r + 1) < nrows && pixels[(r + 1) * ncols + (c)] == 0xFFFFFF) {
+						output[r * ncols + c] = 0xFFFFFF;
 					}
 					//bot right
-					else if((r + 1) < nrows && (c + 1) < ncols && pixels[(r + 1) * ncols + (c + 1)] == 1) {
-						output[r * ncols + c] = 1;
+					else if((r + 1) < nrows && (c + 1) < ncols && pixels[(r + 1) * ncols + (c + 1)] == 0xFFFFFF) {
+						output[r * ncols + c] = 0xFFFFFF;
 					}
 				}
 				else {
-					output[r * ncols + c] = 1;
+					output[r * ncols + c] = 0xFFFFFF;
 				}
 			}
 		}
@@ -392,7 +426,7 @@ public class ImageManipulator {
 	 * @param nrows	number of rows of pixels in the image
 	 * @param ncols number og columns of pixels in the image
 	 */
-    public static void findRoad(byte[] bw, int[] output, int nrows, int ncols){
+    public static void findRoad(int[] bw, int[] output, int nrows, int ncols){
     	int rightEnd = 640, leftEnd = 0;
     	for(int i = ncols/2; i < ncols; i++){
 			if(bw[454*ncols + i] == 1){
@@ -411,7 +445,7 @@ public class ImageManipulator {
     		for(int row = nrows-1; row > 0; row--){
 				if(col > 638 || row < 240 || row > 455){
 					output[row*ncols+col] = 0;
-				} else if(bw[row*ncols+col] == 1){
+				} else if(bw[row*ncols+col] == 0xFFFFFF){
 					endFound = true;
 					output[row*ncols+col] = 0xFFFFFF;
 				}else if(!endFound && col > leftEnd && col < rightEnd){

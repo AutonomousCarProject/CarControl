@@ -95,7 +95,8 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         control.readCameraImage();
         control.setEdges(getInsets());
         control.updateWindowDims(getWidth(), getHeight());
-        for (Module module : modules) {
+        for (Module module :
+        	modules) {
             module.update(control);
         }
     }
@@ -156,7 +157,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         if(args.length > 0 && args[0].toLowerCase().equals("nosim")) {
             renderWindow = true;
         }
-        new MrModule(renderWindow);
+        new MrModule(false);
     }
 
     @Override
