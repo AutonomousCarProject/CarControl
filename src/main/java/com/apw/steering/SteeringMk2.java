@@ -16,9 +16,9 @@ import java.util.ArrayList;
  */
 public class SteeringMk2 extends SteeringBase {
 
-    private final int NUM_PREVIOUS = 5;
+    private final int NUM_PREVIOUS = 3;
     private final int MAX_DIFF = 5;
-    private final double MIN_DIST_LOOK = 0.7;
+    private final double MIN_DIST_LOOK = 0.8;
     private final double MAX_DIST_LOOK = 0.9;
     private final int LINE_TRANSLATION = 300;
 

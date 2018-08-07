@@ -1,6 +1,7 @@
 package com.apw.carcontrol;
 
 import java.awt.Insets;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.apw.apw3.DriverCons;
@@ -135,9 +136,9 @@ public class CamControl implements CarControl {
         }
         if (velocity != 0) {
             velocity = MyMath.iMax(MyMath.iMin(velocity, 90), -90);
-            if (velocity == currentVelocity) {
-                return;
-            }
+//            if (velocity == currentVelocity) {
+//                return;	
+//            }
         }
         if (velocity == 0 && !absolute && currentVelocity == 0) {
             return;
@@ -227,33 +228,44 @@ public class CamControl implements CarControl {
 
 	@Override
 	public void drawLine(int color, int rx, int cx, int rz, int cz) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public byte getTile() {
-		// TODO Auto-generated method stub
 		return (byte) (cam.PixTile()-1);
 	}
 
 	@Override
 	public void updateWindowDims(int width, int height) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public int getWindowHeight() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public int getWindowWidth() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
-	
+
+    @Override
+    public ArrayList<ColoredLine> getLines() {
+        return new ArrayList<>();
+    }
+
+    @Override
+    public ArrayList<ColoredRect> getRects() {
+        return new ArrayList<>();
+    }
+
+    @Override
+    public void clearLines() { }
+
+    @Override
+    public void clearRects() { }
+
 
 }

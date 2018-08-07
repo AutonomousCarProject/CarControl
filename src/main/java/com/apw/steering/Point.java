@@ -20,7 +20,7 @@ public class Point {
      * @param x pixel starting from left side of screen
      * @param y pixel starting from top of screen
      */
-    Point(int x, int y) {
+    public Point(int x, int y) {
         this.x = x;
         this.y = y;
     }

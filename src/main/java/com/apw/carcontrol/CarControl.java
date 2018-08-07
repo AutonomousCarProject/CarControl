@@ -1,11 +1,13 @@
 package com.apw.carcontrol;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * Wraps control of the car through either TrakSim or real-world car control.
  */
 public interface CarControl {
+
     /**
      * Gets the current image, from either {@link com.apw.fly2cam.FlyCamera FlyCamera} or {@link com.apw.apw3.SimCamera SimCamera}.
      * Also invalidates the current version of the processed/rendering images.
@@ -38,10 +40,14 @@ public interface CarControl {
     /**
      * Gets the rgb image.
      *
-     * return image The rgb image in the form of a rgb raster array.
+     * @return The rgb image in the form of an rgb raster array.
      */
     int[] getRGBImage();
 
+    /**
+     * Gets the rendered image;
+     * @return The rendered image in the form of an rgb raster array.
+     */
     int[] getRenderedImage();
 
     /**
@@ -50,9 +56,17 @@ public interface CarControl {
      * @param image The rgb image in the form of a rgb raster array.
      */
     void setRGBImage(int[] image);
-    
+
+    /**
+     * Gets the width of the image.
+     * @return The image width as an int.
+     */
     int getImageWidth();
-    
+
+    /**
+     * Gets the height of the image.
+     * @return The image height as an int.
+     */
     int getImageHeight();
 
     /**
@@ -165,6 +179,10 @@ public interface CarControl {
      */
     void addKeyEvent(int keyCode, Runnable action);
 
+    /**
+     * Gets the tiling type of the camera.
+     * @return The camera's tiling type.
+     */
     byte getTile();
 
     /**
@@ -186,4 +204,26 @@ public interface CarControl {
      * @return window width.
      */
     int getWindowWidth();
+
+    /**
+     * Gets the list of <Code>ColoredLine</Code>s rendered in MrModule.
+     * @return List of <Code>ColoredLine</Code>s.
+     */
+    ArrayList<ColoredLine> getLines();
+
+    /**
+     * Gets the list of <Code>ColoredRect</Code>s rendered in MrModule.
+     * @return List of <Code>ColoredRect</Code>s.
+     */
+    ArrayList<ColoredRect> getRects();
+
+    /**
+     * Clears the list of <Code>ColoredLine</Code>s rendered in MrModule.
+     */
+    void clearLines();
+
+    /**
+     * Clears the rect of <Code>ColoredRect</Code>s rendered in MrModule.
+     */
+    void clearRects();
 }

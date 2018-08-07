@@ -20,13 +20,14 @@ public class ImageManagementModule implements Module {
     private int blackWhiteRasterVersion = 1;
     private double luminanceMultiplier = 1.5;
 
+
     //internal variables
     private int width, height;
     private int[] imagePixels;
     private byte tile;
     private int frameWidth = 640;
-    boolean removeNoise = false;
-    boolean dilate = true;
+    boolean removeNoise = true;
+    boolean dilate = false;
 
     /**
      * Main constructor for imageManagement
@@ -254,7 +255,7 @@ public class ImageManagementModule implements Module {
     
     public void changeFilter() {
     	viewType = (viewType) % 6 + 1; 
-    	System.out.println(viewType);
+    	System.out.println("view changed to " + viewType);
     }
 
     @Override
