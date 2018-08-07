@@ -9,8 +9,8 @@ import java.util.*;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
-public class BlobDetection implements IBlobDetection {
-    public static final int MAXIMUM_DIFFERENCE_IN_WIDTH_BETWEEN_TWO_BLOBS_IN_ORDER_TO_JOIN = 75;
+public class BlobDetection implements IBlobDetection { 
+	public static final int MAXIMUM_DIFFERENCE_IN_WIDTH_BETWEEN_TWO_BLOBS_IN_ORDER_TO_JOIN = 75;
 
     //creates data structures to organize different stages of blobs
     private Deque<Blob> unusedBlobs = new ArrayDeque<>();
@@ -21,13 +21,14 @@ public class BlobDetection implements IBlobDetection {
 
     @Override
     public List<Blob> getBlobs(IImage image) {
-        unusedBlobs.addAll(blobs);
+    	
+    	unusedBlobs.addAll(blobs);
         blobs.clear();
-
+    	
         //get the image
         IPixel[][] pixels = image.getImage();
-
-        //there are no blobs in progress, creates a new array of blobs in progress
+        
+    	//there are no blobs in progress, creates a new array of blobs in progress
         if (bips == null || pixels.length != bips.length || pixels[0].length != bips[0].length) {
             bips = new BlobInProgress[pixels.length][pixels[0].length];
         }
@@ -48,8 +49,8 @@ public class BlobDetection implements IBlobDetection {
 
             added.clear();
         }
-
-        //goes along the pixels of the image
+      
+    	//goes along the pixels of the image
         for (int row = 0; row < pixels.length; row++) {
             for (int col = 0; col < pixels[0].length - 1; col++) {
                 IPixel pix1 = pixels[row][col];
@@ -68,6 +69,7 @@ public class BlobDetection implements IBlobDetection {
                 }
             }
         }
+     
         for (int row = 0; row < pixels.length - 1; row++) {
             for (int col = 0; col < pixels[0].length; col++) {
                 IPixel pix1 = pixels[row][col];
@@ -116,7 +118,7 @@ public class BlobDetection implements IBlobDetection {
                 }
             }
         }
-
+       
         //eliminates blbos that are too large or too small
         for (BlobInProgress[] bipRow : bips) {
             for (BlobInProgress bip : bipRow) {
@@ -131,7 +133,7 @@ public class BlobDetection implements IBlobDetection {
                 }
             }
         }
-
+        
         return blobs;
     }
 

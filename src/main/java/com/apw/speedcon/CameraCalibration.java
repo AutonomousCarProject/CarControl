@@ -82,10 +82,9 @@ public class CameraCalibration {
 
 	
 	//Finds focal length which can then be used for distance, read above for detail
-	public void calibrateCamera(CarControl control) {
+	public void calibrateCamera(CarControl control, List<MovingBlob> currentBlobs) {
 		//Searches for a blue blob
-		List<MovingBlob> blobs = this.pedDetect.getAllBlobs(control.getProcessedImage(), 912);
-		for (MovingBlob i : blobs) {
+		for (MovingBlob i : currentBlobs) {
 			if (i.color.getColor() == Color.RED) {
 				testBlobDistance = Math.sqrt(Math.pow(Math.abs(control.getPosition(true) - (2 * 29.5)), 2) + Math.pow(Math.abs(control.getPosition(false) - (2 * 30)), 2));
 				testBlobWidthHeight = ((double) 29 / (double) 44); //Find this in the txt file, image index
