@@ -60,7 +60,7 @@ public class ImageManipulator {
 	 * @param tile tiling pattern of the bayer8 image
 	 */
 //	public static void convertToBlackWhiteRaster(byte[] bayer, byte[] mono, int nrows, int ncols, byte tile) {
-//		for (int r = 0; r < nrows; r++) {
+//		for (int r = nrows/2; r < nrows; r++) {
 //    		int averageLuminance = 0;
 //        	for(int c = 0; c < ncols; c++) {
 //				int R = (bayer[getPos(c,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);
@@ -99,7 +99,7 @@ public class ImageManipulator {
 	
 	public static void convertToBlackWhiteRaster(byte[] bayer, int[] mono, int nrows, int ncols, byte tile) {
 		int pixelsAveraged = 11;
-		for (int r = 0; r < nrows; r++) {
+		for (int r = nrows/2; r < nrows; r++) {
     		int averageLuminance = 0;
         	for(int c = 0; c < ncols; c++) {
 				int R = (bayer[getPos(c,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);
@@ -132,7 +132,7 @@ public class ImageManipulator {
 	}
 
 	public static void convertToBlackWhite2Raster(byte[] bayer, byte[] mono, int nrows, int ncols, byte tile) {
-		for (int r = 0; r < nrows; r++) {
+		for (int r = nrows/2; r < nrows; r++) {
 			int averageLuminance = 0;
 			for(int c = 0; c < ncols; c++) {
 				int R = (bayer[getPos(c,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);
@@ -175,7 +175,7 @@ public class ImageManipulator {
 	 */
 	public static int[] removeNoise(int[] pixels, int nrows, int ncols) {
 		int[] output = new int[nrows * ncols];
-		for (int r = 0; r < nrows; r++) {
+		for (int r = nrows/2; r < nrows; r++) {
 			for (int c = 0; c < ncols; c++) {
 				if(pixels[r * ncols + c] == 0xFFFFFF) {
 					int whiteNeighbors = 0;
@@ -232,7 +232,7 @@ public class ImageManipulator {
 	 */
 	public static int[] dilate(int[] pixels, int nrows, int ncols) {
 		int[] output = new int[nrows * ncols];
-		for (int r = 0; r < nrows; r++) {
+		for (int r = nrows/2; r < nrows; r++) {
 			for (int c = 0; c < ncols; c++) {
 				if(pixels[r * ncols + c] == 0) {
 					//top left
