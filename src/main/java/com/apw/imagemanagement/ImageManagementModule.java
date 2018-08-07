@@ -18,12 +18,13 @@ public class ImageManagementModule implements Module {
 	//adjustable variables
     private int viewType = 1;
     private int blackWhiteRasterVersion = 1;
-    private double luminanceMultiplier = 1.6;
+    private double luminanceMultiplier = 2.0;
 
     //internal variables
     private int width, height;
     private int[] imagePixels;
     private byte tile;
+    private int frameWidth = 640;
     boolean removeNoise = false;
     boolean dilate = true;
 
@@ -105,7 +106,7 @@ public class ImageManagementModule implements Module {
             //ImageManipulator.convertToBlackWhite2Raster(pixels, output, height, width, tile);
         }
         else {
-            ImageManipulator.convertToBlackWhiteRaster(pixels, output, height, width, tile);
+            ImageManipulator.convertToBlackWhiteRaster(pixels, output, height, width, frameWidth, tile);
         }
         if(removeNoise) {
             output = ImageManipulator.removeNoise(output, height, width);
@@ -134,7 +135,7 @@ public class ImageManagementModule implements Module {
      */
     public byte[] getSimpleColorRaster(byte[] pixels) {
     	byte[] simple = new byte[width * height];
-        ImageManipulator.convertToSimpleColorRaster(pixels, simple, height, width, tile);
+        ImageManipulator.convertToSimpleColorRaster(pixels, simple, height, width, frameWidth, tile);
         return simple;
 
 
@@ -283,8 +284,18 @@ public class ImageManagementModule implements Module {
         }
 
         control.setRenderedImage(imagePixels);
-        control.setRGBImage(getBlackWhiteRaster(control.getRecentCameraImage()));
-        control.setProcessedImage(getSimpleColorRaster(control.getRecentCameraImage()));
+        if(viewType != 4) {
+        	control.setRGBImage(getBlackWhiteRaster(control.getRecentCameraImage()));
+        }
+        else {
+        	control.setRGBImage(imagePixels);
+        }
+        if(viewType != 3) {
+            control.setProcessedImage(getSimpleColorRaster(control.getRecentCameraImage()));
+        }
+        else {
+        	control.setRGBImage(imagePixels);
+        }
     }
 
     @Override
