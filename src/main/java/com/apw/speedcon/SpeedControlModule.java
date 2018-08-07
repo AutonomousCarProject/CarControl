@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SpeedControlModule implements Module {
+
   
 	private double currentEstimatedSpeed;
 	private double desiredSpeed;
@@ -195,18 +196,17 @@ public class SpeedControlModule implements Module {
 		//D. Write to the console what has happened
 		//We need all of the if statements to display the colors,
 		//as we need to convert from IPixel colors to Java.awt colors for display reasons
-		
-		for (MovingBlob blob : currentPeds) {
-			if (stopType == 4) {
-				System.out.println("Found a pedestrian: " + blob);
-				System.out.println("Id: " + blob.id);
-				
-				g.setColor(java.awt.Color.MAGENTA);
-				g.drawRect(blob.x, blob.y + 16, blob.width, blob.height);	
-			}
-		}
+
+		//for (MovingBlob blob : currentPeds) {
+		//	if (stopType == 4) {
+		//		System.out.println("Found a pedestrian: " + blob);
+		//		System.out.println("Id: " + blob.id);
+		//		
+		//		g.setColor(java.awt.Color.MAGENTA);
+		//		g.drawRect(blob.x, blob.y + 16, blob.width, blob.height);	
+    //}
 	}
-	
+
 //A method to be called every frame. Calculates desired speed and actual speed
 	//Also takes stopping into account
 	/**
@@ -221,7 +221,7 @@ public class SpeedControlModule implements Module {
 	 * @param dtest the DriveTest object that we feed to our blob detection, which gets displayed in a separate window
 	 */
 	public void onUpdate(CarControl control) {
-		int gasAmount = control.getGas();
+		int gasAmount = control.getVelocity();
 		int steerDegs = control.getSteering();
 		int manualSpeed = control.getManualSpeed();
 		
@@ -290,8 +290,8 @@ public class SpeedControlModule implements Module {
 			determineStop();
 		}
 		
-		for(MovingBlob blob : currentPeds) {
-			if (determinePedStop(blob)) {
+		//for(MovingBlob blob : currentPeds) {
+		//	if (determinePedStop(blob)) {
 				//stopType = 4;	
 				
 				//cycleStopping = true;
@@ -301,18 +301,18 @@ public class SpeedControlModule implements Module {
 				//determineStop(blob);
 				
 				//blob.seen = true;
-			}
-		}
+		//	}
+		//}
 		
 		if (emergencyStop) {
 			stopType = 5;
 			
 			System.out.println("EMERGENCY STOP");
 			
-			//determineStop();
+			determineStop();
 		}
 	}
-	
+	*/
 	/**
 	 * This method detects if a given blob is overlapping another blob.
 	 * 
@@ -323,13 +323,14 @@ public class SpeedControlModule implements Module {
 	 * @param b2 One of the two blobs that we are fed
 	 * @return a boolean that is true if the blobs are overlapping, and false if they are not
 	 */
+	/*
 	public boolean detectBlobOverlappingBlob(MovingBlob outsideBlob, MovingBlob insideBlob) {
 		return (insideBlob.x < outsideBlob.x + outsideBlob.width && 
 				insideBlob.width + insideBlob.x > outsideBlob.x) || 
 				(insideBlob.y < outsideBlob.y + outsideBlob.height && 
 				insideBlob.height + insideBlob.y > outsideBlob.y);
 	}
-	
+	*/
 	/**
 	 * A method that determines what speed we need to be traveling at given our wheel angle, and how we have
 	 * modified our speed by pressing the arrow keys.
@@ -364,43 +365,16 @@ public class SpeedControlModule implements Module {
 			return (int) (this.currentEstimatedSpeed + Constants.MAX_SPEED_INCREMENT);
 		}
 	}
-	
-	//Calculates when the car should start to stop, then reduces its speed.
-	private void determineStop(MovingBlob stoppingBlob) {
-		if (stopType != 0) {
-			stopsignWaitFirst();
-			
-			double blobRealSize = getStopReal(stoppingBlob); //Gets real size
-			
-			initDistToBlob = cameraCalibrator.distanceToObj(blobRealSize/cameraCalibrator.relativeWorldScale, stoppingBlob.width); //Finds distance to closest blob based on real wrold size and pixel size
-			distToBlob = initDistToBlob;
-			
-			System.out.println("frameWait: " + frameWait);
-			System.out.println("stopType: " + stopType);
-			System.out.println("desiredSpeed: " + desiredSpeed);
-			System.out.println("initDistToBlob: " + cameraCalibrator.distanceToObj(cameraCalibrator.testBlobDistance/cameraCalibrator.relativeWorldScale, stoppingBlob.width));
-			System.out.println(cameraCalibrator.calcStopRate(getEstimatedSpeed(), cameraCalibrator.getStopTime(initDistToBlob, getEstimatedSpeed())));
-			
-			this.desiredSpeed = desiredSpeed - cameraCalibrator.calcStopRate(getEstimatedSpeed(), cameraCalibrator.getStopTime(initDistToBlob, getEstimatedSpeed()));
-			
-			if (desiredSpeed < 1) {
-				desiredSpeed = 1;
-			}
-		}
-	}
-	
 
 		//Calculates when the car should start to stop, then reduces its speed.
 		private void determineStop(MovingBlob stoppingBlob, double objectHeight) {
 			if (stopType != 0) {
-				//stopsignWaitHandlerFirst();
+				stopsignWaitHandlerFirst();
 				
-				//double blobRealSize = getStopReal(stoppingBlob); //Gets real size
-				//double distToBlob = cameraCalibrator.distanceToObj(blobRealSize/cameraCalibrator.relativeWorldScale, closestBlob.width); //Finds distance to closest blob based on real wrold size and pixel size
-				
-				double distToBlob = cameraCalibrator.distanceToObj(cameraCalibrator.testBlobDistance/cameraCalibrator.relativeWorldScale, stoppingBlob.width); //Finds distance to closest blob based on real wrold size and pixel size
-				
-				System.out.println("frameWait: " + frameWait);
+				double blobRealSize = getStopReal(stoppingBlob); //Gets real size
+				double distToBlob = cameraCalibrator.distanceToObj(blobRealSize/cameraCalibrator.relativeWorldScale, closestBlob.width); //Finds distance to closest blob based on real wrold size and pixel size
+			
+        System.out.println("frameWait: " + frameWait);
 				System.out.println("stopType: " + stopType);
 				System.out.println("desiredSpeed: " + desiredSpeed);
 				System.out.println(cameraCalibrator.calcStopRate(getEstimatedSpeed(), cameraCalibrator.getStopTime(distToBlob, getEstimatedSpeed())));
@@ -446,7 +420,7 @@ public class SpeedControlModule implements Module {
 		if (stopType == 1) {
 			frameWait = Constants.WAIT_AT_STOPSIGN_FRAMES + 1;
 		}
-		
+
 		frameWait -= 1;
 		
 		if (frameWait == 0 && stopType == 1) {
@@ -468,7 +442,7 @@ public class SpeedControlModule implements Module {
 	private double getStopReal(MovingBlob stopBlob) {
 		return sizeCons.SIGN_INFO.get(stopBlob.type).get(1);
 	}
-	
+	*/
 	//Returns the estimated speed IN METERS PER SECOND
 	public double getEstimatedSpeed() {
 		return currentEstimatedSpeed * Constants.PIN_TO_METER_PER_SECOND;
@@ -478,7 +452,7 @@ public class SpeedControlModule implements Module {
 	public void calculateEstimatedSpeed(int gasAmount) {
 		currentEstimatedSpeed = gasAmount;
 	}
-	
+  
 	public int getDesiredSpeed() {
 		return (int) desiredSpeed;
 	}
@@ -491,6 +465,7 @@ public class SpeedControlModule implements Module {
 	 * @param blob the blob that we want to check
 	 * @return true if the blob is recognized to be a stopsign, otherwise false
 	 */
+	
 	public boolean detectStopSign(MovingBlob blob) {
 		if (blob.color.getColor() == Color.RED &&
 			blob.age > Constants.BLOB_AGE &&
@@ -511,17 +486,17 @@ public class SpeedControlModule implements Module {
 		return false;
 	}
 	
-	public boolean determinePedStop(MovingBlob ped) {
-		if(ped.width >= Constants.PED_MIN_SIZE &&
-			ped.x >= Constants.PED_MIN_X &&
-			ped.x <= Constants.PED_MAX_X) {
-			
-			//System.out.println("Ped Width "+ped.width+" Ped X "+ped.x+" Ped Y "+ped.y);
-			//System.out.println(ped);
-			return true;
-		}
-		return false;
-	}
+	//public boolean determinePedStop(MovingBlob ped) {
+	//	if(ped.width >= Constants.PED_MIN_SIZE &&
+	//		ped.x >= Constants.PED_MIN_X &&
+	//		ped.x <= Constants.PED_MAX_X) {
+	//		
+	//		//System.out.println("Ped Width "+ped.width+" Ped X "+ped.x+" Ped Y "+ped.y);
+	//		//System.out.println(ped);
+	//		return true;
+	//	}
+	//	return false;
+	//}
 	
 	public List<MovingBlob> getBlobs() {
 		return this.currentBlobs;
@@ -540,6 +515,7 @@ public class SpeedControlModule implements Module {
 	 * @param bloblist all of the blobs on screen
 	 * @return returns a light code, see above for light codes
 	 */
+	
 	public int detectLight(MovingBlob blob) {
 		int lightColor = 0;
 		if (blob.color.getColor() == Color.RED &&

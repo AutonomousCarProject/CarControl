@@ -14,6 +14,7 @@
  * This version has been edited to work specifically with the associated Arduino program.
  * The changes are to the protocol and the used functions,
  * mainly removal of unused functions and variables.
+ * Current protocol doesn't have a catch for missed bytes.
  *
  * @author Firmata
  * @author Tom
@@ -24,6 +25,7 @@ package com.apw.sbcio.fakefirm;   // 2018 February 10
 
 import com.apw.pwm.fakefirm.SimHookBase;
 import com.apw.sbcio.PWMController;
+import com.apw.speedcon.Constants;
 
 import jssc.SerialPort;
 import jssc.SerialPortException;
@@ -34,7 +36,9 @@ import jssc.SerialPortException;
 
 public class ArduinoIO implements PWMController { // Adapted to Java from arduino.cs ... (FakeFirmata)
   // (subclass this to add input capability)
+
   public static final boolean UseServos = false;
+
 
   public static final String CommPortNo = "COM3";
   public static final int MAX_DATA_BYTES = 16, // =64 in LattePanda's Arduino.cs
@@ -54,7 +58,7 @@ public class ArduinoIO implements PWMController { // Adapted to Java from arduin
   private int readAngle;
 
   public ArduinoIO() { // outer class constructor..
-    surrealPort = (UseServos) ? new SerialPort(CommPortNo) : new SerialPortDump(CommPortNo);
+    surrealPort = (Constants.useServos) ? new SerialPort(CommPortNo) : new SerialPortDump(CommPortNo);
     System.out.println("new Arduino " + CommPortNo + " " + (surrealPort != null));
     digitalOutputData = new int[MAX_DATA_BYTES];
     Open();
@@ -120,14 +124,29 @@ public class ArduinoIO implements PWMController { // Adapted to Java from arduin
     try {
       while (this.surrealPort.getInputBufferBytesCount() >= 3) {
         byte[] msg = surrealPort.readBytes(3);
-        System.out.println("----ARDUINO IN");
-        System.out.print((int) msg[0]);
-        System.out.print((int) msg[1]);
-        System.out.println((int) msg[2]);
+        
+        if (msg[0] == 100 && Constants.readMessages){
+        	System.out.println("----ARDUINO DEBUG");
+        	System.out.print((int) msg[1]);
+        	System.out.println((int) msg[2]);
+        }
+        else if (msg[0] >= 110){
+        	System.out.println("----ARDUINO INFO");
+        	System.out.println((byte) msg[1]);
+        	System.out.println((byte) msg[2]);
+        	
+            //msg[1] = (byte) (angle & 0x7F);
+            //msg[2] = (byte) (angle >> 7);
+        	System.out.println((int) (msg[2] << 8) + (msg[1]));
+        }
+        else {
+        	System.out.println("----Arduino gave unexpected info:" + msg[0]);
+        }
+        
       }
     } catch (SerialPortException e) {
       e.printStackTrace();
-      System.out.println("Servo reading is creating a problem!");
+      System.out.println("Arduino reading is creating a problem! is useServos set correctly?");
     }
   }
 
