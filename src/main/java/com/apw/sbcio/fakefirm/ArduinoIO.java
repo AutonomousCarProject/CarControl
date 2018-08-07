@@ -130,8 +130,8 @@ public class ArduinoIO implements PWMController { // Adapted to Java from arduin
         	System.out.print((int) msg[1]);
         	System.out.println((int) msg[2]);
         }
-        else if (msg[0] >= 110){
-        	System.out.println("----ARDUINO INFO");
+        else if (msg[0] >= 110){ //A maximum of 126 to be safe
+        	System.out.println("----ARDUINO INFO -type: "+msg[0]);
         	System.out.println((byte) msg[1]);
         	System.out.println((byte) msg[2]);
         	

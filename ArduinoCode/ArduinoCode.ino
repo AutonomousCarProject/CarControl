@@ -110,8 +110,8 @@ void loop() {
     lastNoKill = micros();
     if (kill && micros()-sinceNoKill > 1800){ //Start up if un-killed
       kill = false;
-      addMessage(100, 6, 3);
-      addMessage(111, 50, 100);
+      if (!timedout) addMessage(100, 6, 3);
+      if (!timedout) addMessage(111, 50, 100);
     }
     if (!kill && micros()-sinceNoKill < 1600){ //Check difference to find duration of input
       kill = true;
@@ -120,14 +120,14 @@ void loop() {
       steeringDeg = 90;
       wheelSpeed = 90;
       //Send message to computer
-      addMessage(100, 6, 6);
+      if (!timedout) addMessage(100, 6, 6);
     }
     sinceNoKill = 0;
   }
 
   if (!kill && micros()-lastNoKill > timeout){
     kill = true;
-    addMessage(100, 6, 5);
+    if (!timedout) addMessage(100, 6, 5);
   }
 
   
