@@ -10,9 +10,11 @@ const int killPin = 11;
 const int rpmPin = 14;
 
 unsigned long sinceRpm = 0;
+unsigned long secCounter = 0;
+unsigned int rotationCount = 0;
 
-byte out[] = {0, 0, 0};
-byte outsize = 3;
+byte out[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+byte outsize = 0;
 
 byte type;
 byte pin;
@@ -32,8 +34,7 @@ unsigned long lastNoKill = 0;
 unsigned long sinceConnect = 0;
 unsigned long sinceNoKill = 0; //Input timing for kill
 unsigned long lastRun = 0; //timekeeping for loop
-const unsigned long timeout = 3800000; //microseconds before timeout
-
+const unsigned long timeout = 100000; //microseconds before timeout
 
 //#define NOT_AN_INTERRUPT -1
 //where 1ms is considered full left or full reverse, and 2ms is considered full forward or full right.
@@ -90,16 +91,14 @@ void sendMessage(){
 void loop() {
   lastRun = micros();
 
-  /*if (sinceRpm == 0 && digitalRead(rpmPin) == LOW){
+  if (sinceRpm == 0 && digitalRead(rpmPin) == LOW){
     sinceRpm = micros();
   }
 
   if (sinceRpm != 0 && digitalRead(rpmPin) == HIGH){
-    misc = micros() - sinceRpm;
-
-    addMessage(151, (misc & 0xFF), (misc >> 8));
+    rotationCount++;
     sinceRpm = 0;
-  }*/
+  }
 
   //Read rise of signal
   if (sinceNoKill == 0 && digitalRead(killPin) == HIGH){
@@ -169,6 +168,13 @@ void loop() {
     }
     timedout = false;
   }
+
+  //Full second cycle
+  if (micros()-secCounter >= 1000000){
+    if (!timedout) addMessage(151, (rotationCount & 0xFF), (rotationCount >> 8));
+    rotationCount = 0;
+    secCounter = micros();
+  }
   
   //Start next cycle every .02 seconds
   if (micros()-lastTime >= 20000){
@@ -220,9 +226,9 @@ void loop() {
     digitalWrite(13, HIGH);
 
     //Timeout check
-    if (!timedout && Serial.peek() <= 0 && (micros()-sinceConnect) > timeout){
+    if (!timedout && Serial.peek() <= 0 && (micros()-sinceConnect) > 20*timeout){
       timedout = true;
-      addMessage(100, 4, 5);
+      //addMessage(100, 4, 5); //why send a timeout message to the computer that timed out?
       digitalWrite(13, LOW);
     }
 
