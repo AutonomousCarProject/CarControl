@@ -83,8 +83,8 @@ public class SpeedControlModule implements Module {
 		
 		byte[] limitArray = new byte[Constants.SCREEN_FILTERED_WIDTH * Constants.SCREEN_HEIGHT];
 		ImageManipulator.limitTo(limitArray, control.getProcessedImage(), Constants.SCREEN_FILTERED_WIDTH, Constants.SCREEN_HEIGHT, Constants.SCREEN_FILTERED_WIDTH, Constants.SCREEN_HEIGHT, false);
-		List<MovingBlob> blobs = pedDetect.getAllBlobs(limitArray, Constants.SCREEN_FILTERED_WIDTH);
-		List<MovingBlob> peds = pedDetect.detect(limitArray, Constants.SCREEN_FILTERED_WIDTH);
+		//List<MovingBlob> blobs = pedDetect.getAllBlobs(limitArray, Constants.SCREEN_FILTERED_WIDTH);
+		//List<MovingBlob> peds = pedDetect.detect(limitArray, Constants.SCREEN_FILTERED_WIDTH);
 		
 		if(Settings.overlayOn){
 			//Draw our stoplight hitbox in constant designated color
@@ -197,9 +197,7 @@ public class SpeedControlModule implements Module {
 			g.setColor(java.awt.Color.MAGENTA);
 			g.drawRect(i.x + 8, i.y + 40 - 25, i.width, i.height);
 		}
-		
-	}
-	*/
+		*/
 //A method to be called every frame. Calculates desired speed and actual speed
 	//Also takes stopping into account
 	/**
@@ -223,13 +221,17 @@ public class SpeedControlModule implements Module {
 		com.apw.pedestrians.Constant.TIME_DIFFERENCE = com.apw.pedestrians.Constant.CURRENT_FRAME_MILLIS - com.apw.pedestrians.Constant.LAST_FRAME_MILLIS;
 		this.calculateEstimatedSpeed(gasAmount);
 		this.calculateDesiredSpeed(steerDegs, manualSpeed);
-		}
+		
+		//List<MovingBlob> blobs = this.pedDetect.getAllBlobs(control.getProcessedImage(), control.getImageWidth());
+		//List<MovingBlob> peds = this.pedDetect.detect(control.getProcessedImage(), control.getImageWidth());
+		//this.currentBlobs = blobs;
+		//this.currentPeds = peds;
+		
 		/*
 		List<MovingBlob> blobs = this.pedDetect.getAllBlobs(control.getProcessedImage(), control.getImageWidth());
 		List<MovingBlob> peds = this.pedDetect.detect(control.getProcessedImage(), control.getImageWidth());
 		this.currentBlobs = blobs;
 		this.currentPeds = peds;
-
 		
 		for (MovingBlob blob: currentBlobs) {
 			if (detectStopSign(blob)) {
@@ -271,11 +273,11 @@ public class SpeedControlModule implements Module {
 			}
 		}
 		
-		for(MovingBlob blob : currentPeds) {
+//		for(MovingBlob blob : currentPeds) {
 			//if (determinePedStop(blob)) {
 			//	determineStop(blob, 4);
 			//}
-		}
+//		}
 		
 		if (emergencyStop) {
 			stopType = 5;
@@ -286,6 +288,7 @@ public class SpeedControlModule implements Module {
 		}
 	}
 	*/
+	}
 	/**
 	 * This method detects if a given blob is overlapping another blob.
 	 * 
