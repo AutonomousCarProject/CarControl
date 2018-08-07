@@ -3,6 +3,7 @@ package com.apw.imagemanagement;
 import com.apw.carcontrol.CarControl;
 import com.apw.carcontrol.Module;
 
+import javax.sound.midi.SysexMessage;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
@@ -16,7 +17,7 @@ import java.awt.event.KeyEvent;
 public class ImageManagementModule implements Module {
 
 	//adjustable variables
-    private int viewType = 7;
+    private int viewType = 1;
     private int blackWhiteRasterVersion = 1;
     private double luminanceMultiplier = 1.5;
 
@@ -29,6 +30,11 @@ public class ImageManagementModule implements Module {
     boolean removeNoise = true;
     boolean dilate = false;
 
+    //Image Variables
+    byte[] R;
+    byte[] G;
+    byte[] B;
+
     /**
      * Main constructor for imageManagement
      * @param width the width of the camera image
@@ -40,6 +46,11 @@ public class ImageManagementModule implements Module {
         this.width = width;
         this.height = height;
         tile = newtile;
+
+        //Create image arrays
+        R = new byte[width*height];
+        G = new byte[width*height];
+        B = new byte[width*height];
 
         //Tells ImageManipulator what the Black/White threshold is
         ImageManipulator.setLuminanceMultiplier(luminanceMultiplier);
@@ -70,9 +81,9 @@ public class ImageManagementModule implements Module {
      * @param pixels 1D byte array for an image
      * @return monochrome image
      */
-    public byte[] getMonochromeRaster(byte[] pixels) {
+    public byte[] getMonochromeRaster() {
     	byte[] mono = new byte[width * height];
-        ImageManipulator.convertToMonochromeRaster(pixels, mono, height, width, tile);
+        ImageManipulator.convertToMonochromeRaster(R,G,B, mono, height, width, tile);
         return mono;
 
     }
@@ -86,9 +97,9 @@ public class ImageManagementModule implements Module {
      * @param pixels 1D byte array for an image
      * @return monochrome image
      */
-    public byte[] getMonochrome2Raster(byte[] pixels) {
+    public byte[] getMonochrome2Raster() {
     	byte[] mono = new byte[width * height];
-        ImageManipulator.convertToMonochrome2Raster(pixels, mono, height, width, tile);
+        ImageManipulator.convertToMonochrome2Raster(R,G,B, mono, height, width, tile);
         return mono;
     }
 
@@ -101,13 +112,13 @@ public class ImageManagementModule implements Module {
      * @param pixels 1D byte array for an image
      * @return black and white image
      */
-    public int[] getBlackWhiteRaster(byte[] pixels) {
+    public int[] getBlackWhiteRaster() {
     	int[] output = new int[width * height];
         if(blackWhiteRasterVersion == 2) {
             //ImageManipulator.convertToBlackWhite2Raster(pixels, output, height, width, tile);
         }
         else {
-            ImageManipulator.convertToBlackWhiteRaster(pixels, output, height, width, frameWidth, tile);
+            ImageManipulator.convertToBlackWhiteRaster(R,G,B, output, height, width, frameWidth, tile);
         }
         if(removeNoise) {
             output = ImageManipulator.removeNoise(output, height, width);
@@ -117,9 +128,9 @@ public class ImageManagementModule implements Module {
         }
         return output;
     }
-    public int[] getEdgeBlackWhiteRaster(byte[] pixels){
+    public int[] getEdgeBlackWhiteRaster(){
         int[] output = new int[width*height];
-        ImageManipulator.convertToFirstEdgeBlackWhiteRaster(pixels,output,height,width,tile);
+        //ImageManipulator.convertToFirstEdgeBlackWhiteRaster(R,G,B,output,height,width,tile);
         return output;
     }
 
@@ -139,9 +150,9 @@ public class ImageManagementModule implements Module {
      * @param pixels 1D byte array for an image
      * @return simple image
      */
-    public byte[] getSimpleColorRaster(byte[] pixels) {
+    public byte[] getSimpleColorRaster() {
     	byte[] simple = new byte[width * height];
-        ImageManipulator.convertToSimpleColorRaster(pixels, simple, height, width, frameWidth, tile);
+        ImageManipulator.convertToSimpleColorRaster(R,G,B, simple, height, width, frameWidth, tile);
         return simple;
 
 
@@ -156,9 +167,9 @@ public class ImageManagementModule implements Module {
      * @param pixels 1D byte array for an image
      * @return RGB image
      */
-    public int[] getRGBRaster(byte[] pixels) {
+    public int[] getRGBRaster() {
     	int[] rgb = new int[width*height];
-        ImageManipulator.convertToRGBRaster(pixels, rgb, height, width, tile);
+        ImageManipulator.convertToRGBRaster(R,G,B, rgb, height, width, tile);
         return rgb;
 
     }
@@ -173,9 +184,9 @@ public class ImageManagementModule implements Module {
      * @param pixels 1D byte array for an image
      * @return monochrome image
      */
-    public int[] getMonoRGBRaster(byte[] pixels) {
+    public int[] getMonoRGBRaster() {
     	int[] rgb = new int[width*height];
-    	byte[] mono = getMonochromeRaster(pixels);
+    	byte[] mono = getMonochromeRaster();
         ImageManipulator.convertMonotoRGB(mono, rgb, mono.length);
         return rgb;
 
@@ -198,9 +209,9 @@ public class ImageManagementModule implements Module {
      * @param pixels 1D byte array for an image
      * @return simple image
      */
-    public int[] getSimpleRGBRaster(byte[] pixels) {
+    public int[] getSimpleRGBRaster() {
     	int[] rgb = new int[width*height];
-    	byte[] simple = getSimpleColorRaster(pixels);
+    	byte[] simple = getSimpleColorRaster();
         ImageManipulator.convertSimpleToRGB(simple, rgb, simple.length);
         return rgb;
 
@@ -216,19 +227,19 @@ public class ImageManagementModule implements Module {
      * @param pixels 1D byte array for an image
      * @return black and white image
      */
-    public int[] getBWRGBRaster(byte[] pixels) {
-        int[] output = getBlackWhiteRaster(pixels);
+    public int[] getBWRGBRaster() {
+        int[] output = getBlackWhiteRaster();
         int[] rgb = new int[width*height];
         ImageManipulator.convertBWToRGB(output, rgb, output.length);
         return rgb;
 
     }
     
-    public int[] getRobertsCross(byte[] pixels) {
+    public int[] getRobertsCross() {
     	byte[] mono = new byte[width * height];
     	int[] rgb = new int[width * height];
     	int[] output = new int[width * height];
-    	ImageManipulator.convertToMonochrome2Raster(pixels, mono, height, width, tile);
+    	ImageManipulator.convertToMonochrome2Raster(R,G,B, mono, height, width, tile);
     	ImageManipulator.convertMonotoRGB(mono, rgb, mono.length);
     	ImageManipulator.convertToRobertsCrossRaster(rgb, output, height, width);
     	return output;
@@ -245,12 +256,74 @@ public class ImageManagementModule implements Module {
      * @param pixels 1D byte array for an image
      * @return road finding image
      */
-    public int[] getRoad(byte[] pixels){
-        int[] output = getBlackWhiteRaster(pixels);
+    public int[] getRoad(){
+        int[] output = getBlackWhiteRaster();
 
         int[] rgb = new int[width*height];
         ImageManipulator.findRoad(output, rgb, height, width);
         return rgb;
+    }
+
+    public void setupArrays(byte[] pixels){
+        int nrows = height;
+        int ncols = width;
+        int bit0 = ImageManipulator.getBit(tile,0);
+        int bit1 = ImageManipulator.getBit(tile,1);
+        int bit2 = ImageManipulator.getBit(tile,2);
+        int offset = 2*(1-bit2)*ncols*bit1+bit0+bit1*bit2;
+        int rowV = (4-bit2)*ncols;
+        int halfRowV = (4-bit2)*ncols/2;
+        int halfRow = 2*ncols;
+        int halfRow1 = halfRow+1;
+        int colV = 2+bit2;
+        int max = rowV*nrows;
+        int sum = 0;
+        if (tile == 0){
+            for(int r = 0;r<max;r+=rowV){
+                for(int c = 0;c<halfRowV;c+=colV){
+                    R[sum] = pixels[r+c];
+                    G[sum] = pixels[r+c+1];
+                    B[sum] = pixels[r+c+halfRow1];
+                    sum++;
+                }
+            }
+        }else if (tile == 1){
+            for(int r = 0;r<max;r+=rowV){
+                for(int c = 0;c<rowV;c+=colV){
+                    R[sum] = pixels[r+c+1];
+                    G[sum] = pixels[r+c];
+                    B[sum] = pixels[r+c+halfRow];
+                    sum++;
+                }
+            }
+        }else if (tile == 2){
+            for(int r = 0;r<max;r+=rowV){
+                for(int c = 0;c<rowV;c+=colV){
+                    R[sum] = pixels[r+c+halfRow];
+                    G[sum] = pixels[r+c];
+                    B[sum] = pixels[r+c+1];
+                    sum++;
+                }
+            }
+        }else if (tile == 3){
+            for(int r = 0;r<max;r+=rowV){
+                for(int c = 0;c<rowV;c+=colV){
+                    R[sum] = pixels[r+c+halfRow1];
+                    G[sum] = pixels[r+c+1];
+                    B[sum] = pixels[r+c];
+                    sum++;
+                }
+            }
+        }else if (tile == 4){
+            for(int r = 0;r<max;r+=rowV){
+                for(int c = 0;c<rowV;c+=colV){
+                    R[sum] = pixels[r+c];
+                    G[sum] = pixels[r+c+1];
+                    B[sum] = pixels[r+c+2];
+                    sum++;
+                }
+            }
+        }
     }
 
     @Override
@@ -259,50 +332,47 @@ public class ImageManagementModule implements Module {
     }
     
     public void changeFilter() {
-    	viewType = (viewType) % 7 + 1;
+    	viewType = (viewType) % 6 + 1;
 
     	System.out.println("view changed to " + viewType);
     }
 
     @Override
     public void update(CarControl control) {
-        imagePixels = null;
+        setupArrays(control.getRecentCameraImage());
         switch (viewType) {
             case 1:
-                imagePixels = getRGBRaster(control.getRecentCameraImage());
+                imagePixels = getRGBRaster();
                 break;
             case 2:
-                imagePixels = getMonoRGBRaster(control.getRecentCameraImage());
+                imagePixels = getMonoRGBRaster();
                 break;
             case 3:
-                imagePixels = getSimpleRGBRaster(control.getRecentCameraImage());
+                imagePixels = getSimpleRGBRaster();
                 break;
             case 4:
-                imagePixels = getBlackWhiteRaster(control.getRecentCameraImage());
+                imagePixels = getBlackWhiteRaster();
                 break;
             case 5:
-                imagePixels = getRoad(control.getRecentCameraImage());
+                imagePixels = getRoad();
                 break;
             case 6:
-            	imagePixels = getRobertsCross(control.getRecentCameraImage());
+            	imagePixels = getRobertsCross();
             	break;
-            case 7:
-                imagePixels = getEdgeBlackWhiteRaster(control.getRecentCameraImage());
-                break;
             default:
                 throw new IllegalStateException("No image management viewType: " + viewType);
         }
 
         control.setRenderedImage(imagePixels);
 
-        if(viewType != 7) {
-        	control.setRGBImage(getEdgeBlackWhiteRaster(control.getRecentCameraImage()));
+        if(viewType != 4) {
+        	control.setRGBImage(getBlackWhiteRaster());
         }
         else {
         	control.setRGBImage(imagePixels);
         }
         if(viewType != 3) {
-            control.setProcessedImage(getSimpleColorRaster(control.getRecentCameraImage()));
+            control.setProcessedImage(getSimpleColorRaster());
         }
         else {
         	control.setRGBImage(imagePixels);
