@@ -130,7 +130,7 @@ public class ArduinoIO implements PWMController { // Adapted to Java from arduin
         	System.out.print((int) msg[1]);
         	System.out.println((int) msg[2]);
         }
-        else if (msg[0] >= 150){
+        else if (msg[0] >= 110){
         	System.out.println("----ARDUINO INFO");
         	System.out.println((byte) msg[1]);
         	System.out.println((byte) msg[2]);
@@ -140,7 +140,7 @@ public class ArduinoIO implements PWMController { // Adapted to Java from arduin
         	System.out.println((int) (msg[2] << 8) + (msg[1]));
         }
         else {
-        	System.out.println("----Arduino gave unexpected info!");
+        	System.out.println("----Arduino gave unexpected info:" + msg[0]);
         }
         
       }
