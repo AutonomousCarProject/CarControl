@@ -18,6 +18,7 @@ public class GPUImageModule implements Module {
     private double luminanceMultiplier = 1.6;
     private int width, height;
     private int[] imagePixels;
+    private int frameWidth = 640;
     private byte tile;
     private SimpleColorRasterKernel simpleColorRasterKernel;
     private BlackWhiteRasterKernel blackWhiteRasterKernel;
@@ -151,7 +152,7 @@ public class GPUImageModule implements Module {
         } else {
             //blackWhiteRasterKernel.setValues(pixels, output, height, width, tile);
             //blackWhiteRasterKernel.execute(Range.create2D(height, width));
-            ImageManipulator.convertToBlackWhiteRaster(pixels, rgb, height, width, tile);
+            ImageManipulator.convertToBlackWhiteRaster(pixels, rgb, height, width, frameWidth, tile);
             //output = blackWhiteRasterKernel.getMono();
         }
         if (removeNoise) {
@@ -189,7 +190,7 @@ public class GPUImageModule implements Module {
     public int[] getRoad(byte[] pixels) {
         int[] output = new int[width * height];
         int[] rgb = new int[width * height];
-        ImageManipulator.convertToBlackWhiteRaster(pixels, output, height, width, tile);
+        ImageManipulator.convertToBlackWhiteRaster(pixels, output, height, width, frameWidth, tile);
         //blackWhiteRasterKernel.setValues(pixels, output, height, width, tile);
         //blackWhiteRasterKernel.execute(Range.create2D(height, width));
         if (removeNoise) {
