@@ -10,13 +10,14 @@ public class ImageManagementTest {
 
     public static void main(String[] args){
         boolean millis = true;
-        boolean recall = true;
+        boolean recall = false;
         long time = System.currentTimeMillis();
         ArduinoIO driveSys = new ArduinoIO();
-        int amount = (int)Math.pow(10,6);
-        //new TrakSim();
+        int amount = (int)Math.pow(10,1);
+        new TrakSim().SimStep(2);
         TrakSimControl simControl = new TrakSimControl(driveSys);
-        byte[] p = simControl.getRecentCameraImage();
+        simControl.updateWindowDims(912,480);
+        byte[] p = simControl.readCameraImage();
         ImageManagementModule m = new ImageManagementModule(simControl.getWindowWidth(),simControl.getWindowHeight(),simControl.getTile());
 
         if(millis){
@@ -26,63 +27,69 @@ public class ImageManagementTest {
                 System.out.println(System.currentTimeMillis()-time);
                 time = System.currentTimeMillis();
                 for(int i=0;i<amount;i++)
-                    m.getRGBRaster(simControl.getRecentCameraImage());
+                    m.getRGBRaster(simControl.readCameraImage());
                 System.out.println();
                 System.out.println("RGB");
                 System.out.println(System.currentTimeMillis()-time);
                 time = System.currentTimeMillis();
                 for(int i=0;i<amount;i++)
-                    m.getMonochromeRaster(simControl.getRecentCameraImage());
+                    m.getMonochromeRaster(simControl.readCameraImage());
                 System.out.println();
                 System.out.println("MONO");
                 System.out.println(System.currentTimeMillis()-time);
                 time = System.currentTimeMillis();
                 for(int i=0;i<amount;i++)
-                    m.getMonochrome2Raster(simControl.getRecentCameraImage());
+                    m.getMonochrome2Raster(simControl.readCameraImage());
                 System.out.println();
                 System.out.println("MONO2");
                 System.out.println(System.currentTimeMillis()-time);
                 time = System.currentTimeMillis();
                 for(int i=0;i<amount;i++)
-                    m.getBlackWhiteRaster(simControl.getRecentCameraImage());
+                    m.getBlackWhiteRaster(simControl.readCameraImage());
                 System.out.println();
                 System.out.println("BW");
                 System.out.println(System.currentTimeMillis()-time);
                 time = System.currentTimeMillis();
                 for(int i=0;i<amount;i++)
-                    m.getSimpleColorRaster(simControl.getRecentCameraImage());
+                    m.getSimpleColorRaster(simControl.readCameraImage());
                 System.out.println();
                 System.out.println("SIMPLE");
                 System.out.println(System.currentTimeMillis()-time);
                 time = System.currentTimeMillis();
                 for(int i=0;i<amount;i++)
-                    m.getMonoRGBRaster(simControl.getRecentCameraImage());
+                    m.getMonoRGBRaster(simControl.readCameraImage());
                 System.out.println();
                 System.out.println("MONO-RGB");
                 System.out.println(System.currentTimeMillis()-time);
                 time = System.currentTimeMillis();
                 for(int i=0;i<amount;i++)
-                    m.getSimpleRGBRaster(simControl.getRecentCameraImage());
+                    m.getSimpleRGBRaster(simControl.readCameraImage());
                 System.out.println();
                 System.out.println("SIMPLE-RGB");
                 System.out.println(System.currentTimeMillis()-time);
                 time = System.currentTimeMillis();
                 for(int i=0;i<amount;i++)
-                    m.getBWRGBRaster(simControl.getRecentCameraImage());
+                    m.getBWRGBRaster(simControl.readCameraImage());
                 System.out.println();
                 System.out.println("BW-RGB");
                 System.out.println(System.currentTimeMillis()-time);
                 time = System.currentTimeMillis();
                 for(int i=0;i<amount;i++)
-                    m.getRobertsCross(simControl.getRecentCameraImage());
+                    m.getRobertsCross(simControl.readCameraImage());
                 System.out.println();
                 System.out.println("ROBERTS");
                 System.out.println(System.currentTimeMillis()-time);
                 time = System.currentTimeMillis();
                 for(int i=0;i<amount;i++)
-                    m.getRoad(simControl.getRecentCameraImage());
+                    m.getRoad(simControl.readCameraImage());
                 System.out.println();
                 System.out.println("ROAD");
+                System.out.println(System.currentTimeMillis()-time);
+                time = System.currentTimeMillis();
+                for(int i=0;i<amount;i++)
+                    m.getEdgeBlackWhiteRaster(simControl.readCameraImage());
+                System.out.println();
+                System.out.println("BW-EDGE");
                 System.out.println(System.currentTimeMillis()-time);
                 time = System.currentTimeMillis();
                 for(int i=0;i<amount;i++)
@@ -154,6 +161,12 @@ public class ImageManagementTest {
                     m.getRoad(p);
                 System.out.println();
                 System.out.println("ROAD");
+                System.out.println(System.currentTimeMillis()-time);
+                time = System.currentTimeMillis();
+                for(int i=0;i<amount;i++)
+                    m.getEdgeBlackWhiteRaster(p);
+                System.out.println();
+                System.out.println("BW-EDGE");
                 System.out.println(System.currentTimeMillis()-time);
                 time = System.currentTimeMillis();
                 for(int i=0;i<amount;i++)
@@ -170,63 +183,69 @@ public class ImageManagementTest {
                 System.out.println(System.nanoTime()-time);
                 time = System.nanoTime();
                 for(int i=0;i<amount;i++)
-                    m.getRGBRaster(simControl.getRecentCameraImage());
+                    m.getRGBRaster(simControl.readCameraImage());
                 System.out.println();
                 System.out.println("RGB");
                 System.out.println(System.nanoTime()-time);
                 time = System.nanoTime();
                 for(int i=0;i<amount;i++)
-                    m.getMonochromeRaster(simControl.getRecentCameraImage());
+                    m.getMonochromeRaster(simControl.readCameraImage());
                 System.out.println();
                 System.out.println("MONO");
                 System.out.println(System.nanoTime()-time);
                 time = System.nanoTime();
                 for(int i=0;i<amount;i++)
-                    m.getMonochrome2Raster(simControl.getRecentCameraImage());
+                    m.getMonochrome2Raster(simControl.readCameraImage());
                 System.out.println();
                 System.out.println("MONO2");
                 System.out.println(System.nanoTime()-time);
                 time = System.nanoTime();
                 for(int i=0;i<amount;i++)
-                    m.getBlackWhiteRaster(simControl.getRecentCameraImage());
+                    m.getBlackWhiteRaster(simControl.readCameraImage());
                 System.out.println();
                 System.out.println("BW");
                 System.out.println(System.nanoTime()-time);
                 time = System.nanoTime();
                 for(int i=0;i<amount;i++)
-                    m.getSimpleColorRaster(simControl.getRecentCameraImage());
+                    m.getSimpleColorRaster(simControl.readCameraImage());
                 System.out.println();
                 System.out.println("SIMPLE");
                 System.out.println(System.nanoTime()-time);
                 time = System.nanoTime();
                 for(int i=0;i<amount;i++)
-                    m.getMonoRGBRaster(simControl.getRecentCameraImage());
+                    m.getMonoRGBRaster(simControl.readCameraImage());
                 System.out.println();
                 System.out.println("MONO-RGB");
                 System.out.println(System.nanoTime()-time);
                 time = System.nanoTime();
                 for(int i=0;i<amount;i++)
-                    m.getSimpleRGBRaster(simControl.getRecentCameraImage());
+                    m.getSimpleRGBRaster(simControl.readCameraImage());
                 System.out.println();
                 System.out.println("SIMPLE-RGB");
                 System.out.println(System.nanoTime()-time);
                 time = System.nanoTime();
                 for(int i=0;i<amount;i++)
-                    m.getBWRGBRaster(simControl.getRecentCameraImage());
+                    m.getBWRGBRaster(simControl.readCameraImage());
                 System.out.println();
                 System.out.println("BW-RGB");
                 System.out.println(System.nanoTime()-time);
                 time = System.nanoTime();
                 for(int i=0;i<amount;i++)
-                    m.getRobertsCross(simControl.getRecentCameraImage());
+                    m.getRobertsCross(simControl.readCameraImage());
                 System.out.println();
                 System.out.println("ROBERTS");
                 System.out.println(System.nanoTime()-time);
                 time = System.nanoTime();
                 for(int i=0;i<amount;i++)
-                    m.getRoad(simControl.getRecentCameraImage());
+                    m.getRoad(simControl.readCameraImage());
                 System.out.println();
                 System.out.println("ROAD");
+                System.out.println(System.nanoTime()-time);
+                time = System.nanoTime();
+                for(int i=0;i<amount;i++)
+                    m.getEdgeBlackWhiteRaster(simControl.readCameraImage());
+                System.out.println();
+                System.out.println("BW-EDGE");
                 System.out.println(System.nanoTime()-time);
                 time = System.nanoTime();
                 for(int i=0;i<amount;i++)
@@ -298,6 +317,12 @@ public class ImageManagementTest {
                     m.getRoad(p);
                 System.out.println();
                 System.out.println("ROAD");
+                System.out.println(System.nanoTime()-time);
+                time = System.nanoTime();
+                for(int i=0;i<amount;i++)
+                    m.getEdgeBlackWhiteRaster(p);
+                System.out.println();
+                System.out.println("BW-EDGE");
                 System.out.println(System.nanoTime()-time);
                 time = System.nanoTime();
                 for(int i=0;i<amount;i++)
