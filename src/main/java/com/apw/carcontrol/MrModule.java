@@ -192,7 +192,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         if(args.length > 0 && args[0].toLowerCase().equals("nosim")) {
             renderWindow = true;
         }
-        new MrModule(true);
+        new MrModule(false);
     }
 
     @Override
