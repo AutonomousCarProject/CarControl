@@ -60,7 +60,7 @@ public class CameraCalibration {
 
 		this.pedDetect = new PedestrianDetector();
 
-
+		/*
 		//Tries to find a file containing the focal length
 		try{
 
@@ -77,6 +77,7 @@ public class CameraCalibration {
 		}catch(IOException e){
 			e.printStackTrace();
 		}
+		*/
 
 	}
 
@@ -128,8 +129,11 @@ public class CameraCalibration {
 	public double distanceToObj(double knownWidth, double objPixelWidth, double objectHeight) {
 		//System.out.print("Distance to object = " + (knownWidth * cameraFocalLength) / objPixelWidth);
 		System.out.println("special stop");
-		double hyp =  ( knownWidth * cameraFocalLength) / objPixelWidth;
+		System.out.println("Known width = " + knownWidth);
+		double hyp =  distanceToObj(knownWidth + 2.5, objPixelWidth);
+		System.out.println("Hyp = " + hyp);
 		double a = Math.pow(hyp, 2) - Math.pow(objectHeight, 2);
+		System.out.println("special = " + Math.sqrt(a));
 		return Math.sqrt(a);
 	}
 
