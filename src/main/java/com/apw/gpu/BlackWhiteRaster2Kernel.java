@@ -63,7 +63,6 @@ public class BlackWhiteRaster2Kernel extends Kernel {
 
     @Override
     public void run() {
-        System.out.println("BlackWhite2RasterKernel.run");
         int row = getGlobalId(0);
         int col = getGlobalId(1);
 

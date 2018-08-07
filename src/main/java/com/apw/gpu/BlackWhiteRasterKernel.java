@@ -14,7 +14,7 @@ public class BlackWhiteRasterKernel extends Kernel {
 
     private byte tile;
 
-    private int averageLuminance;
+    @Local private int averageLuminance;
 
     private final int luminanceMultiplier = 1;
 
@@ -51,7 +51,6 @@ public class BlackWhiteRasterKernel extends Kernel {
         this.nrows = nrows;
         this.ncols = ncols;
         this.tile = tile;
-        averageLuminance = 0;
     }
 
     /**
@@ -74,6 +73,7 @@ public class BlackWhiteRasterKernel extends Kernel {
         int R = (bayer[getPos(col, row, combineTile((byte) 0, tile), ncols, nrows)] & 0xFF);
         int G = (bayer[getPos(col, row, combineTile((byte) 1, tile), ncols, nrows)] & 0xFF);
         int B = (bayer[getPos(col, row, combineTile((byte) 3, tile), ncols, nrows)] & 0xFF);
+
         averageLuminance += (R + G + B) / 3;
 
         if (col == 0)

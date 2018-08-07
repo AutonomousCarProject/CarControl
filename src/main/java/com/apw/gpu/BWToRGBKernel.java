@@ -57,7 +57,7 @@ public class BWToRGBKernel extends Kernel {
     public void run() {
         int i = getGlobalId();
 
-        if (simpleByte[i] == 0) mono[i] = 0xFF0000;
+        if (simpleByte[i] == 0) mono[i] = 0x000000;
         else if (simpleByte[i] == 1) mono[i] = 0xFFFFFF;
     }
 }
