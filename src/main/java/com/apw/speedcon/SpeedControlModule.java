@@ -372,8 +372,8 @@ public class SpeedControlModule implements Module {
 		if (stopType != 0) {
 			stopsignWaitFirst();
 			
-			blobRealSize = getStopReal(stoppingBlob); //Gets real size
-			distToBlob = cameraCalibrator.distanceToObj(blobRealSize/cameraCalibrator.relativeWorldScale, stoppingBlob.width); //Finds distance to closest blob based on real wrold size and pixel size
+			double blobRealSize = getStopReal(stoppingBlob); //Gets real size
+			double distToBlob = cameraCalibrator.distanceToObj(blobRealSize/cameraCalibrator.relativeWorldScale, stoppingBlob.width, sizeCons.SIGN_INFO.get(stoppingBlob.type).get(1)); //Finds distance to closest blob based on real wrold size and pixel size
 			
 			System.out.println("frameWait: " + frameWait);
 			System.out.println("stopType: " + stopType);
