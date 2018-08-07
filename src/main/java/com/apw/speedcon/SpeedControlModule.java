@@ -86,8 +86,8 @@ public class SpeedControlModule implements Module {
 		
 		byte[] limitArray = new byte[Constants.SCREEN_FILTERED_WIDTH * Constants.SCREEN_HEIGHT];
 		ImageManipulator.limitTo(limitArray, control.getProcessedImage(), Constants.SCREEN_FILTERED_WIDTH, Constants.SCREEN_HEIGHT, Constants.SCREEN_FILTERED_WIDTH, Constants.SCREEN_HEIGHT, false);
-		List<MovingBlob> blobs = pedDetect.getAllBlobs(limitArray, Constants.SCREEN_FILTERED_WIDTH);
-		List<MovingBlob> peds = pedDetect.detect(limitArray, Constants.SCREEN_FILTERED_WIDTH);
+		//List<MovingBlob> blobs = pedDetect.getAllBlobs(limitArray, Constants.SCREEN_FILTERED_WIDTH);
+		//List<MovingBlob> peds = pedDetect.detect(limitArray, Constants.SCREEN_FILTERED_WIDTH);
 		
 		if(Settings.overlayOn){
 			//Draw our stoplight hitbox in constant designated color
@@ -172,7 +172,7 @@ public class SpeedControlModule implements Module {
 		//D. Write to the console what has happened
 		//We need all of the if statements to display the colors,
 		//as we need to convert from IPixel colors to Java.awt colors for display reasons
-		if (Settings.blobsOn) {
+		/*if (Settings.blobsOn) {
 			for (MovingBlob i : blobs) {
 				if (i.color.getColor() == com.apw.pedestrians.image.Color.BLACK) {
 					g.setColor(java.awt.Color.BLACK);
@@ -199,7 +199,7 @@ public class SpeedControlModule implements Module {
 			g.setColor(java.awt.Color.MAGENTA);
 			g.drawRect(i.x + 8, i.y + 40 - 25, i.width, i.height);
 		}
-		
+		*/
 	}
 	
 //A method to be called every frame. Calculates desired speed and actual speed
@@ -226,10 +226,10 @@ public class SpeedControlModule implements Module {
 		this.calculateEstimatedSpeed(gasAmount);
 		this.calculateDesiredSpeed(steerDegs, manualSpeed);
 		
-		List<MovingBlob> blobs = this.pedDetect.getAllBlobs(control.getProcessedImage(), control.getImageWidth());
-		List<MovingBlob> peds = this.pedDetect.detect(control.getProcessedImage(), control.getImageWidth());
-		this.currentBlobs = blobs;
-		this.currentPeds = peds;
+		//List<MovingBlob> blobs = this.pedDetect.getAllBlobs(control.getProcessedImage(), control.getImageWidth());
+		//List<MovingBlob> peds = this.pedDetect.detect(control.getProcessedImage(), control.getImageWidth());
+		//this.currentBlobs = blobs;
+		//this.currentPeds = peds;
 
 		
 		for (MovingBlob blob: currentBlobs) {
@@ -272,11 +272,11 @@ public class SpeedControlModule implements Module {
 			}
 		}
 		
-		for(MovingBlob blob : currentPeds) {
+//		for(MovingBlob blob : currentPeds) {
 			//if (determinePedStop(blob)) {
 			//	determineStop(blob, 4);
 			//}
-		}
+//		}
 		
 		if (emergencyStop) {
 			stopType = 5;
