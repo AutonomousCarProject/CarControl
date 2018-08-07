@@ -168,21 +168,21 @@ L 8    -- curve immediately to west (24,87)
 
 // Artifacts...
 
-U 28 25.4 5 15 -- eastbound painted stop line w/"STOP"
--- U 29.6 28.1 4 15 -- northbound painted stop line w/"STOP"
--- U 25.4 26.7 6 15 -- southbound painted stop line w/"STOP"
--- U 26.7 29.6 7 15 -- westbound painted stop line w/"STOP"
+// U 28 25.4 5 15 -- eastbound painted stop line w/"STOP"
+// U 29.6 28.1 4 15 -- northbound painted stop line w/"STOP"
+// U 25.4 26.7 6 15 -- southbound painted stop line w/"STOP"
+// U 26.7 29.6 7 15 -- westbound painted stop line w/"STOP"
 
--- Y 26.0 26.5 0 0 -- stop sign facing north (southbound traffic)
--- Y 26.5 30.0 0 90 -- stop sign facing east (westbound)
--- Y 30.0 29.5 0 180 -- stop sign facing south
-Y 29.5 25.875 0 270 -- stop sign facing west
+--Y 26.0 26.5 0 0 -- stop sign facing north (southbound traffic)
+--Y 26.5 30.0 0 90 -- stop sign facing east (westbound)
+Y 30.0 29.5 0 180 -- stop sign facing south
+--Y 29.5 25.875 0 270 -- stop sign facing west (vert, horz, type or something, rotation)
 
 Y 28.0 28.0 2 0 -- traffic lite
 Y 26 31 16 270 -- parked car facing west
 
 T 20 16 10 1 0 -- start timer #0 +1 secs when: V>40m, H>32m
-J 35 28 6 15n 16f 23z 0d 1.3r 1.25e 0.3i -0.29p*23 -- northbound car
+--J 35 28 6 15n 16f 23z 0d 1.3r 1.25e 0.3i -0.29p*23 -- northbound car
 @ 19.0 29.5 6 20 0 -- northbound car parked at end
 
 J 26.5 30 5 30n 13f 14z 180d 0.125r 1.0e 0.2i -- ped'n walking south

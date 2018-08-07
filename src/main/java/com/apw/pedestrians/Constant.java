@@ -27,7 +27,7 @@ public class Constant {
      */
 
     //maximum time before unmatched MovingBlob is deleted
-    public static int MAX_TIME_OFF_SCREEN = 5;
+    public static int MAX_TIME_OFF_SCREEN = 500;
 
     //maximum distance in pixels between blobs that can be matched
     public static int DISTANCE_LIMIT_X = 50;
