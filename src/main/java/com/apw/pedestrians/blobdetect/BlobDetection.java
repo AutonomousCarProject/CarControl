@@ -1,16 +1,15 @@
 package com.apw.pedestrians.blobdetect;
 
 import com.apw.pedestrians.image.Color;
-import com.apw.pedestrians.image.IImage;
-import com.apw.pedestrians.image.IPixel;
+import com.apw.pedestrians.image.Pixel;
 
 import java.util.*;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
-public class BlobDetection implements IBlobDetection { 
-	public static final int MAXIMUM_DIFFERENCE_IN_WIDTH_BETWEEN_TWO_BLOBS_IN_ORDER_TO_JOIN = 75;
+public class BlobDetection {
+    public static final int MAXIMUM_DIFFERENCE_IN_WIDTH_BETWEEN_TWO_BLOBS_IN_ORDER_TO_JOIN = 75;
 
     //creates data structures to organize different stages of blobs
     private Deque<Blob> unusedBlobs = new ArrayDeque<>();
@@ -19,16 +18,11 @@ public class BlobDetection implements IBlobDetection {
     private Set<Integer> added = new HashSet<>();
     private List<Blob> blobs = new LinkedList<>();
 
-    @Override
-    public List<Blob> getBlobs(IImage image) {
-    	
-    	unusedBlobs.addAll(blobs);
+    public List<Blob> getBlobs(Pixel[][] pixels) {
+        unusedBlobs.addAll(blobs);
         blobs.clear();
-    	
-        //get the image
-        IPixel[][] pixels = image.getImage();
-        
-    	//there are no blobs in progress, creates a new array of blobs in progress
+
+        //there are no blobs in progress, creates a new array of blobs in progress
         if (bips == null || pixels.length != bips.length || pixels[0].length != bips[0].length) {
             bips = new BlobInProgress[pixels.length][pixels[0].length];
         }
@@ -53,8 +47,8 @@ public class BlobDetection implements IBlobDetection {
     	//goes along the pixels of the image
         for (int row = 0; row < pixels.length; row++) {
             for (int col = 0; col < pixels[0].length - 1; col++) {
-                IPixel pix1 = pixels[row][col];
-                IPixel pix2 = pixels[row][col + 1];
+                Pixel pix1 = pixels[row][col];
+                Pixel pix2 = pixels[row][col + 1];
 
                 if (pix1.getColor() == pix2.getColor())// matching
                 {
@@ -72,8 +66,8 @@ public class BlobDetection implements IBlobDetection {
      
         for (int row = 0; row < pixels.length - 1; row++) {
             for (int col = 0; col < pixels[0].length; col++) {
-                IPixel pix1 = pixels[row][col];
-                IPixel pix2 = pixels[row + 1][col];
+                Pixel pix1 = pixels[row][col];
+                Pixel pix2 = pixels[row + 1][col];
 
                 //merges pixels that are vertically nearby and of same color
                 if (pix1.getColor() == pix2.getColor() && bips[row + 1][col] != null && bips[row][col] != null
@@ -138,7 +132,7 @@ public class BlobDetection implements IBlobDetection {
     }
 
     //reduce, reuse, recycle for blobs in progress
-    private BlobInProgress getBip(int top, int left, int bottom, int right, IPixel color) {
+    private BlobInProgress getBip(int top, int left, int bottom, int right, Pixel color) {
         if (unusedBips.isEmpty()) {
             return new BlobInProgress(top, left, bottom, right, color);
         } else {
@@ -171,9 +165,9 @@ public class BlobDetection implements IBlobDetection {
     private static class BlobInProgress {
         private static int currentId = 0;
         private int top, left, bottom, right, id;
-        private IPixel color;
+        private Pixel color;
 
-        public BlobInProgress(int top, int left, int bottom, int right, IPixel color) {
+        public BlobInProgress(int top, int left, int bottom, int right, Pixel color) {
             this.top = top;
             this.left = left;
             this.bottom = bottom;

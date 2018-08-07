@@ -207,6 +207,7 @@ public class SpeedControlModule implements Module {
     //}
 	}
 
+
 //A method to be called every frame. Calculates desired speed and actual speed
 	//Also takes stopping into account
 	/**
@@ -312,7 +313,8 @@ public class SpeedControlModule implements Module {
 			determineStop();
 		}
 	}
-	*/
+	
+	
 	/**
 	 * This method detects if a given blob is overlapping another blob.
 	 * 
@@ -323,14 +325,14 @@ public class SpeedControlModule implements Module {
 	 * @param b2 One of the two blobs that we are fed
 	 * @return a boolean that is true if the blobs are overlapping, and false if they are not
 	 */
-	/*
+
 	public boolean detectBlobOverlappingBlob(MovingBlob outsideBlob, MovingBlob insideBlob) {
 		return (insideBlob.x < outsideBlob.x + outsideBlob.width && 
 				insideBlob.width + insideBlob.x > outsideBlob.x) || 
 				(insideBlob.y < outsideBlob.y + outsideBlob.height && 
 				insideBlob.height + insideBlob.y > outsideBlob.y);
 	}
-	*/
+	
 	/**
 	 * A method that determines what speed we need to be traveling at given our wheel angle, and how we have
 	 * modified our speed by pressing the arrow keys.
@@ -369,10 +371,10 @@ public class SpeedControlModule implements Module {
 		//Calculates when the car should start to stop, then reduces its speed.
 		private void determineStop(MovingBlob stoppingBlob, double objectHeight) {
 			if (stopType != 0) {
-				stopsignWaitHandlerFirst();
+				stopsignWaitFirst();
 				
 				double blobRealSize = getStopReal(stoppingBlob); //Gets real size
-				double distToBlob = cameraCalibrator.distanceToObj(blobRealSize/cameraCalibrator.relativeWorldScale, closestBlob.width); //Finds distance to closest blob based on real wrold size and pixel size
+				double distToBlob = cameraCalibrator.distanceToObj(blobRealSize/cameraCalibrator.relativeWorldScale, stoppingBlob.width); //Finds distance to closest blob based on real wrold size and pixel size
 			
         System.out.println("frameWait: " + frameWait);
 				System.out.println("stopType: " + stopType);
@@ -442,7 +444,7 @@ public class SpeedControlModule implements Module {
 	private double getStopReal(MovingBlob stopBlob) {
 		return sizeCons.SIGN_INFO.get(stopBlob.type).get(1);
 	}
-	*/
+
 	//Returns the estimated speed IN METERS PER SECOND
 	public double getEstimatedSpeed() {
 		return currentEstimatedSpeed * Constants.PIN_TO_METER_PER_SECOND;

@@ -28,6 +28,9 @@ public class MonoToRGBKernel extends Kernel {
         this.length = length;
     }
 
+    public MonoToRGBKernel() {
+    }
+
     /**
      * Sets all member variables of <code>MonoToRGBKernel</code>.
      *

@@ -1,14 +1,13 @@
 package com.apw.pedestrians.image;
 
 //Defines basic implementation for pixel
-public class Pixel implements IPixel {
+public class Pixel {
     private Color color;
 
     public Pixel(Color color) {
         this.setColor(color);
     }
 
-    @Override
     public Color getColor() {
         return color;
     }
