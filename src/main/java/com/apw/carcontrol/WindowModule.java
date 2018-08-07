@@ -33,7 +33,7 @@ public class WindowModule extends JFrame implements Module {
         setVisible(true);
         setIgnoreRepaint(true);
 
-        control.addKeyEvent(KeyEvent.VK_F, () -> {
+        control.addKeyEvent(KeyEvent.VK_F11, () -> {
             fullscreen = !fullscreen;
             setVisible(false);
             dispose();
