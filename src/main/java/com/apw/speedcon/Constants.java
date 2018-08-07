@@ -3,12 +3,12 @@ package com.apw.speedcon;
 public class Constants {
   //Arduino settings
   public static final boolean
-	useServos = false,
-	readMessages = false;
+	useServos = true,
+	readMessages = true;
   
 	//Default Debug Overlays
 	public static final boolean
-	DEFAULT_OVERLAY = false,		//Sets the default state as to the display of blob detection boxes
+	DEFAULT_OVERLAY = true,		//Sets the default state as to the display of blob detection boxes
 	DEFAULT_BLOBS = false,			//Sets the default state as to the display of blob boundaries
 	DEFAULT_WRITE_BLOBS_TO_CONSOLE = false,	//Sets the default state as to the printing of all blob information
 	DEFAULT_WRITE_SPEED_TO_CONSOLE = false;	//Sets the default state as to the printing of the current speed
@@ -18,8 +18,8 @@ public class Constants {
 	
 	//Speed Related Constants
 	public static final double
-	MAX_SPEED = 50,					//Car's maximum speed
-	MIN_SPEED = 15,					//Car's minimum speed
+	MAX_SPEED = 12,					//Car's maximum speed
+	MIN_SPEED = 10,					//Car's minimum speed
 	PIN_TO_METER_PER_SECOND = 0.4,	//Conversion for motor position to m/s. DO NOT TOUCH
 	MAX_OBJECT_WIDTH = 320,			//Maximum width in pixels of object height before car slows
 	MAX_OBJECT_HEIGHT = 200,		//Maximum height of in pixels of an object before car slows

@@ -71,13 +71,10 @@ public class SpeedControlModule implements Module {
 		control.accelerate(true, getNextSpeed());
 		//System.out.println("Speed: " + getNextSpeed());
 	}
-	
+	/*
 	@Override
 	public void paint(CarControl control, Graphics g) {
-		
-		
-		
-		
+
 		if (control.getProcessedImage() == null) {
 			return;
 		}
@@ -86,8 +83,8 @@ public class SpeedControlModule implements Module {
 		
 		byte[] limitArray = new byte[Constants.SCREEN_FILTERED_WIDTH * Constants.SCREEN_HEIGHT];
 		ImageManipulator.limitTo(limitArray, control.getProcessedImage(), Constants.SCREEN_FILTERED_WIDTH, Constants.SCREEN_HEIGHT, Constants.SCREEN_FILTERED_WIDTH, Constants.SCREEN_HEIGHT, false);
-		List<MovingBlob> blobs = pedDetect.getAllBlobs(limitArray, Constants.SCREEN_FILTERED_WIDTH);
-		List<MovingBlob> peds = pedDetect.detect(limitArray, Constants.SCREEN_FILTERED_WIDTH);
+		//List<MovingBlob> blobs = pedDetect.getAllBlobs(limitArray, Constants.SCREEN_FILTERED_WIDTH);
+		//List<MovingBlob> peds = pedDetect.detect(limitArray, Constants.SCREEN_FILTERED_WIDTH);
 		
 		if(Settings.overlayOn){
 			//Draw our stoplight hitbox in constant designated color
@@ -172,7 +169,8 @@ public class SpeedControlModule implements Module {
 		//D. Write to the console what has happened
 		//We need all of the if statements to display the colors,
 		//as we need to convert from IPixel colors to Java.awt colors for display reasons
-		if (Settings.blobsOn) {
+	/*	
+	if (Settings.blobsOn) {
 			for (MovingBlob i : blobs) {
 				if (i.color.getColor() == com.apw.pedestrians.image.Color.BLACK) {
 					g.setColor(java.awt.Color.BLACK);
@@ -199,9 +197,7 @@ public class SpeedControlModule implements Module {
 			g.setColor(java.awt.Color.MAGENTA);
 			g.drawRect(i.x + 8, i.y + 40 - 25, i.width, i.height);
 		}
-		
-	}
-	
+		*/
 //A method to be called every frame. Calculates desired speed and actual speed
 	//Also takes stopping into account
 	/**
@@ -226,11 +222,16 @@ public class SpeedControlModule implements Module {
 		this.calculateEstimatedSpeed(gasAmount);
 		this.calculateDesiredSpeed(steerDegs, manualSpeed);
 		
+		//List<MovingBlob> blobs = this.pedDetect.getAllBlobs(control.getProcessedImage(), control.getImageWidth());
+		//List<MovingBlob> peds = this.pedDetect.detect(control.getProcessedImage(), control.getImageWidth());
+		//this.currentBlobs = blobs;
+		//this.currentPeds = peds;
+		
+		/*
 		List<MovingBlob> blobs = this.pedDetect.getAllBlobs(control.getProcessedImage(), control.getImageWidth());
 		List<MovingBlob> peds = this.pedDetect.detect(control.getProcessedImage(), control.getImageWidth());
 		this.currentBlobs = blobs;
 		this.currentPeds = peds;
-
 		
 		for (MovingBlob blob: currentBlobs) {
 			if (detectStopSign(blob)) {
@@ -272,11 +273,11 @@ public class SpeedControlModule implements Module {
 			}
 		}
 		
-		for(MovingBlob blob : currentPeds) {
+//		for(MovingBlob blob : currentPeds) {
 			//if (determinePedStop(blob)) {
 			//	determineStop(blob, 4);
 			//}
-		}
+//		}
 		
 		if (emergencyStop) {
 			stopType = 5;
@@ -286,7 +287,8 @@ public class SpeedControlModule implements Module {
 			determineStop(currentBlobs.get(0)); //This is bad code. I do it so that I can call determineStop without a blob
 		}
 	}
-	
+	*/
+	}
 	/**
 	 * This method detects if a given blob is overlapping another blob.
 	 * 
@@ -297,13 +299,14 @@ public class SpeedControlModule implements Module {
 	 * @param b2 One of the two blobs that we are fed
 	 * @return a boolean that is true if the blobs are overlapping, and false if they are not
 	 */
+	/*
 	public boolean detectBlobOverlappingBlob(MovingBlob outsideBlob, MovingBlob insideBlob) {
 		return (insideBlob.x < outsideBlob.x + outsideBlob.width && 
 				insideBlob.width + insideBlob.x > outsideBlob.x) || 
 				(insideBlob.y < outsideBlob.y + outsideBlob.height && 
 				insideBlob.height + insideBlob.y > outsideBlob.y);
 	}
-	
+	*/
 	/**
 	 * A method that determines what speed we need to be traveling at given our wheel angle, and how we have
 	 * modified our speed by pressing the arrow keys.
@@ -338,7 +341,7 @@ public class SpeedControlModule implements Module {
 			return (int) (this.currentEstimatedSpeed + Constants.MIN_SPEED_INCREMENT);
 		}
 	}
-	
+	/*
 	//Calculates when the car should start to stop, then reduces its speed.
 	private void determineStop(MovingBlob closestBlob) {
 		if (stopType != 0) {
@@ -358,7 +361,7 @@ public class SpeedControlModule implements Module {
 		//System.out.println("distToBlob: " + distToBlob);
 		//System.out.println(desiredSpeed - cameraCalibrator.calcStopRate(getEstimatedSpeed(), cameraCalibrator.getStopTime(distToBlob, getEstimatedSpeed())));
 		
-		this.desiredSpeed = desiredSpeed - cameraCalibrator.calcStopRate(getEstimatedSpeed(), cameraCalibrator.getStopTime(distToBlob, getEstimatedSpeed()));
+//		this.desiredSpeed = desiredSpeed - cameraCalibrator.calcStopRate(getEstimatedSpeed(), cameraCalibrator.getStopTime(distToBlob, getEstimatedSpeed()));
 		
 		if (frameWait == 0) {
 			stopType = 0;
@@ -370,7 +373,7 @@ public class SpeedControlModule implements Module {
 	private double getStopReal(MovingBlob stopBlob) {
 		return sizeCons.SIGN_INFO.get(stopBlob.type).get(1);
 	}
-	
+	*/
 	//Returns the estimated speed IN METERS PER SECOND
 	public double getEstimatedSpeed() {
 		return currentEstimatedSpeed * Constants.PIN_TO_METER_PER_SECOND;
@@ -380,7 +383,7 @@ public class SpeedControlModule implements Module {
 	public void calculateEstimatedSpeed(int gasAmount) {
 		currentEstimatedSpeed = gasAmount;
 	}
-	
+	/*
 	//Getting and setting our emergency stop boolean
 	public boolean getEmergencyStop() {
 		return emergencyStop;
@@ -389,9 +392,15 @@ public class SpeedControlModule implements Module {
 	public void setEmergencyStop(boolean emer) {
 		this.emergencyStop = emer;
 	}
-	
+	*/
 	public int getDesiredSpeed() {
 		return (int) desiredSpeed;
+	}
+
+	@Override
+	public void paint(CarControl control, Graphics g) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	/**
@@ -402,6 +411,7 @@ public class SpeedControlModule implements Module {
 	 * @param blob the blob that we want to check
 	 * @return true if the blob is recognized to be a stopsign, otherwise false
 	 */
+	/*
 	public boolean detectStopSign(MovingBlob blob) {
 		if (blob.age > Constants.BLOB_AGE &&
 			blob.height > (3) * Constants.BLOB_MIN_HEIGHT &&
@@ -413,7 +423,7 @@ public class SpeedControlModule implements Module {
 			blob.y > Constants.STOPSIGN_MIN_Y &&
 			blob.y < Constants.STOPSIGN_MAX_Y &&
 			blob.color.getColor() == Color.RED &&
-			/*!blob.seen &&*/
+			/*!blob.seen &&*//*
 			(((double) blob.height / (double) blob.width) < 1 + Constants.BLOB_RATIO_DIF &&
 			((double) blob.height / (double) blob.width) > 1 - Constants.BLOB_RATIO_DIF)) {
 			
@@ -437,7 +447,7 @@ public class SpeedControlModule implements Module {
 	public List<MovingBlob> getBlobs() {
 		return this.currentBlobs;
 	}
-	
+	*/
 	/* Returns an int value corresponding to the color of the light we are looking at
 	 * 0 - No light
 	 * 1 - Red Light
@@ -458,6 +468,7 @@ public class SpeedControlModule implements Module {
 	 * @param bloblist all of the blobs on screen
 	 * @return returns a light code, see above for light codes
 	 */
+	/*
 	public int detectLight(MovingBlob blob) {
 		int lightColor = 0;
 		
@@ -471,7 +482,7 @@ public class SpeedControlModule implements Module {
 			blob.y >= Constants.STOPLIGHT_MIN_Y &&
 			blob.y <= Constants.STOPLIGHT_MAX_Y &&
 			blob.color.getColor() == Color.RED &&
-			/*!blob.seen &&*/
+			/*!blob.seen &&*//*
 			((double) blob.height / (double) blob.width) < 1 + Constants.BLOB_RATIO_DIF &&
 			((double) blob.height / (double) blob.width) > 1 - Constants.BLOB_RATIO_DIF) {
 			
@@ -494,7 +505,7 @@ public class SpeedControlModule implements Module {
 			blob.y > Constants.STOPLIGHT_MIN_Y &&
 			blob.y < Constants.STOPLIGHT_MAX_Y &&
 			blob.color.getColor() == Color.YELLOW &&
-			/*!blob.seen &&*/
+			/*!blob.seen &&*//*
 			((double) blob.height / (double) blob.width) < 1 + Constants.BLOB_RATIO_DIF &&
 			((double) blob.height / (double) blob.width) > 1 - Constants.BLOB_RATIO_DIF) {
 			
@@ -517,7 +528,7 @@ public class SpeedControlModule implements Module {
 			blob.y > Constants.STOPLIGHT_MIN_Y &&
 			blob.y < Constants.STOPLIGHT_MAX_Y &&
 			blob.color.getColor() == Color.GREEN &&
-			/*!blob.seen &&*/
+			/*!blob.seen &&*//*
 			((double) blob.height / (double) blob.width) < 1 + Constants.BLOB_RATIO_DIF &&
 			((double) blob.height / (double) blob.width) > 1 - Constants.BLOB_RATIO_DIF) {
 			
@@ -541,4 +552,5 @@ public class SpeedControlModule implements Module {
 	public void emergencyStop() {
 		this.desiredSpeed = cameraCalibrator.calcStopRate(getEstimatedSpeed(), 0.1);
 	}
+	*/
 }

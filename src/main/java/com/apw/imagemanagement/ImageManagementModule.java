@@ -18,14 +18,16 @@ public class ImageManagementModule implements Module {
 	//adjustable variables
     private int viewType = 7;
     private int blackWhiteRasterVersion = 1;
-    private double luminanceMultiplier = 1.6;
+    private double luminanceMultiplier = 1.5;
+
 
     //internal variables
     private int width, height;
     private int[] imagePixels;
     private byte tile;
-    boolean removeNoise = false;
-    boolean dilate = true;
+    private int frameWidth = 640;
+    boolean removeNoise = true;
+    boolean dilate = false;
 
     /**
      * Main constructor for imageManagement
@@ -105,7 +107,7 @@ public class ImageManagementModule implements Module {
             //ImageManipulator.convertToBlackWhite2Raster(pixels, output, height, width, tile);
         }
         else {
-            ImageManipulator.convertToBlackWhiteRaster(pixels, output, height, width, tile);
+            ImageManipulator.convertToBlackWhiteRaster(pixels, output, height, width, frameWidth, tile);
         }
         if(removeNoise) {
             output = ImageManipulator.removeNoise(output, height, width);
@@ -139,7 +141,7 @@ public class ImageManagementModule implements Module {
      */
     public byte[] getSimpleColorRaster(byte[] pixels) {
     	byte[] simple = new byte[width * height];
-        ImageManipulator.convertToSimpleColorRaster(pixels, simple, height, width, tile);
+        ImageManipulator.convertToSimpleColorRaster(pixels, simple, height, width, frameWidth, tile);
         return simple;
 
 
@@ -258,7 +260,8 @@ public class ImageManagementModule implements Module {
     
     public void changeFilter() {
     	viewType = (viewType) % 7 + 1;
-    	System.out.println(viewType);
+
+    	System.out.println("view changed to " + viewType);
     }
 
     @Override
@@ -291,8 +294,19 @@ public class ImageManagementModule implements Module {
         }
 
         control.setRenderedImage(imagePixels);
-        control.setRGBImage(getEdgeBlackWhiteRaster(control.getRecentCameraImage()));
-        control.setProcessedImage(getSimpleColorRaster(control.getRecentCameraImage()));
+
+        if(viewType != 7) {
+        	control.setRGBImage(getEdgeBlackWhiteRaster(control.getRecentCameraImage()));
+        }
+        else {
+        	control.setRGBImage(imagePixels);
+        }
+        if(viewType != 3) {
+            control.setProcessedImage(getSimpleColorRaster(control.getRecentCameraImage()));
+        }
+        else {
+        	control.setRGBImage(imagePixels);
+        }
     }
 
     @Override
