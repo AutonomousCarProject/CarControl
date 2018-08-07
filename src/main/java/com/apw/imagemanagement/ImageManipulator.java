@@ -98,28 +98,30 @@ public class ImageManipulator {
 //	}
 	
 	public static void convertToBlackWhiteRaster(byte[] bayer, int[] mono, int nrows, int ncols, byte tile) {
-		int pixelsAveraged = 11;
-		for (int r = 0; r < nrows; r++) {
-    		int averageLuminance = 0;
-        	for(int c = 0; c < ncols; c++) {
-				int R = (bayer[getPos(c,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);
-				int G = (bayer[getPos(c,r,combineTile((byte)1,tile),ncols,nrows)]&0xFF);
-				int B = (bayer[getPos(c,r,combineTile((byte)3,tile),ncols,nrows)]&0xFF);
+		int pixelsAveraged = 3;
+		int averageLuminance = 0;
+		int R,G,B;
+		int borderWidth;
+		for (int r = nrows >> 1; r < nrows; r++) {
+    		averageLuminance = 0;
+        	for(int c = 0; c < 640; c++) {
+        		R = (bayer[getPos(c,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);
+				G = (bayer[getPos(c,r,combineTile((byte)1,tile),ncols,nrows)]&0xFF);
+				B = (bayer[getPos(c,r,combineTile((byte)3,tile),ncols,nrows)]&0xFF);
 				averageLuminance += (R + G + B);
 			}
-        	averageLuminance /= ncols;
 
-        	int borderWidth = pixelsAveraged >> 1; //int division
-            for (int c = borderWidth; c < ncols-borderWidth; c++) {
+        	borderWidth = pixelsAveraged >> 1; //int division
+            for (int c = nrows >> 1; c < ncols-borderWidth; c++) {
             	int pix = 0;
             	for(int i = 0; i < pixelsAveraged; i++) {
-            		pix += (bayer[getPos(c-borderWidth + i,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);
-    				pix += (bayer[getPos(c-borderWidth + i,r,combineTile((byte)1,tile),ncols,nrows)]&0xFF);
-    				pix += (bayer[getPos(c-borderWidth + i,r,combineTile((byte)3,tile),ncols,nrows)]&0xFF);
+            		R = (bayer[getPos(c-borderWidth + i,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);
+    				G = (bayer[getPos(c-borderWidth + i,r,combineTile((byte)1,tile),ncols,nrows)]&0xFF);
+    				B = (bayer[getPos(c-borderWidth + i,r,combineTile((byte)3,tile),ncols,nrows)]&0xFF);
+    				pix += (R+G+B);
             	}
-				pix /= (pixelsAveraged);
 				if(!(c >= 640 || r < 240 || r > 455)) {
-					if (pix > luminanceMultiplier * averageLuminance) {
+					if (pix * 640 > luminanceMultiplier * averageLuminance * pixelsAveraged) {
 						mono[r * ncols + c] = 0xFFFFFF;
 					} else {
 						mono[r * ncols + c] = 0;
