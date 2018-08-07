@@ -1,27 +1,22 @@
 package com.apw.carcontrol;
 
-import com.apw.apw3.DriverCons;
-import com.apw.apw3.MyMath;
-import com.apw.apw3.SimCamera;
-import com.apw.apw3.SimCameraRGB;
-import com.apw.sbcio.PWMController;
-import com.apw.steering.Point;
-
-import java.awt.*;
-import java.awt.geom.Line2D;
+import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class TrakSimControl implements CarControl {
+import com.apw.apw3.DriverCons;
+import com.apw.apw3.MyMath;
+import com.apw.fly2cam.FlyCamera;
+import com.apw.sbcio.PWMController;
+import com.apw.sbcio.fakefirm.ArduinoIO;
 
-
+public class CamControl implements CarControl {
+    private final int SteerPin, GasPin;
+    private final double LefScaleSt, RitScaleSt;
+    protected FlyCamera cam;
     protected HashMap<Integer, Runnable> keyBindings;
     private PWMController driveSys;
-    protected SimCamera cam;
     private Insets edges;
-    private ArrayList<ColoredLine> lines;
-    private ArrayList<ColoredRect> rects;
-
     private byte[] cameraImage = null;
     private byte[] processedImage = null;
     private int[] rgbImage = null;
@@ -29,40 +24,34 @@ public class TrakSimControl implements CarControl {
     private int currentSteering = 0;
     private int currentVelocity = 0;
     private int currentManualSpeed = 0;
-    private int windowWidth, windowHeight;
-
-    private final double LefScaleSt, RitScaleSt;
-    private final int SteerPin, GasPin;
-
-    public TrakSimControl(PWMController drivesys) {
-        cam = new SimCamera();
+    private int nrows, ncols;
+	
+    public CamControl(PWMController driveSys) {
+        cam = new FlyCamera();
         cam.Connect(4); // 30 FPS
-
+        nrows = cam.Dimz() >> 16;
+        ncols = cam.Dimz() << 16 >> 16;
+        
         SteerPin = DriverCons.D_SteerServo;
         GasPin = DriverCons.D_GasServo;
         LefScaleSt = ((double) DriverCons.D_LeftSteer) / 90.0;
         RitScaleSt = ((double) DriverCons.D_RiteSteer) / 90.0;
 
-        driveSys = drivesys;
+        this.driveSys = driveSys;
 
         keyBindings = new HashMap<>();
-        lines = new ArrayList<>();
-        rects = new ArrayList<>();
     }
 
     @Override
     public byte[] readCameraImage() {
-        int nrows = cam.Dimz() >> 16;
-        int ncols = cam.Dimz() << 16 >> 16;
         if (cameraImage == null || (nrows * ncols * 4) != cameraImage.length) {
             cameraImage = new byte[nrows * ncols * 4];
         }
         boolean b = cam.NextFrame(cameraImage);
         if (!b) {
-            System.err.println("An error occurred in TrakSimControl while reading the camera image from SimCamera.");
+            System.err.println("An error occurred while reading the camera image from FlyCamera.");
         }
 
-//        processedImage = null;
         return cameraImage;
     }
 
@@ -85,10 +74,10 @@ public class TrakSimControl implements CarControl {
     public int[] getRGBImage() {
         return rgbImage;
     }
-    
+
     @Override
-    public void setRGBImage(int[] rgbImage) {
-        this.rgbImage = rgbImage;
+    public void setRGBImage(int[] image) {
+        rgbImage = image;
     }
 
     /**
@@ -100,17 +89,17 @@ public class TrakSimControl implements CarControl {
     public int[] getRenderedImage() {
         return renderedImage;
     }
-    
+
     @Override
 	public int getImageWidth() {
-		return 912;
+		return ncols;
 	}
 
 	@Override
 	public int getImageHeight() {
-		return 480;
+		return nrows;
 	}
-
+    
     @Override
     public void setRenderedImage(int[] renderedImage) {
         this.renderedImage = renderedImage;
@@ -147,20 +136,26 @@ public class TrakSimControl implements CarControl {
         }
         if (velocity != 0) {
             velocity = MyMath.iMax(MyMath.iMin(velocity, 90), -90);
-            if (velocity == currentVelocity) {
-                return;
-            }
+//            if (velocity == currentVelocity) {
+//                return;	
+//            }
         }
         if (velocity == 0 && !absolute && currentVelocity == 0) {
             return;
         }
 
         currentVelocity = velocity;
+        if (driveSys == null) {
+            return;
+        }
         driveSys.setServoAngle(GasPin, velocity + 90);
     }
 
     @Override
     public void steer(boolean absolute, int angle) {
+        System.out.println("Angle to steer: " + angle);
+
+    	
         if (!absolute) {
             angle = currentSteering + angle;
         }
@@ -178,7 +173,12 @@ public class TrakSimControl implements CarControl {
                 angle = (int) Math.round(RitScaleSt * ((double) angle));
             }
         }
+        if (driveSys == null) {
+        	System.out.println("Dsys null");
+            return;
+        }
         driveSys.setServoAngle(SteerPin, angle + 90);
+        System.out.println("Steered");
     }
 
     @Override
@@ -192,25 +192,15 @@ public class TrakSimControl implements CarControl {
     }
 
     @Override
-    public int getVelocity() {
-        return currentVelocity;
-    }
-
-    @Override
     public int getSteering() {
         return currentSteering;
     }
 
     @Override
     public int getManualSpeed() {
-        return 0;
+        return currentManualSpeed;
     }
 
-    @Override
-    public double getPosition(boolean horizontal) {
-    	return cam.theSim.GetPosn(horizontal);
-    }
-    
     @Override
     public Insets getEdges() {
         return edges;
@@ -223,58 +213,63 @@ public class TrakSimControl implements CarControl {
 
     @Override
     public void rectFill(int colo, int rx, int cx, int rz, int c) {
-        cam.theSim.RectFill(colo, rx, cx, rz, c);
-    }
-    
-    @Override
-    public void drawLine(int color, int x1, int y1, int x2, int y2) {
-        lines.add(new ColoredLine(x1, y1, x2, y2, color));
-    }
-
-    @Override
-    public ArrayList<ColoredLine> getLines() {
-        return lines;
-    }
-
-    @Override
-    public ArrayList<ColoredRect> getRects() {
-        return rects;
-    }
-
-    @Override
-    public void clearLines() {
-        lines.clear();
-    }
-
-    @Override
-    public void clearRects() {
-        rects.clear();
+        /*Might be implemented*/
     }
 
     @Override
     public void addKeyEvent(int keyCode, Runnable action) {
         keyBindings.put(keyCode, action);
     }
-    
+
+	@Override
+	public int getVelocity() {
+		return currentVelocity;
+	}
+
+	@Override
+	public void drawLine(int color, int rx, int cx, int rz, int cz) {
+		
+	}
+
+	@Override
+	public byte getTile() {
+		return (byte) (cam.PixTile()-1);
+	}
+
+	@Override
+	public void updateWindowDims(int width, int height) {
+		
+	}
+
+	@Override
+	public int getWindowHeight() {
+		return 0;
+	}
+
+	@Override
+	public int getWindowWidth() {
+		return 0;
+	}
+
     @Override
-    public byte getTile() {
-    	return (byte) (cam.PixTile()-1);
+    public ArrayList<ColoredLine> getLines() {
+        return new ArrayList<>();
     }
 
     @Override
-    public void updateWindowDims(int width, int height) {
-        windowWidth = width;
-        windowHeight = height;
+    public ArrayList<ColoredRect> getRects() {
+        return new ArrayList<>();
     }
 
     @Override
-    public int getWindowHeight() {
-        return windowHeight;
-    }
+    public void clearLines() { }
 
     @Override
-    public int getWindowWidth() {
-        return windowWidth;
-    }
+    public void clearRects() { }
 
+	@Override
+	public double getPosition(boolean horizontal) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

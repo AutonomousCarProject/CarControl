@@ -1,11 +1,13 @@
 package com.apw.carcontrol;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * Wraps control of the car through either TrakSim or real-world car control.
  */
 public interface CarControl {
+
     /**
      * Gets the current image, from either {@link com.apw.fly2cam.FlyCamera FlyCamera} or {@link com.apw.apw3.SimCamera SimCamera}.
      * Also invalidates the current version of the processed/rendering images.
@@ -35,7 +37,37 @@ public interface CarControl {
      */
     void setProcessedImage(byte[] image);
 
+    /**
+     * Gets the rgb image.
+     *
+     * @return The rgb image in the form of an rgb raster array.
+     */
     int[] getRGBImage();
+
+    /**
+     * Gets the rendered image;
+     * @return The rendered image in the form of an rgb raster array.
+     */
+    int[] getRenderedImage();
+
+    /**
+     * Sets the rgb image.
+     *
+     * @param image The rgb image in the form of a rgb raster array.
+     */
+    void setRGBImage(int[] image);
+
+    /**
+     * Gets the width of the image.
+     * @return The image width as an int.
+     */
+    int getImageWidth();
+
+    /**
+     * Gets the height of the image.
+     * @return The image height as an int.
+     */
+    int getImageHeight();
 
     /**
      * Sets the image to be rendered on the screen.
@@ -88,7 +120,7 @@ public interface CarControl {
      * @return The curremt gas/velocity value.
      * @see #accelerate(boolean, int)
      */
-    int getGas();
+    int getVelocity();
 
     /**
      * Gets the current steering angle of the car
@@ -154,4 +186,51 @@ public interface CarControl {
      */
     void addKeyEvent(int keyCode, Runnable action);
 
+    /**
+     * Gets the tiling type of the camera.
+     * @return The camera's tiling type.
+     */
+    byte getTile();
+
+    /**
+     * Updates the window width and height to the provided values, should only be called from
+     * MrModule.
+     * @param width The new window width.
+     * @param height The new window height.
+     */
+    void updateWindowDims(int width, int height);
+
+    /**
+     * Returns the height of the JFrame created in MrModule.
+     * @return Window height.
+     */
+    int getWindowHeight();
+
+    /**
+     * Returns the width of the JFrame created in MrModule
+     * @return window width.
+     */
+    int getWindowWidth();
+
+    /**
+     * Gets the list of <Code>ColoredLine</Code>s rendered in MrModule.
+     * @return List of <Code>ColoredLine</Code>s.
+     */
+    ArrayList<ColoredLine> getLines();
+
+    /**
+     * Gets the list of <Code>ColoredRect</Code>s rendered in MrModule.
+     * @return List of <Code>ColoredRect</Code>s.
+     */
+    ArrayList<ColoredRect> getRects();
+
+    /**
+     * Clears the list of <Code>ColoredLine</Code>s rendered in MrModule.
+     */
+    void clearLines();
+
+    /**
+     * Clears the rect of <Code>ColoredRect</Code>s rendered in MrModule.
+     */
+    void clearRects();
 }
