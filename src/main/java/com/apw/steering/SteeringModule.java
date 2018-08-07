@@ -62,67 +62,8 @@ public class SteeringModule implements Module {
         double widthMultiplier = (1.0 * control.getWindowWidth() / steering.screenWidth);
         double heightMultiplier = (1.0 * control.getWindowHeight() / steering.cameraHeight);
         int tempDeg = angle;
-        if (control.getVelocity() > 0) {
-
-            double inRadiusAngle = .57 / 2 * (double) tempDeg;
-            double outRadiusAngle = .38 / 2 * (double) tempDeg;
-            if (tempDeg < 0) {
-                outRadiusAngle = .45 / 2 * tempDeg;
-                inRadiusAngle = 0.7 / 2 * (double) tempDeg;
-            }
-
-            double turnRadiusIn = 2.68 / Math.tan(Math.toRadians(tempDeg * 0.76 - 3.02)) + .5 * (1.976);
-            double turnRadiusOut = 2.68 / Math.tan(Math.toRadians(tempDeg * 0.56 - 2.4)) - .5 * (1.976);
-            double averageTurnRadius = (turnRadiusIn + turnRadiusOut) / 2;
-            double angleTurned = ((double) DriverCons.D_FrameTime / 1000.0) * DriverCons.D_fMinSpeed / averageTurnRadius;
-
-            angleTurned = Math.toDegrees(angleTurned);
-            if (tempDeg < 0) {
-                angleTurned = angleTurned * DriverCons.D_LeftSteer / DriverCons.D_RiteSteer;
-            }
-            angleTurned = angleTurned;
-            if (tempDeg == 0) angleTurned = 0;
-
-            sumOfAngles += (double) angleTurned;
-            sumOfAngles = sumOfAngles;
-
-            //if (sumOfAngles > 360) sumOfAngles = sumOfAngles - 360;
-            //if (sumOfAngles < 0) sumOfAngles = sumOfAngles + 360;
-            //}
-
-
-            locX = locX + (double) Math.cos(Math.toRadians(sumOfAngles)) * (double) DriverCons.D_FrameTime / 1000.0 * (double) DriverCons.D_fMinSpeed;
-
-
-            locY = locY + (double) Math.sin(Math.toRadians(sumOfAngles)) * (double) DriverCons.D_FrameTime / 1000.0 * (double) DriverCons.D_fMinSpeed;
-            if (frameCount < 100) frameCount++;
-            if (frameCount >= 100 && Math.abs(locX) < 15 && Math.abs(locY) < 15 && Math.abs(tempDeg) < 3 && !drawnMap && (Math.abs(sumOfAngles % 360) < 10)) {
-                System.out.println("found origin");
-                steering.drawMapArrays();
-                drawnMap = true;
-            } else if (!drawnMap) {
-                steering.updatePosLog(locX, locY, sumOfAngles);
-            }
-            g.setColor(Color.RED);
-            if (drawnMap) {
-                System.out.println("drawing map");
-                for (int i = 0; i < steering.pathTraveled.length; i++) {
-                    Point p1 = steering.pathTraveled[i];
-                    Point p2 = steering.leftEdge[i];
-                    Point p3 = steering.rightEdge[i];
-                    g.drawRect(DriverCons.D_ImWi + 30 + (int) ((double) p1.x), 150 + p1.y, 1, 1);
-                    //graf.drawRect(DriverCons.D_ImWi + 30 + (int) ((double) p2.x), 150 + p2.y, 1, 1);
-                    //graf.drawRect(DriverCons.D_ImWi + 30 + (int) ((double) p3.x), 150 + p3.y, 1, 1);
-                    System.setOut(o);
-                    System.out.println(p1.x + " " + p1.y);
-                    PrintStream console = System.out;
-                    System.setOut(console);
-                }
-            }
-        }
 
         for (int idx = 0; idx < steering.midPoints.size(); idx++) {
-
             if (idx >= steering.startTarget && idx <= steering.endTarget) {
                 g.setColor(Color.green);
                 g.fillRect((int) ((steering.midPoints.get(idx).x - 2) * widthMultiplier),
@@ -134,7 +75,6 @@ public class SteeringModule implements Module {
                         (int)((steering.midPoints.get(idx).y + 10) * heightMultiplier),
                         4, 4);
             }
-
         }
 
         // Draw left and right sides
@@ -142,7 +82,6 @@ public class SteeringModule implements Module {
         if (DriverCons.D_DrawOnSides) {
             g.setColor(Color.yellow);
             for (Point point : steering.leftPoints) {
-
                 int xL = point.x - 4;
                 int yL = point.y - 4;
                 g.fillRect((int) (xL * widthMultiplier), (int) (yL * heightMultiplier) + 10, 8, 8);
@@ -151,7 +90,6 @@ public class SteeringModule implements Module {
                 int xR = point.x - 4;
                 int yR = point.y - 4;
                 g.fillRect((int) (xR * widthMultiplier), (int) (yR * heightMultiplier) + 10, 8, 8);
-
             }
         }
         g.setColor(Color.cyan);

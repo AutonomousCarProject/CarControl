@@ -20,7 +20,7 @@ public class SteeringMk2 extends SteeringBase {
     private final int MAX_DIFF = 5;
     private final double MIN_DIST_LOOK = 0.8;
     private final double MAX_DIST_LOOK = 0.9;
-    private final int LINE_TRANSLATION = 300;
+    private final double LINE_TRANSLATION_MULTIPLIER = 0.4;
 
     private boolean leftSideFound = false;
     private boolean rightSideFound = false;
@@ -67,7 +67,6 @@ public class SteeringMk2 extends SteeringBase {
         for (Integer deg : previousHeadings) {
             averageDeg += deg;
         }
-//        System.out.println(averageDeg / NUM_PREVIOUS);
         return (int)(averageDeg / NUM_PREVIOUS);
     }
 
@@ -89,7 +88,7 @@ public class SteeringMk2 extends SteeringBase {
 
             // Find left point
             for (int cameraColumn = midX; cameraColumn >= 0; cameraColumn--) {
-                if (!leftSideFound && pixels[(screenWidth * (cameraRow)) + cameraColumn] >= 16777215) {
+                if (!leftSideFound && pixels[(screenWidth * (cameraRow)) + cameraColumn] == 0xffffff) {
                     leftSideFound = true;
                     leftPoints.add(new Point(cameraColumn, cameraRow));
                     break;
@@ -98,7 +97,7 @@ public class SteeringMk2 extends SteeringBase {
 
             // Find Right point
             for (int cameraColumn = midX; cameraColumn <= this.cameraWidth; cameraColumn++) {
-                if (!rightSideFound && pixels[(screenWidth * (cameraRow - 1)) + cameraColumn] >= 16777215) {
+                if (!rightSideFound && pixels[(screenWidth * (cameraRow - 1)) + cameraColumn] == 0xffffff) {
                     rightSideFound = true;
                     rightPoints.add(new Point(cameraColumn, cameraRow));
                     break;
@@ -123,7 +122,7 @@ public class SteeringMk2 extends SteeringBase {
 
             // If One lane is found, add midpoint 100 pixels towards middle.
             } else if (rightSideFound) {
-                midX = rightPoints.get(rightPoints.size() - 1).x - LINE_TRANSLATION;
+                midX = rightPoints.get(rightPoints.size() - 1).x - (int) (cameraWidth * LINE_TRANSLATION_MULTIPLIER);
                 if (Math.abs(midX - lastX) > MAX_DIFF) {
                     if (midX > lastX) {
                         midX = lastX + MAX_DIFF;
@@ -133,7 +132,7 @@ public class SteeringMk2 extends SteeringBase {
                 }
                 midPoints.add(new Point(midX, cameraRow));
             } else if (leftSideFound) {
-                midX = leftPoints.get(leftPoints.size() - 1).x + LINE_TRANSLATION;
+                midX = leftPoints.get(leftPoints.size() - 1).x + (int) (cameraWidth * LINE_TRANSLATION_MULTIPLIER);
                 if (Math.abs(midX - lastX) > MAX_DIFF) {
                     if (midX > lastX) {
                         midX = lastX + MAX_DIFF;
