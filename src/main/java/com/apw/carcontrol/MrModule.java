@@ -30,7 +30,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     private ArrayList<Module> modules;
     private CarControl control;
     private boolean fullscreen;
-    
+
     // FIXME breaks if dimensions are not 912x480
     private int windowWidth = 912;
     private int windowHeight = 480;

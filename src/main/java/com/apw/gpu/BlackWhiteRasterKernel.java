@@ -8,15 +8,12 @@ import com.aparapi.Kernel;
  */
 public class BlackWhiteRasterKernel extends Kernel {
 
-    private int nrows, ncols;
-
-    private byte[] bayer, mono;
-
-    private byte tile;
-
-    @Local private int averageLuminance;
-
     private final int luminanceMultiplier = 1;
+    private int nrows, ncols;
+    private byte[] bayer, mono;
+    private byte tile;
+    @Local
+    private int averageLuminance;
 
     /**
      * Constructs an <code>BlackWhiteRasterKernel</code> Aparapi {@link com.aparapi.opencl.OpenCL OpenCL} kernel.
