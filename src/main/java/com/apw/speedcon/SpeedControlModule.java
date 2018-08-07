@@ -395,7 +395,7 @@ public class SpeedControlModule implements Module {
 		//Calculates when the car should start to stop, then reduces its speed.
 		private void determineStop(MovingBlob stoppingBlob, double objectHeight) {
 			if (stopType != 0) {
-				stopsignWaitHandlerFirst();
+				//stopsignWaitHandlerFirst();
 				
 				//double blobRealSize = getStopReal(stoppingBlob); //Gets real size
 				//double distToBlob = cameraCalibrator.distanceToObj(blobRealSize/cameraCalibrator.relativeWorldScale, closestBlob.width); //Finds distance to closest blob based on real wrold size and pixel size

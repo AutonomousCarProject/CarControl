@@ -69,7 +69,6 @@ public class SizeConstants {
 	public SizeConstants() {
 		SIGN_INFO.put("Stop", (List<Double>) Arrays.asList(3.0, .750, .900, .0, .600, 1.200, 2.133));
 		SIGN_INFO.put("StopLightWidth", (List<Double>) Arrays.asList(3.0, .300, .00, .0, .200, 0.0, 7.62));
-		SIGN_INFO.put("Stop", (List<Double>) Arrays.asList(3.0, .750, .900, .0, .600, 1.200));
 		SIGN_INFO.put("Yield", (List<Double>) Arrays.asList(1.0, .900, 1.200, 1.500, .750, 0.0));
 		SIGN_INFO.put("4Way", (List<Double>) Arrays.asList(0.0, .300, .150, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
 		SIGN_INFO.put("AllWay", (List<Double>) Arrays.asList(0.0, .450, .150, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
