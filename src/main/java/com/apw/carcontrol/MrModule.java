@@ -10,10 +10,14 @@ import com.apw.steering.SteeringModule;
 
 import javax.swing.*;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.security.Key;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.concurrent.*;
 
-public class MrModule extends JFrame implements Runnable {
+public class MrModule extends JFrame implements Runnable, KeyListener {
 
     private ScheduledExecutorService executorService;
     private PWMController driveSys = new ArduinoIO();
@@ -50,7 +54,10 @@ public class MrModule extends JFrame implements Runnable {
     }
 
     private void createModules() {
-        modules.add(new WindowModule(windowWidth, windowHeight));
+        WindowModule windowModule = new WindowModule(windowWidth, windowHeight);
+        windowModule.addKeyListener(this);
+
+        modules.add(windowModule);
         modules.add(new ImageManagementModule(windowWidth, windowHeight, control.getTile()));
         modules.add(new SpeedControlModule());
         modules.add(new SteeringModule());
@@ -94,4 +101,19 @@ public class MrModule extends JFrame implements Runnable {
         else
             new MrModule(true);
     }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if ((control instanceof TrakSimControl))
+            for (Map.Entry<Integer, Runnable> binding : ((TrakSimControl) control).keyBindings.entrySet())
+                if (e.getKeyCode() == binding.getKey())
+                    binding.getValue().run();
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) { }
+
+    @Override
+    public void keyTyped(KeyEvent e) { }
+
 }
