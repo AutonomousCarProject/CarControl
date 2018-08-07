@@ -32,7 +32,7 @@ public class SpeedControlModule implements Module {
 	private CameraCalibration cameraCalibrator;
 	
 	private List<MovingBlob> currentBlobs;
-	private List<MovingBlob> currentPeds;
+	//private List<MovingBlob> currentPeds;
 	
 	private SizeConstants sizeCons;
 	
@@ -75,9 +75,9 @@ public class SpeedControlModule implements Module {
 	@Override
 	public void update(CarControl control) {
 		List<MovingBlob> blobs = this.pedDetect.getAllBlobs(control.getProcessedImage(), 912);
-		List<MovingBlob> peds = this.pedDetect.detect(control.getProcessedImage(), 912, blobs);
+		//List<MovingBlob> peds = this.pedDetect.detect(control.getProcessedImage(), 912, blobs);
 		this.currentBlobs = blobs;
-		this.currentPeds = peds;
+		//this.currentPeds = peds;
 		
 		onUpdate(control);
 		control.accelerate(true, getNextSpeed());
@@ -196,15 +196,15 @@ public class SpeedControlModule implements Module {
 		//We need all of the if statements to display the colors,
 		//as we need to convert from IPixel colors to Java.awt colors for display reasons
 		
-		for (MovingBlob blob : currentPeds) {
-			if (stopType == 4) {
-				System.out.println("Found a pedestrian: " + blob);
-				System.out.println("Id: " + blob.id);
-				
-				g.setColor(java.awt.Color.MAGENTA);
-				g.drawRect(blob.x, blob.y + 16, blob.width, blob.height);	
-			}
-		}
+		//for (MovingBlob blob : currentPeds) {
+		//	if (stopType == 4) {
+		//		System.out.println("Found a pedestrian: " + blob);
+		//		System.out.println("Id: " + blob.id);
+		//		
+		//		g.setColor(java.awt.Color.MAGENTA);
+		//		g.drawRect(blob.x, blob.y + 16, blob.width, blob.height);	
+		//	}
+		//}
 	}
 	
 //A method to be called every frame. Calculates desired speed and actual speed
@@ -290,8 +290,8 @@ public class SpeedControlModule implements Module {
 			determineStop();
 		}
 		
-		for(MovingBlob blob : currentPeds) {
-			if (determinePedStop(blob)) {
+		//for(MovingBlob blob : currentPeds) {
+		//	if (determinePedStop(blob)) {
 				//stopType = 4;	
 				
 				//cycleStopping = true;
@@ -301,8 +301,8 @@ public class SpeedControlModule implements Module {
 				//determineStop(blob);
 				
 				//blob.seen = true;
-			}
-		}
+			//}
+		//}
 		
 		if (emergencyStop) {
 			stopType = 5;
@@ -393,12 +393,10 @@ public class SpeedControlModule implements Module {
 		//Calculates when the car should start to stop, then reduces its speed.
 		private void determineStop(MovingBlob stoppingBlob, double objectHeight) {
 			if (stopType != 0) {
-				stopsignWaitHandlerFirst();
+				stopsignWaitFirst();
 				
-				//double blobRealSize = getStopReal(stoppingBlob); //Gets real size
-				//double distToBlob = cameraCalibrator.distanceToObj(blobRealSize/cameraCalibrator.relativeWorldScale, closestBlob.width); //Finds distance to closest blob based on real wrold size and pixel size
-				
-				double distToBlob = cameraCalibrator.distanceToObj(cameraCalibrator.testBlobDistance/cameraCalibrator.relativeWorldScale, stoppingBlob.width); //Finds distance to closest blob based on real wrold size and pixel size
+				double blobRealSize = getStopReal(stoppingBlob); //Gets real size
+				double distToBlob = cameraCalibrator.distanceToObj(blobRealSize/cameraCalibrator.relativeWorldScale, stoppingBlob.width); //Finds distance to closest blob based on real wrold size and pixel size
 				
 				System.out.println("frameWait: " + frameWait);
 				System.out.println("stopType: " + stopType);
@@ -511,17 +509,17 @@ public class SpeedControlModule implements Module {
 		return false;
 	}
 	
-	public boolean determinePedStop(MovingBlob ped) {
-		if(ped.width >= Constants.PED_MIN_SIZE &&
-			ped.x >= Constants.PED_MIN_X &&
-			ped.x <= Constants.PED_MAX_X) {
-			
-			//System.out.println("Ped Width "+ped.width+" Ped X "+ped.x+" Ped Y "+ped.y);
-			//System.out.println(ped);
-			return true;
-		}
-		return false;
-	}
+	//public boolean determinePedStop(MovingBlob ped) {
+	//	if(ped.width >= Constants.PED_MIN_SIZE &&
+	//		ped.x >= Constants.PED_MIN_X &&
+	//		ped.x <= Constants.PED_MAX_X) {
+	//		
+	//		//System.out.println("Ped Width "+ped.width+" Ped X "+ped.x+" Ped Y "+ped.y);
+	//		//System.out.println(ped);
+	//		return true;
+	//	}
+	//	return false;
+	//}
 	
 	public List<MovingBlob> getBlobs() {
 		return this.currentBlobs;
