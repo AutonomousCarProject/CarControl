@@ -54,7 +54,8 @@ public class CameraCalibration {
 
 	//Used to set world scale, and width of known objects
 	public CameraCalibration() {
-
+		
+		cameraFocalLength = 140;
 		relativeWorldScale = 8;
 
 		this.pedDetect = new PedestrianDetector();

@@ -80,4 +80,9 @@ public class Constants {
 	SCREEN_WIDTH = 640,
 	SCREEN_FILTERED_WIDTH = 640,
 	SCREEN_HEIGHT = 480;
+	
+	//Car Cons
+	public static final double
+	WHEEL_GEARING = 4,			//Wheel : Driveshaft (4 spins of driveshaft = 1 spin of wheels) 
+	WHEEL_CIRCUMFERENCE = 0.04;	//Circumfrence of wheels in meters
 }
