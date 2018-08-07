@@ -2,28 +2,24 @@ package com.apw.pedestrians;
 
 import com.apw.pedestrians.blobdetect.Blob;
 import com.apw.pedestrians.blobdetect.BlobDetection;
-import com.apw.pedestrians.blobdetect.IBlobDetection;
 import com.apw.pedestrians.blobfilter.BlobFilter;
-import com.apw.pedestrians.blobfilter.IMovingBlobReduction;
-import com.apw.pedestrians.blobtrack.IMovingBlobDetection;
 import com.apw.pedestrians.blobtrack.MovingBlob;
 import com.apw.pedestrians.blobtrack.MovingBlobDetection;
 import com.apw.pedestrians.image.Color;
-import com.apw.pedestrians.image.IPixel;
 import com.apw.pedestrians.image.Pixel;
 
 import java.util.List;
 
 public class PedestrianDetector {
-    private IBlobDetection blobDetection;
-    private IMovingBlobDetection movingBlobDetection;
-    private IMovingBlobReduction blobFilter;
+    private BlobDetection blobDetection;
+    private MovingBlobDetection movingBlobDetection;
+    private BlobFilter blobFilter;
 
     public PedestrianDetector() {
         this(new BlobDetection(), new MovingBlobDetection(), new BlobFilter());
     }
 
-    public PedestrianDetector(IBlobDetection blobDetection, IMovingBlobDetection movingBlobDetection, IMovingBlobReduction blobFilter) {
+    public PedestrianDetector(BlobDetection blobDetection, MovingBlobDetection movingBlobDetection, BlobFilter blobFilter) {
         this.blobDetection = blobDetection;
         this.movingBlobDetection = movingBlobDetection;
         this.blobFilter = blobFilter;
@@ -31,14 +27,14 @@ public class PedestrianDetector {
 
     public List<MovingBlob> getAllBlobs(byte[] colors, int width) {
         int height = colors.length / width;
-        IPixel[][] image = new IPixel[height][width];
+        Pixel[][] image = new Pixel[height][width];
         for (int i = 0; i < colors.length; i++) {
             int row = i / width;
             int col = i % width;
             image[row][col] = getPixel(colors[i]);
         }
 
-        List<Blob> knownBlobs = blobDetection.getBlobs(() -> image);
+        List<Blob> knownBlobs = blobDetection.getBlobs(image);
         return movingBlobDetection.getMovingBlobs(knownBlobs);
     }
 
@@ -50,7 +46,7 @@ public class PedestrianDetector {
         return blobFilter.filterFilteredUnifiedBlobs(matchedUnifiedBlobs);
     }
 
-    public IPixel getPixel(byte b) {
+    public Pixel getPixel(byte b) {
         return new Pixel(Color.values()[b]);
     }
 }

@@ -6,7 +6,7 @@ import com.aparapi.Kernel;
  * The <code>MonochromeRasterKernel</code> subclass describes a {@link com.aparapi.Kernel Kernel}
  * that converts a bayer rgb byte array into a monochromatic bayer byte array.
  */
-public class MonochromeRasterKernel extends Kernel {
+public class Monochrome2RasterKernel extends Kernel {
 
     private int nrows, ncols;
 
@@ -22,7 +22,7 @@ public class MonochromeRasterKernel extends Kernel {
      * @param nrows Number of rows to filter
      * @param ncols Number of columns to filter
      */
-    public MonochromeRasterKernel(byte[] bayer, byte[] mono, int nrows, int ncols, byte tile) {
+    public Monochrome2RasterKernel(byte[] bayer, byte[] mono, int nrows, int ncols, byte tile) {
         this.bayer = bayer;
         this.mono = mono;
         this.nrows = nrows;
@@ -30,7 +30,7 @@ public class MonochromeRasterKernel extends Kernel {
         this.tile = tile;
     }
 
-    public MonochromeRasterKernel() {
+    public Monochrome2RasterKernel() {
     }
 
     /**
@@ -65,6 +65,29 @@ public class MonochromeRasterKernel extends Kernel {
         int row = getGlobalId(0);
         int col = getGlobalId(1);
 
-        mono[row * ncols + col] = (byte) ((((int) bayer[(row * ncols * 2 + col) * 2 + 1]) & 0xFF));
+        int R = (bayer[getPos(col, row, combineTile((byte) 0, tile), ncols, nrows)] & 0xFF);
+        int G = (bayer[getPos(col, row, combineTile((byte) 1, tile), ncols, nrows)] & 0xFF);
+        int B = (bayer[getPos(col, row, combineTile((byte) 3, tile), ncols, nrows)] & 0xFF);
+        //double Y = R *  .299000 + G *  .587000 + B *  .114000;
+
+        double Y = (R + G + B) / 3.0f;
+        mono[row * ncols + col] = (byte) Y;
+    }
+
+    private int getBit(byte tile, int pos) {
+        return (tile >> pos) & 1;
+    }
+
+    private int boolBit(boolean check) {
+        if (check) return 1;
+        return 0;
+    }
+
+    private int getPos(int x, int y, byte tile, int ncols, int nrows) {
+        return (y * ncols * (4 - getBit(tile, 2)) + (2 + getBit(tile, 2)) * x + getBit(tile, 1) * (2 * ncols - (2 * ncols - 1) * getBit(tile, 2)) + getBit(tile, 0)) % ((4 - getBit(tile, 2)) * ncols * nrows);
+    }
+
+    private byte combineTile(byte tile1, byte tile2) {
+        return (byte) (((int) tile1) ^ ((int) tile2));
     }
 }

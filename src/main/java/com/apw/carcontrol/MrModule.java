@@ -1,5 +1,7 @@
 package com.apw.carcontrol;
 
+import com.aparapi.device.Device;
+import com.apw.gpu.GPUImageModule;
 import com.apw.imagemanagement.ImageManagementModule;
 import com.apw.sbcio.PWMController;
 import com.apw.sbcio.fakefirm.ArduinoIO;
@@ -76,6 +78,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         addKeyListener(this);
         setIgnoreRepaint(true);
     }
+
     private void createModules() {
         modules.add(new ImageManagementModule(windowWidth, windowHeight, control.getTile()));
         modules.add(new SpeedControlModule());
@@ -146,10 +149,9 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         try {
             update();
             paint();
-        } catch (RuntimeException e) {
-            Thread t = Thread.currentThread();
-            t.getUncaughtExceptionHandler().uncaughtException(t, e);
-        }
+        }catch(Exception e){
+            e.printStackTrace();
+        } 
     }
 
     public static void main(String[] args) {
