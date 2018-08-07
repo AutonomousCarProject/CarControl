@@ -44,7 +44,6 @@ public class CameraCalibration {
 
 	//Camera information
 	private double cameraFocalLength = 160;	//If used in sim, leave at 35, if testing IRL leave blank and use calibrateCamera
-	private double signWidth;				//The width of a standared stop sign in mm
 
 	private MovingBlob testBlob;
 	private double testBlobWidthHeight;	//the width and height of a square used to calibrate the camera
@@ -123,6 +122,15 @@ public class CameraCalibration {
 	public double distanceToObj(double knownWidth, double objPixelWidth) {
 		//System.out.print("Distance to object = " + (knownWidth * cameraFocalLength) / objPixelWidth);
 		return ( knownWidth * cameraFocalLength) / objPixelWidth;
+	}
+
+	//Calculates the distance to a blob if the real world size is known, finds more accurate dist with height
+	public double distanceToObj(double knownWidth, double objPixelWidth, double objectHeight) {
+		//System.out.print("Distance to object = " + (knownWidth * cameraFocalLength) / objPixelWidth);
+		System.out.println("special stop");
+		double hyp =  ( knownWidth * cameraFocalLength) / objPixelWidth;
+		double a = Math.pow(hyp, 2) - Math.pow(objectHeight, 2);
+		return Math.sqrt(a);
 	}
 
 	//Break Rate Math

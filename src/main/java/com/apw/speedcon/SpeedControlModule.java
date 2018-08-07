@@ -9,6 +9,7 @@ import com.apw.pedestrians.image.Color;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +27,6 @@ public class SpeedControlModule implements Module {
 	
 	private List<MovingBlob> currentBlobs;
 	private List<MovingBlob> currentPeds;
-	private ArrayList<MovingBlob> stopObjects;
 	
 	private SizeConstants sizeCons;
 	
@@ -37,7 +37,6 @@ public class SpeedControlModule implements Module {
 		this.pedDetect = new PedestrianDetector();
 		this.currentBlobs = new ArrayList<>();
 		this.cameraCalibrator = new CameraCalibration();
-		this.stopObjects = new ArrayList<>();
 		this.sizeCons = new SizeConstants();
 	}
 	
@@ -60,7 +59,8 @@ public class SpeedControlModule implements Module {
 		control.addKeyEvent(KeyEvent.VK_UP, () -> control.manualSpeedControl(true, 20));
 		control.addKeyEvent(KeyEvent.VK_DOWN, () -> control.manualSpeedControl(true, 0));
 	}
-	
+
+
 	/**
 	 * A method that is called every frame to call the methods that need to get called every frame
 	 * @param control this is our car controller
@@ -233,7 +233,8 @@ public class SpeedControlModule implements Module {
 				blob.type = "Stop";
 				System.out.println("Found a stopsign: " + "Color: " + blob.color.getColor() + blob);
 				
-				determineStop(blob);
+
+				determineStop(blob, sizeCons.SIGN_INFO.get(blob.type).get(6));
 				
 				blob.seen = true;
 			}
@@ -245,7 +246,7 @@ public class SpeedControlModule implements Module {
 				blob.type = "StopLightWidth";
 				System.out.println("Found a " + blob.color.getColor() + "light: " + "Color: " + blob.color.getColor() + blob);
 				
-				determineStop(blob);
+				determineStop(blob, sizeCons.SIGN_INFO.get(blob.type).get(6));
 				
 				blob.seen = true;
 			}
@@ -257,7 +258,8 @@ public class SpeedControlModule implements Module {
 				blob.type = "StopLightWidth";
 				System.out.println("Found a " + blob.color.getColor() + "light: " + "Color: " + blob.color.getColor() + blob);
 				
-				determineStop(blob);
+				determineStop(blob, sizeCons.SIGN_INFO.get(blob.type).get(6));
+
 				
 				blob.seen = true;
 			}
@@ -383,6 +385,35 @@ public class SpeedControlModule implements Module {
 		}
 	}
 	
+
+		//Calculates when the car should start to stop, then reduces its speed.
+		private void determineStop(MovingBlob stoppingBlob, double objectHeight) {
+			if (stopType != 0) {
+				stopsignWaitHandlerFirst();
+				
+				//double blobRealSize = getStopReal(stoppingBlob); //Gets real size
+				//double distToBlob = cameraCalibrator.distanceToObj(blobRealSize/cameraCalibrator.relativeWorldScale, closestBlob.width); //Finds distance to closest blob based on real wrold size and pixel size
+				
+				double distToBlob = cameraCalibrator.distanceToObj(cameraCalibrator.testBlobDistance/cameraCalibrator.relativeWorldScale, stoppingBlob.width); //Finds distance to closest blob based on real wrold size and pixel size
+				
+				System.out.println("frameWait: " + frameWait);
+				System.out.println("stopType: " + stopType);
+				System.out.println("desiredSpeed: " + desiredSpeed);
+				System.out.println(cameraCalibrator.calcStopRate(getEstimatedSpeed(), cameraCalibrator.getStopTime(distToBlob, getEstimatedSpeed())));
+				
+				if (desiredSpeed < 1) {
+					desiredSpeed = 1;
+				}
+				
+				this.desiredSpeed = desiredSpeed - cameraCalibrator.calcStopRate(getEstimatedSpeed(), cameraCalibrator.getStopTime(distToBlob, getEstimatedSpeed()));
+			
+				if (desiredSpeed < 1) {
+					desiredSpeed = 1;
+				}
+			}
+		}
+
+
 	//Calculates when the car should start to stop, then reduces its speed.
 		private void determineStop() {
 			if (stopType != 0) {
@@ -506,7 +537,8 @@ public class SpeedControlModule implements Module {
 	 */
 	public int detectLight(MovingBlob blob) {
 		int lightColor = 0;
-		if (blob.age >= Constants.BLOB_AGE &&
+		if (blob.color.getColor() == Color.RED &&
+			blob.age >= Constants.BLOB_AGE &&
 			blob.height >= (2) + Constants.BLOB_MIN_HEIGHT &&
 			blob.height <= (2) + Constants.BLOB_MAX_HEIGHT &&
 			blob.width >= Constants.BLOB_MIN_WIDTH &&
@@ -515,7 +547,6 @@ public class SpeedControlModule implements Module {
 			blob.x <= Constants.STOPLIGHT_MAX_X &&
 			blob.y >= Constants.STOPLIGHT_MIN_Y &&
 			blob.y <= Constants.STOPLIGHT_MAX_Y &&
-			blob.color.getColor() == Color.RED &&
 			!blob.seen &&
 			((double) blob.height / (double) blob.width) < 1 + Constants.BLOB_RATIO_DIF &&
 			((double) blob.height / (double) blob.width) > 1 - Constants.BLOB_RATIO_DIF) {
@@ -528,7 +559,8 @@ public class SpeedControlModule implements Module {
 				}
 			}
 		} 
-		else if (blob.age > Constants.BLOB_AGE &&
+		else if (blob.color.getColor() == Color.YELLOW &&
+			blob.age > Constants.BLOB_AGE &&
 			blob.height > Constants.BLOB_MIN_HEIGHT &&
 			blob.height < (1/2) * Constants.BLOB_MAX_HEIGHT &&
 			blob.width > Constants.BLOB_MIN_WIDTH &&
@@ -537,7 +569,6 @@ public class SpeedControlModule implements Module {
 			blob.x < Constants.STOPLIGHT_MAX_X &&
 			blob.y > Constants.STOPLIGHT_MIN_Y &&
 			blob.y < Constants.STOPLIGHT_MAX_Y &&
-			blob.color.getColor() == Color.YELLOW &&
 			!blob.seen &&
 			((double) blob.height / (double) blob.width) < 1 + Constants.BLOB_RATIO_DIF &&
 			((double) blob.height / (double) blob.width) > 1 - Constants.BLOB_RATIO_DIF) {
