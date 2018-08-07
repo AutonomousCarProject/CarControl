@@ -30,6 +30,7 @@ public class GPUImageModule implements Module {
     private RemoveNoiseKernel removeNoiseKernel;
     private DilateKernel dilateKernel;
     private BWToRGBKernel bwToRGBKernel;
+    private RobertsCrossRasterKernel robertsCrossRasterKernel;
 
     public GPUImageModule(int width, int height, byte newtile) {
         this.width = width;
@@ -48,6 +49,7 @@ public class GPUImageModule implements Module {
         removeNoiseKernel = new RemoveNoiseKernel();
         dilateKernel = new DilateKernel();
         bwToRGBKernel = new BWToRGBKernel();
+        robertsCrossRasterKernel = new RobertsCrossRasterKernel();
     }
 
     @Override
@@ -142,13 +144,15 @@ public class GPUImageModule implements Module {
         byte[] output = new byte[width * height];
         int[] rgb = new int[width * height];
         if (blackWhiteRasterVersion == 2) {
-            blackWhiteRaster2Kernel.setValues(pixels, output, height, width, tile);
-            blackWhiteRaster2Kernel.execute(Range.create2D(height, width));
-            output = blackWhiteRaster2Kernel.getMono();
+            ImageManipulator.convertToBlackWhite2Raster(pixels, output, height, width, tile);
+            //blackWhiteRaster2Kernel.setValues(pixels, output, height, width, tile);
+            //blackWhiteRaster2Kernel.execute(Range.create2D(height, width));
+            //output = blackWhiteRaster2Kernel.getMono();
         } else {
-            blackWhiteRasterKernel.setValues(pixels, output, height, width, tile);
-            blackWhiteRasterKernel.execute(Range.create2D(height, width));
-            output = blackWhiteRasterKernel.getMono();
+            //blackWhiteRasterKernel.setValues(pixels, output, height, width, tile);
+            //blackWhiteRasterKernel.execute(Range.create2D(height, width));
+            ImageManipulator.convertToBlackWhiteRaster(pixels, output, height, width, tile);
+            //output = blackWhiteRasterKernel.getMono();
         }
         if (removeNoise) {
             removeNoiseKernel.setValues(output, height, width);
@@ -169,9 +173,15 @@ public class GPUImageModule implements Module {
         byte[] mono = new byte[width * height];
         int[] rgb = new int[width * height];
         int[] output = new int[width * height];
-        ImageManipulator.convertToMonochrome2Raster(pixels, mono, height, width, tile);
-        ImageManipulator.convertMonotoRGB(mono, rgb, mono.length);
-        ImageManipulator.convertToRobertsCrossRaster(rgb, output, height, width);
+        //ImageManipulator.convertToMonochrome2Raster(pixels, mono, height, width, tile);
+        monochrome2RasterKernel.setValues(pixels, mono, height, width, tile);
+        monochrome2RasterKernel.execute(Range.create2D(height, width));
+        //ImageManipulator.convertMonotoRGB(mono, rgb, mono.length);
+        monoToRGBKernel.setValues(mono, rgb, mono.length);
+        monoToRGBKernel.execute(Range.create(mono.length));
+        //ImageManipulator.convertToRobertsCrossRaster(rgb, output, height, width);
+        robertsCrossRasterKernel.setValues(rgb, output, height, width);
+        robertsCrossRasterKernel.execute(Range.create2D(height, width));
         return output;
     }
 
@@ -179,11 +189,17 @@ public class GPUImageModule implements Module {
         byte[] output = new byte[width * height];
         int[] rgb = new int[width * height];
         ImageManipulator.convertToBlackWhiteRaster(pixels, output, height, width, tile);
+        //blackWhiteRasterKernel.setValues(pixels, output, height, width, tile);
+        //blackWhiteRasterKernel.execute(Range.create2D(height, width));
         if (removeNoise) {
-            ImageManipulator.removeNoise(output, height, width);
+            //ImageManipulator.removeNoise(output, height, width);
+            removeNoiseKernel.setValues(output, height, width);
+            removeNoiseKernel.execute(Range.create2D(height, width));
         }
         if (dilate) {
-            ImageManipulator.dilate(output, height, width);
+            //ImageManipulator.dilate(output, height, width);
+            dilateKernel.setValues(output, height, width);
+            dilateKernel.execute(Range.create2D(height, width));
         }
         ImageManipulator.findRoad(output, rgb, height, width);
         return rgb;
