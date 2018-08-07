@@ -498,7 +498,8 @@ public class SpeedControlModule implements Module {
 	 * @return true if the blob is recognized to be a stopsign, otherwise false
 	 */
 	public boolean detectStopSign(MovingBlob blob) {
-		if (blob.age > Constants.BLOB_AGE &&
+		if (blob.color.getColor() == Color.RED &&
+			blob.age > Constants.BLOB_AGE &&
 			blob.height > (3) * Constants.BLOB_MIN_HEIGHT &&
 			blob.height < Constants.BLOB_MAX_HEIGHT &&
 			blob.width > (3) * Constants.BLOB_MIN_WIDTH &&
@@ -507,7 +508,6 @@ public class SpeedControlModule implements Module {
 			blob.x < Constants.STOPSIGN_MAX_X &&
 			blob.y > Constants.STOPSIGN_MIN_Y &&
 			blob.y < Constants.STOPSIGN_MAX_Y &&
-			blob.color.getColor() == Color.RED &&
 			!blob.seen &&
 			(((double) blob.height / (double) blob.width) < 1 + Constants.BLOB_RATIO_DIF &&
 			((double) blob.height / (double) blob.width) > 1 - Constants.BLOB_RATIO_DIF)) {
@@ -592,7 +592,8 @@ public class SpeedControlModule implements Module {
 				}
 			}
 		} 
-		else if (blob.age > Constants.BLOB_AGE &&
+		else if (blob.color.getColor() == Color.GREEN &&
+			blob.age > Constants.BLOB_AGE &&
 			blob.height > Constants.BLOB_MIN_HEIGHT &&
 			blob.height < Constants.BLOB_MAX_HEIGHT &&
 			blob.width > Constants.BLOB_MIN_WIDTH &&
@@ -601,7 +602,6 @@ public class SpeedControlModule implements Module {
 			blob.x < Constants.STOPLIGHT_MAX_X &&
 			blob.y > Constants.STOPLIGHT_MIN_Y &&
 			blob.y < Constants.STOPLIGHT_MAX_Y &&
-			blob.color.getColor() == Color.GREEN &&
 			!blob.seen &&
 			((double) blob.height / (double) blob.width) < 1 + Constants.BLOB_RATIO_DIF &&
 			((double) blob.height / (double) blob.width) > 1 - Constants.BLOB_RATIO_DIF) {
