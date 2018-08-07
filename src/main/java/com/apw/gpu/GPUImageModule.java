@@ -141,17 +141,17 @@ public class GPUImageModule implements Module {
     }
 
     public int[] getBWRGBRaster(byte[] pixels) {
-        byte[] output = new byte[width * height];
+        int[] output = new int[width * height];
         int[] rgb = new int[width * height];
         if (blackWhiteRasterVersion == 2) {
-            ImageManipulator.convertToBlackWhite2Raster(pixels, output, height, width, tile);
+            //ImageManipulator.convertToBlackWhite2Raster(pixels, output, height, width, tile);
             //blackWhiteRaster2Kernel.setValues(pixels, output, height, width, tile);
             //blackWhiteRaster2Kernel.execute(Range.create2D(height, width));
             //output = blackWhiteRaster2Kernel.getMono();
         } else {
             //blackWhiteRasterKernel.setValues(pixels, output, height, width, tile);
             //blackWhiteRasterKernel.execute(Range.create2D(height, width));
-            ImageManipulator.convertToBlackWhiteRaster(pixels, output, height, width, tile);
+            ImageManipulator.convertToBlackWhiteRaster(pixels, rgb, height, width, tile);
             //output = blackWhiteRasterKernel.getMono();
         }
         if (removeNoise) {
@@ -164,9 +164,10 @@ public class GPUImageModule implements Module {
             dilateKernel.execute(Range.create2D(height, width));
             output = dilateKernel.getDilated();
         }
-        bwToRGBKernel.setValues(output, rgb, output.length);
-        bwToRGBKernel.execute(Range.create(output.length));
-        return bwToRGBKernel.getRgb();
+        //bwToRGBKernel.setValues(output, rgb, output.length);
+        //bwToRGBKernel.execute(Range.create(output.length));
+        //return bwToRGBKernel.getRgb();
+        return rgb;
     }
 
     public int[] getRobertsCross(byte[] pixels) {
@@ -186,7 +187,7 @@ public class GPUImageModule implements Module {
     }
 
     public int[] getRoad(byte[] pixels) {
-        byte[] output = new byte[width * height];
+        int[] output = new int[width * height];
         int[] rgb = new int[width * height];
         ImageManipulator.convertToBlackWhiteRaster(pixels, output, height, width, tile);
         //blackWhiteRasterKernel.setValues(pixels, output, height, width, tile);

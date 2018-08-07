@@ -1,5 +1,6 @@
 package com.apw.carcontrol;
 
+import com.aparapi.device.Device;
 import com.apw.gpu.GPUImageModule;
 import com.apw.imagemanagement.ImageManagementModule;
 import com.apw.sbcio.PWMController;
@@ -157,7 +158,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         if(args.length > 0 && args[0].toLowerCase().equals("nosim")) {
             renderWindow = true;
         }
-        new MrModule(false);
+        new MrModule(true);
     }
 
     @Override
