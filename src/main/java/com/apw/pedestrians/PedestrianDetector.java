@@ -2,21 +2,25 @@ package com.apw.pedestrians;
 
 import com.apw.pedestrians.blobdetect.Blob;
 import com.apw.pedestrians.blobdetect.BlobDetection;
+import com.apw.pedestrians.blobdetect.PrimitiveBlobDetection;
 import com.apw.pedestrians.blobfilter.BlobFilter;
 import com.apw.pedestrians.blobtrack.MovingBlob;
 import com.apw.pedestrians.blobtrack.MovingBlobDetection;
 import com.apw.pedestrians.image.Color;
 import com.apw.pedestrians.image.Pixel;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class PedestrianDetector {
+    private static final Pixel[] pixels = Arrays.stream(Color.values()).map(Pixel::new).toArray(Pixel[]::new);
+
     private BlobDetection blobDetection;
     private MovingBlobDetection movingBlobDetection;
     private BlobFilter blobFilter;
 
     public PedestrianDetector() {
-        this(new BlobDetection(), new MovingBlobDetection(), new BlobFilter());
+        this(new PrimitiveBlobDetection(), new MovingBlobDetection(), new BlobFilter());
     }
 
     public PedestrianDetector(BlobDetection blobDetection, MovingBlobDetection movingBlobDetection, BlobFilter blobFilter) {
@@ -31,10 +35,12 @@ public class PedestrianDetector {
         for (int i = 0; i < colors.length; i++) {
             int row = i / width;
             int col = i % width;
-            image[row][col] = getPixel(colors[i]);
+            image[row][col] = pixels[colors[i]];
         }
 
         List<Blob> knownBlobs = blobDetection.getBlobs(image);
+        System.err.println("################################");
+        System.err.println(knownBlobs.size());
         return movingBlobDetection.getMovingBlobs(knownBlobs);
     }
 
