@@ -84,7 +84,7 @@ public class SpeedControlModule implements Module {
 		byte[] limitArray = new byte[Constants.SCREEN_FILTERED_WIDTH * Constants.SCREEN_HEIGHT];
 		ImageManipulator.limitTo(limitArray, control.getProcessedImage(), Constants.SCREEN_FILTERED_WIDTH, Constants.SCREEN_HEIGHT, Constants.SCREEN_FILTERED_WIDTH, Constants.SCREEN_HEIGHT, false);
 		List<MovingBlob> blobs = pedDetect.getAllBlobs(limitArray, Constants.SCREEN_FILTERED_WIDTH);
-		List<MovingBlob> peds = pedDetect.detect(limitArray, Constants.SCREEN_FILTERED_WIDTH);
+//		List<MovingBlob> peds = pedDetect.detect(limitArray, Constants.SCREEN_FILTERED_WIDTH);
 		
 		if(Settings.overlayOn){
 			//Draw our stoplight hitbox in constant designated color
@@ -192,10 +192,10 @@ public class SpeedControlModule implements Module {
 				g.drawRect(i.x + 8, i.y + 40 - 25, i.width, i.height);
 			}
 		}
-		for(MovingBlob i : peds) {
-			g.setColor(java.awt.Color.MAGENTA);
-			g.drawRect(i.x + 8, i.y + 40 - 25, i.width, i.height);
-		}
+//		for(MovingBlob i : peds) {
+//			g.setColor(java.awt.Color.MAGENTA);
+//			g.drawRect(i.x + 8, i.y + 40 - 25, i.width, i.height);
+//		}
 		
 	}
 	

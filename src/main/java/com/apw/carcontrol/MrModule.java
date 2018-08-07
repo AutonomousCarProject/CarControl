@@ -76,7 +76,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         setIgnoreRepaint(true);
     }
     private void createModules() {
-        modules.add(new GPUImageModule(windowWidth, windowHeight, control.getTile()));
+        modules.add(new ImageManagementModule(windowWidth, windowHeight, control.getTile()));
         modules.add(new SpeedControlModule());
         modules.add(new SteeringModule());
         modules.add(new ArduinoModule(driveSys));
