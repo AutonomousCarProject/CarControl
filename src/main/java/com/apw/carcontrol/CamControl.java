@@ -267,5 +267,9 @@ public class CamControl implements CarControl {
     @Override
     public void clearRects() { }
 
-
+	@Override
+	public double getPosition(boolean horizontal) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

@@ -44,8 +44,8 @@ public class PedestrianDetector {
         return movingBlobDetection.getMovingBlobs(knownBlobs);
     }
 
-    public List<MovingBlob> detect(byte[] colors, int width) {
-        final List<MovingBlob> fmovingBlobs = blobFilter.filterMovingBlobs(getAllBlobs(colors, width));
+    public List<MovingBlob> detect(byte[] colors, int width, List<MovingBlob> blobs) {
+        final List<MovingBlob> fmovingBlobs = blobFilter.filterMovingBlobs(blobs);
         final List<MovingBlob> unifiedBlobs = movingBlobDetection.getUnifiedBlobs(fmovingBlobs);
         final List<MovingBlob> funifiedBlobs = blobFilter.filterUnifiedBlobs(unifiedBlobs);
         final List<MovingBlob> matchedUnifiedBlobs = movingBlobDetection.getFilteredUnifiedBlobs(funifiedBlobs);
