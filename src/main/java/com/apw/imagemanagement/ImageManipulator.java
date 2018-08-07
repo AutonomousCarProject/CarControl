@@ -629,8 +629,8 @@ public class ImageManipulator {
 	 *
 	 * @param x
 	 * @param y
-	 * @param tile				0 = X0	1 = 0X	2 = 00	3 = 00
-	 * 								00		00		X0		0X
+	 * @param tile				0 = X0 X0	1 = 0X 0X	2 = 00 00	3 = 00 00	4 = X00	  5 = 0X0	6 = 0X0	  7 = 00X
+	 * 								00 00		00 0X		X0 X0		0X 00		X00		  0X0		0X0		  00X
 	 * @param ncols
 	 * @param nrows
 	 * @return

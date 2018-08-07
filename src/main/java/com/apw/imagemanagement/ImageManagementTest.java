@@ -14,7 +14,7 @@ public class ImageManagementTest {
         long time = System.currentTimeMillis();
         ArduinoIO driveSys = new ArduinoIO();
         int amount = (int)Math.pow(10,1);
-        new TrakSim().SimStep(2);
+        new TrakSim().SimStep(1);
         TrakSimControl simControl = new TrakSimControl(driveSys);
         simControl.updateWindowDims(912,480);
         byte[] p = simControl.readCameraImage();
