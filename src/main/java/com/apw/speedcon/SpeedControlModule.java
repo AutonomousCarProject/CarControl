@@ -373,13 +373,16 @@ public class SpeedControlModule implements Module {
 			stopsignWaitFirst();
 			
 			double blobRealSize = getStopReal(stoppingBlob); //Gets real size
-			distToBlob = cameraCalibrator.distanceToObj(blobRealSize/cameraCalibrator.relativeWorldScale, stoppingBlob.width, sizeCons.SIGN_INFO.get(stoppingBlob.type).get(1)); //Finds distance to closest blob based on real wrold size and pixel size
+			distToBlob = cameraCalibrator.distanceToObj(blobRealSize/cameraCalibrator.relativeWorldScale, stoppingBlob.width, sizeCons.SIGN_INFO.get(stoppingBlob.type).get(6)); //Finds distance to closest blob based on real wrold size and pixel size
 			
 			System.out.println("frameWait: " + frameWait);
 			System.out.println("stopType: " + stopType);
 			System.out.println("desiredSpeed: " + desiredSpeed);
-			System.out.println(getEstimatedSpeed());
-			System.out.println(distToBlob);
+			System.out.println("getEstimatedSpeed: " + getEstimatedSpeed());
+			System.out.println("distToBlob: " + distToBlob);
+			System.out.println("blobRealSize: " + blobRealSize);
+			System.out.println("stoppingBlob.width: " + stoppingBlob.width);
+			System.out.println("sizeCons.SIGN_INFO.get(stoppingBlob.type).get(6): " + sizeCons.SIGN_INFO.get(stoppingBlob.type).get(6));
 			System.out.println("Actual dist: " + Math.sqrt(Math.pow(Math.abs(control.getPosition(true) - (2 * 28.75)), 2) + Math.pow(Math.abs(control.getPosition(false) - (2 * 29.5)), 2)));
 			System.out.println(cameraCalibrator.calcStopRate(getEstimatedSpeed(), cameraCalibrator.getStopTime(distToBlob, getEstimatedSpeed())));
 			
