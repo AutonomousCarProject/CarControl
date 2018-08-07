@@ -24,9 +24,9 @@
 // U 25.4 26.7 6 15 -- southbound painted stop line w/"STOP"
 // U 26.7 29.6 7 15 -- westbound painted stop line w/"STOP"
 
-Y 26.0 26.5 0 0 -- stop sign facing north (southbound traffic)
-Y 26.5 30.0 0 90 -- stop sign facing east (westbound)
-Y 30.0 29.5 0 180 -- stop sign facing south
+//Y 26.0 26.5 0 0 -- stop sign facing north (southbound traffic)
+//Y 26.5 30.0 0 90 -- stop sign facing east (westbound)
+//Y 30.0 29.5 0 180 -- stop sign facing south
 Y 29.5 25.875 0 270 -- stop sign facing west (vert, horz, type or something, rotation)
 
 Y 28.0 28.0 2 0 -- traffic lite
