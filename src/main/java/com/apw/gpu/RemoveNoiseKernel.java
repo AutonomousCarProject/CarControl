@@ -11,12 +11,13 @@ public class RemoveNoiseKernel extends Kernel {
     private int nrows, ncols;
 
     private byte[] pixels, output;
+
     /**
      * Constructs an <code>BlackWhiteRaster2Kernel</code> Aparapi {@link com.aparapi.opencl.OpenCL OpenCL} kernel.
      *
      * @param pixels image to be eroded
-     * @param nrows	number of rows of pixels in the image
-     * @param ncols number of columns of pixels in the image
+     * @param nrows  number of rows of pixels in the image
+     * @param ncols  number of columns of pixels in the image
      */
     public RemoveNoiseKernel(byte[] pixels, int nrows, int ncols) {
         this.pixels = pixels;
@@ -31,8 +32,8 @@ public class RemoveNoiseKernel extends Kernel {
      * Sets all member variables of <code>BlackWhiteRaster2Kernel</code>.
      *
      * @param pixels image to be eroded
-     * @param nrows	number of rows of pixels in the image
-     * @param ncols number of columns of pixels in the image
+     * @param nrows  number of rows of pixels in the image
+     * @param ncols  number of columns of pixels in the image
      */
     public void setValues(byte[] pixels, int nrows, int ncols) {
         this.pixels = pixels;
@@ -55,44 +56,43 @@ public class RemoveNoiseKernel extends Kernel {
     public void run() {
         int row = getGlobalId(0);
         int col = getGlobalId(1);
-        if(pixels[row * ncols + col] == 1) {
+        if (pixels[row * ncols + col] == 1) {
             int whiteNeighbors = 0;
             //top left
-            if((row - 1) > 0 && (col - 1) > 0 && pixels[(row - 1) * ncols + (col - 1)] == 1) {
+            if ((row - 1) > 0 && (col - 1) > 0 && pixels[(row - 1) * ncols + (col - 1)] == 1) {
                 whiteNeighbors++;
             }
             //top
-            if((row - 1) > 0 && pixels[(row - 1) * ncols + (col)] == 1) {
+            if ((row - 1) > 0 && pixels[(row - 1) * ncols + (col)] == 1) {
                 whiteNeighbors++;
             }
             //top right
-            if((row - 1) > 0 && (col + 1) < ncols && pixels[(row - 1) * ncols + (col + 1)] == 1) {
+            if ((row - 1) > 0 && (col + 1) < ncols && pixels[(row - 1) * ncols + (col + 1)] == 1) {
                 whiteNeighbors++;
             }
             //left
-            if((col - 1) > 0 && pixels[(row) * ncols + (col - 1)] == 1) {
+            if ((col - 1) > 0 && pixels[(row) * ncols + (col - 1)] == 1) {
                 whiteNeighbors++;
             }
             //right
-            if((col + 1) < ncols && pixels[(row) * ncols + (col + 1)] == 1) {
+            if ((col + 1) < ncols && pixels[(row) * ncols + (col + 1)] == 1) {
                 whiteNeighbors++;
             }
             //bot left
-            if((row + 1) < nrows && (col - 1) > 0 && pixels[(row + 1) * ncols + (col - 1)] == 1) {
+            if ((row + 1) < nrows && (col - 1) > 0 && pixels[(row + 1) * ncols + (col - 1)] == 1) {
                 whiteNeighbors++;
             }
             //bot
-            if((row + 1) < nrows && pixels[(row + 1) * ncols + (col)] == 1) {
+            if ((row + 1) < nrows && pixels[(row + 1) * ncols + (col)] == 1) {
                 whiteNeighbors++;
             }
             //bot right
-            if((row + 1) < nrows && (col + 1) < ncols && pixels[(row + 1) * ncols + (col + 1)] == 1) {
+            if ((row + 1) < nrows && (col + 1) < ncols && pixels[(row + 1) * ncols + (col + 1)] == 1) {
                 whiteNeighbors++;
             }
-            if(whiteNeighbors > 7) {
+            if (whiteNeighbors > 7) {
                 output[row * ncols + col] = 1;
-            }
-            else {
+            } else {
                 output[row * ncols + col] = 0;
             }
         }

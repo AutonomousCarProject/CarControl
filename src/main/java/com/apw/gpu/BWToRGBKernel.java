@@ -28,7 +28,8 @@ public class BWToRGBKernel extends Kernel {
         this.length = length;
     }
 
-    public BWToRGBKernel() {}
+    public BWToRGBKernel() {
+    }
 
     /**
      * Sets all member variables of <code>BWToRGBKernel</code>.

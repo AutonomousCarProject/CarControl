@@ -47,30 +47,30 @@ public class FindRoadKernel extends Kernel {
         int kcol = getGlobalId(1);
 
         int rightEnd = 640, leftEnd = 0;
-        if (kcol + ncols/2 < ncols) {
-            if(bw[454*ncols + (kcol + ncols/2)] == 1){
-                rightEnd = (kcol + ncols/2);
+        if (kcol + ncols / 2 < ncols) {
+            if (bw[454 * ncols + (kcol + ncols / 2)] == 1) {
+                rightEnd = (kcol + ncols / 2);
             }
         }
 
-        for(int i = ncols/2; i > 0; i--){
-            if(bw[454*ncols + i] == 1){
+        for (int i = ncols / 2; i > 0; i--) {
+            if (bw[454 * ncols + i] == 1) {
                 leftEnd = i;
             }
         }
-        for(int col = 0; col < ncols; col++){
+        for (int col = 0; col < ncols; col++) {
             boolean endFound = false;
 
-            for(int row = nrows-1; row > 0; row--){
-                if(col > 638 || row < 240 || row > 455){
-                    output[row*ncols+col] = 0;
-                } else if(bw[row*ncols+col] == 1){
+            for (int row = nrows - 1; row > 0; row--) {
+                if (col > 638 || row < 240 || row > 455) {
+                    output[row * ncols + col] = 0;
+                } else if (bw[row * ncols + col] == 1) {
                     endFound = true;
-                    output[row*ncols+col] = 0xFFFFFF;
-                }else if(!endFound && col > leftEnd && col < rightEnd){
-                    output[row*ncols + col] = 0xF63FFC;
-                }else{
-                    output[row*ncols + col] = 0x000000;
+                    output[row * ncols + col] = 0xFFFFFF;
+                } else if (!endFound && col > leftEnd && col < rightEnd) {
+                    output[row * ncols + col] = 0xF63FFC;
+                } else {
+                    output[row * ncols + col] = 0x000000;
                 }
             }
         }
