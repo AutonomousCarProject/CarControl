@@ -147,10 +147,9 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         try {
             update();
             paint();
-        } catch (RuntimeException e) {
-            Thread t = Thread.currentThread();
-            t.getUncaughtExceptionHandler().uncaughtException(t, e);
-        }
+        }catch(Exception e){
+            e.printStackTrace();
+        } 
     }
 
     public static void main(String[] args) {

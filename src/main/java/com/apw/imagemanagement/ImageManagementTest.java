@@ -85,6 +85,12 @@ public class ImageManagementTest {
                 System.out.println("ROAD");
                 System.out.println(System.currentTimeMillis()-time);
                 time = System.currentTimeMillis();
+                for(int i=0;i<amount;i++)
+                    m.update(simControl);
+                System.out.println();
+                System.out.println("UPDATE");
+                System.out.println(System.currentTimeMillis()-time);
+                time = System.currentTimeMillis();
             }else{
                 System.out.println();
                 System.out.println("INIT");
@@ -148,6 +154,12 @@ public class ImageManagementTest {
                     m.getRoad(p);
                 System.out.println();
                 System.out.println("ROAD");
+                System.out.println(System.currentTimeMillis()-time);
+                time = System.currentTimeMillis();
+                for(int i=0;i<amount;i++)
+                    m.update(simControl);
+                System.out.println();
+                System.out.println("UPDATE");
                 System.out.println(System.currentTimeMillis()-time);
                 time = System.currentTimeMillis();
             }
@@ -217,6 +229,12 @@ public class ImageManagementTest {
                 System.out.println("ROAD");
                 System.out.println(System.nanoTime()-time);
                 time = System.nanoTime();
+                for(int i=0;i<amount;i++)
+                    m.update(simControl);
+                System.out.println();
+                System.out.println("UPDATE");
+                System.out.println(System.nanoTime()-time);
+                time = System.nanoTime();
             }else{
                 System.out.println();
                 System.out.println("INIT");
@@ -280,6 +298,12 @@ public class ImageManagementTest {
                     m.getRoad(p);
                 System.out.println();
                 System.out.println("ROAD");
+                System.out.println(System.nanoTime()-time);
+                time = System.nanoTime();
+                for(int i=0;i<amount;i++)
+                    m.update(simControl);
+                System.out.println();
+                System.out.println("UPDATE");
                 System.out.println(System.nanoTime()-time);
                 time = System.nanoTime();
             }
