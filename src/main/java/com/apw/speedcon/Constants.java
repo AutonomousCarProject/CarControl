@@ -1,9 +1,11 @@
 package com.apw.speedcon;
 
+import com.apw.apw3.DriverCons;
+
 public class Constants {
   //Arduino settings
   public static final boolean
-	useServos = false,
+	useServos = DriverCons.D_LiveCam&&true,
 	readMessages = false;
   
 	//Default Debug Overlays
