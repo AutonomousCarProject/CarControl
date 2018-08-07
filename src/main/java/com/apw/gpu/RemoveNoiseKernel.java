@@ -10,7 +10,7 @@ public class RemoveNoiseKernel extends Kernel {
 
     private int nrows, ncols;
 
-    private byte[] pixels, output;
+    private int[] pixels, output;
 
     /**
      * Constructs an <code>BlackWhiteRaster2Kernel</code> Aparapi {@link com.aparapi.opencl.OpenCL OpenCL} kernel.
@@ -19,7 +19,7 @@ public class RemoveNoiseKernel extends Kernel {
      * @param nrows  number of rows of pixels in the image
      * @param ncols  number of columns of pixels in the image
      */
-    public RemoveNoiseKernel(byte[] pixels, int nrows, int ncols) {
+    public RemoveNoiseKernel(int[] pixels, int nrows, int ncols) {
         this.pixels = pixels;
         this.nrows = nrows;
         this.ncols = ncols;
@@ -35,11 +35,11 @@ public class RemoveNoiseKernel extends Kernel {
      * @param nrows  number of rows of pixels in the image
      * @param ncols  number of columns of pixels in the image
      */
-    public void setValues(byte[] pixels, int nrows, int ncols) {
+    public void setValues(int[] pixels, int nrows, int ncols) {
         this.pixels = pixels;
         this.nrows = nrows;
         this.ncols = ncols;
-        output = new byte[nrows * ncols];
+        output = new int[nrows * ncols];
     }
 
     /**
@@ -48,7 +48,7 @@ public class RemoveNoiseKernel extends Kernel {
      *
      * @return Monochrome bayer byte array
      */
-    public byte[] getEroded() {
+    public int[] getEroded() {
         return output;
     }
 
@@ -56,43 +56,44 @@ public class RemoveNoiseKernel extends Kernel {
     public void run() {
         int row = getGlobalId(0);
         int col = getGlobalId(1);
-        if (pixels[row * ncols + col] == 1) {
+        if (pixels[row * ncols + col] == 0xFFFFFF) {
             int whiteNeighbors = 0;
             //top left
-            if ((row - 1) > 0 && (col - 1) > 0 && pixels[(row - 1) * ncols + (col - 1)] == 1) {
+            if((row - 1) > 0 && (col - 1) > 0 && pixels[(row - 1) * ncols + (col - 1)] == 0xFFFFFF) {
                 whiteNeighbors++;
             }
             //top
-            if ((row - 1) > 0 && pixels[(row - 1) * ncols + (col)] == 1) {
+            if((row - 1) > 0 && pixels[(row - 1) * ncols + (col)] == 0xFFFFFF) {
                 whiteNeighbors++;
             }
             //top right
-            if ((row - 1) > 0 && (col + 1) < ncols && pixels[(row - 1) * ncols + (col + 1)] == 1) {
+            if((row - 1) > 0 && (col + 1) < ncols && pixels[(row - 1) * ncols + (col + 1)] == 0xFFFFFF) {
                 whiteNeighbors++;
             }
             //left
-            if ((col - 1) > 0 && pixels[(row) * ncols + (col - 1)] == 1) {
+            if((col - 1) > 0 && pixels[(row) * ncols + (col - 1)] == 0xFFFFFF) {
                 whiteNeighbors++;
             }
             //right
-            if ((col + 1) < ncols && pixels[(row) * ncols + (col + 1)] == 1) {
+            if((col + 1) < ncols && pixels[(row) * ncols + (col + 1)] == 0xFFFFFF) {
                 whiteNeighbors++;
             }
             //bot left
-            if ((row + 1) < nrows && (col - 1) > 0 && pixels[(row + 1) * ncols + (col - 1)] == 1) {
+            if((row + 1) < nrows && (col - 1) > 0 && pixels[(row + 1) * ncols + (col - 1)] == 0xFFFFFF) {
                 whiteNeighbors++;
             }
             //bot
-            if ((row + 1) < nrows && pixels[(row + 1) * ncols + (col)] == 1) {
+            if((row + 1) < nrows && pixels[(row + 1) * ncols + (col)] == 0xFFFFFF) {
                 whiteNeighbors++;
             }
             //bot right
-            if ((row + 1) < nrows && (col + 1) < ncols && pixels[(row + 1) * ncols + (col + 1)] == 1) {
+            if((row + 1) < nrows && (col + 1) < ncols && pixels[(row + 1) * ncols + (col + 1)] == 0xFFFFFF) {
                 whiteNeighbors++;
             }
-            if (whiteNeighbors > 7) {
-                output[row * ncols + col] = 1;
-            } else {
+            if(whiteNeighbors > 7) {
+                output[row * ncols + col] = 0xFFFFFF;
+            }
+            else {
                 output[row * ncols + col] = 0;
             }
         }
