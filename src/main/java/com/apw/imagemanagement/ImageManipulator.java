@@ -118,12 +118,8 @@ public class ImageManipulator {
     				pix += (bayer[getPos(c-borderWidth + i,r,combineTile((byte)1,tile),ncols,nrows)]&0xFF);
     				pix += (bayer[getPos(c-borderWidth + i,r,combineTile((byte)3,tile),ncols,nrows)]&0xFF);
             	}
-				if(!(c >= 640 || r < 240 || r > 455)) {
-					if (pix * 640 > luminanceMultiplier * averageLuminance * pixelsAveraged) {
-						mono[r * ncols + c] = 0xFFFFFF;
-					} else {
-						mono[r * ncols + c] = 0;
-					}
+				if (pix * frameWidth > luminanceMultiplier * averageLuminance * pixelsAveraged) {
+					mono[r * ncols + c] = 0xFFFFFF;
 				} else {
 					mono[r * ncols + c] = 0;
 				}
