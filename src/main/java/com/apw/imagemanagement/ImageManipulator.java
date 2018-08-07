@@ -130,6 +130,84 @@ public class ImageManipulator {
 			}
 		}
 	}
+	public static void convertToFirstEdgeBlackWhiteRaster(byte[] bayer, int[] mono, int nrows, int ncols, byte tile){
+		int width = 640;
+		int luminUp;
+		int lumin = PixelInterpreter.luminRow(bayer,nrows,ncols,tile,nrows/2-1,0);
+		int luminDown = PixelInterpreter.luminRow(bayer,nrows,ncols,tile,nrows/2,0);
+		int a ;
+		int b1;
+		int b2;
+		int b3;
+		int b4;
+		int b5;
+		int b6;
+		int b7;
+		int b8;
+		boolean check;
+		int min = 1;		//Set to 1 for TrakSim
+		for (int r = nrows/2; r < nrows-1; r++) {
+			luminUp = lumin;
+			lumin = luminDown;
+			luminDown = PixelInterpreter.luminRow(bayer,nrows,ncols,tile,nrows/2,0);
+			a = PixelInterpreter.convertToBlackWhiteCore(bayer,nrows,ncols,tile,r,width/2-2,lumin);
+			b1 = PixelInterpreter.convertToBlackWhiteCore(bayer,nrows,ncols,tile,r-1,width/2-2,luminUp);
+			b2 = PixelInterpreter.convertToBlackWhiteCore(bayer,nrows,ncols,tile,r-1,width/2-2+1,luminUp);
+			b3 = PixelInterpreter.convertToBlackWhiteCore(bayer,nrows,ncols,tile,r,width/2-2+1,lumin);
+			b4 = PixelInterpreter.convertToBlackWhiteCore(bayer,nrows,ncols,tile,r+1,width/2-2+1,luminDown);
+			b5 = PixelInterpreter.convertToBlackWhiteCore(bayer,nrows,ncols,tile,r+1,width/2-2,luminDown);
+			check = true;
+			for(int i = 0; i<width/2;i++){
+				b8 = b1;
+				b7 = a;
+				b6 = b5;
+				b5 = b4;
+				a = b3;
+				b1 = b2;
+				b2 = PixelInterpreter.convertToBlackWhiteCore(bayer,nrows,ncols,tile,r-1,width/2+i,luminUp);
+				b3 = PixelInterpreter.convertToBlackWhiteCore(bayer,nrows,ncols,tile,r,width/2+i,luminUp);
+				b4 = PixelInterpreter.convertToBlackWhiteCore(bayer,nrows,ncols,tile,r+1,width/2+i,luminUp);
+				if(a+b1+b2+b3+b4+b5+b6+b7+b8>min){
+					mono[r*ncols+width/2-1+i] = 0xFFFFFF;
+					//System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+					check = false;
+					break;
+				}
+			}
+			if(check){
+				mono[r*ncols+width-1]=0xFFFFFF;
+			}
+			a = PixelInterpreter.convertToBlackWhiteCore(bayer,nrows,ncols,tile,r,width/2,lumin);
+			b1 = PixelInterpreter.convertToBlackWhiteCore(bayer,nrows,ncols,tile,r-1,width/2,luminUp);
+			b2 = PixelInterpreter.convertToBlackWhiteCore(bayer,nrows,ncols,tile,r-1,width/2-1,luminUp);
+			b3 = PixelInterpreter.convertToBlackWhiteCore(bayer,nrows,ncols,tile,r,width/2-1,lumin);
+			b4 = PixelInterpreter.convertToBlackWhiteCore(bayer,nrows,ncols,tile,r+1,width/2-1,luminDown);
+			b5 = PixelInterpreter.convertToBlackWhiteCore(bayer,nrows,ncols,tile,r+1,width/2,luminDown);
+			check = true;
+			for(int i = 0; i<width/2;i++){
+				b8 = b1;
+				b7 = a;
+				b6 = b5;
+				b5 = b4;
+				a = b3;
+				b1 = b2;
+				b2 = PixelInterpreter.convertToBlackWhiteCore(bayer,nrows,ncols,tile,r-1,width/2-i,luminUp);
+				b3 = PixelInterpreter.convertToBlackWhiteCore(bayer,nrows,ncols,tile,r,width/2-i,luminUp);
+				b4 = PixelInterpreter.convertToBlackWhiteCore(bayer,nrows,ncols,tile,r+1,width/2-i,luminUp);
+				if(a+b1+b2+b3+b4+b5+b6+b7+b8>min){
+					mono[r*ncols+width/2-1-i] = 0xFFFFFF;
+					check = false;
+					//System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+					break;
+				}
+			}
+			if(check){
+				mono[r*ncols]=0xFFFFFF;
+			}
+		}
+	}
+
+
 
 	public static void convertToBlackWhite2Raster(byte[] bayer, byte[] mono, int nrows, int ncols, byte tile) {
 		for (int r = nrows/2; r < nrows; r++) {

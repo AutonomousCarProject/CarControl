@@ -16,7 +16,7 @@ import java.awt.event.KeyEvent;
 public class ImageManagementModule implements Module {
 
 	//adjustable variables
-    private int viewType = 1;
+    private int viewType = 7;
     private int blackWhiteRasterVersion = 1;
     private double luminanceMultiplier = 1.6;
 
@@ -113,6 +113,11 @@ public class ImageManagementModule implements Module {
         if(dilate) {
             output = ImageManipulator.dilate(output, height, width);
         }
+        return output;
+    }
+    public int[] getEdgeBlackWhiteRaster(byte[] pixels){
+        int[] output = new int[width*height];
+        ImageManipulator.convertToFirstEdgeBlackWhiteRaster(pixels,output,height,width,tile);
         return output;
     }
 
@@ -252,7 +257,7 @@ public class ImageManagementModule implements Module {
     }
     
     public void changeFilter() {
-    	viewType = (viewType) % 6 + 1; 
+    	viewType = (viewType) % 7 + 1;
     	System.out.println(viewType);
     }
 
@@ -278,12 +283,15 @@ public class ImageManagementModule implements Module {
             case 6:
             	imagePixels = getRobertsCross(control.getRecentCameraImage());
             	break;
+            case 7:
+                imagePixels = getEdgeBlackWhiteRaster(control.getRecentCameraImage());
+                break;
             default:
                 throw new IllegalStateException("No image management viewType: " + viewType);
         }
 
         control.setRenderedImage(imagePixels);
-        control.setRGBImage(getBlackWhiteRaster(control.getRecentCameraImage()));
+        control.setRGBImage(getEdgeBlackWhiteRaster(control.getRecentCameraImage()));
         control.setProcessedImage(getSimpleColorRaster(control.getRecentCameraImage()));
     }
 
