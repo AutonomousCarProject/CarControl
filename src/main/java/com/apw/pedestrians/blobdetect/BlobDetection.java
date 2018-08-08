@@ -63,7 +63,7 @@ public class BlobDetection {
                 }
             }
         }
-     
+
         for (int row = 0; row < pixels.length - 1; row++) {
             for (int col = 0; col < pixels[0].length; col++) {
                 Pixel pix1 = pixels[row][col];

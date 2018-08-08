@@ -4,8 +4,6 @@ import com.apw.imagemanagement.ImageManagementModule;
 import com.apw.sbcio.PWMController;
 import com.apw.sbcio.fakefirm.ArduinoIO;
 import com.apw.sbcio.fakefirm.ArduinoModule;
-import com.apw.speedcon.Constants;
-import com.apw.speedcon.Settings;
 import com.apw.speedcon.SpeedControlModule;
 
 import com.apw.steering.SteeringModule;

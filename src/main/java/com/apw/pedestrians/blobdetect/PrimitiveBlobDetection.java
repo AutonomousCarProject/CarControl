@@ -2,8 +2,6 @@ package com.apw.pedestrians.blobdetect;
 
 import com.aparapi.Kernel;
 import com.aparapi.Range;
-import com.aparapi.device.Device;
-import com.aparapi.device.OpenCLDevice;
 import com.apw.pedestrians.image.Color;
 import com.apw.pedestrians.image.Pixel;
 
@@ -21,6 +19,8 @@ public class PrimitiveBlobDetection extends BlobDetection {
     private int[] blobs;
     private Deque<Blob> unusedBlobs = new ArrayDeque<>();
 
+    private List<Blob> blobList = new LinkedList<>();
+
     Kernel rightCheckKernel = null;
 
     @Override
@@ -28,6 +28,9 @@ public class PrimitiveBlobDetection extends BlobDetection {
         if (pixels.length == 0) {
             return null;
         }
+
+        unusedBlobs.addAll(blobList);
+        blobList.clear();
 
         final int width = pixels[0].length;
         final int height = pixels.length;
@@ -63,7 +66,7 @@ public class PrimitiveBlobDetection extends BlobDetection {
                         int blob1 = ((row * width) + col) * BLOB_NUM_INT_FIELDS;
                         int blob2 = ((row * width) + col + 1) * BLOB_NUM_INT_FIELDS;
 
-                        if (color1 != color2) {
+                        if (color1 == color2) {
                             //either adds to the blob if there is an existing one or creates a new one if there isn't
                             if (blobs[blob1 + BLOB_TYPE] == BLOB_TYPE_NULL) {
                                 blobs[blob1 + BLOB_TYPE] = BLOB_TYPE_VALUE;
@@ -164,8 +167,6 @@ public class PrimitiveBlobDetection extends BlobDetection {
         }
         return blobs;
         */
-
-        List<Blob> blobList = new LinkedList<>();
 
         for (int i = 0; i < blobs.length; i += BLOB_NUM_INT_FIELDS) {
             if (blobs[i + BLOB_TYPE] == BLOB_TYPE_VALUE) {

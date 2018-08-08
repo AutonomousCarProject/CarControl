@@ -20,6 +20,7 @@ public class PedestrianDetector {
     private BlobFilter blobFilter;
 
     public PedestrianDetector() {
+//        this(new BlobDetection(), new MovingBlobDetection(), new BlobFilter());
         this(new PrimitiveBlobDetection(), new MovingBlobDetection(), new BlobFilter());
     }
 
@@ -39,8 +40,6 @@ public class PedestrianDetector {
         }
 
         List<Blob> knownBlobs = blobDetection.getBlobs(image);
-        System.err.println("################################");
-        System.err.println(knownBlobs.size());
         return movingBlobDetection.getMovingBlobs(knownBlobs);
     }
 
@@ -50,9 +49,5 @@ public class PedestrianDetector {
         final List<MovingBlob> funifiedBlobs = blobFilter.filterUnifiedBlobs(unifiedBlobs);
         final List<MovingBlob> matchedUnifiedBlobs = movingBlobDetection.getFilteredUnifiedBlobs(funifiedBlobs);
         return blobFilter.filterFilteredUnifiedBlobs(matchedUnifiedBlobs);
-    }
-
-    public Pixel getPixel(byte b) {
-        return new Pixel(Color.values()[b]);
     }
 }
