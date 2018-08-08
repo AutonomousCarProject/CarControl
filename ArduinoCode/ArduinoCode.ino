@@ -99,6 +99,13 @@ void loop() {
     rotationCount++;
     sinceRpm = 0;
   }
+  
+  //Full second cycle
+  if (micros()-secCounter >= 1000000){
+    if (!timedout) addMessage(112, (rotationCount & 0xFF), (rotationCount >> 8));
+    rotationCount = 0;
+    secCounter = micros();
+  }
 
   //Read rise of signal
   if (sinceNoKill == 0 && digitalRead(killPin) == HIGH){
@@ -167,13 +174,6 @@ void loop() {
       addMessage(100, 4, 3);
     }
     timedout = false;
-  }
-
-  //Full second cycle
-  if (micros()-secCounter >= 1000000){
-    if (!timedout) addMessage(151, (rotationCount & 0xFF), (rotationCount >> 8));
-    rotationCount = 0;
-    secCounter = micros();
   }
   
   //Start next cycle every .02 seconds
