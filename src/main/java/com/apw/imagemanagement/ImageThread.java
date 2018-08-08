@@ -6,6 +6,7 @@ public class ImageThread implements Runnable {
 	private ImageManagementModule owner;
 	private boolean newData = false;
 	private Thread imageThread;
+	private int debugCount = 0;
 	
 	public ImageThread(ImageManagementModule newowner, int newtype) {
 		owner = newowner;
@@ -15,14 +16,19 @@ public class ImageThread implements Runnable {
 	@Override
 	public void run() {
 		while(true) {
-			System.out.println("running");
+			try {
+				Thread.sleep(0);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 			if(newData && imageType == 1) {
 				owner.BWPixels = owner.getBlackWhiteRaster();
-				System.out.println("test");
+				debugCount++;
 				newData = false;
 			}
 			else if(newData && imageType == 2) {
 				owner.simplePixels = owner.getSimpleColorRaster();
+				debugCount++;
 				newData = false;
 			}
 		}
