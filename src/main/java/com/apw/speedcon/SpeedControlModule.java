@@ -75,7 +75,7 @@ public class SpeedControlModule implements Module {
 	 */
 	@Override
 	public void update(CarControl control) {
-		List<MovingBlob> blobs = this.pedDetect.getAllBlobs(control.getProcessedImage(), 912);
+		List<MovingBlob> blobs = this.pedDetect.getAllBlobs(control.getProcessedImage(), 640);
 		//List<MovingBlob> peds = this.pedDetect.detect(control.getProcessedImage(), 912, blobs);
 		this.currentBlobs = blobs;
 		//this.currentPeds = peds;
