@@ -1,5 +1,6 @@
 package com.apw.speedcon;
 
+import com.apw.carcontrol.CamControl;
 import com.apw.carcontrol.CarControl;
 import com.apw.carcontrol.Module;
 import com.apw.imagemanagement.ImageManipulator;
@@ -79,10 +80,18 @@ public class SpeedControlModule implements Module {
 	 */
 	@Override
 	public void update(CarControl control) {
-		List<MovingBlob> blobs = this.pedDetect.getAllBlobs(control.getProcessedImage(), 640);
-		//List<MovingBlob> peds = this.pedDetect.detect(control.getProcessedImage(), 912, blobs);
-		this.currentBlobs = blobs;
-		//this.currentPeds = peds;
+		if (control instanceof CamControl) {
+			List<MovingBlob> blobs = this.pedDetect.getAllBlobs(control.getProcessedImage(), control.getImageWidth());
+			//List<MovingBlob> peds = this.pedDetect.detect(control.getProcessedImage(), control.getImageWidth(), blobs);
+			this.currentBlobs = blobs;
+			//this.currentPeds = peds;
+		}
+		else {
+			List<MovingBlob> blobs = this.pedDetect.getAllBlobs(control.getProcessedImage(), Constants.SCREEN_WIDTH);
+			//List<MovingBlob> peds = this.pedDetect.detect(control.getProcessedImage(), Constants.SCREEN_WIDTH, blobs);
+			this.currentBlobs = blobs;
+			//this.currentPeds = peds;
+		}
 		
 		onUpdate(control);
 		control.accelerate(true, (int)Math.min(Constants.MAX_SPEED, getNextSpeed()));
@@ -96,8 +105,20 @@ public class SpeedControlModule implements Module {
 		}
 		
 		
-		byte[] limitArray = new byte[Constants.SCREEN_FILTERED_WIDTH * Constants.SCREEN_HEIGHT];
-		ImageManipulator.limitTo(limitArray, control.getProcessedImage(), Constants.SCREEN_FILTERED_WIDTH, Constants.SCREEN_HEIGHT, Constants.SCREEN_FILTERED_WIDTH, Constants.SCREEN_HEIGHT, false);
+		double widthMultiplier;
+		double heightMultiplier;
+		if (control instanceof CamControl) {
+			widthMultiplier = (1.0 * control.getWindowWidth() / control.getImageWidth());
+			heightMultiplier = (1.0 * control.getWindowHeight() / control.getImageHeight());	
+		}
+		else {
+			widthMultiplier = (1.0 * control.getWindowWidth() / Constants.SCREEN_WIDTH);
+			heightMultiplier = (1.0 * control.getWindowHeight() / Constants.SCREEN_HEIGHT);
+		}
+		
+		
+		byte[] limitArray = new byte[Constants.SCREEN_WIDTH * Constants.SCREEN_HEIGHT];
+		ImageManipulator.limitTo(limitArray, control.getProcessedImage(), Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT, false);
 		
 		if(Settings.overlayOn){
 			//Draw our stoplight hitbox in constant designated color
@@ -187,7 +208,7 @@ public class SpeedControlModule implements Module {
 					}
 					
 					//Draw our current blob on screen
-					g.drawRect(blob.x, blob.y + 16, blob.width, blob.height);
+					g.drawRect((int) (blob.x * widthMultiplier), (int) ((blob.y + 16) * heightMultiplier), blob.width, blob.height);
 				}
 			}
 		}

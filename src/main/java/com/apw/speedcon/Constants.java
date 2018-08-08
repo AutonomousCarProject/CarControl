@@ -3,13 +3,13 @@ package com.apw.speedcon;
 public class Constants {
   //Arduino settings
   public static final boolean
-	useServos = true,
+	useServos = false,
 	readMessages = false;
   
 	//Default Debug Overlays
 	public static final boolean
-	DEFAULT_OVERLAY = true,		//Sets the default state as to the display of blob detection boxes
-	DEFAULT_BLOBS = true,			//Sets the default state as to the display of blob boundaries
+	DEFAULT_OVERLAY = false,		//Sets the default state as to the display of blob detection boxes
+	DEFAULT_BLOBS = false,			//Sets the default state as to the display of blob boundaries
 	DEFAULT_WRITE_BLOBS_TO_CONSOLE = false,	//Sets the default state as to the printing of all blob information
 	DEFAULT_WRITE_SPEED_TO_CONSOLE = false;	//Sets the default state as to the printing of the current speed
 	public static final int
@@ -81,7 +81,7 @@ public class Constants {
 	
 	//Other
 	public static final int
-	SCREEN_WIDTH = 640,
+	SCREEN_WIDTH = 912,
 	SCREEN_FILTERED_WIDTH = 640,
 	SCREEN_HEIGHT = 480;
 	
