@@ -59,8 +59,8 @@ public class ImageManagementModule implements Module {
         //Tells ImageManipulator what the Black/White threshold is
         ImageManipulator.setLuminanceMultiplier(luminanceMultiplier);
         
-        BWThread.run();
-        simpleThread.run();
+        BWThread.start();
+        simpleThread.start();
     }
 
     /**
