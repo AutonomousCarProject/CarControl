@@ -87,6 +87,6 @@ public class Constants {
 	
 	//Car Cons
 	public static final double
-	WHEEL_GEARING = 4,			//Wheel : Driveshaft (4 spins of driveshaft = 1 spin of wheels) 
+	WHEEL_GEARING = 3,			//Driveshaft : Wheel (3 spins of driveshaft = 1 spin of wheels) 
 	WHEEL_CIRCUMFERENCE = 0.04;	//Circumfrence of wheels in meters
 }
