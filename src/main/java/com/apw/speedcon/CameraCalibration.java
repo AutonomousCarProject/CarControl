@@ -40,7 +40,6 @@ public class CameraCalibration {
 	 */
 
 
-	private PedestrianDetector pedDetect;
 
 	//Camera information
 	private double cameraFocalLength;	//If used in sim, leave at 35, if testing IRL leave blank and use calibrateCamera
@@ -58,7 +57,8 @@ public class CameraCalibration {
 		cameraFocalLength = 35;
 		relativeWorldScale = 8;
 
-		this.pedDetect = new PedestrianDetector();
+		testBlobWidthHeight = 0; //Set this to the width of the blob you will be testing for calibration
+		testBlobDistance = 0;    //Set this to the distance the blob is away from the camera lens
 
 		
 		//Tries to find a file containing the focal length
@@ -87,10 +87,7 @@ public class CameraCalibration {
 		//Searches for a blue blob
 		for (MovingBlob i : currentBlobs) {
 			if (i.color.getColor() == Color.BLUE) {
-				//testBlobDistance = Math.sqrt(Math.pow(Math.abs(control.getPosition(true) - (2 * 29.5)), 2) + Math.pow(Math.abs(control.getPosition(false) - (2 * 30)), 2));
-				//testBlobWidthHeight = ((double) 29 / (double) 44); //Find this in the txt file, image index
-				testBlobDistance = 28.0;
-				testBlobWidthHeight = 9.0;
+
 				testBlob = i;
 				findFocalLength(testBlob);
 				break;
