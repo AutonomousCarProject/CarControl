@@ -10,6 +10,7 @@ public class BottomCheckKernel extends Kernel {
     int[] colors, blobs;
 
     int width, height;
+    int offset;
 
     public void setValues(int[] colors, int[] blobs, int width, int height) {
         this.colors = colors;
@@ -18,17 +19,13 @@ public class BottomCheckKernel extends Kernel {
         this.height = height;
     }
 
+    public void setOffset(int offset) {
+        this.offset = offset;
+    }
+
     @Override
     public void run() {
-//        int mode = getGlobalId(1);
-
-  //      int col = getGlobalId(0) * 2 + mode;
-
-        int col = getGlobalId(0) * 2;
-
-        if(col >= width) {
-            col = (col - width) + 1;
-        }
+        int col = getGlobalId(0) * 2 + offset;
 
         if (col < width) {
             for (int row = 0; row < height - 1; row++) {
@@ -38,14 +35,20 @@ public class BottomCheckKernel extends Kernel {
                 int blob1 = ((row * width) + col) * BLOB_NUM_INT_FIELDS;
                 int blob2 = (((row + 1) * width) + col) * BLOB_NUM_INT_FIELDS;
 
+                // TODO: find cause of infinite loop
+                
+                int iterationCount = 0;
                 int tlBlob1 = blob1;
-                while (blobs[tlBlob1 + BLOB_TYPE] == BLOB_TYPE_REFERENCE) {
+                while (blobs[tlBlob1 + BLOB_TYPE] == BLOB_TYPE_REFERENCE && iterationCount < 20) {
                     tlBlob1 = blobs[tlBlob1 + BLOB_REFERENCE_INDEX];
+                    iterationCount++;
                 }
 
                 int tlBlob2 = blob2;
-                while (blobs[tlBlob2 + BLOB_TYPE] == BLOB_TYPE_REFERENCE) {
+                iterationCount = 0;
+                while (blobs[tlBlob2 + BLOB_TYPE] == BLOB_TYPE_REFERENCE && iterationCount < 20) {
                     tlBlob2 = blobs[tlBlob2 + BLOB_REFERENCE_INDEX];
+                    iterationCount++;
                 }
 
                 int blob1Width = blobs[tlBlob1 + BLOB_RIGHT] - blobs[tlBlob1 + BLOB_LEFT] + 1;

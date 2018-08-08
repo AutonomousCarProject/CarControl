@@ -54,12 +54,15 @@ public class PrimitiveBlobDetection extends BlobDetection {
 
         //noinspection SuspiciousNameCombination
         Range rowRange = Range.create(height);
-        Range colRange = Range.create(width);
+        Range colRange = Range.create(width / 2);
 
         rightCheckKernel.setValues(colors, blobs, width);
         rightCheckKernel.execute(rowRange);
 
         bottomCheckKernel.setValues(colors, blobs, width, height);
+        bottomCheckKernel.setOffset(0);
+        bottomCheckKernel.execute(colRange);
+        bottomCheckKernel.setOffset(1);
         bottomCheckKernel.execute(colRange);
 
         for (int i = 0; i < blobs.length; i += BLOB_NUM_INT_FIELDS) {
