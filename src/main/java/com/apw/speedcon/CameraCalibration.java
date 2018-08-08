@@ -86,9 +86,11 @@ public class CameraCalibration {
 	public void calibrateCamera(CarControl control, List<MovingBlob> currentBlobs) {
 		//Searches for a blue blob
 		for (MovingBlob i : currentBlobs) {
-			if (i.color.getColor() == Color.RED) {
-				testBlobDistance = Math.sqrt(Math.pow(Math.abs(control.getPosition(true) - (2 * 29.5)), 2) + Math.pow(Math.abs(control.getPosition(false) - (2 * 30)), 2));
-				testBlobWidthHeight = ((double) 29 / (double) 44); //Find this in the txt file, image index
+			if (i.color.getColor() == Color.BLUE) {
+				//testBlobDistance = Math.sqrt(Math.pow(Math.abs(control.getPosition(true) - (2 * 29.5)), 2) + Math.pow(Math.abs(control.getPosition(false) - (2 * 30)), 2));
+				//testBlobWidthHeight = ((double) 29 / (double) 44); //Find this in the txt file, image index
+				testBlobDistance = 28.0;
+				testBlobWidthHeight = 9.0;
 				testBlob = i;
 				findFocalLength(testBlob);
 				break;
@@ -96,7 +98,9 @@ public class CameraCalibration {
 		}
 
 		//Used to test distance to found test blob, should be same as testBlobDistance
+		
 		distanceToObj(testBlobWidthHeight, testBlob.width);
+		System.out.println(distanceToObj(testBlobWidthHeight, testBlob.width));
 
 
 		//Saves the camera calibration data, only needed once or when changing cameras

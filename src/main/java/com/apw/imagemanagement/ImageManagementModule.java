@@ -295,7 +295,7 @@ public class ImageManagementModule implements Module {
             control.setProcessedImage(getSimpleColorRaster(control.getRecentCameraImage()));
         }
         else {
-        	control.setRGBImage(imagePixels);
+        	//control.setProcessedImage(imagePixels);
         }
     }
 

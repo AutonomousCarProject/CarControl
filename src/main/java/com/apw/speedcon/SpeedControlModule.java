@@ -79,13 +79,13 @@ public class SpeedControlModule implements Module {
 	 */
 	@Override
 	public void update(CarControl control) {
-		List<MovingBlob> blobs = this.pedDetect.getAllBlobs(control.getProcessedImage(), 912);
+		List<MovingBlob> blobs = this.pedDetect.getAllBlobs(control.getProcessedImage(), 640);
 		//List<MovingBlob> peds = this.pedDetect.detect(control.getProcessedImage(), 912, blobs);
 		this.currentBlobs = blobs;
 		//this.currentPeds = peds;
 		
 		onUpdate(control);
-		control.accelerate(true, getNextSpeed());
+		control.accelerate(true, (int)Math.min(Constants.MAX_SPEED, getNextSpeed()));
 		System.out.println("getNextSpeed(): " + getNextSpeed());
 	}
 	
@@ -380,16 +380,16 @@ public class SpeedControlModule implements Module {
 			//change this to initDistToBlob when adding rotations
 			//stoppingRotations = driveSys.totalRotations;
 			
-			System.out.println("frameWait: " + frameWait);
-			System.out.println("stopType: " + stopType);
-			System.out.println("desiredSpeed: " + desiredSpeed);
-			System.out.println("getEstimatedSpeed: " + getEstimatedSpeed());
-			System.out.println("distToBlob: " + distToBlob);
-			System.out.println("blobRealSize: " + blobRealSize);
-			System.out.println("stoppingBlob.width: " + stoppingBlob.width);
-			System.out.println("sizeCons.SIGN_INFO.get(stoppingBlob.type).get(6): " + sizeCons.SIGN_INFO.get(stoppingBlob.type).get(6));
-			System.out.println("Actual dist: " + Math.sqrt(Math.pow(Math.abs(control.getPosition(true) - (2 * 28.75)), 2) + Math.pow(Math.abs(control.getPosition(false) - (2 * 29.5)), 2)));
-			System.out.println(cameraCalibrator.calcStopRate(getEstimatedSpeed(), cameraCalibrator.getStopTime(distToBlob, getEstimatedSpeed())));
+			//System.out.println("frameWait: " + frameWait);
+			//System.out.println("stopType: " + stopType);
+			//System.out.println("desiredSpeed: " + desiredSpeed);
+			//System.out.println("getEstimatedSpeed: " + getEstimatedSpeed());
+			//System.out.println("distToBlob: " + distToBlob);
+			//System.out.println("blobRealSize: " + blobRealSize);
+			//System.out.println("stoppingBlob.width: " + stoppingBlob.width);
+			//System.out.println("sizeCons.SIGN_INFO.get(stoppingBlob.type).get(6): " + sizeCons.SIGN_INFO.get(stoppingBlob.type).get(6));
+			//System.out.println("Actual dist: " + Math.sqrt(Math.pow(Math.abs(control.getPosition(true) - (2 * 28.75)), 2) + Math.pow(Math.abs(control.getPosition(false) - (2 * 29.5)), 2)));
+			//System.out.println(cameraCalibrator.calcStopRate(getEstimatedSpeed(), cameraCalibrator.getStopTime(distToBlob, getEstimatedSpeed())));
 			
 			this.desiredSpeed = desiredSpeed - cameraCalibrator.calcStopRate(getEstimatedSpeed(), cameraCalibrator.getStopTime(distToBlob, getEstimatedSpeed()));
 		
@@ -411,10 +411,10 @@ public class SpeedControlModule implements Module {
 			
 			//System.out.println("frameWait: " + frameWait);
 			//System.out.println("stopType: " + stopType);
-			System.out.println("distToBlob: " + distToBlob);
-			System.out.println(getEstimatedSpeed());
-			System.out.println(Constant.TIME_DIFFERENCE);
-			System.out.println("desiredSpeed: " + desiredSpeed);
+			//System.out.println("distToBlob: " + distToBlob);
+			//System.out.println(getEstimatedSpeed());
+			//System.out.println(Constant.TIME_DIFFERENCE);
+			//System.out.println("desiredSpeed: " + desiredSpeed);
 			//System.out.println(getEstimatedSpeed());
 			//System.out.println(Constant.TIME_DIFFERENCE);
 			//System.out.println("desiredSpeed: " + desiredSpeed);

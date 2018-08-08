@@ -159,16 +159,16 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         if(args.length > 0 && args[0].toLowerCase().equals("nosim")) {
             renderWindow = true;
         }
-        new MrModule(true);
+        new MrModule(false);
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (!(control instanceof TrakSimControl)) {
-            return;
-        }
+//        if (!(control instanceof TrakSimControl)) {
+//            return;
+//        }
 
-        if (e.getKeyCode() == KeyEvent.VK_F) {
+        if (e.getKeyCode() == KeyEvent.VK_Q) {
             fullscreen = !fullscreen;
             setVisible(false);
             dispose();
@@ -182,10 +182,18 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
             }
         }
 
-        for (Map.Entry<Integer, Runnable> binding : ((TrakSimControl) control).keyBindings.entrySet()) {
-            if (e.getKeyCode() == binding.getKey()) {
-                binding.getValue().run();
-            }
+        if (control instanceof TrakSimControl) {
+	        for (Map.Entry<Integer, Runnable> binding : ((TrakSimControl) control).keyBindings.entrySet()) {
+	            if (e.getKeyCode() == binding.getKey()) {
+	                binding.getValue().run();
+	            } 
+	        }
+        } else {
+        	for (Map.Entry<Integer, Runnable> binding : ((CamControl) control).keyBindings.entrySet()) {
+	            if (e.getKeyCode() == binding.getKey()) {
+	                binding.getValue().run();
+	            }
+	        }
         }
     }
 
