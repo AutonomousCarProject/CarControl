@@ -89,36 +89,15 @@ public abstract class SteeringBase implements Steerable {
 
 
     /**
-     * Not sure what this does
+     * Adds the car's current x coordinate, y coordinate, and heading to the posLog arrayList
      *
-     * @param x       x coordinate
-     * @param y       y coordinate
-     * @param heading idk
+     * @param x         x coordinate
+     * @param y         y coordinate
+     * @param heading   car's current heading (degrees)
      */
     public void updatePosLog(double x, double y, double heading) { // Reference positions by doing point# * 3 + (0 for x, 1 for y, 2 for heading)
         posLog.add(x);
         posLog.add(y);
         posLog.add(heading);
-    }
-
-    public void drawMapArrays() {
-        int length = posLog.size() / 3;
-        double laneWidth = 4; // Needs to be measured
-        leftEdge = new Point[length];
-        rightEdge = new Point[length];
-        pathTraveled = new Point[length];
-        for (int i = 0; i < length; i++) {
-            leftEdge[i] = new Point(0, 0);
-            rightEdge[i] = new Point(0, 0);
-            pathTraveled[i] = new Point(0, 0);
-        }
-        for (int i = 0; i <= length; i++) {
-            leftEdge[i].x = (int) (posLog.get(i * 3) + laneWidth / 2 * Math.cos(posLog.get(i * 3 + 2) + (Math.PI / 2)));
-            leftEdge[i].y = (int) (posLog.get(i * 3 + 1) + laneWidth / 2 * Math.sin(posLog.get(i * 3 + 2) + (Math.PI / 2)));
-            rightEdge[i].x = (int) (posLog.get(i * 3) + laneWidth / 2 * Math.cos(posLog.get(i * 3 + 2) - (Math.PI / 2)));
-            rightEdge[i].y = (int) (posLog.get(i * 3 + 1) + laneWidth / 2 * Math.sin(posLog.get(i * 3 + 2) - (Math.PI / 2)));
-            pathTraveled[i].x = (int) ((double) posLog.get(i * 3));
-            pathTraveled[i].y = (int) ((double) posLog.get(i * 3 + 1));
-        }
     }
 }

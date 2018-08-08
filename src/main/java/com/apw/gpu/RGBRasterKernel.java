@@ -11,7 +11,10 @@ public class RGBRasterKernel extends Kernel {
     private int nrows, ncols;
 
     private byte[] bayer;
+
     private int[] rgb;
+
+    private byte tile;
 
     /**
      * Constructs an <code>RGBRasterKernel</code> Aparapi {@link com.aparapi.opencl.OpenCL OpenCL} kernel.
@@ -21,11 +24,15 @@ public class RGBRasterKernel extends Kernel {
      * @param ncols Number of columns to filter
      * @param rgb   rgb raster of the bayer array
      */
-    public RGBRasterKernel(byte[] bayer, int[] rgb, int nrows, int ncols) {
+    public RGBRasterKernel(byte[] bayer, int[] rgb, int nrows, int ncols, byte tile) {
         this.bayer = bayer;
         this.rgb = rgb;
         this.nrows = nrows;
         this.ncols = ncols;
+        this.tile = tile;
+    }
+
+    public RGBRasterKernel() {
     }
 
     /**
@@ -36,11 +43,12 @@ public class RGBRasterKernel extends Kernel {
      * @param ncols Number of columns to filter
      * @param rgb   rgb raster of the bayer array
      */
-    public void setValues(byte[] bayer, int[] rgb, int nrows, int ncols) {
+    public void setValues(byte[] bayer, int[] rgb, int nrows, int ncols, byte tile) {
         this.bayer = bayer;
         this.rgb = rgb;
         this.nrows = nrows;
         this.ncols = ncols;
+        this.tile = tile;
     }
 
     /**
@@ -56,15 +64,32 @@ public class RGBRasterKernel extends Kernel {
     @Override
     public void run() {
 
-        int rows = getGlobalId(0);
-        int cols = getGlobalId(1);
+        int row = getGlobalId(0);
+        int col = getGlobalId(1);
 
-        int R = ((((int) bayer[(rows * ncols * 2 + cols) * 2]) & 0xFF));  //Top left (red)
-        int G = ((((int) bayer[(rows * ncols * 2 + cols) * 2 + 1]) & 0xFF));  //Top right (green)
-        int B = (((int) bayer[(rows * ncols * 2 + cols) * 2 + 1 + 2 * ncols]) & 0xFF);  //Bottom right (blue)
+        int R = (bayer[getPos(col, row, combineTile((byte) 0, tile), ncols, nrows)] & 0xFF);
+        int G = (bayer[getPos(col, row, combineTile((byte) 1, tile), ncols, nrows)] & 0xFF);
+        int B = (bayer[getPos(col, row, combineTile((byte) 3, tile), ncols, nrows)] & 0xFF);
 
         int pix = (R << 16) + (G << 8) + B;
 
-        rgb[rows * ncols + cols] = pix;
+        rgb[row * ncols + col] = pix;
+    }
+
+    private int getBit(byte tile, int pos) {
+        return (tile >> pos) & 1;
+    }
+
+    private int boolBit(boolean check) {
+        if (check) return 1;
+        return 0;
+    }
+
+    private int getPos(int x, int y, byte tile, int ncols, int nrows) {
+        return (y * ncols * (4 - getBit(tile, 2)) + (2 + getBit(tile, 2)) * x + getBit(tile, 1) * (2 * ncols - (2 * ncols - 1) * getBit(tile, 2)) + getBit(tile, 0)) % ((4 - getBit(tile, 2)) * ncols * nrows);
+    }
+
+    private byte combineTile(byte tile1, byte tile2) {
+        return (byte) (((int) tile1) ^ ((int) tile2));
     }
 }

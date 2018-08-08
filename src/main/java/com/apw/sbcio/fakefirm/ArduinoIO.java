@@ -36,9 +36,7 @@ import jssc.SerialPortException;
 
 public class ArduinoIO implements PWMController { // Adapted to Java from arduino.cs ... (FakeFirmata)
   // (subclass this to add input capability)
-
   public static final boolean UseServos = false;
-
 
   public static final String CommPortNo = "COM3";
   public static final int MAX_DATA_BYTES = 16, // =64 in LattePanda's Arduino.cs
