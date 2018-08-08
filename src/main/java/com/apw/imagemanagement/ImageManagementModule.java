@@ -3,7 +3,6 @@ package com.apw.imagemanagement;
 import com.apw.carcontrol.CarControl;
 import com.apw.carcontrol.Module;
 
-import javax.sound.midi.SysexMessage;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
@@ -24,11 +23,16 @@ public class ImageManagementModule implements Module {
 
     //internal variables
     private int width, height;
-    private int[] imagePixels;
+    public int[] imagePixels;
+    public int[] BWPixels;
+    public byte[] simplePixels;
     private byte tile;
     private int frameWidth = 640;
     boolean removeNoise = false;
     boolean dilate = true;
+    
+    ImageThread BWThread = new ImageThread(this, 1);
+    ImageThread simpleThread = new ImageThread(this, 2);
 
     //Image Variables
     byte[] R;
@@ -54,6 +58,9 @@ public class ImageManagementModule implements Module {
 
         //Tells ImageManipulator what the Black/White threshold is
         ImageManipulator.setLuminanceMultiplier(luminanceMultiplier);
+        
+        BWThread.run();
+        simpleThread.run();
     }
 
     /**
@@ -304,43 +311,34 @@ public class ImageManagementModule implements Module {
     @Override
     public void update(CarControl control) {
         setupArrays(control.getRecentCameraImage());
-        switch (viewType) {
-            case 1:
-                imagePixels = getRGBRaster();
-                break;
-            case 2:
-                imagePixels = getMonoRGBRaster();
-                break;
-            case 3:
-                imagePixels = getSimpleRGBRaster();
-                break;
-            case 4:
-                imagePixels = getBlackWhiteRaster();
-                break;
-            case 5:
-                imagePixels = getRoad();
-                break;
-            case 6:
-            	imagePixels = getRobertsCross();
-            	break;
-            default:
-                throw new IllegalStateException("No image management viewType: " + viewType);
-        }
+        BWThread.newData();
+    	simpleThread.newData();
+//        switch (viewType) {
+//            case 1:
+//                imagePixels = getRGBRaster();
+//                break;
+//            case 2:
+//                imagePixels = getMonoRGBRaster();
+//                break;
+//            case 3:
+//                imagePixels = getSimpleRGBRaster();
+//                break;
+//            case 4:
+//                imagePixels = getBlackWhiteRaster();
+//                break;
+//            case 5:
+//                imagePixels = getRoad();
+//                break;
+//            case 6:
+//            	imagePixels = getRobertsCross();
+//            	break;
+//            default:
+//                throw new IllegalStateException("No image management viewType: " + viewType);
+//        }
 
-        control.setRenderedImage(imagePixels);
-
-        if(viewType != 4) {
-        	control.setRGBImage(getBlackWhiteRaster());
-        }
-        else {
-        	control.setRGBImage(imagePixels);
-        }
-        if(viewType != 3) {
-            control.setProcessedImage(getSimpleColorRaster());
-        }
-        else {
-        	control.setRGBImage(imagePixels);
-        }
+        control.setRenderedImage(BWPixels);
+    	control.setRGBImage(BWPixels);
+    	control.setProcessedImage(simplePixels);
     }
 
     @Override
@@ -362,4 +360,5 @@ public class ImageManagementModule implements Module {
     public void setHeight(int height) {
         this.height = height;
     }
+
 }
