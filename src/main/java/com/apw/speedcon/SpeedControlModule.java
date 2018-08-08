@@ -376,7 +376,8 @@ public class SpeedControlModule implements Module {
 			stopsignWaitFirst();
 			
 			double blobRealSize = getStopReal(stoppingBlob); //Gets real size
-			initDistToBlob = cameraCalibrator.distanceToObj(blobRealSize, stoppingBlob.width, sizeCons.SIGN_INFO.get(stoppingBlob.type).get(6)); //Finds distance to closest blob based on real wrold size and pixel size
+			distToBlob = cameraCalibrator.distanceToObj(blobRealSize, stoppingBlob.width, sizeCons.SIGN_INFO.get(stoppingBlob.type).get(6)); //Finds distance to closest blob based on real wrold size and pixel size
+			//change this to initDistToBlob when adding rotations
 			//stoppingRotations = driveSys.totalRotations;
 			
 			System.out.println("frameWait: " + frameWait);
@@ -412,8 +413,8 @@ public class SpeedControlModule implements Module {
 			//System.out.println("frameWait: " + frameWait);
 			//System.out.println("stopType: " + stopType);
 			System.out.println("distToBlob: " + distToBlob);
-			//System.out.println(getEstimatedSpeed());
-			//System.out.println(Constant.TIME_DIFFERENCE);
+			System.out.println(getEstimatedSpeed());
+			System.out.println(Constant.TIME_DIFFERENCE);
 			System.out.println("desiredSpeed: " + desiredSpeed);
 			//System.out.println("Change in desiredSpeed: " + cameraCalibrator.calcStopRate(getEstimatedSpeed(), cameraCalibrator.getStopTime(distToBlob, getEstimatedSpeed())));
 			
@@ -556,9 +557,9 @@ public class SpeedControlModule implements Module {
 		else if (blob.color.getColor() == Color.YELLOW &&
 			blob.age > Constants.BLOB_AGE &&
 			blob.height > Constants.BLOB_MIN_HEIGHT &&
-			blob.height < (1/2) * Constants.BLOB_MAX_HEIGHT &&
+			blob.height < Constants.BLOB_MAX_HEIGHT &&
 			blob.width > Constants.BLOB_MIN_WIDTH &&
-			blob.width < (1/2) * Constants.BLOB_MAX_WIDTH &&
+			blob.width < Constants.BLOB_MAX_WIDTH &&
 			blob.x > Constants.STOPLIGHT_MIN_X &&
 			blob.x < Constants.STOPLIGHT_MAX_X &&
 			blob.y > Constants.STOPLIGHT_MIN_Y &&
