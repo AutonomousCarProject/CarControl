@@ -1,8 +1,6 @@
 package com.apw.pedestrians.blobdetect;
 
-import com.aparapi.Kernel;
 import com.aparapi.Range;
-import com.aparapi.device.Device;
 import com.apw.pedestrians.image.Color;
 import com.apw.pedestrians.image.Pixel;
 
@@ -56,55 +54,19 @@ public class PrimitiveBlobDetection extends BlobDetection {
 
         //noinspection SuspiciousNameCombination
         Range rowRange = Range.create(height);
-        Range colRange1 = Range.create(width / 2);
-        //Range colRange2 = Range.create2D(width / 2, 1);
+        Range colRange = Range.create(width);
 
         rightCheckKernel.setValues(colors, blobs, width);
         rightCheckKernel.execute(rowRange);
 
         bottomCheckKernel.setValues(colors, blobs, width, height);
-        bottomCheckKernel.execute(colRange1);
-        //bottomCheckKernel.execute(colRange2);
-
-        // eliminates blobs that are too large or too small or grey
-        // also brings the blobs as left as possible within the array
-        // this makes it so that there is no need to allocate a new array and reduces amount of iteration needed later
-
-        /*
-        int eliminated = 0;
-
-        for (int i = 0; i < blobs.length; i += BLOB_NUM_INT_FIELDS) {
-            if (blobs[i + BLOB_TYPE] == BLOB_TYPE_VALUE) {
-                int blobWidth = blobs[i + BLOB_RIGHT] - blobs[i + BLOB_LEFT] + 1;
-                int blobHeight = blobs[i + BLOB_BOTTOM] - blobs[i + BLOB_TOP] + 1;
-
-                if (blobWidth >= 4 && blobHeight >= 4 && blobWidth < (width / 2) && blobHeight < (height / 2) && blobs[i + BLOB_COLOR] != Color.GREY.ordinal()) {
-                    // do not eliminate
-                    if (eliminated != 0) {
-                        // needs to be shifted left
-                        int newIndex = i - (eliminated * BLOB_NUM_INT_FIELDS);
-                        System.arraycopy(blobs, i, blobs, newIndex, BLOB_NUM_INT_FIELDS);
-                    }
-                } else {
-                    eliminated++;
-                }
-            } else {
-                eliminated++;
-            }
-
-            if (eliminated != 0) {
-                blobs[i + BLOB_TYPE] = BLOB_TYPE_NULL;
-            }
-        }
-        return blobs;
-        */
+        bottomCheckKernel.execute(colRange);
 
         for (int i = 0; i < blobs.length; i += BLOB_NUM_INT_FIELDS) {
             if (blobs[i + BLOB_TYPE] == BLOB_TYPE_VALUE) {
                 blobList.add(getBlob(i));
             }
         }
-
 
         System.out.println(System.currentTimeMillis() - time);
 

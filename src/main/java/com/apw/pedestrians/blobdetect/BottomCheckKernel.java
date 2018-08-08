@@ -25,6 +25,11 @@ public class BottomCheckKernel extends Kernel {
   //      int col = getGlobalId(0) * 2 + mode;
 
         int col = getGlobalId(0) * 2;
+
+        if(col >= width) {
+            col = (col - width) + 1;
+        }
+
         if (col < width) {
             for (int row = 0; row < height - 1; row++) {
                 int color1 = colors[(row * width) + col];
