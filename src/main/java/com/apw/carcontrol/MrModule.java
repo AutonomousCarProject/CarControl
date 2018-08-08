@@ -27,11 +27,11 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     private final int windowWidth = 912;
     private final int windowHeight = 480;
 
-    private MrModule(boolean renderWindow) {
-        if (renderWindow)
-            control = new TrakSimControl(driveSys);
-        else
+    private MrModule(boolean realcam) {
+        if (realcam)
             control = new CamControl(driveSys);
+        else
+            control = new TrakSimControl(driveSys);
 
         headlessInit();
         createModules();
@@ -96,11 +96,11 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     }
 
     public static void main(String[] args) {
-        boolean renderWindow = true;
-        if(args.length > 0 && args[0].toLowerCase().equals("nosim")) {
-            renderWindow = true;
+        boolean realcam = true;
+        if(args.length > 0 && args[0].toLowerCase().equals("sim")) {
+            realcam = false;
         }
-        new MrModule(false);
+        new MrModule(realcam);
     }
 
     @Override
