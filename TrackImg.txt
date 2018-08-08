@@ -1,134 +1,93 @@
-0x700070 0x96931963 0x380024 90 13 "Figure-8" -- 2018 May 9
+0x4000FF 0x1AAA0999 0x12003C 60 15 "PSU TestOval" -- 2018 May 7
 
-// "Figure-8" track for testing..
+// Concrete floor; alt color: 0x96961966 = reddish track, greenish off
 
-//   112x112m park (=56x56 in grid units),
-//   brown trk + green non-trk,
-//   start 56,36 (=28,18 grid units),
-//   90 degrees = E
-//   5" (13cm) line width
+// PSU TestOval..   +---- 350 map pix = 32m floor = 256m park ----+
+// (north hallway   |                                             |
+//  off EB atrium)  |            <88px=66m>                     ^ |
+// (108pix=32'=10m) |            +--------+              54px = 40m pk
+//  48x255m park    |< 96px=68m >|   ^    | +--------+          v |
+//  (=24x127 grid)  |            |22p=20m +=+   ^    |            |
+//  =16x100' floor  + .. . .. .. +  =7.5'    32p=22m +- 64px=46m -+
+//
+// Adapted from plan here: https://www.pdx.edu/floorplans/buildings/eb
+//
+// Start 18,60 (=9,30 grid), 60 degs = ENE, 6" park (3/4" floor) lines
 
-// Alternate start: 0x32001B 135 (50,27 aim SE) for later timing start
+F 1 1 29 34 0 -- rect fill w/floor (2x2m grid coords)..
+F 1 1 11 124 0
+F 1 64 20 68 0
+F 1 68 15 101 0
+F 1 96 22 126 0
 
-// Artifacts at crossroads:
-//   stop sign facing west, also painted on street
-//   traffic lite over center
-//   parked car on far side, facing west
-//   pedestrian walking south on east side
-//   car driving by northbound
+-- U 7.25 50 5 412^172 99 83 -- (disabled) eastbound painted stop line
 
-// Artifacts...
+V 11 34  30  5 -- (double) white N-S wall
+H 11 34   63 5 -- ditto, E-W wall
+V 11 63  30  5
+V 14 68  19  5
+H 14 68   95 5
+V 14 95  20  5
+H 22 95  126 5
+H 10 122 127 1 -- exit divider wall?
+H 20 65   67 2 -- recessed door
+H 22 97   99 2 -- flat door
+H 22 101 103 2
 
-U 28 25.4 5 15 -- eastbound painted stop line w/"STOP"
--- U 29.6 28.1 4 15 -- northbound painted stop line w/"STOP"
--- U 25.4 26.7 6 15 -- southbound painted stop line w/"STOP"
--- U 26.7 29.6 7 15 -- westbound painted stop line w/"STOP"
+P 9 126
 
--- Y 26.0 26.5 0 0 -- stop sign facing north (southbound traffic)
--- Y 26.5 30.0 0 90 -- stop sign facing east (westbound)
--- Y 30.0 29.5 0 180 -- stop sign facing south
-Y 29.5 25.875 0 270 -- stop sign facing west
+P 1  1      -- dark columns in glass wall to north..
+P 21 1
+P 1 20
+P 1 26
+P 1 56
+P 1 62
+P 1 88
+P 1 92
+P 1 126
 
-Y 28.0 28.0 2 0 -- traffic lite
-Y 26 31 16 270 -- parked car facing west
+-- Do outside track edge first..
 
-T 20 16 10 1 0 -- start timer #0 +1 secs when: V>40m, H>32m
-J 35 28 6 15n 16f 23z 0d 1.3r 1.25e 0.3i -0.29p*23 -- northbound car
-@ 19.0 29.5 6 20 0 -- northbound car parked at end
+W 2 17 -- start in 2,17 facing west
+L 8    -- curve to south (to 10,8)
+A 5    -- advance south extra, to make room for return (15,8)
+L 8    -- curve to east (24,16)
+A 3    -- short straight (24,18)
+L 8    -- curve to north (16,27)
+A 1    -- even shorter straight (15,27)
+R 5    -- curve to east (9,32)
+A 62   -- advance east to other end of hall (9,95)
+E 10 98 -- 1st segment of R 5 curve to south (+1,+3)
+E 19 105 -- 2nd seg't merged w/2nd seg of.. (+7,+7)
+E 20 109 -- 3rd segment of L 8 curve to east (+1,+4)
+A 2    -- short straight (20,111)
+L 8    -- curve to north (12,120)
+A 1    -- tiny advance north (11,120)
+L 8    -- curve to west (2,112)
+A 95   -- advance west to start (2,17)
 
-J 26.5 30 5 30n 13f 14z 180d 0.125r 1.0e 0.2i -- ped'n walking south
--- J 28.0 28 6 15n 16f 23z 0d 0r 0.5e 0.25i -- car rotates (disabled)
+I -- Now the inside track edge..
 
--- _ 55 -- (disabled) TripLine (extra logging on map row 55m)
+E 5 16 -- start in 5,17 facing east
+A 95   -- advance east to other end of hall (5,111)
+R 5    -- curve to south (to 10,118)
+A 1    -- tiny advance south to (11,118)
+R 5    -- curve to west (17,113)
+A 2    -- short straight west (17,111)
+W 16 107 -- 1st segment of R 5 curve to north (-1,-3)
+W 7 100 -- 2nd seg't merged w/2nd seg of.. (-9,-7)
+W 6 96 -- 3rd segment of L 8 curve to west (+1,+4)
+A 63   -- advance west to other end of hall (6,33)
+L 8    -- curve to south (to 14,24)
+A 1    -- very short straight (15,24)
+R 5    -- curve to west (24,16)
+A 2    -- short straight west (24,14)
+R 5    -- curve to north (16,8)
+A 5    -- longer straight (15,8)
+R 5    -- curve to east, ending at start (6?,17)
 
--- U 20 30.0 0 32^248 5 3 -- numeral '4' (marking milestones)
--- U 20 30.5 0 16^248 5 3 -- numeral '0' (disabled)
--- U 25 30.0 0 36^248 5 3 -- numeral '5'
--- U 25 30.5 0 16^248 5 3 -- numeral '0'
--- U 30 30.0 0 40^248 5 3 -- numeral '6'
--- U 30 30.5 0 16^248 5 3 -- numeral '0'
--- U 35 30.0 0 44^248 5 3 -- numeral '7'
--- U 35 30.5 0 16^248 5 3 -- numeral '0'
--- U 27.7 27.7 0 36^248 5 3 -- numeral '5' (center of crossroad)
--- U 27.7 28.2 0 36^248 5 3 -- numeral '5'
-
-// Now the track...
-
-F  1  1  50 50 0 -- rect fill w/grass (2x2m grid coords)
-
--- outside edge from top (CCW)..
-
-W 10 19 -- start at top center facing west
-L 8     -- curve W->S (to 18,10)
-A 2     -- short straight south (20,10)
-L 8     -- curve S->E (29,18)
-A 7     -- straight east to crossover (29,25)
-R 0     -- corner south (29,26)
-A 7     -- straight south from crossover (36,26)
-L 8     -- curve S->E (45,34)
-A 2     -- short straight east (45,36)
-L 8     -- curve E->N (37,45)
-A 2     -- short straight north (35,45)
-L 8     -- curve N->W (26,37)
-A 7     -- straight west to crossover (26,30)
-R 0     -- corner north (26,29)
-A 7     -- straight north from crossover (19,29)
-L 8     -- curve N->W (10,21)
-A 2     -- short straight west to end at start
-
-I       -- inside edge from top (upper loop c-wise)..
-
-E 13 20 -- start at top center facing east
-R 5     -- curve E->S (to 18,26)
-A 7     -- straight south to crossover (25,26)
-R 0     -- corner west (26,26)
-A 7     -- straight west from crossover (26,19)
-R 5     -- curve W->N (21,13)
-A 2     -- short straight north (19,13)
-R 5     -- curve N->E (13,18)
-A 2     -- short straight east to end at start
-
-I       -- inside edge from top (lower loop c-wise)..
-
-E 29 29 -- start at top center facing east
-A 7     -- straight east from crossover (to 29,36)
-R 5     -- curve E->S (34,42)
-A 2     -- short straight south (36,42)
-R 5     -- curve S->W (42,37)
-A 2     -- short straight west (42,35)
-R 5     -- curve W->N (37,29)
-A 7     -- straight north to crossover (30,29)
-R 0     -- corner east to end at start (29,29)
-
-B 12 20   1  -- drop track bucket near top
-. -- end of track
-
-// Image Index...
-
-.StopInfo
- 90 128 29 1 44 0~1 -- Stop Sign full-on (in file)
- 90 64 15 60 22 0~2 -- Stop Sign back full-on
- 160 128 17 32 44 0~3 -- Stop Sign front angled
- 160 64 9 50 22 0~4 -- Stop Sign back angled
- 180 64 3 76 22 0~5 -- Stop Sign S-edge-on
- 0 64 3 80 22 0~6 -- Stop Sign P-edge-on
- 0 200 25 84 24~7 -- dark traffic lite
- 0 200 25 110 24 1~8 -- Green lite
- 0 200 25 136 24 1~9 -- Yellow lite
- 0 200 25 162 24 1~10 -- Red lite
- 0 64 23 55^132 25~11 -- Pedestrian faces left
- 0 64 29 52^66 25~12 -- Pedestrian steps left
- 0 64 23 1^132 25~13 -- Pedestrian faces right
- 0 64 29 25^132 25~14 -- Pedestrian steps right
- 0 83 99 412^172 32~15 -- white painted STOP line
- 60     55 78 274^172 36~16=16 -- BlueCar front
- 32+45  54 157 190^2  36~17=16 -- BlueCar right-front
- 60+90  54 155 352^114 36~18=16 -- BlueCar right
- 32+135 54 157 352^58 36~19=16 -- BlueCar right-back
- 60+180 55 78 190^172 36~20=16 -- BlueCar back
- 32+225 54 157 190^58 36~21=16 -- BlueCar left-back
- 60+270 54 155 190^114 36~22=16 -- BlueCar left
- 0      54 157 352^2  36~23=16 -- BlueCar left-front
+B 3 55 1 -- bucket track drop in westbound lane
+B 12 102 1 -- (otherwise might miss diagonal)
 
 . . . . . . . . -- end of descriptor -- . . . . . . . . . . . . . . . .
 
@@ -281,98 +240,140 @@ L 8    -- curve immediately to west (24,87)
 
 . . . . . . . . -- end of descriptor -- . . . . . . . . . . . . . . . .
 
-0x4000FF 0x1AAA0999 0x12003C 60 15 "PSU TestOval" -- 2018 May 7
+0x700070 0x96931963 0x380024 90 13 "Figure-8" -- 2018 May 9
 
-// Concrete floor; alt color: 0x96961966 = reddish track, greenish off
+// "Figure-8" track for testing..
 
-// PSU TestOval..   +---- 350 map pix = 32m floor = 256m park ----+
-// (north hallway   |                                             |
-//  off EB atrium)  |            <88px=66m>                     ^ |
-// (108pix=32'=10m) |            +--------+              54px = 40m pk
-//  48x255m park    |< 96px=68m >|   ^    | +--------+          v |
-//  (=24x127 grid)  |            |22p=20m +=+   ^    |            |
-//  =16x100' floor  + .. . .. .. +  =7.5'    32p=22m +- 64px=46m -+
-//
-// Adapted from plan here: https://www.pdx.edu/floorplans/buildings/eb
-//
-// Start 18,60 (=9,30 grid), 60 degs = ENE, 6" park (3/4" floor) lines
+//   112x112m park (=56x56 in grid units),
+//   brown trk + green non-trk,
+//   start 56,36 (=28,18 grid units),
+//   90 degrees = E
+//   5" (13cm) line width
 
-F 1 1 29 34 0 -- rect fill w/floor (2x2m grid coords)..
-F 1 1 11 124 0
-F 1 64 20 68 0
-F 1 68 15 101 0
-F 1 96 22 126 0
+// Alternate start: 0x32001B 135 (50,27 aim SE) for later timing start
 
--- U 7.25 50 5 412^172 99 83 -- (disabled) eastbound painted stop line
+// Artifacts at crossroads:
+//   stop sign facing west, also painted on street
+//   traffic lite over center
+//   parked car on far side, facing west
+//   pedestrian walking south on east side
+//   car driving by northbound
 
-V 11 34  30  5 -- (double) white N-S wall
-H 11 34   63 5 -- ditto, E-W wall
-V 11 63  30  5
-V 14 68  19  5
-H 14 68   95 5
-V 14 95  20  5
-H 22 95  126 5
-H 10 122 127 1 -- exit divider wall?
-H 20 65   67 2 -- recessed door
-H 22 97   99 2 -- flat door
-H 22 101 103 2
+// Artifacts...
 
-P 9 126
+U 28 25.4 5 15 -- eastbound painted stop line w/"STOP"
+-- U 29.6 28.1 4 15 -- northbound painted stop line w/"STOP"
+-- U 25.4 26.7 6 15 -- southbound painted stop line w/"STOP"
+-- U 26.7 29.6 7 15 -- westbound painted stop line w/"STOP"
 
-P 1  1      -- dark columns in glass wall to north..
-P 21 1
-P 1 20
-P 1 26
-P 1 56
-P 1 62
-P 1 88
-P 1 92
-P 1 126
+-- Y 26.0 26.5 0 0 -- stop sign facing north (southbound traffic)
+-- Y 26.5 30.0 0 90 -- stop sign facing east (westbound)
+-- Y 30.0 29.5 0 180 -- stop sign facing south
+Y 29.5 25.875 0 270 -- stop sign facing west
 
--- Do outside track edge first..
+Y 28.0 28.0 2 0 -- traffic lite
+Y 26 31 16 270 -- parked car facing west
 
-W 2 17 -- start in 2,17 facing west
-L 8    -- curve to south (to 10,8)
-A 5    -- advance south extra, to make room for return (15,8)
-L 8    -- curve to east (24,16)
-A 3    -- short straight (24,18)
-L 8    -- curve to north (16,27)
-A 1    -- even shorter straight (15,27)
-R 5    -- curve to east (9,32)
-A 62   -- advance east to other end of hall (9,95)
-E 10 98 -- 1st segment of R 5 curve to south (+1,+3)
-E 19 105 -- 2nd seg't merged w/2nd seg of.. (+7,+7)
-E 20 109 -- 3rd segment of L 8 curve to east (+1,+4)
-A 2    -- short straight (20,111)
-L 8    -- curve to north (12,120)
-A 1    -- tiny advance north (11,120)
-L 8    -- curve to west (2,112)
-A 95   -- advance west to start (2,17)
+T 20 16 10 1 0 -- start timer #0 +1 secs when: V>40m, H>32m
+J 35 28 6 15n 16f 23z 0d 1.3r 1.25e 0.3i -0.29p*23 -- northbound car
+@ 19.0 29.5 6 20 0 -- northbound car parked at end
 
-I -- Now the inside track edge..
+J 26.5 30 5 30n 13f 14z 180d 0.125r 1.0e 0.2i -- ped'n walking south
+-- J 28.0 28 6 15n 16f 23z 0d 0r 0.5e 0.25i -- car rotates (disabled)
 
-E 5 16 -- start in 5,17 facing east
-A 95   -- advance east to other end of hall (5,111)
-R 5    -- curve to south (to 10,118)
-A 1    -- tiny advance south to (11,118)
-R 5    -- curve to west (17,113)
-A 2    -- short straight west (17,111)
-W 16 107 -- 1st segment of R 5 curve to north (-1,-3)
-W 7 100 -- 2nd seg't merged w/2nd seg of.. (-9,-7)
-W 6 96 -- 3rd segment of L 8 curve to west (+1,+4)
-A 63   -- advance west to other end of hall (6,33)
-L 8    -- curve to south (to 14,24)
-A 1    -- very short straight (15,24)
-R 5    -- curve to west (24,16)
-A 2    -- short straight west (24,14)
-R 5    -- curve to north (16,8)
-A 5    -- longer straight (15,8)
-R 5    -- curve to east, ending at start (6?,17)
+-- _ 55 -- (disabled) TripLine (extra logging on map row 55m)
 
-B 3 55 1 -- bucket track drop in westbound lane
-B 12 102 1 -- (otherwise might miss diagonal)
+-- U 20 30.0 0 32^248 5 3 -- numeral '4' (marking milestones)
+-- U 20 30.5 0 16^248 5 3 -- numeral '0' (disabled)
+-- U 25 30.0 0 36^248 5 3 -- numeral '5'
+-- U 25 30.5 0 16^248 5 3 -- numeral '0'
+-- U 30 30.0 0 40^248 5 3 -- numeral '6'
+-- U 30 30.5 0 16^248 5 3 -- numeral '0'
+-- U 35 30.0 0 44^248 5 3 -- numeral '7'
+-- U 35 30.5 0 16^248 5 3 -- numeral '0'
+-- U 27.7 27.7 0 36^248 5 3 -- numeral '5' (center of crossroad)
+-- U 27.7 28.2 0 36^248 5 3 -- numeral '5'
+
+// Now the track...
+
+F  1  1  50 50 0 -- rect fill w/grass (2x2m grid coords)
+
+-- outside edge from top (CCW)..
+
+W 10 19 -- start at top center facing west
+L 8     -- curve W->S (to 18,10)
+A 2     -- short straight south (20,10)
+L 8     -- curve S->E (29,18)
+A 7     -- straight east to crossover (29,25)
+R 0     -- corner south (29,26)
+A 7     -- straight south from crossover (36,26)
+L 8     -- curve S->E (45,34)
+A 2     -- short straight east (45,36)
+L 8     -- curve E->N (37,45)
+A 2     -- short straight north (35,45)
+L 8     -- curve N->W (26,37)
+A 7     -- straight west to crossover (26,30)
+R 0     -- corner north (26,29)
+A 7     -- straight north from crossover (19,29)
+L 8     -- curve N->W (10,21)
+A 2     -- short straight west to end at start
+
+I       -- inside edge from top (upper loop c-wise)..
+
+E 13 20 -- start at top center facing east
+R 5     -- curve E->S (to 18,26)
+A 7     -- straight south to crossover (25,26)
+R 0     -- corner west (26,26)
+A 7     -- straight west from crossover (26,19)
+R 5     -- curve W->N (21,13)
+A 2     -- short straight north (19,13)
+R 5     -- curve N->E (13,18)
+A 2     -- short straight east to end at start
+
+I       -- inside edge from top (lower loop c-wise)..
+
+E 29 29 -- start at top center facing east
+A 7     -- straight east from crossover (to 29,36)
+R 5     -- curve E->S (34,42)
+A 2     -- short straight south (36,42)
+R 5     -- curve S->W (42,37)
+A 2     -- short straight west (42,35)
+R 5     -- curve W->N (37,29)
+A 7     -- straight north to crossover (30,29)
+R 0     -- corner east to end at start (29,29)
+
+B 12 20   1  -- drop track bucket near top
+. -- end of track
+
+// Image Index...
+
+.StopInfo
+ 90 128 29 1 44 0~1 -- Stop Sign full-on (in file)
+ 90 64 15 60 22 0~2 -- Stop Sign back full-on
+ 160 128 17 32 44 0~3 -- Stop Sign front angled
+ 160 64 9 50 22 0~4 -- Stop Sign back angled
+ 180 64 3 76 22 0~5 -- Stop Sign S-edge-on
+ 0 64 3 80 22 0~6 -- Stop Sign P-edge-on
+ 0 200 25 84 24~7 -- dark traffic lite
+ 0 200 25 110 24 1~8 -- Green lite
+ 0 200 25 136 24 1~9 -- Yellow lite
+ 0 200 25 162 24 1~10 -- Red lite
+ 0 64 23 55^132 25~11 -- Pedestrian faces left
+ 0 64 29 52^66 25~12 -- Pedestrian steps left
+ 0 64 23 1^132 25~13 -- Pedestrian faces right
+ 0 64 29 25^132 25~14 -- Pedestrian steps right
+ 0 83 99 412^172 32~15 -- white painted STOP line
+ 60     55 78 274^172 36~16=16 -- BlueCar front
+ 32+45  54 157 190^2  36~17=16 -- BlueCar right-front
+ 60+90  54 155 352^114 36~18=16 -- BlueCar right
+ 32+135 54 157 352^58 36~19=16 -- BlueCar right-back
+ 60+180 55 78 190^172 36~20=16 -- BlueCar back
+ 32+225 54 157 190^58 36~21=16 -- BlueCar left-back
+ 60+270 54 155 190^114 36~22=16 -- BlueCar left
+ 0      54 157 352^2  36~23=16 -- BlueCar left-front
 
 . . . . . . . . -- end of descriptor -- . . . . . . . . . . . . . . . .
+
 
 0x500050 0x96931963 0x180020 90 5 "Minimal Circle" -- 2018 February 7
 

@@ -1,6 +1,6 @@
 package com.apw.carcontrol;
 
-import com.apw.gpu.GPUImageModule;
+import com.apw.apw3.DriverCons;
 import com.apw.imagemanagement.ImageManagementModule;
 import com.apw.sbcio.PWMController;
 import com.apw.sbcio.fakefirm.ArduinoIO;
@@ -30,13 +30,12 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     private static final int windowWidth = 912;
     private static final int windowHeight = 480;
 
-    private MrModule(boolean simulate) {
-        if (simulate) {
-            control = new TrakSimControl(driveSys);
-        }
-        else {
+
+    private MrModule(boolean realcam) {
+        if (realcam)
             control = new CamControl(driveSys);
-        }
+        else
+            control = new TrakSimControl(driveSys);
 
         headlessInit();
         createModules();
@@ -47,7 +46,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         modules = new ArrayList<>();
 
         executorService = Executors.newSingleThreadScheduledExecutor();
-        executorService.scheduleAtFixedRate(this, 0, 1000 / 20, TimeUnit.MILLISECONDS);
+        executorService.scheduleAtFixedRate(this, 1000, 1000 / 5, TimeUnit.MILLISECONDS);
 
         Future run = executorService.submit(this);
 
@@ -87,6 +86,30 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         for (Module module : modules) {
             module.update(control);
         }
+
+/*
+        // bad code here for example
+        ImageManagementModule imageModule = (ImageManagementModule) modules.get(0);
+        CompletableFuture<int[]> futureBWImage =
+                CompletableFuture.supplyAsync(() -> imageModule.getBlackWhiteRaster(control.getRecentCameraImage()));
+        CompletableFuture<byte[]> futureSimpleImage =
+                CompletableFuture.supplyAsync(() -> imageModule.getSimpleColorRaster(control.getRecentCameraImage()));
+
+        // Call steering Module
+        CompletableFuture<Void> futureSteering = futureBWImage.thenAcceptAsync(image -> modules.get(2).update(control, futureBWImage));
+        // Call speed module
+        CompletableFuture<Void> futureSpeed = futureSimpleImage.thenAcceptAsync(image -> modules.get(1).update(control, futureSimpleImage));
+        // Wait for them all to finish
+        CompletableFuture<Void> futureComplete = CompletableFuture.allOf(futureSpeed, futureSteering)
+                .thenAccept(v -> paint())
+                // Handle errors
+                .exceptionally(ex -> null);
+        // This makes java wait
+        futureComplete.join();
+
+
+        // bad code here for example */
+
     }
 
 
@@ -113,11 +136,11 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     }
 
     public static void main(String[] args) {
-        boolean simulate = true;
-        if(args.length > 0 && args[0].toLowerCase().equals("car")) {
-            simulate = false;
+        boolean realcam = DriverCons.D_LiveCam;
+        if(args.length > 0 && args[0].toLowerCase().equals("sim")) {
+            realcam = false;
         }
-        new MrModule(false);
+        new MrModule(realcam);
     }
 
     @Override
