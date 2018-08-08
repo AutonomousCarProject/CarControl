@@ -78,12 +78,6 @@ public class ImageManagementTest {
                 System.out.println(System.currentTimeMillis()-time);
                 time = System.currentTimeMillis();
                 for(int i=0;i<amount;i++)
-                    m.getBWRGBRaster();
-                System.out.println();
-                System.out.println("BW-RGB");
-                System.out.println(System.currentTimeMillis()-time);
-                time = System.currentTimeMillis();
-                for(int i=0;i<amount;i++)
                     m.getRobertsCross();
                 System.out.println();
                 System.out.println("ROBERTS");
@@ -158,12 +152,6 @@ public class ImageManagementTest {
                     m.getSimpleRGBRaster();
                 System.out.println();
                 System.out.println("SIMPLE-RGB");
-                System.out.println(System.nanoTime()-time);
-                time = System.nanoTime();
-                for(int i=0;i<amount;i++)
-                    m.getBWRGBRaster();
-                System.out.println();
-                System.out.println("BW-RGB");
                 System.out.println(System.nanoTime()-time);
                 time = System.nanoTime();
                 for(int i=0;i<amount;i++)

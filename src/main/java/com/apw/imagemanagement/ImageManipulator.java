@@ -20,13 +20,14 @@ public class ImageManipulator {
 
 	/** Converts a bayer8 image to a monochrome image, uses the green value of the bayer8
 	 *
-	 * @param bayer bayer8 image
+	 * @param R red values of bayer8 image
+	 * @param G green values of bayer8 image
+	 * @param B blue values of bayer8 image
 	 * @param mono	monochrome output
 	 * @param nrows	number of rows of pixels in the image
 	 * @param ncols number of columns of pixels in the image
-	 * @param tile tiling pattern of the bayer8 image
 	 */
-    public static void convertToMonochromeRaster(byte[] R, byte[] G, byte[] B, byte[] mono, int nrows, int ncols, byte tile) {
+    public static void convertToMonochromeRaster(byte[] R, byte[] G, byte[] B, byte[] mono, int nrows, int ncols) {
 
         for (int r = 0; r < nrows; r++) {
             for (int c = 0; c < ncols; c++) {
@@ -35,7 +36,17 @@ public class ImageManipulator {
         }
     }
 
-	public static void convertToMonochrome2Raster(byte[] R, byte[] G, byte[] B, byte[] mono, int nrows, int ncols, byte tile) {
+	/** Converts a bayer8 image to a monochrome image, averages the values of the bayer8
+	 *
+	 * @param R red values of bayer8 image
+	 * @param G green values of bayer8 image
+	 * @param B blue values of bayer8 image
+	 * @param mono	monochrome output
+	 * @param nrows	number of rows of pixels in the image
+	 * @param ncols number of columns of pixels in the image
+	 */
+
+	public static void convertToMonochrome2Raster(byte[] R, byte[] G, byte[] B, byte[] mono, int nrows, int ncols) {
 
         for (int r = 0; r < nrows; r++) {
             for (int c = 0; c < ncols; c++) {
@@ -53,53 +64,18 @@ public class ImageManipulator {
 	
 	/** Converts a bayer8 image to a black and white image based on average luminance of each row
 	 *
-	 * @param bayer bayer8 image
-	 * @param mono	black and white output
+	 * @param R red values of bayer8 image
+	 * @param G green values of bayer8 image
+	 * @param B blue values of bayer8 image
+	 * @param blackWhite	black and white output
 	 * @param nrows	number of rows of pixels in the image
 	 * @param ncols number of columns of pixels in the image
-	 * @param tile tiling pattern of the bayer8 image
+	 * @param frameWidth width of image to apply filter to (usually 640)
 	 */
-//	public static void convertToBlackWhiteRaster(byte[] bayer, byte[] mono, int nrows, int ncols, byte tile) {
-//		for (int r = nrows/2; r < nrows; r++) {
-//    		int averageLuminance = 0;
-//        	for(int c = 0; c < ncols; c++) {
-//				int R = (bayer[getPos(c,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);
-//				int G = (bayer[getPos(c,r,combineTile((byte)1,tile),ncols,nrows)]&0xFF);
-//				int B = (bayer[getPos(c,r,combineTile((byte)3,tile),ncols,nrows)]&0xFF);
-//				averageLuminance += (R + G + B)/3;
-//			}
-//        	averageLuminance /= ncols;
-//
-//            for (int c = 1; c < ncols-1; c++) {
-//
-//				int R1 = (bayer[getPos(c-1,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);
-//				int G1 = (bayer[getPos(c-1,r,combineTile((byte)1,tile),ncols,nrows)]&0xFF);
-//				int B1 = (bayer[getPos(c-1,r,combineTile((byte)3,tile),ncols,nrows)]&0xFF);
-//				int R2 = (bayer[getPos(c,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);
-//				int G2 = (bayer[getPos(c,r,combineTile((byte)1,tile),ncols,nrows)]&0xFF);
-//				int B2 = (bayer[getPos(c,r,combineTile((byte)3,tile),ncols,nrows)]&0xFF);
-//				int R3 = (bayer[getPos(c+1,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);
-//				int G3 = (bayer[getPos(c+1,r,combineTile((byte)1,tile),ncols,nrows)]&0xFF);
-//				int B3 = (bayer[getPos(c+1,r,combineTile((byte)3,tile),ncols,nrows)]&0xFF);
-//
-//				int pix =(R1 + R2 + R3 + B1 + B2 + B3 + G1 + G2 + G3)/9;
-////				int pix = (R2 + G2 + B2)/3;
-//				if(!(c >= 640 || r < 240 || r > 455)) {
-//					if (pix > luminanceMultiplier * averageLuminance) {
-//						mono[r * ncols + c] = 1;
-//					} else {
-//						mono[r * ncols + c] = 0;
-//					}
-//				} else {
-//					mono[r * ncols + c] = 0;
-//				}
-//			}
-//		}
-//	}
-	
 
-	public static void convertToBlackWhiteRaster(byte[] R, byte[] G, byte[] B, int[] mono, int nrows, int ncols, int frameWidth, byte tile) {
-		int pixelsAveraged = 3;
+	public static void convertToBlackWhiteRaster(byte[] R, byte[] G, byte[] B, int[] blackWhite, int nrows, int ncols, int frameWidth) {
+		int pixelsAveraged = 3; //number of pixels averaged to see if the middle pixel counts as white.
+		// Increasing this number reduces noise but severely increases processing time
 		for (int r = nrows >> 1; r < nrows; r++) {
     		int averageLuminance = 0;
         	for(int c = 0; c < frameWidth; c++) {
@@ -119,94 +95,24 @@ public class ImageManipulator {
 					pix+= B[ncols*r+c-borderWidth + i]&0xFF;
             	}
 				if (pix * frameWidth > luminanceMultiplier * averageLuminance * pixelsAveraged) {
-					mono[r * ncols + c] = 0xFFFFFF;
+					blackWhite[r * ncols + c] = 0xFFFFFF;
 				} else {
-					mono[r * ncols + c] = 0;
+					blackWhite[r * ncols + c] = 0;
 				}
 			}
 		}
 	}
-	/*
-	public static void convertToFirstEdgeBlackWhiteRaster(byte[] R, byte[] G, byte[] B, int[] mono, int nrows, int ncols, byte tile){
-		int width = 640;
-		int luminUp;
-		int lumin = PixelInterpreter.luminRow(bayer,nrows,ncols,tile,nrows/2-1,0);
-		int luminDown = PixelInterpreter.luminRow(bayer,nrows,ncols,tile,nrows/2,0);
-		int a ;
-		int b1;
-		int b2;
-		int b3;
-		int b4;
-		int b5;
-		int b6;
-		int b7;
-		int b8;
-		boolean check;
-		int min = 8;		//Set to 1 for TrakSim
-		for (int r = nrows/2; r < nrows-1; r++) {
-			luminUp = lumin;
-			lumin = luminDown;
-			luminDown = PixelInterpreter.luminRow(bayer,nrows,ncols,tile,nrows/2,0);
-			a = PixelInterpreter.convertToBlackWhiteCore(bayer,nrows,ncols,tile,r,width/2-2,lumin);
-			b1 = PixelInterpreter.convertToBlackWhiteCore(bayer,nrows,ncols,tile,r-1,width/2-2,luminUp);
-			b2 = PixelInterpreter.convertToBlackWhiteCore(bayer,nrows,ncols,tile,r-1,width/2-2+1,luminUp);
-			b3 = PixelInterpreter.convertToBlackWhiteCore(bayer,nrows,ncols,tile,r,width/2-2+1,lumin);
-			b4 = PixelInterpreter.convertToBlackWhiteCore(bayer,nrows,ncols,tile,r+1,width/2-2+1,luminDown);
-			b5 = PixelInterpreter.convertToBlackWhiteCore(bayer,nrows,ncols,tile,r+1,width/2-2,luminDown);
-			check = true;
-			for(int i = 0; i<width/2;i++){
-				b8 = b1;
-				b7 = a;
-				b6 = b5;
-				b5 = b4;
-				a = b3;
-				b1 = b2;
-				b2 = PixelInterpreter.convertToBlackWhiteCore(bayer,nrows,ncols,tile,r-1,width/2+i,luminUp);
-				b3 = PixelInterpreter.convertToBlackWhiteCore(bayer,nrows,ncols,tile,r,width/2+i,luminUp);
-				b4 = PixelInterpreter.convertToBlackWhiteCore(bayer,nrows,ncols,tile,r+1,width/2+i,luminUp);
-				if(a+b1+b2+b3+b4+b5+b6+b7+b8>min){
-					mono[r*ncols+width/2-1+i] = 0xFFFFFF;
-					//System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-					check = false;
-					break;
-				}
-			}
-			if(check){
-				mono[r*ncols+width-1]=0xFFFFFF;
-			}
-			a = PixelInterpreter.convertToBlackWhiteCore(bayer,nrows,ncols,tile,r,width/2,lumin);
-			b1 = PixelInterpreter.convertToBlackWhiteCore(bayer,nrows,ncols,tile,r-1,width/2,luminUp);
-			b2 = PixelInterpreter.convertToBlackWhiteCore(bayer,nrows,ncols,tile,r-1,width/2-1,luminUp);
-			b3 = PixelInterpreter.convertToBlackWhiteCore(bayer,nrows,ncols,tile,r,width/2-1,lumin);
-			b4 = PixelInterpreter.convertToBlackWhiteCore(bayer,nrows,ncols,tile,r+1,width/2-1,luminDown);
-			b5 = PixelInterpreter.convertToBlackWhiteCore(bayer,nrows,ncols,tile,r+1,width/2,luminDown);
-			check = true;
-			for(int i = 0; i<width/2;i++){
-				b8 = b1;
-				b7 = a;
-				b6 = b5;
-				b5 = b4;
-				a = b3;
-				b1 = b2;
-				b2 = PixelInterpreter.convertToBlackWhiteCore(bayer,nrows,ncols,tile,r-1,width/2-i,luminUp);
-				b3 = PixelInterpreter.convertToBlackWhiteCore(bayer,nrows,ncols,tile,r,width/2-i,luminUp);
-				b4 = PixelInterpreter.convertToBlackWhiteCore(bayer,nrows,ncols,tile,r+1,width/2-i,luminUp);
-				if(a+b1+b2+b3+b4+b5+b6+b7+b8>min){
-					mono[r*ncols+width/2-1-i] = 0xFFFFFF;
-					check = false;
-					//System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-					break;
-				}
-			}
-			if(check){
-				mono[r*ncols]=0xFFFFFF;
-			}
-		}
-	}
-	//*/
 
-
-	public static void convertToBlackWhite2Raster(byte[] R, byte[] G, byte[] B, byte[] mono, int nrows, int ncols, byte tile) {
+	/** Converts a bayer8 image to a black and white image based on how much each pixel increases
+	 *  the average luminance of each row
+	 * @param R red values of bayer8 image
+	 * @param G green values of bayer8 image
+	 * @param B blue values of bayer8 image
+	 * @param blackWhite	black and white output
+	 * @param nrows	number of rows of pixels in the image
+	 * @param ncols number of columns of pixels in the image
+	 */
+	public static void convertToBlackWhite2Raster(byte[] R, byte[] G, byte[] B, byte[] blackWhite, int nrows, int ncols) {
 		for (int r = nrows/2; r < nrows; r++) {
 			int averageLuminance = 0;
 			for(int c = 0; c < ncols; c++) {
@@ -218,18 +124,25 @@ public class ImageManipulator {
 				}
 				if(!(c >= 640 || r < 240 || r > 455)) {
 					if ((averageLuminance + (red+green+blue)/3)/2 > averageLuminance * 1.5) {
-						mono[r * ncols + c] = 1;
+						blackWhite[r * ncols + c] = 1;
 					} else {
-						mono[r * ncols + c] = 0;
+						blackWhite[r * ncols + c] = 0;
 					}
 				} else {
-					mono[r * ncols + c] = 0;
+					blackWhite[r * ncols + c] = 0;
 				}
 				averageLuminance = (averageLuminance + (red+green+blue)/3)/2;
 			}
 		}
 	}
-	
+
+	/**
+	 *
+	 * @param input
+	 * @param output
+	 * @param nrows
+	 * @param ncols
+	 */
 	public static void convertToRobertsCrossRaster(int[] input, int[] output, int nrows, int ncols) {
 		for (int r = 0; r < nrows - 1; r++) {
 			for(int c = 0; c < ncols - 1; c++) {
@@ -241,7 +154,212 @@ public class ImageManipulator {
 	}
 	
 	
-	/** erosion filter used on pixels in a byte[]
+
+
+	/** Converts a bayer8 image to a simple color image, the simple colors are red, green, blue, yellow, white, grey and black
+	 *
+	 * @param R red values of bayer8 image
+	 * @param G green values of bayer8 image
+	 * @param B blue values of bayer8 image
+	 * @param simple simple color output
+	 * @param nrows	number of rows of pixels in the image
+	 * @param ncols number og columns of pixels in the image
+	 * @param frameWidth width of the image to apply the filter to (usually 640)
+	 */
+	public static void convertToSimpleColorRaster(byte[] R, byte[] G, byte[] B, byte[] simple, int nrows, int ncols, int frameWidth) {
+		/*
+			*
+			*Serves color raster encoded in 1D of values 0-5 with
+	 		* 0 = RED
+	 		* 1 = GREEN
+	 		* 2 = BLUE
+	 		* 3 = WHITE
+	 		* 4 = GREY
+	 		* 5 = BLACK
+	 		* 6 = YELLOW
+		*/
+		for(int r = 0; r < nrows; r++){
+			for(int c = 0; c < frameWidth; c++){
+				int red = R[ncols*r+c]&0xFF;
+				int green = G[ncols*r+c]&0xFF;
+				int blue = B[ncols*r+c]&0xFF;
+				//int B = (((int)bayer[(r*ncols*2 + c)*2 + 1+2*ncols-ncols*2*getBit(tile,1)-getBit(tile,0)])&0xFF);			//Bottom right (blue)
+                double Y = red *  .299000 + green *  .587000 + blue *  .114000;
+				double U  = red * -.168736 + green * -.331264 + blue *  .500000 + 128;
+				double V = red *  .500000 + green * -.418688 + blue * -.081312 + 128;
+				red =(int)(  1.4075 * (V - 128));
+				green = (int)(0- 0.3455 * (U - 128) - (0.7169 * (V - 128)));
+				blue = (int)(1.7790 * (U - 128));
+				//If one of the colors has a value 50 greater than both other colors
+				//it assigns that pixel to that color
+				if(red > green+SimpleThresholds.redGreen && red > blue+SimpleThresholds.redBlue){
+					simple[r*ncols+c] = 0;
+				} else if(green > red+SimpleThresholds.greenRed && green > blue+SimpleThresholds.greenBlue){
+					simple[r*ncols+c] = 1;
+				} else if(blue > red+SimpleThresholds.blueRed && blue > green+SimpleThresholds.blueGreen){
+					simple[r*ncols+c] = 2;
+				}else if(red<green+SimpleThresholds.yellowDiff&&green<red+SimpleThresholds.yellowDiff&&(red>blue+SimpleThresholds.yellowBlue)){
+					simple[r*ncols+c] = 6;
+				}
+				//Otherwise it sees if one of the colors has a value above 170 for white
+				// if not, 85 for grey and below 85 for black
+				else if(Y>SimpleThresholds.whitePoint){
+					simple[r*ncols+c] = 3;
+				} else if(Y>SimpleThresholds.greyPoint){
+					simple[r*ncols+c] = 4; //0x808080
+				} else {
+					simple[r * ncols + c] = 5;
+				}
+			}
+		}
+	}
+
+	/** Converts a bayer8 image to a rgb image
+	 *
+	 * @param R red values of bayer8 image
+	 * @param G green values of bayer8 image
+	 * @param B blue values of bayer8 image
+	 * @param rgb	rgb output
+	 * @param nrows	number of rows of pixels in the image
+	 * @param ncols number og columns of pixels in the image
+	 */
+	public static void convertToRGBRaster(byte[] R, byte[] G, byte[] B, int[] rgb, int nrows, int ncols) {
+		for (int r = 0; r < nrows; r++) {
+			for (int c = 0; c < ncols; c++) {
+				int red = R[ncols*r+c]&0xFF;
+				int green = G[ncols*r+c]&0xFF;
+				int blue = B[ncols*r+c]&0xFF;
+				int pix =(red<<16)+(green<<8)+blue;
+				rgb[r*ncols + c] = pix;
+			}
+			
+		}
+	}
+
+	/** Converts the simpleColor byte array to an rgb int array
+	 *
+	 * @param simpleByte simple color byte array(input)
+	 * @param simpleRGB simple color int array(output)
+	 * @param length length of the array
+	 */
+	public static void convertSimpleToRGB(byte[] simpleByte, int[]simpleRGB, int length){
+		for(int i = 0; i < length; i++){
+			switch(simpleByte[i]){
+				case 0:
+					simpleRGB[i] = 0xFF0000;
+					break;
+				case 1:
+					simpleRGB[i] = 0x00FF00;
+					break;
+				case 2:
+					simpleRGB[i] = 0x0000FF;
+					break;
+				case 3:
+					simpleRGB[i] = 0xFFFFFF;
+					break;
+				case 4:
+					simpleRGB[i] = 0x808080;
+					break;
+				case 5:
+					simpleRGB[i] = 0x000000;
+					break;
+				case 6:
+					simpleRGB[i] = 0xDDDD00;
+					break;
+			}
+		}
+	}
+
+	/** Converts the black and white byte array to an rgb int array
+	 *
+	 * @param blackWhiteByte black and white byte array(input)
+	 * @param blackWhite black and white int array(output)
+	 * @param length length of the array
+	 */
+    public static void convertBWToRGB(int[] blackWhiteByte, int[] blackWhite, int length) {
+        for (int i = 0; i < length; i++) {
+            switch (blackWhiteByte[i]) {
+                case 0:
+                    blackWhite[i] = 0x000000;
+                    break;
+                case 1:
+                    blackWhite[i] = 0xFFFFFF;
+                    break;
+            }
+        }
+    }
+
+	/**Converts the monochrome byte array to a int array
+	 *
+	 * @param mono monochrome byte array (input)
+	 * @param rgb monochrome int array (output)
+	 * @param length length of the array
+	 */
+
+    public static void convertMonotoRGB(byte[] mono, int[] rgb, int length) {
+        for (int i = 0; i < length; i++) {
+            rgb[i] = (mono[i] << 16) + (mono[i] << 8) + mono[i];
+        }
+    }
+
+    /** Converts a black and white image to a black white image with a colored road
+	 *
+	 * @param bw black and white
+	 * @param output image output in int[]
+	 * @param nrows	number of rows of pixels in the image
+	 * @param ncols number of columns of pixels in the image
+	 */
+    public static void findRoad(int[] bw, int[] output, int nrows, int ncols){
+    	int rightEnd = 640, leftEnd = 0;
+    	for(int i = ncols/2; i < ncols; i++){
+			if(bw[454*ncols + i] == 1){
+				rightEnd = i;
+			}
+		}
+
+		for(int i = ncols/2; i > 0; i--){
+			if(bw[454*ncols + i] == 1){
+				leftEnd = i;
+			}
+		}
+    	for(int col = 0; col < ncols; col++){
+    		boolean endFound = false;
+
+    		for(int row = nrows-1; row > 0; row--){
+				if(col > 638 || row < 240 || row > 455){
+					output[row*ncols+col] = 0;
+				} else if(bw[row*ncols+col] == 0xFFFFFF){
+					endFound = true;
+					output[row*ncols+col] = 0xFFFFFF;
+				}else if(!endFound && col > leftEnd && col < rightEnd){
+					output[row*ncols + col] = 0xF63FFC;
+				}else{
+					output[row*ncols + col] = 0x000000;
+				}
+			}
+		}
+	}
+
+
+	/**Crops an array down
+	 *
+	 * @param output cropped array
+	 * @param input array to crop
+	 * @param ncols number of columns of pixels in the image
+	 * @param nrows number of rows of pixels in the image
+	 * @param width width of the array to crop to
+	 * @param height height of the array to crop to
+	 */
+	public static void limitTo(byte[] output, byte[] input, int ncols, int nrows, int width, int height) {
+		for (int r = 0; r < height; r++) {
+			for (int c = 0; c < width; c++) {
+				//System.out.println(r*width+c);
+				output[width*r+c]=input[r*ncols+c];
+			}
+		}
+	}
+
+	/** erosion filter used on pixels in a int[]
 	 *
 	 * @param pixels image to be eroded
 	 * @param nrows	number of rows of pixels in the image
@@ -297,8 +415,8 @@ public class ImageManipulator {
 		}
 		return output;
 	}
-	
-	/** dilation filter used on pixels in a byte[]
+
+	/** dilation filter used on pixels in a int[]
 	 *
 	 * @param pixels image to be dilated
 	 * @param nrows	number of rows of pixels in the image
@@ -351,277 +469,6 @@ public class ImageManipulator {
 		return output;
 	}
 
-	/** Converts a bayer8 image to a simple color image, the simple colors are red, green, blue, yellow, white, grey and black
-	 *
-	 * @param bayer bayer8 image
-	 * @param simple simple color output
-	 * @param nrows	number of rows of pixels in the image
-	 * @param ncols number og columns of pixels in the image
-	 * @param tile tiling pattern of the bayer8 image
-	 */
-	public static void convertToSimpleColorRaster(byte[] R, byte[] G, byte[] B, byte[] simple, int nrows, int ncols, int frameWidth, byte tile) {
-		/*
-			*
-			*Serves color raster encoded in 1D of values 0-5 with
-	 		* 0 = RED
-	 		* 1 = GREEN
-	 		* 2 = BLUE
-	 		* 3 = WHITE
-	 		* 4 = GREY
-	 		* 5 = BLACK
-	 		* 6 = YELLOW
-		*/
-		for(int r = 0; r < nrows; r++){
-			for(int c = 0; c < frameWidth; c++){
-				int red = R[ncols*r+c]&0xFF;
-				int green = G[ncols*r+c]&0xFF;
-				int blue = B[ncols*r+c]&0xFF;
-				//int B = (((int)bayer[(r*ncols*2 + c)*2 + 1+2*ncols-ncols*2*getBit(tile,1)-getBit(tile,0)])&0xFF);			//Bottom right (blue)
-                double Y = red *  .299000 + green *  .587000 + blue *  .114000;
-				double U  = red * -.168736 + green * -.331264 + blue *  .500000 + 128;
-				double V = red *  .500000 + green * -.418688 + blue * -.081312 + 128;
-				red =(int)(  1.4075 * (V - 128));
-				green = (int)(0- 0.3455 * (U - 128) - (0.7169 * (V - 128)));
-				blue = (int)(1.7790 * (U - 128));
-				//If one of the colors has a value 50 greater than both other colors
-				//it assigns that pixel to that color
-				if(red > green+SimpleThresholds.redGreen && red > blue+SimpleThresholds.redBlue){
-					simple[r*ncols+c] = 0;
-				} else if(green > red+SimpleThresholds.greenRed && green > blue+SimpleThresholds.greenBlue){
-					simple[r*ncols+c] = 1;
-				} else if(blue > red+SimpleThresholds.blueRed && blue > green+SimpleThresholds.blueGreen){
-					simple[r*ncols+c] = 2;
-				}else if(red<green+SimpleThresholds.yellowDiff&&green<red+SimpleThresholds.yellowDiff&&(red>blue+SimpleThresholds.yellowBlue)){
-					simple[r*ncols+c] = 6;
-				}
-				//Otherwise it sees if one of the colors has a value above 170 for white
-				// if not, 85 for grey and below 85 for black
-				else if(Y>SimpleThresholds.whitePoint){
-					simple[r*ncols+c] = 3;
-				} else if(Y>SimpleThresholds.greyPoint){
-					simple[r*ncols+c] = 4; //0x808080
-				} else {
-					simple[r * ncols + c] = 5;
-				}
-			}
-		}
-	}
-
-	/** Converts a bayer8 image to a rgb image
-	 *
-	 * @param bayer bayer8 image
-	 * @param rgb	rgb output
-	 * @param nrows	number of rows of pixels in the image
-	 * @param ncols number og columns of pixels in the image
-	 * @param tile tiling pattern of the bayer8 image
-	 */
-	public static void convertToRGBRaster(byte[] R, byte[] G, byte[] B, int[] rgb, int nrows, int ncols, byte tile) {
-		for (int r = 0; r < nrows; r++) {
-			for (int c = 0; c < ncols; c++) {
-				int red = R[ncols*r+c]&0xFF;
-				int green = G[ncols*r+c]&0xFF;
-				int blue = B[ncols*r+c]&0xFF;
-				int pix =(red<<16)+(green<<8)+blue;
-				rgb[r*ncols + c] = pix;
-			}
-			
-		}
-	}
-
-	/** Converts the simpleColor byte array to an rgb int array
-	 *
-	 * @param simpleByte simple color byte array(input)
-	 * @param simpleRGB simple color int array(output)
-	 * @param length length of the array
-	 */
-	public static void convertSimpleToRGB(byte[] simpleByte, int[]simpleRGB, int length){
-		for(int i = 0; i < length; i++){
-			switch(simpleByte[i]){
-				case 0:
-					simpleRGB[i] = 0xFF0000;
-					break;
-				case 1:
-					simpleRGB[i] = 0x00FF00;
-					break;
-				case 2:
-					simpleRGB[i] = 0x0000FF;
-					break;
-				case 3:
-					simpleRGB[i] = 0xFFFFFF;
-					break;
-				case 4:
-					simpleRGB[i] = 0x808080;
-					break;
-				case 5:
-					simpleRGB[i] = 0x000000;
-					break;
-				case 6:
-					simpleRGB[i] = 0xDDDD00;
-					break;
-			}
-		}
-	}
-
-	/** Converts the black and white byte array to an rgb int array
-	 *
-	 * @param simpleByte black and white byte array(input)
-	 * @param mono black and white int array(output)
-	 * @param length length of the array
-	 */
-    public static void convertBWToRGB(int[] simpleByte, int[] mono, int length) {
-        for (int i = 0; i < length; i++) {
-            switch (simpleByte[i]) {
-                case 0:
-                    mono[i] = 0x000000;
-                    break;
-                case 1:
-                    mono[i] = 0xFFFFFF;
-                    break;
-            }
-        }
-    }
-
-	/**Converts the monochrome byte array to a int array
-	 *
-	 * @param mono monochrome byte array (input)
-	 * @param rgb monochrome int array (output)
-	 * @param length length of the array
-	 */
-
-    public static void convertMonotoRGB(byte[] mono, int[] rgb, int length) {
-        for (int i = 0; i < length; i++) {
-            rgb[i] = (mono[i] << 16) + (mono[i] << 8) + mono[i];
-        }
-    }
-
-    /** Converts a black and white image to a black white image with a colored road
-	 *
-	 * @param bw black and white
-	 * @param output image output in int[]
-	 * @param nrows	number of rows of pixels in the image
-	 * @param ncols number og columns of pixels in the image
-	 */
-    public static void findRoad(int[] bw, int[] output, int nrows, int ncols){
-    	int rightEnd = 640, leftEnd = 0;
-    	for(int i = ncols/2; i < ncols; i++){
-			if(bw[454*ncols + i] == 1){
-				rightEnd = i;
-			}
-		}
-
-		for(int i = ncols/2; i > 0; i--){
-			if(bw[454*ncols + i] == 1){
-				leftEnd = i;
-			}
-		}
-    	for(int col = 0; col < ncols; col++){
-    		boolean endFound = false;
-
-    		for(int row = nrows-1; row > 0; row--){
-				if(col > 638 || row < 240 || row > 455){
-					output[row*ncols+col] = 0;
-				} else if(bw[row*ncols+col] == 0xFFFFFF){
-					endFound = true;
-					output[row*ncols+col] = 0xFFFFFF;
-				}else if(!endFound && col > leftEnd && col < rightEnd){
-					output[row*ncols + col] = 0xF63FFC;
-				}else{
-					output[row*ncols + col] = 0x000000;
-				}
-			}
-		}
-	}
-	/*
-	public static void byteRGB(byte[] R, byte[] G, byte[] B, byte[] rgb, int ncols, int nrows, byte tile){
-    	//System.out.println(ncols+", "+nrows);
-
-    	for(int r = 0; r<nrows;r++){
-    		for(int c = 0; c<ncols;c++){
-				(rgb[getPos(c,r,combineTile((byte)0,(byte)4),ncols,nrows)])=(bayer[getPos(c,r,combineTile((byte)0,tile),ncols,nrows)]);
-				(rgb[getPos(c,r,combineTile((byte)1,(byte)4),ncols,nrows)])=(bayer[getPos(c,r,combineTile((byte)1,tile),ncols,nrows)]);
-				(rgb[getPos(c,r,combineTile((byte)3,(byte)4),ncols,nrows)])=(bayer[getPos(c,r,combineTile((byte)3,tile),ncols,nrows)]);
-				//System.out.println(getPos(c,r,combineTile((byte)0,(byte)4),ncols,nrows)+", "+getPos(c,r,combineTile((byte)1,(byte)4),ncols,nrows)+", "+getPos(c,r,combineTile((byte)3,(byte)4),ncols,nrows));
-				//System.out.println(getPos(c,r,combineTile((byte)0,tile),ncols,nrows)+", "+getPos(c,r,combineTile((byte)1,tile),ncols,nrows)+", "+getPos(c,r,combineTile((byte)3,tile),ncols,nrows));
-				//System.out.println();
-			}
-			//System.out.println(getPos(ncols-1,r-1,combineTile((byte)0,tile),ncols,nrows)+", "+getPos(ncols-1,r-1,combineTile((byte)1,tile),ncols,nrows)+", "+getPos(ncols-1,r-1,combineTile((byte)3,tile),ncols,nrows));
-			//System.out.println(getPos(0,r,combineTile((byte)0,tile),ncols,nrows)+", "+getPos(0,r,combineTile((byte)1,tile),ncols,nrows)+", "+getPos(0,r,combineTile((byte)3,tile),ncols,nrows));
-
-			//System.out.println(getPos(0,r,combineTile((byte)0,(byte)4),ncols,nrows)+", "+getPos(0,r,combineTile((byte)1,(byte)4),ncols,nrows)+", "+getPos(0,r,combineTile((byte)3,(byte)4),ncols,nrows));
-		}
-	}
- //*/
-
-
-	public static void limitTo(byte[] output, byte[] input, int ncols, int nrows, int width, int height) {
-		for (int r = 0; r < height; r++) {
-			for (int c = 0; c < width; c++) {
-				//System.out.println(r*width+c);
-				output[width*r+c]=input[r*ncols+c];
-			}
-		}
-	}
-
-    public static void limitTo(byte[] output, byte[] input, int ncols, int nrows, int width, int height, boolean bayer) {
-        //if(bayer){
-        //	width*=2;
-        //	height*=2;
-        //}
-        for (int r = 0; r < height; r++) {
-            for (int c = 0; c < width; c++) {
-                //System.out.println(r*width+c);
-                output[width * r + c] = input[r * ncols + c];
-            }
-        }
-
-	}
-    
-    public static void setLuminanceMultiplier(double multiplier) {
-		luminanceMultiplier = multiplier;
-	}
-    
-	public static int getBit(byte tile, int pos){
-        return (tile >> pos) & 1;
-    }
-
-    public static void smooth(byte[] input,byte[] output, int ncols, int nrows, byte tile){
-    	for(int r = 0; r<nrows;r++){
-			output[getPos(0,r,combineTile((byte)0,tile),ncols,nrows)] = input[getPos(0,r,combineTile((byte)0,tile),ncols,nrows)];
-			int R2 = (input[getPos(0,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);
-			int G2 = (input[getPos(0,r,combineTile((byte)1,tile),ncols,nrows)]&0xFF);
-			int B2 = (input[getPos(0,r,combineTile((byte)3,tile),ncols,nrows)]&0xFF);
-			double Y2 = R2 *  .299000 + G2 *  .587000 + B2 *  .114000;
-			double Y = Y2;
-			//output[getPos(ncols-1,r,combineTile((byte)0,tile),ncols,nrows,true)] = input[getPos(ncols-1,r,combineTile((byte)0,tile),ncols,nrows,true)];
-			for(int c = 1; c<ncols;c++){
-				//int R1 = (input[getPos(c-1,r,combineTile((byte)0,tile),ncols,nrows,true)]&0xFF);
-				//int G1 = (input[getPos(c-1,r,combineTile((byte)1,tile),ncols,nrows,true)]&0xFF);
-				//int B1 = (input[getPos(c-1,r,combineTile((byte)3,tile),ncols,nrows,true)]&0xFF);
-				R2 = (input[getPos(c,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);
-				G2 = (input[getPos(c,r,combineTile((byte)1,tile),ncols,nrows)]&0xFF);
-				B2 = (input[getPos(c,r,combineTile((byte)3,tile),ncols,nrows)]&0xFF);
-				//int R3 = (input[getPos(c+1,r,combineTile((byte)0,tile),ncols,nrows,true)]&0xFF);
-				//int G3 = (input[getPos(c+1,r,combineTile((byte)1,tile),ncols,nrows,true)]&0xFF);
-				//int B3 = (input[getPos(c+1,r,combineTile((byte)3,tile),ncols,nrows,true)]&0xFF);
-				//double Y1 = R1 *  .299000 + G1 *  .587000 + B1 *  .114000;
-				Y2 = R2 *  .299000 + G2 *  .587000 + B2 *  .114000;
-				//double Y3 = R3 *  .299000 + G3 *  .587000 + B3 *  .114000;
-				//double Y = (Y1+Y2*2+Y3)/4;
-				Y += Y2;
-				Y/=2;
-				double U  = R2 * -.168736 + G2 * -.331264 + B2 *  .500000 + 128;
-				double V = R2 *  .500000 + G2 * -.418688 + B2 * -.081312 + 128;
-				double R = Y + 1.4075 * (V - 128);
-				double G = Y - 0.3455 * (U - 128) - (0.7169 * (V - 128));
-				double B = Y + 1.7790 * (U - 128);
-				output[getPos(c,r,combineTile((byte)0,tile),ncols,nrows)] = (byte)R;
-				output[getPos(c,r,combineTile((byte)1,tile),ncols,nrows)] = (byte)G;
-				output[getPos(c,r,combineTile((byte)2,tile),ncols,nrows)] = (byte)G;
-				output[getPos(c,r,combineTile((byte)3,tile),ncols,nrows)] = (byte)B;
-			}
-		}
-	}
-
 	/**
 	 *
 	 * @param x
@@ -637,7 +484,13 @@ public class ImageManipulator {
 		return (y*ncols*(4-getBit(tile,2))+(2+getBit(tile,2))*x+getBit(tile,1)*(2*ncols-(2*ncols-1)*getBit(tile,2))+getBit(tile,0));
 	}
 
+	public static void setLuminanceMultiplier(double multiplier) {
+		luminanceMultiplier = multiplier;
+	}
 
+	public static int getBit(byte tile, int pos){
+		return (tile >> pos) & 1;
+	}
 
 	public static byte combineTile(byte tile1, byte tile2){
 		return (byte)(((int)tile1)^((int)tile2));
