@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class SteeringMk2 extends SteeringBase {
 
     private final int NUM_PREVIOUS = 3;
-    private final int MAX_DIFF = 5;
+    private final int MAX_DIFF = 7;
     private final double MIN_DIST_LOOK = 0.8;
     private final double MAX_DIST_LOOK = 0.9;
     private final double LINE_TRANSLATION_MULTIPLIER = 0.4;
@@ -182,7 +182,7 @@ public class SteeringMk2 extends SteeringBase {
         double xSum = 0;
 
         // Sum the x's and the y's
-        for (int idx = startTarget; idx <= endTarget; idx++) {
+        for (int idx = startTarget; idx < endTarget; idx++) {
             xSum += midPoints.get(idx).x;
             ySum += midPoints.get(idx).y;
         }
