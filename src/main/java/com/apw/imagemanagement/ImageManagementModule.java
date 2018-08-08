@@ -24,6 +24,7 @@ public class ImageManagementModule implements Module {
     //internal variables
     private int width, height;
     public int[] imagePixels;
+    public int[] displayPixels;
     public int[] BWPixels;
     public byte[] simplePixels;
     private byte tile;
@@ -31,8 +32,9 @@ public class ImageManagementModule implements Module {
     boolean removeNoise = false;
     boolean dilate = true;
     
-    ImageThread BWThread = new ImageThread(this, 1);
-    ImageThread simpleThread = new ImageThread(this, 2);
+    ImageThread displayThread = new ImageThread(this, 1,true);
+    ImageThread BWThread = new ImageThread(this, 1,false);
+    ImageThread simpleThread = new ImageThread(this, 2,false);
 
     //Image Variables
     byte[] R;
@@ -59,8 +61,10 @@ public class ImageManagementModule implements Module {
         //Tells ImageManipulator what the Black/White threshold is
         ImageManipulator.setLuminanceMultiplier(luminanceMultiplier);
         
+        displayThread.start();
         BWThread.start();
-        simpleThread.start();
+            simpleThread.start();
+
     }
 
     /**
@@ -304,16 +308,26 @@ public class ImageManagementModule implements Module {
     
     public void changeFilter() {
     	viewType = (viewType) % 6 + 1;
-
+        displayThread.updateRaster(viewType);
     	System.out.println("view changed to " + viewType);
     }
 
     @Override
     public void update(CarControl control) {
         setupArrays(control.getRecentCameraImage());
-        BWThread.newData();
-    	simpleThread.newData();
-//        switch (viewType) {
+        synchronized(displayThread){
+            displayThread.notifyAll();
+        }
+        synchronized(BWThread) {
+            BWThread.notifyAll();
+        }
+        synchronized(simpleThread) {
+            simpleThread.notifyAll();
+        }
+        //System.out.println("Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        //notifyAll();
+//
+//  switch (viewType) {
 //            case 1:
 //                imagePixels = getRGBRaster();
 //                break;
@@ -336,7 +350,7 @@ public class ImageManagementModule implements Module {
 //                throw new IllegalStateException("No image management viewType: " + viewType);
 //        }
 
-        control.setRenderedImage(BWPixels);
+        control.setRenderedImage(displayPixels);
     	control.setRGBImage(BWPixels);
     	control.setProcessedImage(simplePixels);
     }
