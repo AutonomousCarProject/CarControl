@@ -60,7 +60,7 @@ public class CameraCalibration {
 
 		this.pedDetect = new PedestrianDetector();
 
-		/*
+		
 		//Tries to find a file containing the focal length
 		try{
 
@@ -77,7 +77,7 @@ public class CameraCalibration {
 		}catch(IOException e){
 			e.printStackTrace();
 		}
-		*/
+		
 
 	}
 
