@@ -152,7 +152,7 @@ public class GPUImageModule implements Module {
         } else {
             //blackWhiteRasterKernel.setValues(pixels, output, height, width, tile);
             //blackWhiteRasterKernel.execute(Range.create2D(height, width));
-            ImageManipulator.convertToBlackWhiteRaster(pixels, rgb, height, width, frameWidth, tile);
+            //ImageManipulator.convertToBlackWhiteRaster(pixels, rgb, height, width, frameWidth, tile);
             //output = blackWhiteRasterKernel.getMono();
         }
         if (removeNoise) {
@@ -190,7 +190,7 @@ public class GPUImageModule implements Module {
     public int[] getRoad(byte[] pixels) {
         int[] output = new int[width * height];
         int[] rgb = new int[width * height];
-        ImageManipulator.convertToBlackWhiteRaster(pixels, output, height, width, frameWidth, tile);
+        //ImageManipulator.convertToBlackWhiteRaster(pixels, output, height, width, frameWidth, tile);
         //blackWhiteRasterKernel.setValues(pixels, output, height, width, tile);
         //blackWhiteRasterKernel.execute(Range.create2D(height, width));
         if (removeNoise) {
