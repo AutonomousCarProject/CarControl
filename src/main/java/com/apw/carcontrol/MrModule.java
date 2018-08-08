@@ -42,7 +42,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         modules = new ArrayList<>();
 
         executorService = Executors.newSingleThreadScheduledExecutor();
-        executorService.scheduleAtFixedRate(this, 0, 1000 / 20, TimeUnit.MILLISECONDS);
+        executorService.scheduleAtFixedRate(this, 1000, 1000 / 5, TimeUnit.MILLISECONDS);
 
         Future run = executorService.submit(this);
 
@@ -77,6 +77,30 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         for (Module module : modules) {
             module.update(control);
         }
+
+/*
+        // bad code here for example
+        ImageManagementModule imageModule = (ImageManagementModule) modules.get(0);
+        CompletableFuture<int[]> futureBWImage =
+                CompletableFuture.supplyAsync(() -> imageModule.getBlackWhiteRaster(control.getRecentCameraImage()));
+        CompletableFuture<byte[]> futureSimpleImage =
+                CompletableFuture.supplyAsync(() -> imageModule.getSimpleColorRaster(control.getRecentCameraImage()));
+
+        // Call steering Module
+        CompletableFuture<Void> futureSteering = futureBWImage.thenAcceptAsync(image -> modules.get(2).update(control, futureBWImage));
+        // Call speed module
+        CompletableFuture<Void> futureSpeed = futureSimpleImage.thenAcceptAsync(image -> modules.get(1).update(control, futureSimpleImage));
+        // Wait for them all to finish
+        CompletableFuture<Void> futureComplete = CompletableFuture.allOf(futureSpeed, futureSteering)
+                .thenAccept(v -> paint())
+                // Handle errors
+                .exceptionally(ex -> null);
+        // This makes java wait
+        futureComplete.join();
+
+
+        // bad code here for example */
+
     }
 
     private void paint() {
