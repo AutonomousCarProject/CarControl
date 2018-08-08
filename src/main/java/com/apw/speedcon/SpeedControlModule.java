@@ -376,8 +376,7 @@ public class SpeedControlModule implements Module {
 			stopsignWaitFirst();
 			
 			double blobRealSize = getStopReal(stoppingBlob); //Gets real size
-			initDistToBlob = cameraCalibrator.distanceToObj(blobRealSize, stoppingBlob.width, sizeCons.SIGN_INFO.get(stoppingBlob.type).get(6)); //Finds distance to closest blob based on real wrold size and pixel size
-			//stoppingRotations = driveSys.totalRotations;
+			distToBlob = cameraCalibrator.distanceToObj(blobRealSize, stoppingBlob.width, sizeCons.SIGN_INFO.get(stoppingBlob.type).get(6)); //Finds distance to closest blob based on real wrold size and pixel size
 			
 			System.out.println("frameWait: " + frameWait);
 			System.out.println("stopType: " + stopType);
@@ -407,14 +406,13 @@ public class SpeedControlModule implements Module {
 			//distToBlob -= (rpmSpeed / Constants.WHEEL_GEARING) * Constants.WHEEL_CIRCUMFERENCE * Constant.TIME_DIFFERENCE;
 			//distToBlob -= driveSys.getSpeed(); //will return null if tracksim, will return number of times driveshaft turned in the last second, often 0?
 			distToBlob -= getEstimatedSpeed() * (Constant.TIME_DIFFERENCE / 1000.0);
-			//distToBlob = getDistance(stoppingRotations);
 			
 			//System.out.println("frameWait: " + frameWait);
 			//System.out.println("stopType: " + stopType);
 			System.out.println("distToBlob: " + distToBlob);
 			//System.out.println(getEstimatedSpeed());
 			//System.out.println(Constant.TIME_DIFFERENCE);
-			System.out.println("desiredSpeed: " + desiredSpeed);
+			//System.out.println("desiredSpeed: " + desiredSpeed);
 			//System.out.println("Change in desiredSpeed: " + cameraCalibrator.calcStopRate(getEstimatedSpeed(), cameraCalibrator.getStopTime(distToBlob, getEstimatedSpeed())));
 			
 			this.desiredSpeed = desiredSpeed - cameraCalibrator.calcStopRate(getEstimatedSpeed(), cameraCalibrator.getStopTime(distToBlob, getEstimatedSpeed()));
@@ -462,8 +460,11 @@ public class SpeedControlModule implements Module {
 		currentEstimatedSpeed = gasAmount;
 	}
 	
-	//public double getDistance(int stoppingRotations) {
-	//	return initDistToBlob - ((driveSys.totalRotations() - stoppingRotations) / Constants.WHEEL_GEARING) * Constants.WHEEL_CIRCUMFERENCE * (Constant.TIME_DIFFERENCE / 1000);
+	//public double getRPM() {
+		//if (driveSys.getSpeed() == 1) {
+			//currentRotation = System.nanoTime();
+		//}
+		//lastRotation
 	//}
 	
 	public int getDesiredSpeed() {
