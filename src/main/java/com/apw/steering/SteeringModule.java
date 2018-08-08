@@ -9,6 +9,7 @@ import com.apw.speedcon.SpeedControlModule;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.PrintStream;
+import java.util.concurrent.CompletableFuture;
 
 public class SteeringModule implements Module {
 
