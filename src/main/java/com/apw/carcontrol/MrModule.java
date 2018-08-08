@@ -1,7 +1,5 @@
 package com.apw.carcontrol;
 
-import com.aparapi.device.Device;
-import com.apw.gpu.GPUImageModule;
 import com.apw.imagemanagement.ImageManagementModule;
 import com.apw.sbcio.PWMController;
 import com.apw.sbcio.fakefirm.ArduinoIO;
@@ -9,8 +7,6 @@ import com.apw.sbcio.fakefirm.ArduinoModule;
 import com.apw.speedcon.SpeedControlModule;
 
 import com.apw.steering.SteeringModule;
-import java.awt.image.Raster;
-import java.awt.image.WritableRaster;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,13 +27,14 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     private ArrayList<Module> modules;
     private CarControl control;
     private boolean fullscreen;
+    private boolean initialized = false;
 
     // FIXME breaks if dimensions are not 912x480
     private int windowWidth = 912;
     private int windowHeight = 480;
 
-    private MrModule(boolean renderWindow) {
-        if (renderWindow) {
+    private MrModule(boolean simulate) {
+        if (simulate) {
             control = new TrakSimControl(driveSys);
         } else {
             control = new CamControl(driveSys);
@@ -86,18 +83,19 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         for (Module module : modules) {
             module.initialize(control);
         }
+
+        initialized = true;
     }
 
     private void update() {
         if (control instanceof TrakSimControl) {
             ((TrakSimControl) control).cam.theSim.SimStep(1);
         }
-
+        
         control.readCameraImage();
         control.setEdges(getInsets());
         control.updateWindowDims(getWidth(), getHeight());
-        for (Module module :
-        	modules) {
+        for (Module module : modules) {
             module.update(control);
         }
     }
@@ -108,12 +106,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         Graphics g;
         g = this.getGraphics();
 
-        if (control instanceof TrakSimControl) {
-            renderedImage = ((TrakSimControl) control).getRenderedImage();
-        }
-        else if (control instanceof CamControl) {
-            renderedImage = ((CamControl) control).getRenderedImage();
-        }
+        renderedImage = control.getRenderedImage();
 
         if (renderedImage != null) {
             int[] displayPixels = ((DataBufferInt) bufferImage.getRaster().getDataBuffer()).getData();
@@ -144,21 +137,24 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
 
     @Override
     public void run() {
+        if(!initialized) {
+            return;
+        }
+
         try {
             update();
             paint();
-        } catch (RuntimeException e) {
-            Thread t = Thread.currentThread();
-            t.getUncaughtExceptionHandler().uncaughtException(t, e);
-        }
+        }catch(Exception e){
+            e.printStackTrace();
+        } 
     }
 
     public static void main(String[] args) {
-        boolean renderWindow = true;
-        if(args.length > 0 && args[0].toLowerCase().equals("nosim")) {
-            renderWindow = true;
+        boolean simulate = true;
+        if(args.length > 0 && args[0].toLowerCase().equals("car")) {
+            simulate = false;
         }
-        new MrModule(true);
+        new MrModule(simulate);
     }
 
     @Override
