@@ -50,7 +50,8 @@ public class ImageThread implements Runnable {
 					default:
 						throw new IllegalStateException("No image management viewType: " + imageType);
 				}
-			} else {
+			} 
+			else {
 				if (imageType == 1) {
 					owner.BWPixels = owner.getBlackWhiteRaster();
 

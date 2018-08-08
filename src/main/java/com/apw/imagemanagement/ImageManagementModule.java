@@ -63,7 +63,7 @@ public class ImageManagementModule implements Module {
         
         displayThread.start();
         BWThread.start();
-            simpleThread.start();
+        simpleThread.start();
 
     }
 
@@ -324,7 +324,6 @@ public class ImageManagementModule implements Module {
         synchronized(simpleThread) {
             simpleThread.notifyAll();
         }
-        //System.out.println("Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         //notifyAll();
 //
 //  switch (viewType) {
