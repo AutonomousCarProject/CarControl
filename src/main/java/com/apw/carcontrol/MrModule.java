@@ -26,7 +26,6 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
 
     private boolean initialized = false;
 
-
     private static final int windowWidth = 912;
     private static final int windowHeight = 480;
 
