@@ -38,7 +38,7 @@ public abstract class DriverCons { // TrakSim constant parameters
             D_ShowMap = true,       // T: show the map next to the scene
             D_DoCloseUp = true,     // T: show close-up map if there is room
             D_RampServos = false,   // T: servos take time to arrive at setting
-            D_TrakNoPix = false,    // T: draw track only, omit artifacts & trees
+            D_TrakNoPix = true,    // T: draw track only, omit artifacts & trees
             D_UseTexTrak = true,    // T: use text file to build track to drive
             D_Reversible = false,   // T: allow reverse (untested)
             D_StartInCalibrate = false, // T: use this to calibrate servo limits
@@ -73,8 +73,8 @@ public abstract class DriverCons { // TrakSim constant parameters
             D_xCloseUp = 3,    // 2^x magnification, x=0 to let TrakSim decide
             D_xTrLiteTime = 3, // 2^x seconds red time = green time +2secs yellow
             D_Crummy = 255,    // (power of 2) size of BreadCrumbs list for map display
-            D_CheckerBd = 1,   // (power of 2) =1 to checker 1x1m, =2 for 2x2, =0 off
-            D_steeringVersion = 2; // Which Version of steering to use
+            D_CheckerBd = 0,   // (power of 2) =1 to checker 1x1m, =2 for 2x2, =0 off
+            D_steeringVersion = 3; // Which Version of steering to use
 
     public static final double D_TurnRadius = 7.0, // nom. meters in park coords
     // measured from midline fully cramped, servo position = 0/180
