@@ -1,5 +1,6 @@
 package com.apw.carcontrol;
 
+import com.apw.apw3.DriverCons;
 import com.apw.imagemanagement.ImageManagementModule;
 import com.apw.sbcio.PWMController;
 import com.apw.sbcio.fakefirm.ArduinoIO;
@@ -13,6 +14,7 @@ import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.security.Key;
+import java.sql.Driver;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.*;
@@ -96,7 +98,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     }
 
     public static void main(String[] args) {
-        boolean realcam = true;
+        boolean realcam = DriverCons.D_LiveCam;
         if(args.length > 0 && args[0].toLowerCase().equals("sim")) {
             realcam = false;
         }

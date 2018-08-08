@@ -2,7 +2,7 @@ package com.apw.imagemanagement;
 
 public class PixelInterpreter {
 
-        private static double luminanceMultiplier = 1.6;
+        private static double luminanceMultiplier = .7;
 
 
         public static int convertToMonochrome(byte[] bayer, int nrows, int ncols, byte tile, int r, int c) {
@@ -23,6 +23,8 @@ public class PixelInterpreter {
 
         }
         public static int convertToBlackWhite(byte[] bayer, int nrows, int ncols, byte tile, int r, int c, int lumin, int luminUp, int luminDown) {
+            if(r==0||c==0||r==nrows-1||c==ncols-1)
+                return 1;
             int a = convertToBlackWhiteCore(bayer,nrows,ncols,tile,r,c,lumin);
             int b1 = convertToBlackWhiteCore(bayer,nrows,ncols,tile,r-1,c,luminUp);
             int b2 = convertToBlackWhiteCore(bayer,nrows,ncols,tile,r-1,c+1,luminUp);
@@ -33,13 +35,13 @@ public class PixelInterpreter {
             int b7 = convertToBlackWhiteCore(bayer,nrows,ncols,tile,r,c-1,lumin);
             int b8 = convertToBlackWhiteCore(bayer,nrows,ncols,tile,r-1,c-1,luminUp);
 
-                if(a+b1+b2+b3+b4+b5+b6+b7+b8==8) {
+                if(a+b1+b2+b3+b4+b5+b6+b7+b8==9) {
                     return 1;
                 }
 
             return 0;
         }
-        private static int convertToBlackWhiteCore(byte[] bayer, int nrows, int ncols, byte tile, int r, int c, int lumin) {
+        public static int convertToBlackWhiteCore(byte[] bayer, int nrows, int ncols, byte tile, int r, int c, int lumin) {
 
             int pix = 0;
             pix += (bayer[getPos(c , r, combineTile((byte) 0, tile), ncols, nrows)] & 0xFF);
@@ -52,7 +54,7 @@ public class PixelInterpreter {
 
 
         }
-        public static int luminRow(int[] bayer, int nrows, int ncols, byte tile, int r, int c) {
+        public static int luminRow(byte[] bayer, int nrows, int ncols, byte tile, int r, int c) {
             int averageLuminance = 0;
             for(int i = 0; c < ncols; c++) {
                 int R = (bayer[getPos(i,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);

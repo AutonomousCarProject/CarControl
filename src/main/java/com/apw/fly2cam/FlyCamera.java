@@ -4,6 +4,8 @@
 
 package com.apw.fly2cam; // (same API as fly0cam, same as 2017 Feb 27 but subclassable)
 
+import com.apw.apw3.DriverCons;
+
 public class FlyCamera { // (in Java/fly2cam)
     public static final int FrameRate_15 = 3, FrameRate_30 = 4,
             BaseRose = 480, BaseColz = 640, BaseTile = 1;
@@ -16,9 +18,17 @@ public class FlyCamera { // (in Java/fly2cam)
             errn; // returns an error number, see ErrorNumberText()
     private long stuff; // used for error reporting, or not at all
 
-    static {System.loadLibrary("fly2cam/FlyCamera");} // comment this line out if no DLLs
+    //static {System.loadLibrary("fly2cam/FlyCamera");} // comment this line out if no DLLs
 
     public FlyCamera() { // (in Java/fly2cam)
+        try{
+            if(DriverCons.D_LiveCam)
+                System.loadLibrary("fly2cam/FlyCamera");
+
+        }catch(Error e){
+            System.out.println("FlyCamera not found");
+        }
+
         FrameNo = 0;
         rose = 0;
         colz = 0;
