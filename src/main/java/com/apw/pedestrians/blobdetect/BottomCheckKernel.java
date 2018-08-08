@@ -36,19 +36,15 @@ public class BottomCheckKernel extends Kernel {
                 int blob2 = (((row + 1) * width) + col) * BLOB_NUM_INT_FIELDS;
 
                 // TODO: find cause of infinite loop
-                
-                int iterationCount = 0;
+
                 int tlBlob1 = blob1;
-                while (blobs[tlBlob1 + BLOB_TYPE] == BLOB_TYPE_REFERENCE && iterationCount < 20) {
+                while (blobs[tlBlob1 + BLOB_TYPE] == BLOB_TYPE_REFERENCE) {
                     tlBlob1 = blobs[tlBlob1 + BLOB_REFERENCE_INDEX];
-                    iterationCount++;
                 }
 
                 int tlBlob2 = blob2;
-                iterationCount = 0;
-                while (blobs[tlBlob2 + BLOB_TYPE] == BLOB_TYPE_REFERENCE && iterationCount < 20) {
+                while (blobs[tlBlob2 + BLOB_TYPE] == BLOB_TYPE_REFERENCE) {
                     tlBlob2 = blobs[tlBlob2 + BLOB_REFERENCE_INDEX];
-                    iterationCount++;
                 }
 
                 int blob1Width = blobs[tlBlob1 + BLOB_RIGHT] - blobs[tlBlob1 + BLOB_LEFT] + 1;
@@ -59,6 +55,12 @@ public class BottomCheckKernel extends Kernel {
                     if (blobs[blob1 + BLOB_TYPE] != BLOB_TYPE_NULL
                             && blobs[blob2 + BLOB_TYPE] != BLOB_TYPE_NULL
                             && Math.abs(blob2Width - blob1Width) <= MAXIMUM_DIFFERENCE_IN_WIDTH_BETWEEN_TWO_BLOBS_IN_ORDER_TO_JOIN) {
+
+                        if(tlBlob1 > tlBlob2) {
+                            int temp = tlBlob1;
+                            tlBlob1 = tlBlob2;
+                            tlBlob2 = temp;
+                        }
 
                         blobs[tlBlob1 + BLOB_LEFT] = Math.min(blobs[tlBlob1 + BLOB_LEFT], blobs[tlBlob2 + BLOB_LEFT]);
                         blobs[tlBlob1 + BLOB_RIGHT] = Math.max(blobs[tlBlob1 + BLOB_RIGHT], blobs[tlBlob2 + BLOB_RIGHT]);
