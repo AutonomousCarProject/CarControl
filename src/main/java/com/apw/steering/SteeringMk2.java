@@ -2,7 +2,6 @@ package com.apw.steering;
 
 import com.apw.carcontrol.CarControl;
 
-import com.apw.sbcio.fakefirm.ArduinoIO;
 import java.util.ArrayList;
 
 /**
@@ -16,45 +15,58 @@ import java.util.ArrayList;
  */
 public class SteeringMk2 extends SteeringBase {
 
-    private final int NUM_PREVIOUS = 3;
-    private final int MAX_DIFF = 5;
-    private final double MIN_DIST_LOOK = 0.8;
-    private final double MAX_DIST_LOOK = 1;
-    private final double LINE_TRANSLATION_MULTIPLIER = 0.4;
+    private final int NUM_PREVIOUS = 3; // Number of previous frames to average degree to steer to
+    private final int MAX_DIFF = 5; // Maximum X Pixel difference from one row to the next
+    private final double MIN_DIST_LOOK = 0.4; // Percent of midPoints to start at
+    private final double MAX_DIST_LOOK = 0.6; // Percent of midPoints to end at.
 
     private boolean leftSideFound = false;
     private boolean rightSideFound = false;
-    private ArrayList<Integer> previousHeadings = new ArrayList<>();
-    private int furthestY;
+    private ArrayList<Integer> previousHeadings = new ArrayList<>(); // Array containing the previous frames' degree
+    private int furthestY; // Furthest point to look for white lines.
     private int previousMidX;
 
+    /**
+     * Constructor used for TrakSim.
+     *
+     * @param cameraWidth  Width of the camera, (excluding maps on right side)
+     * @param cameraHeight Height of the camera
+     * @param screenWidth  Width of the screen, (including maps on right side)
+     */
     public SteeringMk2(int cameraWidth, int cameraHeight, int screenWidth) {
         this.cameraWidth = cameraWidth;
         this.cameraHeight = cameraHeight;
         this.screenWidth = screenWidth;
-        for (int count = 0; count < NUM_PREVIOUS; count ++) {
-            previousHeadings.add(0);
-        }
         origin = new Point(cameraWidth / 2, cameraHeight);
         furthestY = (int) (cameraHeight * 0.55);
+        previousMidX = screenWidth / 2;
+        for (int count = 0; count < NUM_PREVIOUS; count++) {
+            previousHeadings.add(0);
+        }
     }
 
+    /**
+     * Constructor used for actual camera
+     *
+     * @param control CarControl that contains data from other modules.
+     */
     public SteeringMk2(CarControl control) {
         this.cameraWidth = control.getImageWidth();
         this.cameraHeight = control.getImageHeight();
         this.screenWidth = this.cameraWidth;
         origin = new Point(cameraWidth / 2, cameraHeight);
-        for (int count = 0; count < NUM_PREVIOUS; count ++) {
+        furthestY = (int) (cameraHeight * 0.55);
+        previousMidX = screenWidth / 2;
+        for (int count = 0; count < NUM_PREVIOUS; count++) {
             previousHeadings.add(0);
         }
-        furthestY = (int) (cameraHeight * 0.55);
     }
 
     /**
-     * not currently being used.
+     * Called to drive the car
      *
-     * @param pixels the array of pixels.
-     * @return Degree to drive to
+     * @param pixels the array of screen pixels.
+     * @return Degree the car needs to turn.
      */
     @Override
     public int drive(int pixels[]) {
@@ -68,7 +80,7 @@ public class SteeringMk2 extends SteeringBase {
         for (Integer deg : previousHeadings) {
             averageDeg += deg;
         }
-        return (int)(averageDeg / NUM_PREVIOUS);
+        return (int) (averageDeg / NUM_PREVIOUS);
     }
 
 
@@ -79,12 +91,11 @@ public class SteeringMk2 extends SteeringBase {
      */
     @Override
     public void findPoints(int[] pixels) {
-    	if(pixels == null) {
-    		return;
-    	}
-    	
+        if (pixels == null) {
+            return;
+        }
         int lastX = cameraWidth / 2;
-        int midX = cameraWidth / 2; // midX is where the car thinks is the middle of the road
+        int midX = previousMidX; // midX is where the car thinks is the middle of the road
         double m = (cameraHeight * 0.24) / (cameraWidth * 0.91);
         double b = (-m * (0.06 * cameraWidth)) + (cameraHeight * 0.52);
         boolean haveNewMidX = false;
@@ -128,7 +139,7 @@ public class SteeringMk2 extends SteeringBase {
                 }
                 midPoints.add(new Point(midX, cameraRow));
 
-            // If One lane is found, add midpoint 100 pixels towards middle.
+                // If One lane is found, add midpoint 100 pixels towards middle.
             } else if (rightSideFound) {
                 Point lastRightPoint = rightPoints.get(rightPoints.size() - 1);
                 midX = lastRightPoint.x - (int) ((lastRightPoint.y - b) / (2 * m));
@@ -152,7 +163,7 @@ public class SteeringMk2 extends SteeringBase {
                 }
                 midPoints.add(new Point(midX, cameraRow));
 
-            // If no lanes are found, route towards found lines.
+                // If no lanes are found, route towards found lines.
             } else {
                 midX = this.cameraWidth / 2;
                 if (Math.abs(midX - lastX) > MAX_DIFF) {
@@ -166,8 +177,13 @@ public class SteeringMk2 extends SteeringBase {
             }
             if (midX != cameraWidth / 2 && !haveNewMidX) {
                 previousMidX = midX;
+
                 haveNewMidX = true;
             }
+            if (midX != cameraWidth / 2 && !haveNewMidX) {
+                previousMidX = midX;
+                haveNewMidX = true;
+            }//*/
 
             rightSideFound = false;
             leftSideFound = false;
@@ -187,7 +203,7 @@ public class SteeringMk2 extends SteeringBase {
     /**
      * Average the midpoints to create the steerPoint.
      */
-    private void averagePoints() {
+    void averagePoints() {
 
         startTarget = (int) (midPoints.size() * MIN_DIST_LOOK);
         endTarget = (int) (midPoints.size() * MAX_DIST_LOOK);

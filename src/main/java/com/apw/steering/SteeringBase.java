@@ -1,6 +1,5 @@
 package com.apw.steering;
 import com.apw.apw3.DriverCons;
-import com.apw.carcontrol.CarControl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,24 +12,26 @@ import java.util.List;
  * @author Nathan Ng ©2018
  */
 public abstract class SteeringBase implements Steerable {
-    public int startTarget = 0;
-    public int endTarget = 0;
-    public Point steerPoint = new Point(0, 0); // Point to where the car attempts to steer towards
-    public List<Point> leftPoints = new ArrayList<>();
-    public List<Point> rightPoints = new ArrayList<>();
-    public List<Point> midPoints = new ArrayList<>();
-    public int cameraHeight = 0;
-    public int cameraWidth = 0;
-    public int screenWidth = 912;
+    int startTarget = 0;
+    int endTarget = 0;
+    int cameraHeight = 0;
+    int cameraWidth = 0;
+    int screenWidth = 912;
     Point origin;
-    boolean usePID = false;
+    Point steerPoint = new Point(0, 0); // Point to where the car attempts to steer towards
+    List<Point> leftPoints = new ArrayList<>();
+    List<Point> rightPoints = new ArrayList<>();
+    List<Point> midPoints = new ArrayList<>();
+    private boolean usePID = false;
     private double integral, // The integral of the
             previousError;  // PID
-    public Point[] leftEdge;
-    public Point[] rightEdge;
-    public Point[] pathTraveled;
-    List<Double> posLog = new ArrayList<>(); // Array list for logging positions fed into it
+    private List<Double> posLog = new ArrayList<>(); // Array list for logging positions fed into it
 
+    /**
+     * How steep the curve is
+     * @param turnAngle angle from center line to furthest point
+     * @return How steep the curve is, (0-1)
+     */
     @Override
     public double curveSteepness(double turnAngle) {
         return Math.abs(turnAngle) / (45);
@@ -42,7 +43,7 @@ public abstract class SteeringBase implements Steerable {
      *
      * @return the degreeOffset, as a integer.
      */
-    public int getDegreeOffset() {
+    int getDegreeOffset() {
         int xOffset = origin.x - steerPoint.x;
         int yOffset = Math.abs(origin.y - steerPoint.y);
 
