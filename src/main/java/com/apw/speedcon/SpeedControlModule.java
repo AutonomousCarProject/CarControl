@@ -7,6 +7,8 @@ import com.apw.pedestrians.Constant;
 import com.apw.pedestrians.PedestrianDetector;
 import com.apw.pedestrians.blobtrack.MovingBlob;
 import com.apw.pedestrians.image.Color;
+import com.apw.sbcio.PWMController;
+import com.apw.sbcio.fakefirm.ArduinoIO;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -31,6 +33,7 @@ public class SpeedControlModule implements Module {
 	
 	private PedestrianDetector pedDetect;
 	private CameraCalibration cameraCalibrator;
+	private ArduinoIO driveSys;
 	
 	private List<MovingBlob> currentBlobs;
 	//private List<MovingBlob> currentPeds;
@@ -45,6 +48,7 @@ public class SpeedControlModule implements Module {
 		this.currentBlobs = new ArrayList<>();
 		this.cameraCalibrator = new CameraCalibration();
 		this.sizeCons = new SizeConstants();
+		this.driveSys = new ArduinoIO();
 	}
 	
 	/**
@@ -397,14 +401,16 @@ public class SpeedControlModule implements Module {
 	//Calculates when the car should start to stop, then reduces its speed.
 	private void determineStop() {
 		if (stopType != 0) {
+			
 			stopsignWaitSubsequent();
 			
 			//distToBlob -= (rpmSpeed / Constants.WHEEL_GEARING) * Constants.WHEEL_CIRCUMFERENCE * Constant.TIME_DIFFERENCE;
+			//distToBlob -= driveSys.getSpeed(); //will return null if tracksim, will return number of times driveshaft turned in the last second, often 0?
 			distToBlob -= getEstimatedSpeed() * (Constant.TIME_DIFFERENCE / 1000.0);
 			
 			//System.out.println("frameWait: " + frameWait);
 			//System.out.println("stopType: " + stopType);
-			//System.out.println("distToBlob: " + distToBlob);
+			System.out.println("distToBlob: " + distToBlob);
 			//System.out.println(getEstimatedSpeed());
 			//System.out.println(Constant.TIME_DIFFERENCE);
 			//System.out.println("desiredSpeed: " + desiredSpeed);
@@ -454,7 +460,14 @@ public class SpeedControlModule implements Module {
 	public void calculateEstimatedSpeed(int gasAmount) {
 		currentEstimatedSpeed = gasAmount;
 	}
-  
+	
+	//public double getRPM() {
+		//if (driveSys.getSpeed() == 1) {
+			//currentRotation = System.nanoTime();
+		//}
+		//lastRotation
+	//}
+	
 	public int getDesiredSpeed() {
 		return (int) desiredSpeed;
 	}
