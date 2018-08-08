@@ -2,6 +2,7 @@ package com.apw.pedestrians.blobdetect;
 
 import com.aparapi.Kernel;
 import com.aparapi.Range;
+import com.aparapi.device.Device;
 import com.apw.pedestrians.image.Color;
 import com.apw.pedestrians.image.Pixel;
 
@@ -25,6 +26,8 @@ public class PrimitiveBlobDetection extends BlobDetection {
 
     @Override
     public List<Blob> getBlobs(Pixel[][] pixels) {
+        long time = System.currentTimeMillis();
+
         if (pixels.length == 0) {
             return null;
         }
@@ -189,6 +192,9 @@ public class PrimitiveBlobDetection extends BlobDetection {
                 blobList.add(getBlob(i));
             }
         }
+
+
+        System.out.println(System.currentTimeMillis() - time);
 
         return blobList;
     }

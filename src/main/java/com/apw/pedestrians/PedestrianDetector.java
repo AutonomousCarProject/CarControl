@@ -2,6 +2,7 @@ package com.apw.pedestrians;
 
 import com.apw.pedestrians.blobdetect.Blob;
 import com.apw.pedestrians.blobdetect.BlobDetection;
+import com.apw.pedestrians.blobdetect.NonGPUPrimitiveBlobDetection;
 import com.apw.pedestrians.blobdetect.PrimitiveBlobDetection;
 import com.apw.pedestrians.blobfilter.BlobFilter;
 import com.apw.pedestrians.blobtrack.MovingBlob;
@@ -21,7 +22,8 @@ public class PedestrianDetector {
 
     public PedestrianDetector() {
 //        this(new BlobDetection(), new MovingBlobDetection(), new BlobFilter());
-        this(new PrimitiveBlobDetection(), new MovingBlobDetection(), new BlobFilter());
+        this(new NonGPUPrimitiveBlobDetection(), new MovingBlobDetection(), new BlobFilter());
+//        this(new PrimitiveBlobDetection(), new MovingBlobDetection(), new BlobFilter());
     }
 
     public PedestrianDetector(BlobDetection blobDetection, MovingBlobDetection movingBlobDetection, BlobFilter blobFilter) {
