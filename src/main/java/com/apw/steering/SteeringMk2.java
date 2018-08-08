@@ -152,7 +152,7 @@ public class SteeringMk2 extends SteeringBase {
                         midX = lastX - MAX_DIFF;
                     }
                 }
-                //midPoints.add(new Point(midX, cameraRow));
+                midPoints.add(new Point(midX, cameraRow));
             }
 
             rightSideFound = false;
