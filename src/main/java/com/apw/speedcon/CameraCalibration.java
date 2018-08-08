@@ -130,7 +130,7 @@ public class CameraCalibration {
 		//System.out.print("Distance to object = " + (knownWidth * cameraFocalLength) / objPixelWidth);
 		System.out.println("special stop");
 		System.out.println("Known width = " + knownWidth);
-		double hyp =  distanceToObj(knownWidth + 2.5, objPixelWidth);
+		double hyp =  distanceToObj(knownWidth, objPixelWidth);
 		System.out.println("Hyp = " + hyp);
 		double a = Math.pow(hyp, 2) - Math.pow(objectHeight, 2);
 		System.out.println("special = " + Math.sqrt(a));

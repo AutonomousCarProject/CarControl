@@ -95,7 +95,6 @@ public class SpeedControlModule implements Module {
 			return;
 		}
 		
-		PedestrianDetector pedDetect = new PedestrianDetector();
 		
 		byte[] limitArray = new byte[Constants.SCREEN_FILTERED_WIDTH * Constants.SCREEN_HEIGHT];
 		ImageManipulator.limitTo(limitArray, control.getProcessedImage(), Constants.SCREEN_FILTERED_WIDTH, Constants.SCREEN_HEIGHT, Constants.SCREEN_FILTERED_WIDTH, Constants.SCREEN_HEIGHT, false);
