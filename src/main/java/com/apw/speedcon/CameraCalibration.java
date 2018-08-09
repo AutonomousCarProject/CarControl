@@ -40,7 +40,6 @@ public class CameraCalibration {
 	 */
 
 
-	private PedestrianDetector pedDetect;
 
 	//Camera information
 	private double cameraFocalLength;	//If used in sim, leave at 35, if testing IRL leave blank and use calibrateCamera
@@ -58,9 +57,10 @@ public class CameraCalibration {
 		cameraFocalLength = 35;
 		relativeWorldScale = 8;
 
-		this.pedDetect = new PedestrianDetector();
+		//testBlobWidthHeight = 9; //Set this to the width of the blob you will be testing for calibration
+		//testBlobDistance = 28;    //Set this to the distance the blob is away from the camera lens
 
-		/*
+		
 		//Tries to find a file containing the focal length
 		try{
 
@@ -77,7 +77,7 @@ public class CameraCalibration {
 		}catch(IOException e){
 			e.printStackTrace();
 		}
-		*/
+		
 
 	}
 
@@ -87,8 +87,13 @@ public class CameraCalibration {
 		//Searches for a blue blob
 		for (MovingBlob i : currentBlobs) {
 			if (i.color.getColor() == Color.RED) {
+				
+				//testBlobWidthHeight = 9; //Set this to the width of the blob you will be testing for calibration
+				//testBlobDistance = 28;    //Set this to the distance the blob is away from the camera lens
+				
 				testBlobDistance = Math.sqrt(Math.pow(Math.abs(control.getPosition(true) - (2 * 29.5)), 2) + Math.pow(Math.abs(control.getPosition(false) - (2 * 30)), 2));
 				testBlobWidthHeight = ((double) 29 / (double) 44); //Find this in the txt file, image index
+				
 				testBlob = i;
 				findFocalLength(testBlob);
 				break;
@@ -96,7 +101,9 @@ public class CameraCalibration {
 		}
 
 		//Used to test distance to found test blob, should be same as testBlobDistance
-		distanceToObj(testBlobWidthHeight, testBlob.width);
+		
+		//distanceToObj(testBlobWidthHeight, testBlob.width);
+		//System.out.println(distanceToObj(testBlobWidthHeight, testBlob.width));
 
 
 		//Saves the camera calibration data, only needed once or when changing cameras
@@ -104,7 +111,6 @@ public class CameraCalibration {
 			fileWriter = new FileWriter("calibrationData.txt");
 			fileWriter.write(Double.toString(cameraFocalLength));
 			fileWriter.close();
-			
 		}catch(IOException e){
 			e.printStackTrace();
 		}
@@ -114,7 +120,7 @@ public class CameraCalibration {
 
 	//Formula that calculates focal length of the test blob
 	void findFocalLength(MovingBlob blob) {
-		cameraFocalLength = (blob.width * testBlobDistance) / testBlobWidthHeight;
+		cameraFocalLength = 2.4 * ((blob.width * testBlobDistance) / testBlobWidthHeight);
 		System.out.println("Focal Length = " + cameraFocalLength);
 	}
 
@@ -130,7 +136,7 @@ public class CameraCalibration {
 		//System.out.print("Distance to object = " + (knownWidth * cameraFocalLength) / objPixelWidth);
 		System.out.println("special stop");
 		System.out.println("Known width = " + knownWidth);
-		double hyp =  distanceToObj(knownWidth + 2.5, objPixelWidth);
+		double hyp =  distanceToObj(knownWidth, objPixelWidth);
 		System.out.println("Hyp = " + hyp);
 		double a = Math.pow(hyp, 2) - Math.pow(objectHeight, 2);
 		System.out.println("special = " + Math.sqrt(a));

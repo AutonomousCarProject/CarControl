@@ -1,5 +1,6 @@
 package com.apw.speedcon;
 
+import com.apw.carcontrol.CamControl;
 import com.apw.carcontrol.CarControl;
 import com.apw.carcontrol.Module;
 import com.apw.imagemanagement.ImageManipulator;
@@ -7,6 +8,9 @@ import com.apw.pedestrians.Constant;
 import com.apw.pedestrians.PedestrianDetector;
 import com.apw.pedestrians.blobtrack.MovingBlob;
 import com.apw.pedestrians.image.Color;
+import com.apw.pedestrians.image.Pixel;
+import com.apw.sbcio.PWMController;
+import com.apw.sbcio.fakefirm.ArduinoIO;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -31,11 +35,13 @@ public class SpeedControlModule implements Module {
 	
 	private PedestrianDetector pedDetect;
 	private CameraCalibration cameraCalibrator;
+	private ArduinoIO driveSys;
 	
 	private List<MovingBlob> currentBlobs;
 	//private List<MovingBlob> currentPeds;
 	
 	private SizeConstants sizeCons;
+	private Pixel pixel;
 	
 	/**
 	 * A basic constructor for our SpeedController.
@@ -45,6 +51,7 @@ public class SpeedControlModule implements Module {
 		this.currentBlobs = new ArrayList<>();
 		this.cameraCalibrator = new CameraCalibration();
 		this.sizeCons = new SizeConstants();
+		this.driveSys = new ArduinoIO();
 	}
 	
 	/**
@@ -53,10 +60,11 @@ public class SpeedControlModule implements Module {
 	 */
 	@Override
 	public void initialize(CarControl control) {
-		control.addKeyEvent(KeyEvent.VK_P, () -> stopType = 1);
-		control.addKeyEvent(KeyEvent.VK_O, () -> stopType = 3);
-		control.addKeyEvent(KeyEvent.VK_I, () -> stopType = 0);
-		control.addKeyEvent(KeyEvent.VK_I, () -> cycleStopping = false);
+		control.addKeyEvent(KeyEvent.VK_P, () -> fakeRed(control));
+		control.addKeyEvent(KeyEvent.VK_O, () -> fakeYellow(control));
+		control.addKeyEvent(KeyEvent.VK_I, () -> fakeGreen(control));
+		control.addKeyEvent(KeyEvent.VK_U, () -> fakeSign(control));
+		control.addKeyEvent(KeyEvent.VK_Y, () -> incrementStopDist());
 		control.addKeyEvent(KeyEvent.VK_B, () -> Settings.blobsOn ^= true);
 		control.addKeyEvent(KeyEvent.VK_V, () -> Settings.overlayOn ^= true);
 		control.addKeyEvent(KeyEvent.VK_F, () -> cameraCalibrator.calibrateCamera(control, currentBlobs));
@@ -75,13 +83,21 @@ public class SpeedControlModule implements Module {
 	 */
 	@Override
 	public void update(CarControl control) {
-		List<MovingBlob> blobs = this.pedDetect.getAllBlobs(control.getProcessedImage(), 640);
-		//List<MovingBlob> peds = this.pedDetect.detect(control.getProcessedImage(), 912, blobs);
-		this.currentBlobs = blobs;
-		//this.currentPeds = peds;
+		if (control instanceof CamControl) {
+			List<MovingBlob> blobs = this.pedDetect.getAllBlobs(control.getProcessedImage(), control.getImageWidth());
+			//List<MovingBlob> peds = this.pedDetect.detect(control.getProcessedImage(), control.getImageWidth(), blobs);
+			this.currentBlobs = blobs;
+			//this.currentPeds = peds;
+		}
+		else {
+			List<MovingBlob> blobs = this.pedDetect.getAllBlobs(control.getProcessedImage(), Constants.SCREEN_WIDTH);
+			//List<MovingBlob> peds = this.pedDetect.detect(control.getProcessedImage(), Constants.SCREEN_WIDTH, blobs);
+			this.currentBlobs = blobs;
+			//this.currentPeds = peds;
+		}
 		
 		onUpdate(control);
-		control.accelerate(true, getNextSpeed());
+		control.accelerate(true, (int)Math.min(Constants.MAX_SPEED, getNextSpeed()));
 		System.out.println("getNextSpeed(): " + getNextSpeed());
 	}
 	
@@ -91,10 +107,21 @@ public class SpeedControlModule implements Module {
 			return;
 		}
 		
-		PedestrianDetector pedDetect = new PedestrianDetector();
 		
-		byte[] limitArray = new byte[Constants.SCREEN_FILTERED_WIDTH * Constants.SCREEN_HEIGHT];
-		ImageManipulator.limitTo(limitArray, control.getProcessedImage(), Constants.SCREEN_FILTERED_WIDTH, Constants.SCREEN_HEIGHT, Constants.SCREEN_FILTERED_WIDTH, Constants.SCREEN_HEIGHT);
+		double widthMultiplier;
+		double heightMultiplier;
+		if (control instanceof CamControl) {
+			widthMultiplier = (1.0 * control.getWindowWidth() / control.getImageWidth());
+			heightMultiplier = (1.0 * control.getWindowHeight() / control.getImageHeight());	
+		}
+		else {
+			widthMultiplier = (1.0 * control.getWindowWidth() / Constants.SCREEN_WIDTH);
+			heightMultiplier = (1.0 * control.getWindowHeight() / Constants.SCREEN_HEIGHT);
+		}
+		
+		
+		byte[] limitArray = new byte[Constants.SCREEN_WIDTH * Constants.SCREEN_HEIGHT];
+		ImageManipulator.limitTo(limitArray, control.getProcessedImage(), Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
 		
 		if(Settings.overlayOn){
 			//Draw our stoplight hitbox in constant designated color
@@ -116,9 +143,9 @@ public class SpeedControlModule implements Module {
 					System.out.println(blob.id);
 				}
 			}
-	}
+		}
 		
-		if (Settings.colorMode >= Settings.numColorModes) {
+		if (Settings.colorMode > Settings.maxColorMode) {
 			Settings.colorMode = 0;
 		}
 		if (Settings.blobsOn) {
@@ -184,7 +211,7 @@ public class SpeedControlModule implements Module {
 					}
 					
 					//Draw our current blob on screen
-					g.drawRect(blob.x, blob.y + 16, blob.width, blob.height);
+					g.drawRect((int) (blob.x * widthMultiplier), (int) ((blob.y + 16) * heightMultiplier), blob.width, blob.height);
 				}
 			}
 		}
@@ -373,19 +400,20 @@ public class SpeedControlModule implements Module {
 			stopsignWaitFirst();
 			
 			double blobRealSize = getStopReal(stoppingBlob); //Gets real size
-			distToBlob = cameraCalibrator.distanceToObj(blobRealSize/cameraCalibrator.relativeWorldScale, stoppingBlob.width, sizeCons.SIGN_INFO.get(stoppingBlob.type).get(6)); //Finds distance to closest blob based on real wrold size and pixel size
-//			distToBlob = cameraCalibrator.distanceToObj(blobRealSize, stoppingBlob.width, sizeCons.SIGN_INFO.get(stoppingBlob.type).get(6)); //Finds distance to closest blob based on real wrold size and pixel size
-
-			System.out.println("frameWait: " + frameWait);
-			System.out.println("stopType: " + stopType);
-			System.out.println("desiredSpeed: " + desiredSpeed);
-			System.out.println("getEstimatedSpeed: " + getEstimatedSpeed());
-			System.out.println("distToBlob: " + distToBlob);
-			System.out.println("blobRealSize: " + blobRealSize);
-			System.out.println("stoppingBlob.width: " + stoppingBlob.width);
-			System.out.println("sizeCons.SIGN_INFO.get(stoppingBlob.type).get(6): " + sizeCons.SIGN_INFO.get(stoppingBlob.type).get(6));
-			System.out.println("Actual dist: " + Math.sqrt(Math.pow(Math.abs(control.getPosition(true) - (2 * 28.75)), 2) + Math.pow(Math.abs(control.getPosition(false) - (2 * 29.5)), 2)));
-			System.out.println(cameraCalibrator.calcStopRate(getEstimatedSpeed(), cameraCalibrator.getStopTime(distToBlob, getEstimatedSpeed())));
+			distToBlob = cameraCalibrator.distanceToObj(blobRealSize, stoppingBlob.width, sizeCons.SIGN_INFO.get(stoppingBlob.type).get(6)); //Finds distance to closest blob based on real wrold size and pixel size
+			//change this to initDistToBlob when adding rotations
+			//stoppingRotations = driveSys.totalRotations;
+			
+			//System.out.println("frameWait: " + frameWait);
+			//System.out.println("stopType: " + stopType);
+			//System.out.println("desiredSpeed: " + desiredSpeed);
+			//System.out.println("getEstimatedSpeed: " + getEstimatedSpeed());
+			//System.out.println("distToBlob: " + distToBlob);
+			//System.out.println("blobRealSize: " + blobRealSize);
+			//System.out.println("stoppingBlob.width: " + stoppingBlob.width);
+			//System.out.println("sizeCons.SIGN_INFO.get(stoppingBlob.type).get(6): " + sizeCons.SIGN_INFO.get(stoppingBlob.type).get(6));
+			//System.out.println("Actual dist: " + Math.sqrt(Math.pow(Math.abs(control.getPosition(true) - (2 * 28.75)), 2) + Math.pow(Math.abs(control.getPosition(false) - (2 * 29.5)), 2)));
+			//System.out.println(cameraCalibrator.calcStopRate(getEstimatedSpeed(), cameraCalibrator.getStopTime(distToBlob, getEstimatedSpeed())));
 			
 			this.desiredSpeed = desiredSpeed - cameraCalibrator.calcStopRate(getEstimatedSpeed(), cameraCalibrator.getStopTime(distToBlob, getEstimatedSpeed()));
 		
@@ -398,14 +426,19 @@ public class SpeedControlModule implements Module {
 	//Calculates when the car should start to stop, then reduces its speed.
 	private void determineStop() {
 		if (stopType != 0) {
+			
 			stopsignWaitSubsequent();
 			
 			//distToBlob -= (rpmSpeed / Constants.WHEEL_GEARING) * Constants.WHEEL_CIRCUMFERENCE * Constant.TIME_DIFFERENCE;
-			distToBlob -= getEstimatedSpeed() * (Constant.TIME_DIFFERENCE / 1000);
+			//distToBlob -= driveSys.getSpeed(); //will return null if tracksim, will return number of times driveshaft turned in the last second, often 0?
+			distToBlob -= getEstimatedSpeed() * (Constant.TIME_DIFFERENCE / 1000.0);
 			
 			//System.out.println("frameWait: " + frameWait);
 			//System.out.println("stopType: " + stopType);
 			//System.out.println("distToBlob: " + distToBlob);
+			//System.out.println(getEstimatedSpeed());
+			//System.out.println(Constant.TIME_DIFFERENCE);
+			//System.out.println("desiredSpeed: " + desiredSpeed);
 			//System.out.println(getEstimatedSpeed());
 			//System.out.println(Constant.TIME_DIFFERENCE);
 			//System.out.println("desiredSpeed: " + desiredSpeed);
@@ -455,7 +488,14 @@ public class SpeedControlModule implements Module {
 	public void calculateEstimatedSpeed(int gasAmount) {
 		currentEstimatedSpeed = gasAmount;
 	}
-  
+	
+	//public double getRPM() {
+		//if (driveSys.getSpeed() == 1) {
+			//currentRotation = System.nanoTime();
+		//}
+		//lastRotation
+	//}
+	
 	public int getDesiredSpeed() {
 		return (int) desiredSpeed;
 	}
@@ -546,9 +586,9 @@ public class SpeedControlModule implements Module {
 		else if (blob.color.getColor() == Color.YELLOW &&
 			blob.age > Constants.BLOB_AGE &&
 			blob.height > Constants.BLOB_MIN_HEIGHT &&
-			blob.height < (1/2) * Constants.BLOB_MAX_HEIGHT &&
+			blob.height < Constants.BLOB_MAX_HEIGHT &&
 			blob.width > Constants.BLOB_MIN_WIDTH &&
-			blob.width < (1/2) * Constants.BLOB_MAX_WIDTH &&
+			blob.width < Constants.BLOB_MAX_WIDTH &&
 			blob.x > Constants.STOPLIGHT_MIN_X &&
 			blob.x < Constants.STOPLIGHT_MAX_X &&
 			blob.y > Constants.STOPLIGHT_MIN_Y &&
@@ -592,6 +632,84 @@ public class SpeedControlModule implements Module {
 	
 	public CameraCalibration getCalibrator() {
 		return cameraCalibrator;
+	}
+	
+	public void fakeRed(CarControl control) {
+		pixel = new Pixel(com.apw.pedestrians.image.Color.RED);
+		currentBlobs.add(currentBlobs.get(0));
+		currentBlobs.get(currentBlobs.size() - 1).set(Settings.stopDist, Settings.stopDist, 0, 0, pixel, currentBlobs.get(0).id);
+		MovingBlob blob = currentBlobs.get(currentBlobs.size() - 1);
+		
+		System.out.println(blob);
+		System.out.println(blob.color.getColor());
+		
+		blob.type = "StopLightWidth";
+		
+		cycleStopping = true;
+		stopType = 2;
+		
+		determineStop(blob, sizeCons.SIGN_INFO.get(blob.type).get(6), control);
+	}
+	
+	public void fakeYellow(CarControl control) {
+		pixel = new Pixel(com.apw.pedestrians.image.Color.YELLOW);
+		currentBlobs.add(currentBlobs.get(0));
+		currentBlobs.get(currentBlobs.size() - 1).set(Settings.stopDist, Settings.stopDist, 0, 0, pixel, currentBlobs.get(0).id);
+		MovingBlob blob = currentBlobs.get(currentBlobs.size() - 1);
+
+		System.out.println(blob);
+		System.out.println(blob.color.getColor());
+		
+		blob.type = "StopLightWidth";
+		
+		cycleStopping = true;
+		stopType = 3;
+		
+		determineStop(blob, sizeCons.SIGN_INFO.get(blob.type).get(6), control);
+	}
+	
+	public void fakeGreen(CarControl control) {
+		pixel = new Pixel(com.apw.pedestrians.image.Color.GREEN);
+		currentBlobs.add(currentBlobs.get(0));
+		currentBlobs.get(currentBlobs.size() - 1).set(Settings.stopDist, Settings.stopDist, 0, 0, pixel, currentBlobs.get(0).id);
+		MovingBlob blob = currentBlobs.get(currentBlobs.size() - 1);
+		
+		blob.type = "StopLightWidth";
+		
+		System.out.println(blob);
+		System.out.println(blob.color.getColor());
+		
+		cycleStopping = false;
+		stopType = 0;
+		
+		determineStop(blob, sizeCons.SIGN_INFO.get(blob.type).get(6), control);
+	}
+	
+	public void fakeSign(CarControl control) {
+		pixel = new Pixel(com.apw.pedestrians.image.Color.RED);
+		currentBlobs.add(currentBlobs.get(0));
+		currentBlobs.get(currentBlobs.size() - 1).set(Settings.stopDist, Settings.stopDist, 0, 0, pixel, currentBlobs.get(0).id);
+		MovingBlob blob = currentBlobs.get(currentBlobs.size() - 1);
+		
+		blob.type = "Stop";
+		
+		System.out.println(blob);
+		System.out.println(blob.color.getColor());
+		
+		cycleStopping = true;
+		stopType = 1;
+		
+		determineStop(blob, sizeCons.SIGN_INFO.get(blob.type).get(6), control);
+	}
+	
+	public void incrementStopDist() {
+		Settings.stopDist += 2;
+		
+		if (Settings.stopDist > Settings.maxStopDist) {
+			Settings.stopDist = 0;
+		}
+		
+		System.out.println(Settings.stopDist);
 	}
 	
 	//Getting and setting our emergency stop boolean

@@ -1,22 +1,22 @@
 package com.apw.speedcon;
 
-import com.apw.apw3.DriverCons;
-
 public class Constants {
   //Arduino settings
   public static final boolean
-	useServos = true && DriverCons.D_LiveCam,
+	useServos = false,
 	readMessages = false;
   
 	//Default Debug Overlays
 	public static final boolean
-	DEFAULT_OVERLAY = true,		//Sets the default state as to the display of blob detection boxes
+	DEFAULT_OVERLAY = false,		//Sets the default state as to the display of blob detection boxes
 	DEFAULT_BLOBS = false,			//Sets the default state as to the display of blob boundaries
 	DEFAULT_WRITE_BLOBS_TO_CONSOLE = false,	//Sets the default state as to the printing of all blob information
 	DEFAULT_WRITE_SPEED_TO_CONSOLE = false;	//Sets the default state as to the printing of the current speed
 	public static final int
-	DEFAULT_COLOR_MODE = 0,			//Sets the default state as to the blob boundary color (0 = age, 1 = color, 2 = velocity) 
-	NUM_COLOR_MODES = 3;			//Sets the number current total number of blob boundary color modes
+	DEFAULT_COLOR_MODE = 1,			//Sets the default state as to the blob boundary color (0 = age, 1 = color, 2 = velocity) 
+	MAX_COLOR_MODE = 2,			//Sets the number current total number of blob boundary color modes
+	DEFAULT_STOP_DIST = 10,
+	MAX_STOP_DIST = 20;
 	
 	//Speed Related Constants
 	public static final double
@@ -36,7 +36,7 @@ public class Constants {
 	//Stop Frames
 	public static final int
 	WAIT_AT_STOPSIGN_FRAMES = 50,	//Frames to wait at stopsign once stopped
-	MAX_SPEED_INCREMENT = 3;		//Min increment amount between current and next frame speed
+	MAX_SPEED_INCREMENT = 5;		//Min increment amount between current and next frame speed
 	
 	//Blob Filters
 	public static final int
@@ -83,7 +83,7 @@ public class Constants {
 	
 	//Other
 	public static final int
-	SCREEN_WIDTH = 640,
+	SCREEN_WIDTH = 912,
 	SCREEN_FILTERED_WIDTH = 640,
 	SCREEN_HEIGHT = 480;
 	
