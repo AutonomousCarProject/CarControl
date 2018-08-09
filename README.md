@@ -4,12 +4,12 @@ Speed, steering, and object detection for an autonomous RC car
 ### Branch specific build status
 Branch      | Ubuntu x86_64 | macOS High Sierra
 ----------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------
-Master      | [![Build Status](https://travis-ci.org/AutonomousCarProject/CarControl.svg?branch=master)](https://travis-ci.org/AutonomousCarProject/CarControl)      | N/A
-Steering    | [![Build Status](https://travis-ci.org/AutonomousCarProject/CarControl.svg?branch=steering)](https://travis-ci.org/AutonomousCarProject/CarControl)    | N/A
-Speed       | [![Build Status](https://travis-ci.org/AutonomousCarProject/CarControl.svg?branch=speed)](https://travis-ci.org/AutonomousCarProject/CarControl)       | N/A
-Image       | [![Build Status](https://travis-ci.org/AutonomousCarProject/CarControl.svg?branch=image)](https://travis-ci.org/AutonomousCarProject/CarControl)       | N/A
-GPU         | [![Build Status](https://travis-ci.org/AutonomousCarProject/CarControl.svg?branch=gpu)](https://travis-ci.org/AutonomousCarProject/CarControl)         | N/A
-Interfacing | [![Build Status](https://travis-ci.org/AutonomousCarProject/CarControl.svg?branch=Interfacing)](https://travis-ci.org/AutonomousCarProject/CarControl) | N/A
+Master      | [![Travis (.org) branch](https://img.shields.io/travis/AutonomousCarProject/CarControl/master.svg)](https://travis-ci.org/AutonomousCarProject/CarControl)    | N/A
+Steering    | [![Travis (.org) branch](https://img.shields.io/travis/AutonomousCarProject/CarControl/steering.svg)](https://travis-ci.org/AutonomousCarProject/CarControl)    | N/A
+Speed       | [![Travis (.org) branch](https://img.shields.io/travis/AutonomousCarProject/CarControl/speed.svg)](https://travis-ci.org/AutonomousCarProject/CarControl)       | N/A
+Image       | [![Travis (.org) branch](https://img.shields.io/travis/AutonomousCarProject/CarControl/image.svg)](https://travis-ci.org/AutonomousCarProject/CarControl) | N/A
+GPU         | [![Travis (.org) branch](https://img.shields.io/travis/AutonomousCarProject/CarControl/gpu.svg)](https://travis-ci.org/AutonomousCarProject/CarControl) | N/A
+Interfacing | [![Travis (.org) branch](https://img.shields.io/travis/AutonomousCarProject/CarControl/Interfacing.svg)](https://travis-ci.org/AutonomousCarProject/CarControl) | N/A
 
 ## Main Components
 
@@ -114,7 +114,13 @@ or contact Tom at TPittman@IttyBittyComputers.com
 
 This project was created and is maintained by a group of highschool students in Portland, Oregon.
 
-You are welcome to submit issues and pull requests if you so desire (you probably dont).
+__Bugs and requests__: submit them through the project's issues tracker.<br>
+
+[![Issues](http://img.shields.io/github/issues/AutonomousCarProject/CarControl.svg)]( https://github.com/AutonomousCarProject/CarControl/issues )
+
+__Questions__: ask them at StackOverflow with the tag *REPO*.<br>
+
+[![StackOverflow](http://img.shields.io/badge/stackoverflow-AVP_HS-blue.svg)]( http://stackoverflow.com/questions/tagged/AVP_HS )
 
 # CI
 
@@ -125,4 +131,4 @@ You are welcome to submit issues and pull requests if you so desire (you probabl
 [Google Java Style Guide](https://google.github.io/styleguide/javaguide.html), enforced by [Google Java Formatter](https://github.com/google/google-java-format) with [google-java-format-gradle-plugin](https://github.com/sherter/google-java-format-gradle-plugin).
 
 # License
-See LICENSE
+[![Apache license](http://img.shields.io/badge/license-Apache-brightgreen.svg)](http://opensource.org/licenses/Apache-2.0)
