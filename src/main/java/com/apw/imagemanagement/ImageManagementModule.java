@@ -23,7 +23,7 @@ public class ImageManagementModule implements Module {
 
     //internal variables
     private int width, height;
-    public int[] imagePixels;
+    //public int[] imagePixels;
     public int[] displayPixels;
     public int[] BWPixels;
     public byte[] simplePixels;
@@ -57,6 +57,12 @@ public class ImageManagementModule implements Module {
         R = new byte[width*height];
         G = new byte[width*height];
         B = new byte[width*height];
+
+        //Initialize camera arrays
+        displayPixels = new int[width*height];
+        BWPixels = new int[width*height];
+        simplePixels = new byte[width*height];
+
 
         //Tells ImageManipulator what the Black/White threshold is
         ImageManipulator.setLuminanceMultiplier(luminanceMultiplier);
