@@ -87,7 +87,7 @@ If you wish to run the program with no visual display/window run with the argume
 * **C** - Enable/disable writing blobs to console.
 * **S** - Enable/disable writing speed to console.
 * **M** - Increment blob color mode.
-* **M** - Change image filter.
+* **SPACE** - Change image filter.
 * **F11** - Toggle Fullscreen window (if using WindowModule).
 
 ### Track
