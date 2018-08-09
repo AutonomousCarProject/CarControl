@@ -98,7 +98,7 @@ public class ImageManagementModule implements Module {
             }
         }else if (tile == 1){
             for(int r = 0;r<max;r+=rowV){
-                for(int c = 0;c<rowV;c+=colV){
+                for(int c = 0;c<halfRowV;c+=colV){
                     R[sum] = pixels[r+c+1];
                     G[sum] = pixels[r+c];
                     B[sum] = pixels[r+c+halfRow];
@@ -107,7 +107,7 @@ public class ImageManagementModule implements Module {
             }
         }else if (tile == 2){
             for(int r = 0;r<max;r+=rowV){
-                for(int c = 0;c<rowV;c+=colV){
+                for(int c = 0;c<halfRowV;c+=colV){
                     R[sum] = pixels[r+c+halfRow];
                     G[sum] = pixels[r+c];
                     B[sum] = pixels[r+c+1];
@@ -116,7 +116,7 @@ public class ImageManagementModule implements Module {
             }
         }else if (tile == 3){
             for(int r = 0;r<max;r+=rowV){
-                for(int c = 0;c<rowV;c+=colV){
+                for(int c = 0;c<halfRowV;c+=colV){
                     R[sum] = pixels[r+c+halfRow1];
                     G[sum] = pixels[r+c+1];
                     B[sum] = pixels[r+c];
