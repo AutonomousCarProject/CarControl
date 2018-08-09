@@ -19,7 +19,6 @@ public class BlobDetection {
     private List<Blob> blobs = new LinkedList<>();
 
     public List<Blob> getBlobs(Pixel[][] pixels) {
-        long time = System.currentTimeMillis();
         unusedBlobs.addAll(blobs);
         blobs.clear();
 
@@ -128,8 +127,6 @@ public class BlobDetection {
                 }
             }
         }
-
-        System.out.println("!!!" + (System.currentTimeMillis() - time));
         
         return blobs;
     }

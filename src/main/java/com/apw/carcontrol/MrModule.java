@@ -32,8 +32,10 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
 
     private static final int FPS = 60;
     private static final int initDelay = 100;
+    
+    private boolean window;
 
-    private MrModule(boolean realcam) {
+    private MrModule(boolean realcam, boolean window) {
         if (realcam)
             control = new CamControl(driveSys);
         else
@@ -42,8 +44,10 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         windowWidth = control.getImageWidth();
         windowHeight = control.getImageHeight();
         
+        this.window = window;
+        
         headlessInit();
-        createModules();
+        createModules(window);
     }
 
     private void headlessInit() {
@@ -62,15 +66,18 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         }
     }
 
-    private void createModules() {
-        WindowModule windowModule = new WindowModule(windowWidth, windowHeight);
-        windowModule.addKeyListener(this);
-
-        modules.add(windowModule);
+    private void createModules(boolean window) {
+    	if(window) {
+	        WindowModule windowModule = new WindowModule(windowWidth, windowHeight);
+	        windowModule.addKeyListener(this);
+	        modules.add(windowModule);
+    	}
+    	
         modules.add(new ImageManagementModule(windowWidth, windowHeight, control.getTile()));
         modules.add(new SpeedControlModule());
         modules.add(new SteeringModule());
         modules.add(new ArduinoModule(driveSys));
+        modules.add(new LatencyTestModule());
 
         for (Module module : modules) {
             module.initialize(control);
@@ -135,17 +142,25 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     private void paint() {
         if (!modules.isEmpty()) {
             for (Module module : modules) {
-                module.paint(control, ((WindowModule) (modules.get(0))).getGraphics());
+            	if(window) {
+            		module.paint(control, ((WindowModule) (modules.get(0))).getGraphics());
+            	}
             }
         }
     }
 
     public static void main(String[] args) {
         boolean realcam = true;
-        if(args.length > 0 && args[0].toLowerCase().equals("sim")) {
-            realcam = false;
+        boolean window = true;
+        if(args.length > 0) {
+        	if(args[0].toLowerCase().equals("sim")) {
+        		realcam = false;
+        	}
+        	if(args[0].toLowerCase().equals("headless")) {
+        		window = false;
+        	}
         }
-        new MrModule(realcam);
+        new MrModule(realcam, window);
     }
 
     @Override

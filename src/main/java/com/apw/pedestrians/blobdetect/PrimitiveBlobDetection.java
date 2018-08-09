@@ -31,8 +31,6 @@ public class PrimitiveBlobDetection extends BlobDetection {
 
     @Override
     public List<Blob> getBlobs(Pixel[][] pixels) {
-        long time = System.currentTimeMillis();
-
         if (pixels.length == 0) {
             return null;
         }
@@ -63,12 +61,15 @@ public class PrimitiveBlobDetection extends BlobDetection {
         Range colRange = Range.create(width / 2);
 ;
         rightCheckKernel.setValues(colors, blobs, width);
+//        rightCheckKernel.setExecutionModeWithoutFallback(EXECUTION_MODE.JTP);
         rightCheckKernel.execute(rowRange);
 
         bottomCheckKernel.setValues(colors, blobs, width, height);
         bottomCheckKernel.setOffset(0);
+//        rightCheckKernel.setExecutionModeWithoutFallback(EXECUTION_MODE.JTP);
         bottomCheckKernel.execute(colRange);
         bottomCheckKernel.setOffset(1);
+//        rightCheckKernel.setExecutionModeWithoutFallback(EXECUTION_MODE.JTP);
         bottomCheckKernel.execute(colRange);
 
         for (int i = 0; i < blobs.length; i += BLOB_NUM_INT_FIELDS) {
@@ -76,8 +77,6 @@ public class PrimitiveBlobDetection extends BlobDetection {
                 blobList.add(getBlob(i));
             }
         }
-
-        System.out.println("!!!" + (System.currentTimeMillis() - time) + rightCheckKernel.getTargetDevice().getShortDescription());
 
         return blobList;
     }
