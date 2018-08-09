@@ -30,6 +30,8 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     private int windowWidth = 912;
     private int windowHeight = 480;
 
+    private static final int FPS = 60;
+    private static final int initDelay = 100;
 
     private MrModule(boolean realcam) {
         if (realcam)
@@ -49,7 +51,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         modules = new ArrayList<>();
 
         executorService = Executors.newSingleThreadScheduledExecutor();
-        executorService.scheduleAtFixedRate(this, 1000, 1000 / 5, TimeUnit.MILLISECONDS);
+        executorService.scheduleAtFixedRate(this, initDelay, 1000 / FPS, TimeUnit.MILLISECONDS);
 
         Future run = executorService.submit(this);
 

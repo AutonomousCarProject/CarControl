@@ -7,8 +7,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 
 /**
- * Controls how the image is processed after acquisition by CamControl.
- * 
+ *  Controls how the image is processed after acquisition by CamControl.
  * @author Riley J
  * @author Joshua B
  * @author Nathan P
@@ -16,294 +15,322 @@ import java.awt.event.KeyEvent;
  */
 public class ImageManagementModule implements Module {
 
-	// adjustable variables
-	private int viewType = 4;
-	private int blackWhiteRasterVersion = 1;
-	private double luminanceMultiplier = 1.4;
+	//adjustable variables
+    private int viewType = 4;
+    private int blackWhiteRasterVersion = 1;
+    private double luminanceMultiplier = 1.4;
 
-	// internal variables
-	private int width, height;
-	public int[] imagePixels;
-	public int[] displayPixels;
-	public int[] BWPixels;
-	public byte[] simplePixels;
-	private byte tile;
-	private int frameWidth = 640;
-	boolean removeNoise = false;
-	boolean dilate = true;
 
-	ImageThread displayThread = new ImageThread(this, 1, true);
-	ImageThread BWThread = new ImageThread(this, 1, false);
-	ImageThread simpleThread = new ImageThread(this, 2, false);
+    //internal variables
+    private int width, height;
+    //public int[] imagePixels;
+    public int[] displayPixels;
+    public int[] BWPixels;
+    public byte[] simplePixels;
+    private byte tile;
+    private int frameWidth = 640;
+    boolean removeNoise = false;
+    boolean dilate = true;
+    
+    ImageThread displayThread = new ImageThread(this, 1,true);
+    ImageThread BWThread = new ImageThread(this, 1,false);
+    ImageThread simpleThread = new ImageThread(this, 2,false);
 
-	// Image Variables
-	byte[] R;
-	byte[] G;
-	byte[] B;
+    //Image Variables
+    byte[] R;
+    byte[] G;
+    byte[] B;
 
-	/**
-	 * Main constructor for imageManagement
-	 * 
-	 * @param width   the width of the camera image
-	 * @param height  the height of the camera image
-	 * @param newtile the tiling of the camera: See ImageManipulator.getPos()
-	 */
-	public ImageManagementModule(int width, int height, byte newtile) {
-		// Set passed values
-		this.width = width;
-		this.height = height;
-		tile = newtile;
+    /**
+     * Main constructor for imageManagement
+     * @param width the width of the camera image
+     * @param height the height of the camera image
+     * @param newtile the tiling of the camera: See ImageManipulator.getPos()
+     */
+    public ImageManagementModule(int width, int height, byte newtile) {
+        //Set passed values
+        this.width = width;
+        this.height = height;
+        tile = newtile;
 
-		// Create image arrays
-		R = new byte[width * height];
-		G = new byte[width * height];
-		B = new byte[width * height];
+        //Create image arrays
+        R = new byte[width*height];
+        G = new byte[width*height];
+        B = new byte[width*height];
 
-		// Tells ImageManipulator what the Black/White threshold is
-		ImageManipulator.setLuminanceMultiplier(luminanceMultiplier);
+        //Initialize camera arrays
+        displayPixels = new int[width*height];
+        BWPixels = new int[width*height];
+        simplePixels = new byte[width*height];
 
-		displayThread.start();
-		BWThread.start();
-		simpleThread.start();
 
-	}
+        //Tells ImageManipulator what the Black/White threshold is
+        ImageManipulator.setLuminanceMultiplier(luminanceMultiplier);
+        
+        displayThread.start();
+        BWThread.start();
+        simpleThread.start();
 
-	/**
-	 * Takes in a Bayer8 image and fills an array with the red values, another with
-	 * the green values and a third with the blue values
-	 * 
-	 * @param pixels Bayer8 image
-	 */
+    }
 
-	public void setupArrays(byte[] pixels) {
-		int nrows = height;
-		int ncols = width;
-		//System.out.println(tile);
-		int bit0 = ImageManipulator.getBit(tile, 0);
-		int bit1 = ImageManipulator.getBit(tile, 1);
-		int bit2 = ImageManipulator.getBit(tile, 2);
-		int offset = 2 * (1 - bit2) * ncols * bit1 + bit0 + bit1 * bit2;
-		System.out.println(ncols+", "+nrows);
-		int rowV = (4 - bit2) * ncols;
-		int halfRowV = (4 - bit2) * ncols / 2;
-		int halfRow = 2 * ncols;
-		int halfRow1 = halfRow + 1;
-		int colV = 2 + bit2;
-		int max = rowV * nrows;
-		int sum = 0;
-		if (tile == 0) {
-			for (int r = 0; r < max; r += rowV) {
-				for (int c = 0; c < halfRowV; c += colV) {
-					R[sum] = pixels[r + c];
-					G[sum] = pixels[r + c + 1];
-					B[sum] = pixels[r + c + halfRow1];
-					sum++;
-				}
-			}
-		} else if (tile == 1) {
-			for (int r = 0; r < max; r += rowV) {
-				for (int c = 0; c < halfRowV; c += colV) {
-					R[sum] = pixels[r + c + 1]; 
-					G[sum] = pixels[r + c];
-					B[sum] = pixels[r + c + halfRow];
-					sum++;
-				}
-			}
-		} else if (tile == 2) {
-			for (int r = 0; r < max; r += rowV) {
-				for (int c = 0; c < halfRowV; c += colV) {
-					R[sum] = pixels[r + c + halfRow];
-					G[sum] = pixels[r + c];
-					B[sum] = pixels[r + c + 1];
-					sum++;
-				}
-			}
-		} else if (tile == 3) {
-			for (int r = 0; r < max; r += rowV) {
-				for (int c = 0; c < halfRowV; c += colV) {
-					R[sum] = pixels[r + c + halfRow1];
-					G[sum] = pixels[r + c + 1];
-					B[sum] = pixels[r + c];
-					sum++;
-				}
-			}
-		} else if (tile == 4) {
-			for (int r = 0; r < max; r += rowV) {
-				for (int c = 0; c < rowV; c += colV) {
-					R[sum] = pixels[r + c];
-					G[sum] = pixels[r + c + 1];
-					B[sum] = pixels[r + c + 2];
-					sum++;
-				}
-			}
-		}
-	}
+    /**
+     * Takes in a Bayer8 image and fills an array with the red values, another with the green
+     * values and a third with the blue values
+     * @param pixels Bayer8 image
+     */
 
-	/**
-	 * Serves monochrome raster of given image Formatted in 1D array of bytes Uses
-	 * only the Green Value for image
-	 * 
-	 * @return monochrome image
-	 */
-	public byte[] getMonochromeRaster() {
-		byte[] mono = new byte[width * height];
-		ImageManipulator.convertToMonochromeRaster(R, G, B, mono, height, width);
-		return mono;
+    public void setupArrays(byte[] pixels){
+        int nrows = height;
+        int ncols = width;
+        int bit0 = ImageManipulator.getBit(tile,0);
+        int bit1 = ImageManipulator.getBit(tile,1);
+        int bit2 = ImageManipulator.getBit(tile,2);
+        int offset = 2*(1-bit2)*ncols*bit1+bit0+bit1*bit2;
+        int rowV = (4-bit2)*ncols;
+        int halfRowV = (4-bit2)*ncols/2;
+        int halfRow = 2*ncols;
+        int halfRow1 = halfRow+1;
+        int colV = 2+bit2;
+        int max = rowV*nrows;
+        int sum = 0;
+        if (tile == 0){
+            for(int r = 0;r<max;r+=rowV){
+                for(int c = 0;c<halfRowV;c+=colV){
+                    R[sum] = pixels[r+c];
+                    G[sum] = pixels[r+c+1];
+                    B[sum] = pixels[r+c+halfRow1];
+                    sum++;
+                }
+            }
+        }else if (tile == 1){
+            for(int r = 0;r<max;r+=rowV){
+                for(int c = 0;c<rowV;c+=colV){
+                    R[sum] = pixels[r+c+1];
+                    G[sum] = pixels[r+c];
+                    B[sum] = pixels[r+c+halfRow];
+                    sum++;
+                }
+            }
+        }else if (tile == 2){
+            for(int r = 0;r<max;r+=rowV){
+                for(int c = 0;c<rowV;c+=colV){
+                    R[sum] = pixels[r+c+halfRow];
+                    G[sum] = pixels[r+c];
+                    B[sum] = pixels[r+c+1];
+                    sum++;
+                }
+            }
+        }else if (tile == 3){
+            for(int r = 0;r<max;r+=rowV){
+                for(int c = 0;c<rowV;c+=colV){
+                    R[sum] = pixels[r+c+halfRow1];
+                    G[sum] = pixels[r+c+1];
+                    B[sum] = pixels[r+c];
+                    sum++;
+                }
+            }
+        }else if (tile == 4){
+            for(int r = 0;r<max;r+=rowV){
+                for(int c = 0;c<rowV;c+=colV){
+                    R[sum] = pixels[r+c];
+                    G[sum] = pixels[r+c+1];
+                    B[sum] = pixels[r+c+2];
+                    sum++;
+                }
+            }
+        }
+    }
 
-	}
+    /**
+     * Serves monochrome raster of given image
+     * Formatted in 1D array of bytes
+     * Uses only the Green Value for image
+     * @return monochrome image
+     */
+    public byte[] getMonochromeRaster() {
+    	byte[] mono = new byte[width * height];
+        ImageManipulator.convertToMonochromeRaster(R,G,B, mono, height, width);
+        return mono;
 
-	/**
-	 * Serves monochrome raster of given image Formatted in 1D array of bytes
-	 * Averages the RGB values of image
-	 * 
-	 * @return monochrome image
-	 */
-	public byte[] getMonochrome2Raster() {
-		byte[] mono = new byte[width * height];
-		ImageManipulator.convertToMonochrome2Raster(R, G, B, mono, height, width);
-		return mono;
-	}
+    }
 
-	/**
-	 * Serves black and white raster of given image Formatted in 1D array of
-	 * integers 0xRRGGBB Compares luminance of pixels to those around them
-	 *
-	 * @return black and white image
-	 */
-	public int[] getBlackWhiteRaster() {
-		int[] output = new int[width * height];
-		if (blackWhiteRasterVersion == 2) {
-			// ImageManipulator.convertToBlackWhite2Raster(pixels, output, height, width,
-			// tile);
-		} else {
-			ImageManipulator.convertToBlackWhiteRaster(R, G, B, output, height, width, frameWidth);
-		}
-		if (removeNoise) {
-			output = ImageManipulator.removeNoise(output, height, width);
-		}
-		if (dilate) {
-			output = ImageManipulator.dilate(output, height, width);
-		}
-		return output;
-	}
+    /**
+     * Serves monochrome raster of given image
+     * Formatted in 1D array of bytes
+     * Averages the RGB values of image
+     * @return monochrome image
+     */
+    public byte[] getMonochrome2Raster() {
+    	byte[] mono = new byte[width * height];
+        ImageManipulator.convertToMonochrome2Raster(R,G,B, mono, height, width);
+        return mono;
+    }
 
-	public int[] getEdgeBlackWhiteRaster() {
-		int[] output = new int[width * height];
-		// ImageManipulator.convertToFirstEdgeBlackWhiteRaster(R,G,B,output,height,width,tile);
-		return output;
-	}
+    /**
+     * Serves black and white raster of given image
+     * Formatted in 1D array of integers 0xRRGGBB
+     * Compares luminance of pixels to those around them
+     *
+     * @return black and white image
+     */
+    public int[] getBlackWhiteRaster() {
+    	int[] output = new int[width * height];
+        if(blackWhiteRasterVersion == 2) {
+            //ImageManipulator.convertToBlackWhite2Raster(pixels, output, height, width, tile);
+        }
+        else {
+            ImageManipulator.convertToBlackWhiteRaster(R,G,B, output, height, width, frameWidth);
+        }
+        if(removeNoise) {
+            output = ImageManipulator.removeNoise(output, height, width);
+        }
+        if(dilate) {
+            output = ImageManipulator.dilate(output, height, width);
+        }
+        return output;
+    }
 
-	/**
-	 * Serves simple raster of given image Formatted in 1D array of bytes
-	 *
-	 * Serves color raster encoded in 1D of values 0-6 with 0 = RED 1 = GREEN 2 =
-	 * BLUE 3 = WHITE 4 = GREY 5 = BLACK 6 = YELLOW
-	 *
-	 * @return simple image
-	 */
-	public byte[] getSimpleColorRaster() {
-		byte[] simple = new byte[width * height];
-		ImageManipulator.convertToSimpleColorRaster(R, G, B, simple, height, width, frameWidth);
-		return simple;
+    public int[] getEdgeBlackWhiteRaster(){
+        int[] output = new int[width*height];
+        //ImageManipulator.convertToFirstEdgeBlackWhiteRaster(R,G,B,output,height,width,tile);
+        return output;
+    }
 
-	}
+    /**
+     * Serves simple raster of given image
+     * Formatted in 1D array of bytes
+     *
+     * Serves color raster encoded in 1D of values 0-6 with
+     *      0 = RED
+     *      1 = GREEN
+     *      2 = BLUE
+     *      3 = WHITE
+     *      4 = GREY
+     *      5 = BLACK
+     *      6 = YELLOW
+     *
+     * @return simple image
+     */
+    public byte[] getSimpleColorRaster() {
+    	byte[] simple = new byte[width * height];
+        ImageManipulator.convertToSimpleColorRaster(R,G,B, simple, height, width, frameWidth);
+        return simple;
 
-	/**
-	 * Serves RGB raster of given image Formatted in 1D array of ints
-	 *
-	 * Formatted in 0xRRGGBB
-	 *
-	 * @return RGB image
-	 */
-	public int[] getRGBRaster() {
-		int[] rgb = new int[width * height];
-		ImageManipulator.convertToRGBRaster(R, G, B, rgb, height, width);
-		return rgb;
 
-	}
+    }
 
-	/**
-	 * Converts into monochrome supported by window Formatted in 1D array of ints
-	 *
-	 * Uses only the Green Value for image Formatted in 0xRRGGBB
-	 *
-	 * @return monochrome image
-	 */
-	public int[] getMonoRGBRaster() {
-		int[] rgb = new int[width * height];
-		byte[] mono = getMonochromeRaster();
-		ImageManipulator.convertMonotoRGB(mono, rgb, mono.length);
-		return rgb;
+    /**
+     * Serves RGB raster of given image
+     * Formatted in 1D array of ints
+     *
+     * Formatted in 0xRRGGBB
+     *
+     * @return RGB image
+     */
+    public int[] getRGBRaster() {
+    	int[] rgb = new int[width*height];
+        ImageManipulator.convertToRGBRaster(R,G,B, rgb, height, width);
+        return rgb;
 
-	}
+    }
 
-	/**
-	 * Converts into simple colors supported by window Formatted in 1D array of ints
-	 *
-	 * Serves color raster encoded in 1D of values 0-6 with 0 = RED 1 = GREEN 2 =
-	 * BLUE 3 = WHITE 4 = GREY 5 = BLACK 6 = YELLOW Formatted in 0xRRGGBB
-	 *
-	 * @return simple image
-	 */
-	public int[] getSimpleRGBRaster() {
-		int[] rgb = new int[width * height];
-		byte[] simple = getSimpleColorRaster();
-		ImageManipulator.convertSimpleToRGB(simple, rgb, simple.length);
-		return rgb;
+    /**
+     * Converts into monochrome supported by window
+     * Formatted in 1D array of ints
+     *
+     * Uses only the Green Value for image
+     * Formatted in 0xRRGGBB
+     *
+     * @return monochrome image
+     */
+    public int[] getMonoRGBRaster() {
+    	int[] rgb = new int[width*height];
+    	byte[] mono = getMonochromeRaster();
+        ImageManipulator.convertMonotoRGB(mono, rgb, mono.length);
+        return rgb;
 
-	}
+    }
 
-	public int[] getRobertsCross() {
-		byte[] mono = new byte[width * height];
-		int[] rgb = new int[width * height];
-		int[] output = new int[width * height];
-		ImageManipulator.convertToMonochrome2Raster(R, G, B, mono, height, width);
-		ImageManipulator.convertMonotoRGB(mono, rgb, mono.length);
-		ImageManipulator.convertToRobertsCrossRaster(rgb, output, height, width);
-		return output;
-	}
+    /**
+     * Converts into simple colors supported by window
+     * Formatted in 1D array of ints
+     *
+     * Serves color raster encoded in 1D of values 0-6 with
+     *      0 = RED
+     *      1 = GREEN
+     *      2 = BLUE
+     *      3 = WHITE
+     *      4 = GREY
+     *      5 = BLACK
+     *      6 = YELLOW
+     * Formatted in 0xRRGGBB
+     *
+     * @return simple image
+     */
+    public int[] getSimpleRGBRaster() {
+    	int[] rgb = new int[width*height];
+    	byte[] simple = getSimpleColorRaster();
+        ImageManipulator.convertSimpleToRGB(simple, rgb, simple.length);
+        return rgb;
 
-	/**
-	 * Converts into road supported by window Formatted in 1D array of ints
-	 *
-	 * Compares luminance of pixels to those around them Then makes the road pink by
-	 * drawing from the bottom of the screen to the first white pixel Formatted in
-	 * 0xRRGGBB
-	 *
-	 * @return road finding image
-	 */
-	public int[] getRoad() {
-		int[] output = getBlackWhiteRaster();
+    }
 
-		int[] rgb = new int[width * height];
-		ImageManipulator.findRoad(output, rgb, height, width);
-		return rgb;
-	}
 
-	@Override
-	public void initialize(CarControl control) {
-		control.addKeyEvent(KeyEvent.VK_SPACE, () -> changeFilter());
-	}
+    
+    public int[] getRobertsCross() {
+    	byte[] mono = new byte[width * height];
+    	int[] rgb = new int[width * height];
+    	int[] output = new int[width * height];
+    	ImageManipulator.convertToMonochrome2Raster(R,G,B, mono, height, width);
+    	ImageManipulator.convertMonotoRGB(mono, rgb, mono.length);
+    	ImageManipulator.convertToRobertsCrossRaster(rgb, output, height, width);
+    	return output;
+    }
 
-	public void changeFilter() {
-		viewType = (viewType) % 6 + 1;
-		displayThread.updateRaster(viewType);
-		System.out.println("view changed to " + viewType);
-	}
+    /**
+     * Converts into road supported by window
+     * Formatted in 1D array of ints
+     *
+     * Compares luminance of pixels to those around them
+     * Then makes the road pink by drawing from the bottom of the screen to the first white pixel
+     * Formatted in 0xRRGGBB
+     *
+     * @return road finding image
+     */
+    public int[] getRoad(){
+        int[] output = getBlackWhiteRaster();
 
-	@Override
-	public void update(CarControl control) {
-		setupArrays(control.getRecentCameraImage());
-		synchronized (displayThread) {
-			displayThread.notifyAll();
-		}
-		synchronized (BWThread) {
-			BWThread.notifyAll();
-		}
-		synchronized (simpleThread) {
-			simpleThread.notifyAll();
-		}
-		// notifyAll();
+        int[] rgb = new int[width*height];
+        ImageManipulator.findRoad(output, rgb, height, width);
+        return rgb;
+    }
+
+
+
+    @Override
+    public void initialize(CarControl control) {
+    	control.addKeyEvent(KeyEvent.VK_SPACE, () -> changeFilter());
+    }
+    
+    public void changeFilter() {
+    	viewType = (viewType) % 6 + 1;
+        displayThread.updateRaster(viewType);
+    	System.out.println("view changed to " + viewType);
+    }
+
+    @Override
+    public void update(CarControl control) {
+        setupArrays(control.getRecentCameraImage());
+        synchronized(displayThread){
+            displayThread.notifyAll();
+        }
+        synchronized(BWThread) {
+            BWThread.notifyAll();
+        }
+        synchronized(simpleThread) {
+            simpleThread.notifyAll();
+        }
+        //notifyAll();
 //
 //  switch (viewType) {
 //            case 1:
@@ -328,29 +355,29 @@ public class ImageManagementModule implements Module {
 //                throw new IllegalStateException("No image management viewType: " + viewType);
 //        }
 
-		control.setRenderedImage(displayPixels);
-		control.setRGBImage(BWPixels);
-		control.setProcessedImage(simplePixels);
-	}
+        control.setRenderedImage(displayPixels);
+    	control.setRGBImage(BWPixels);
+    	control.setProcessedImage(simplePixels);
+    }
 
-	@Override
-	public void paint(CarControl control, Graphics g) {
-	}
+    @Override
+    public void paint(CarControl control, Graphics g) {
+    }
 
-	public int getWidth() {
-		return width;
-	}
+    public int getWidth() {
+        return width;
+    }
 
-	public void setWidth(int width) {
-		this.width = width;
-	}
+    public void setWidth(int width) {
+        this.width = width;
+    }
 
-	public int getHeight() {
-		return height;
-	}
+    public int getHeight() {
+        return height;
+    }
 
-	public void setHeight(int height) {
-		this.height = height;
-	}
+    public void setHeight(int height) {
+        this.height = height;
+    }
 
 }

@@ -12,7 +12,7 @@ Stuff required for the car to drive, majority of the program.
 * Pedestrian & other obstacle detecion.
 * Steering.
 
-## Non-Esentials
+## Non-Essentials
 
 Stuff we would like to complete.    
 
@@ -101,7 +101,7 @@ This project was created and is maintained by a group of highschool students in 
 
 You are welcome to submit issues and pull requests if you so desire (you probably dont).
 
-# IC
+# CI
 
 [Travis](https://travis-ci.org).
 
@@ -109,6 +109,5 @@ You are welcome to submit issues and pull requests if you so desire (you probabl
 
 [Google Java Style Guide](https://google.github.io/styleguide/javaguide.html), enforced by [Google Java Formatter](https://github.com/google/google-java-format) with [google-java-format-gradle-plugin](https://github.com/sherter/google-java-format-gradle-plugin).
 
-# Liscense
-
-None.
+# License
+See LICENSE
