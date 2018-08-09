@@ -7,8 +7,9 @@ bool speedON, steerON;
 const int speedPin = 10;
 const int steerPin = 9;
 const int killPin = 11;
-const int rpmPin = 14;
+const int rpmPin = 0;
 
+bool RPMon = false;
 unsigned long sinceRpm = 0;
 unsigned long secCounter = 0;
 unsigned int rotationCount = 0;
@@ -24,6 +25,7 @@ unsigned long misc;
 
 unsigned long overtime = 20;
 const int overtimeFix = 150;
+const int maxSpeed = 20; //Maximum angle difference from 90
 
 unsigned long speedDelay = 1500 - overtimeFix;
 unsigned long steerDelay = 1500 - overtimeFix;
@@ -91,13 +93,24 @@ void sendMessage(){
 void loop() {
   lastRun = micros();
 
-  if (sinceRpm == 0 && digitalRead(rpmPin) == LOW){
+  /*if (sinceRpm == 0 && digitalRead(rpmPin) == LOW){
     sinceRpm = micros();
   }
 
   if (sinceRpm != 0 && digitalRead(rpmPin) == HIGH){
     rotationCount++;
     sinceRpm = 0;
+  }*/
+
+  /*
+  int last = analogRead(rpmPin);
+  if (!RMPon && last < 5){ //Low signal when ticked
+    RMPon = true;
+  }
+
+  if (RPMon && last >= 6){
+    RPMon = false;
+    rotationCount++;
   }
   
   //Full second cycle
@@ -105,7 +118,7 @@ void loop() {
     if (!timedout) addMessage(112, (rotationCount & 0xFF), (rotationCount >> 8));
     rotationCount = 0;
     secCounter = micros();
-  }
+  }*/
 
   //Read rise of signal
   if (sinceNoKill == 0 && digitalRead(killPin) == HIGH){
@@ -162,7 +175,7 @@ void loop() {
     if (!kill && pin == 10){
       if (value != wheelSpeed){
         //speedDelay = 1.0+((double) value)/180;
-        speedDelay = map(constrain(value, 0, 180), 0, 180, 1000, 2000) - overtimeFix;
+        speedDelay = map(constrain(value, 90 - maxSpeed, 90 + maxSpeed), 0, 180, 1000, 2000) - overtimeFix;
       }
       wheelSpeed = value;
     }
