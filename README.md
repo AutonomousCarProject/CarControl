@@ -2,7 +2,7 @@
 Speed, steering, and object detection for an autonomous RC car
 
 ### Branch specific build status
-Branch      | Ubuntu x86_64 | macOS
+Branch      | Ubuntu x86_64 | macOS High Sierra
 ----------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------
 Master      | [![Build Status](https://travis-ci.org/AutonomousCarProject/CarControl.svg?branch=master)](https://travis-ci.org/AutonomousCarProject/CarControl)      | N/A
 Steering    | [![Build Status](https://travis-ci.org/AutonomousCarProject/CarControl.svg?branch=steering)](https://travis-ci.org/AutonomousCarProject/CarControl)    | N/A

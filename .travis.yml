@@ -1,6 +1,8 @@
-os: osx
-
 language: java
+
+os:
+- linux
+- osx
 
 install: true
 
