@@ -86,6 +86,13 @@ public class Constants {
 	SCREEN_WIDTH = 912,
 	SCREEN_FILTERED_WIDTH = 640,
 	SCREEN_HEIGHT = 480;
+	public static final double
+	SENSOR_CAM_DIAGONAL = 8.466, 			//mm
+	SENSOR_CAM_HEIGHT = (SENSOR_CAM_DIAGONAL / 5) * 3, 	//mm
+	SENSOR_CAM_WIDTH = (SENSOR_CAM_DIAGONAL / 5) * 4, 	//mm
+	SENSOR_TRAK_DIAGONAL = 25.4, 			//mm
+	SENSOR_TRAK_HEIGHT = (SENSOR_TRAK_DIAGONAL / 5) * 3, 	//mm
+	SENSOR_TRAK_WIDTH = (SENSOR_TRAK_DIAGONAL / 5) * 4; 	//mm
 	
 	//Car Cons
 	public static final double

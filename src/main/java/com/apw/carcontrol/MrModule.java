@@ -44,6 +44,8 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         windowWidth = control.getImageWidth();
         windowHeight = control.getImageHeight();
         
+        System.out.println(windowWidth);
+        
         this.window = window;
         
         headlessInit();
@@ -165,10 +167,15 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if ((control instanceof TrakSimControl))
+        if (control instanceof TrakSimControl) {
             for (Map.Entry<Integer, Runnable> binding : ((TrakSimControl) control).keyBindings.entrySet())
                 if (e.getKeyCode() == binding.getKey())
                     binding.getValue().run();
+        } else if (control instanceof CamControl) {
+        	for (Map.Entry<Integer, Runnable> binding : ((CamControl) control).keyBindings.entrySet())
+                if (e.getKeyCode() == binding.getKey())
+                    binding.getValue().run();
+        }
     }
 
     @Override

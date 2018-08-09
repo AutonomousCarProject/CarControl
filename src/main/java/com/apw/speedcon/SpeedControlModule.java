@@ -121,7 +121,8 @@ public class SpeedControlModule implements Module {
 		
 		
 		byte[] limitArray = new byte[Constants.SCREEN_WIDTH * Constants.SCREEN_HEIGHT];
-		ImageManipulator.limitTo(limitArray, control.getProcessedImage(), Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
+		limitArray = control.getProcessedImage();
+		//ImageManipulator.limitTo(limitArray, control.getProcessedImage(), Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
 		
 		if(Settings.overlayOn){
 			//Draw our stoplight hitbox in constant designated color
