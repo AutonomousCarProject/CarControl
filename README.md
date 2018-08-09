@@ -1,14 +1,15 @@
 # Autonomous Vehicle Project
 Speed, steering, and object detection for an autonomous RC car
 
-Branch | Build Status
------- | ------------
-Master | [![Build Status](https://travis-ci.org/AutonomousCarProject/CarControl.svg?branch=master)](https://travis-ci.org/AutonomousCarProject/CarControl)
-Steering | [![Build Status](https://travis-ci.org/AutonomousCarProject/CarControl.svg?branch=steering)](https://travis-ci.org/AutonomousCarProject/CarControl)
-Speed | [![Build Status](https://travis-ci.org/AutonomousCarProject/CarControl.svg?branch=speed)](https://travis-ci.org/AutonomousCarProject/CarControl)
-Image | [![Build Status](https://travis-ci.org/AutonomousCarProject/CarControl.svg?branch=image)](https://travis-ci.org/AutonomousCarProject/CarControl)
-GPU | [![Build Status](https://travis-ci.org/AutonomousCarProject/CarControl.svg?branch=gpu)](https://travis-ci.org/AutonomousCarProject/CarControl)
+Branch      | Build Status
+----------- | ------------
+Master      | [![Build Status](https://travis-ci.org/AutonomousCarProject/CarControl.svg?branch=master)](https://travis-ci.org/AutonomousCarProject/CarControl)
+Steering    | [![Build Status](https://travis-ci.org/AutonomousCarProject/CarControl.svg?branch=steering)](https://travis-ci.org/AutonomousCarProject/CarControl)
+Speed       | [![Build Status](https://travis-ci.org/AutonomousCarProject/CarControl.svg?branch=speed)](https://travis-ci.org/AutonomousCarProject/CarControl)
+Image       | [![Build Status](https://travis-ci.org/AutonomousCarProject/CarControl.svg?branch=image)](https://travis-ci.org/AutonomousCarProject/CarControl)
+GPU         | [![Build Status](https://travis-ci.org/AutonomousCarProject/CarControl.svg?branch=gpu)](https://travis-ci.org/AutonomousCarProject/CarControl)
 Interfacing | [![Build Status](https://travis-ci.org/AutonomousCarProject/CarControl.svg?branch=Interfacing)](https://travis-ci.org/AutonomousCarProject/CarControl)
+
 ## Main Components
 
 Stuff required for the car to drive, majority of the program.
@@ -35,7 +36,7 @@ This project is mostly focused on the software side of the problem but we are ru
 * RC Car
 * Onboard SBC - LattePanda (insert specific version here).
 * Arduino integrated with LP to control servos.
-* Frontmounted camera - FLIR Firefly Camera.
+* Frontmounted camera - FLIR Chameleon 3 Camera.
 
 ## Dependencies
 
