@@ -32,7 +32,7 @@ public abstract class DriverCons { // TrakSim constant parameters
             D_LiveCam = false,       // F: omit connecting to FlyCamera
             D_StartLive = false,    // T: start in live camera if possible
             D_FixedSpeed = false,    // ignore speed control, assume fMinSpeed
-            D_StayInTrack = true,   // ignore steering control, stay centered in track
+            D_StayInTrack = false,   // ignore steering control, stay centered in track
             D_ShoTrkTstPts = false, // T: show test points used to calc StayInTrack
             D_ShoClikGrid = true,  // T: to see where to click to steer/accelerate
             D_ShowMap = true,       // T: show the map next to the scene
