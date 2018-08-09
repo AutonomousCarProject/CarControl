@@ -19,6 +19,7 @@ public class BlobDetection {
     private List<Blob> blobs = new LinkedList<>();
 
     public List<Blob> getBlobs(Pixel[][] pixels) {
+        long time = System.currentTimeMillis();
         unusedBlobs.addAll(blobs);
         blobs.clear();
 
@@ -43,8 +44,8 @@ public class BlobDetection {
 
             added.clear();
         }
-
-        //goes along the pixels of the image
+      
+    	//goes along the pixels of the image
         for (int row = 0; row < pixels.length; row++) {
             for (int col = 0; col < pixels[0].length - 1; col++) {
                 Pixel pix1 = pixels[row][col];
@@ -63,6 +64,7 @@ public class BlobDetection {
                 }
             }
         }
+
         for (int row = 0; row < pixels.length - 1; row++) {
             for (int col = 0; col < pixels[0].length; col++) {
                 Pixel pix1 = pixels[row][col];
@@ -111,7 +113,7 @@ public class BlobDetection {
                 }
             }
         }
-
+       
         //eliminates blbos that are too large or too small
         for (BlobInProgress[] bipRow : bips) {
             for (BlobInProgress bip : bipRow) {
@@ -127,6 +129,8 @@ public class BlobDetection {
             }
         }
 
+        System.out.println(System.currentTimeMillis() - time);
+        
         return blobs;
     }
 

@@ -85,12 +85,12 @@ public class SimpleColorRasterKernel extends Kernel {
         int G = (bayer[getPos(col, row, combineTile((byte) 1, tile), ncols, nrows)] & 0xFF);
         int B = (bayer[getPos(col, row, combineTile((byte) 3, tile), ncols, nrows)] & 0xFF);
         //int B = (((int)bayer[(r*ncols*2 + c)*2 + 1+2*ncols-ncols*2*getBit(tile,1)-getBit(tile,0)])&0xFF);			//Bottom right (blue)
-        double Y = R * .299000 + G * .587000 + B * .114000;
-        double U = R * -.168736 + G * -.331264 + B * .500000 + 128;
-        double V = R * .500000 + G * -.418688 + B * -.081312 + 128;
-        R = (int) (1.4075 * (V - 128));
-        G = (int) (0 - 0.3455 * (U - 128) - (0.7169 * (V - 128)));
-        B = (int) (1.7790 * (U - 128));
+        float Y = R * .299000f + G * .587000f + B * .114000f;
+        float U = R * -.168736f + G * -.331264f + B * .500000f + 128;
+        float V = R * .500000f + G * -.418688f + B * -.081312f + 128;
+        R = (int) (1.4075f * (V - 128));
+        G = (int) (0 - 0.3455f * (U - 128) - (0.7169f * (V - 128)));
+        B = (int) (1.7790f * (U - 128));
         //If one of the colors has a value 50 greater than both other colors
         //it assigns that pixel to that color
         if (R > G + SimpleThresholds.redGreen && R > B + SimpleThresholds.redBlue) {

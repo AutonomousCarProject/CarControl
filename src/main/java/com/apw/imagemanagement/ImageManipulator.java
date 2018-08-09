@@ -232,7 +232,6 @@ public class ImageManipulator {
 				int pix =(red<<16)+(green<<8)+blue;
 				rgb[r*ncols + c] = pix;
 			}
-			
 		}
 	}
 

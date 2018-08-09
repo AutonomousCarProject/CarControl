@@ -13,8 +13,7 @@ import javax.swing.*;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.security.Key;
-import java.sql.Driver;
+
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.*;
@@ -26,8 +25,11 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     private ArrayList<Module> modules;
     private CarControl control;
 
-    private final int windowWidth = 912;
-    private final int windowHeight = 480;
+    private boolean initialized = false;
+
+    private static final int windowWidth = 912;
+    private static final int windowHeight = 480;
+
 
     private MrModule(boolean realcam) {
         if (realcam)
@@ -68,14 +70,19 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         for (Module module : modules) {
             module.initialize(control);
         }
+
+        initialized = true;
     }
 
     private void update() {
         if (control instanceof TrakSimControl) {
             ((TrakSimControl) control).cam.theSim.SimStep(1);
         }
-
+        
         control.readCameraImage();
+        control.setEdges(getInsets());
+        control.updateWindowDims(getWidth(), getHeight());
+
         for (Module module : modules) {
             module.update(control);
         }
@@ -105,19 +112,26 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
 
     }
 
-    private void paint() {
-        if (!modules.isEmpty())
-            for (Module module : modules)
-                module.paint(control, ((WindowModule) (modules.get(0))).getGraphics());
-    }
 
     @Override
     public void run() {
+        if(!initialized) {
+            return;
+        }
+
         try {
             update();
             paint();
         } catch(Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void paint() {
+        if (!modules.isEmpty()) {
+            for (Module module : modules) {
+                module.paint(control, ((WindowModule) (modules.get(0))).getGraphics());
+            }
         }
     }
 

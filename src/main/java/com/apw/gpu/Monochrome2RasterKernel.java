@@ -68,9 +68,9 @@ public class Monochrome2RasterKernel extends Kernel {
         int R = (bayer[getPos(col, row, combineTile((byte) 0, tile), ncols, nrows)] & 0xFF);
         int G = (bayer[getPos(col, row, combineTile((byte) 1, tile), ncols, nrows)] & 0xFF);
         int B = (bayer[getPos(col, row, combineTile((byte) 3, tile), ncols, nrows)] & 0xFF);
-        //double Y = R *  .299000 + G *  .587000 + B *  .114000;
+        //float Y = R *  .299000 + G *  .587000 + B *  .114000;
 
-        double Y = (R + G + B) / 3.0f;
+        float Y = (R + G + B) / 3.0f;
         mono[row * ncols + col] = (byte) Y;
     }
 
