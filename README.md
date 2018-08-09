@@ -1,14 +1,15 @@
 # Autonomous Vehicle Project
 Speed, steering, and object detection for an autonomous RC car
 
-Branch      | Build Status
------------ | ------------
-Master      | [![Build Status](https://travis-ci.org/AutonomousCarProject/CarControl.svg?branch=master)](https://travis-ci.org/AutonomousCarProject/CarControl)
-Steering    | [![Build Status](https://travis-ci.org/AutonomousCarProject/CarControl.svg?branch=steering)](https://travis-ci.org/AutonomousCarProject/CarControl)
-Speed       | [![Build Status](https://travis-ci.org/AutonomousCarProject/CarControl.svg?branch=speed)](https://travis-ci.org/AutonomousCarProject/CarControl)
-Image       | [![Build Status](https://travis-ci.org/AutonomousCarProject/CarControl.svg?branch=image)](https://travis-ci.org/AutonomousCarProject/CarControl)
-GPU         | [![Build Status](https://travis-ci.org/AutonomousCarProject/CarControl.svg?branch=gpu)](https://travis-ci.org/AutonomousCarProject/CarControl)
-Interfacing | [![Build Status](https://travis-ci.org/AutonomousCarProject/CarControl.svg?branch=Interfacing)](https://travis-ci.org/AutonomousCarProject/CarControl)
+### Branch specific build status
+Branch      | Ubuntu x86_64 | macOS
+----------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------
+Master      | [![Build Status](https://travis-ci.org/AutonomousCarProject/CarControl.svg?branch=master)](https://travis-ci.org/AutonomousCarProject/CarControl)      | N/A
+Steering    | [![Build Status](https://travis-ci.org/AutonomousCarProject/CarControl.svg?branch=steering)](https://travis-ci.org/AutonomousCarProject/CarControl)    | N/A
+Speed       | [![Build Status](https://travis-ci.org/AutonomousCarProject/CarControl.svg?branch=speed)](https://travis-ci.org/AutonomousCarProject/CarControl)       | N/A
+Image       | [![Build Status](https://travis-ci.org/AutonomousCarProject/CarControl.svg?branch=image)](https://travis-ci.org/AutonomousCarProject/CarControl)       | N/A
+GPU         | [![Build Status](https://travis-ci.org/AutonomousCarProject/CarControl.svg?branch=gpu)](https://travis-ci.org/AutonomousCarProject/CarControl)         | N/A
+Interfacing | [![Build Status](https://travis-ci.org/AutonomousCarProject/CarControl.svg?branch=Interfacing)](https://travis-ci.org/AutonomousCarProject/CarControl) | N/A
 
 ## Main Components
 
