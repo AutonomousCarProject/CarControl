@@ -54,6 +54,10 @@ public class ArduinoIO implements PWMController { // Adapted to Java from arduin
 
   private int readSpeed;
   private int readAngle;
+  
+  private long rotations;
+  public static final double RotDistConversion = 1; //rotation to distance ratio
+  
 
   public ArduinoIO() { // outer class constructor..
     surrealPort = (Constants.useServos) ? new SerialPort(CommPortNo) : new SerialPortDump(CommPortNo);
@@ -128,14 +132,18 @@ public class ArduinoIO implements PWMController { // Adapted to Java from arduin
         	System.out.print((int) msg[1]);
         	System.out.println((int) msg[2]);
         }
-        else if (msg[0] >= 110){
-        	System.out.println("----ARDUINO INFO");
+        else if (msg[0] >= 110){ //A maximum of 126 to be safe
+        	System.out.println("----ARDUINO INFO -type: "+msg[0]);
         	System.out.println((byte) msg[1]);
         	System.out.println((byte) msg[2]);
         	
-            //msg[1] = (byte) (angle & 0x7F);
-            //msg[2] = (byte) (angle >> 7);
         	System.out.println((int) (msg[2] << 8) + (msg[1]));
+        	
+        	if (msg[0] == 112) {
+        		this.rotations += ((msg[2] << 8) + (msg[1]));
+        		this.readSpeed = ((msg[2] << 8) + (msg[1]));
+        		System.out.println("total rotations: " + this.rotations);
+        	}
         }
         else {
         	System.out.println("----Arduino gave unexpected info:" + msg[0]);

@@ -7,12 +7,15 @@ bool speedON, steerON;
 const int speedPin = 10;
 const int steerPin = 9;
 const int killPin = 11;
-const int rpmPin = 14;
+const int rpmPin = 0;
 
+bool RPMon = false;
 unsigned long sinceRpm = 0;
+unsigned long secCounter = 0;
+unsigned int rotationCount = 0;
 
-byte out[] = {0, 0, 0};
-byte outsize = 3;
+byte out[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+byte outsize = 0;
 
 byte type;
 byte pin;
@@ -22,6 +25,7 @@ unsigned long misc;
 
 unsigned long overtime = 20;
 const int overtimeFix = 150;
+const int maxSpeed = 20; //Maximum angle difference from 90
 
 unsigned long speedDelay = 1500 - overtimeFix;
 unsigned long steerDelay = 1500 - overtimeFix;
@@ -32,8 +36,7 @@ unsigned long lastNoKill = 0;
 unsigned long sinceConnect = 0;
 unsigned long sinceNoKill = 0; //Input timing for kill
 unsigned long lastRun = 0; //timekeeping for loop
-const unsigned long timeout = 3800000; //microseconds before timeout
-
+const unsigned long timeout = 100000; //microseconds before timeout
 
 //#define NOT_AN_INTERRUPT -1
 //where 1ms is considered full left or full reverse, and 2ms is considered full forward or full right.
@@ -95,10 +98,26 @@ void loop() {
   }
 
   if (sinceRpm != 0 && digitalRead(rpmPin) == HIGH){
-    misc = micros() - sinceRpm;
-
-    addMessage(121, (misc & 0xFF), (misc >> 8));
+    rotationCount++;
     sinceRpm = 0;
+  }*/
+
+  /*
+  int last = analogRead(rpmPin);
+  if (!RMPon && last < 5){ //Low signal when ticked
+    RMPon = true;
+  }
+
+  if (RPMon && last >= 6){
+    RPMon = false;
+    rotationCount++;
+  }
+  
+  //Full second cycle
+  if (micros()-secCounter >= 1000000){
+    if (!timedout) addMessage(112, (rotationCount & 0xFF), (rotationCount >> 8));
+    rotationCount = 0;
+    secCounter = micros();
   }*/
 
   //Read rise of signal
@@ -111,8 +130,8 @@ void loop() {
     lastNoKill = micros();
     if (kill && micros()-sinceNoKill > 1800){ //Start up if un-killed
       kill = false;
-      addMessage(100, 6, 3);
-      addMessage(111, 50, 100);
+      if (!timedout) addMessage(100, 6, 3);
+      if (!timedout) addMessage(111, 50, 100);
     }
     if (!kill && micros()-sinceNoKill < 1600){ //Check difference to find duration of input
       kill = true;
@@ -121,14 +140,14 @@ void loop() {
       steeringDeg = 90;
       wheelSpeed = 90;
       //Send message to computer
-      addMessage(100, 6, 6);
+      if (!timedout) addMessage(100, 6, 6);
     }
     sinceNoKill = 0;
   }
 
   if (!kill && micros()-lastNoKill > timeout){
     kill = true;
-    addMessage(100, 6, 5);
+    if (!timedout) addMessage(100, 6, 5);
   }
 
   
@@ -156,7 +175,7 @@ void loop() {
     if (!kill && pin == 10){
       if (value != wheelSpeed){
         //speedDelay = 1.0+((double) value)/180;
-        speedDelay = map(constrain(value, 0, 180), 0, 180, 1000, 2000) - overtimeFix;
+        speedDelay = map(constrain(value, 90 - maxSpeed, 90 + maxSpeed), 0, 180, 1000, 2000) - overtimeFix;
       }
       wheelSpeed = value;
     }
@@ -220,9 +239,9 @@ void loop() {
     digitalWrite(13, HIGH);
 
     //Timeout check
-    if (!timedout && Serial.peek() <= 0 && (micros()-sinceConnect) > timeout){
+    if (!timedout && Serial.peek() <= 0 && (micros()-sinceConnect) > 20*timeout){
       timedout = true;
-      addMessage(100, 4, 5);
+      //addMessage(100, 4, 5); //why send a timeout message to the computer that timed out?
       digitalWrite(13, LOW);
     }
 
