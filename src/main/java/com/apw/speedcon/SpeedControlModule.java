@@ -8,6 +8,7 @@ import com.apw.pedestrians.Constant;
 import com.apw.pedestrians.PedestrianDetector;
 import com.apw.pedestrians.blobtrack.MovingBlob;
 import com.apw.pedestrians.image.Color;
+import com.apw.pedestrians.image.Pixel;
 import com.apw.sbcio.PWMController;
 import com.apw.sbcio.fakefirm.ArduinoIO;
 
@@ -40,6 +41,7 @@ public class SpeedControlModule implements Module {
 	//private List<MovingBlob> currentPeds;
 	
 	private SizeConstants sizeCons;
+	private Pixel pixel;
 	
 	/**
 	 * A basic constructor for our SpeedController.
@@ -58,10 +60,11 @@ public class SpeedControlModule implements Module {
 	 */
 	@Override
 	public void initialize(CarControl control) {
-		control.addKeyEvent(KeyEvent.VK_P, () -> stopType = 1);
-		control.addKeyEvent(KeyEvent.VK_O, () -> stopType = 3);
-		control.addKeyEvent(KeyEvent.VK_I, () -> stopType = 0);
-		control.addKeyEvent(KeyEvent.VK_I, () -> cycleStopping = false);
+		control.addKeyEvent(KeyEvent.VK_P, () -> fakeRed(control));
+		control.addKeyEvent(KeyEvent.VK_O, () -> fakeYellow(control));
+		control.addKeyEvent(KeyEvent.VK_I, () -> fakeGreen(control));
+		control.addKeyEvent(KeyEvent.VK_U, () -> fakeSign(control));
+		control.addKeyEvent(KeyEvent.VK_Y, () -> incrementStopDist());
 		control.addKeyEvent(KeyEvent.VK_B, () -> Settings.blobsOn ^= true);
 		control.addKeyEvent(KeyEvent.VK_V, () -> Settings.overlayOn ^= true);
 		control.addKeyEvent(KeyEvent.VK_F, () -> cameraCalibrator.calibrateCamera(control, currentBlobs));
@@ -140,9 +143,9 @@ public class SpeedControlModule implements Module {
 					System.out.println(blob.id);
 				}
 			}
-	}
+		}
 		
-		if (Settings.colorMode >= Settings.numColorModes) {
+		if (Settings.colorMode > Settings.maxColorMode) {
 			Settings.colorMode = 0;
 		}
 		if (Settings.blobsOn) {
@@ -629,6 +632,84 @@ public class SpeedControlModule implements Module {
 	
 	public CameraCalibration getCalibrator() {
 		return cameraCalibrator;
+	}
+	
+	public void fakeRed(CarControl control) {
+		pixel = new Pixel(com.apw.pedestrians.image.Color.RED);
+		currentBlobs.add(currentBlobs.get(0));
+		currentBlobs.get(currentBlobs.size() - 1).set(Settings.stopDist, Settings.stopDist, 0, 0, pixel, currentBlobs.get(0).id);
+		MovingBlob blob = currentBlobs.get(currentBlobs.size() - 1);
+		
+		System.out.println(blob);
+		System.out.println(blob.color.getColor());
+		
+		blob.type = "StopLightWidth";
+		
+		cycleStopping = true;
+		stopType = 2;
+		
+		determineStop(blob, sizeCons.SIGN_INFO.get(blob.type).get(6), control);
+	}
+	
+	public void fakeYellow(CarControl control) {
+		pixel = new Pixel(com.apw.pedestrians.image.Color.YELLOW);
+		currentBlobs.add(currentBlobs.get(0));
+		currentBlobs.get(currentBlobs.size() - 1).set(Settings.stopDist, Settings.stopDist, 0, 0, pixel, currentBlobs.get(0).id);
+		MovingBlob blob = currentBlobs.get(currentBlobs.size() - 1);
+
+		System.out.println(blob);
+		System.out.println(blob.color.getColor());
+		
+		blob.type = "StopLightWidth";
+		
+		cycleStopping = true;
+		stopType = 3;
+		
+		determineStop(blob, sizeCons.SIGN_INFO.get(blob.type).get(6), control);
+	}
+	
+	public void fakeGreen(CarControl control) {
+		pixel = new Pixel(com.apw.pedestrians.image.Color.GREEN);
+		currentBlobs.add(currentBlobs.get(0));
+		currentBlobs.get(currentBlobs.size() - 1).set(Settings.stopDist, Settings.stopDist, 0, 0, pixel, currentBlobs.get(0).id);
+		MovingBlob blob = currentBlobs.get(currentBlobs.size() - 1);
+		
+		blob.type = "StopLightWidth";
+		
+		System.out.println(blob);
+		System.out.println(blob.color.getColor());
+		
+		cycleStopping = false;
+		stopType = 0;
+		
+		determineStop(blob, sizeCons.SIGN_INFO.get(blob.type).get(6), control);
+	}
+	
+	public void fakeSign(CarControl control) {
+		pixel = new Pixel(com.apw.pedestrians.image.Color.RED);
+		currentBlobs.add(currentBlobs.get(0));
+		currentBlobs.get(currentBlobs.size() - 1).set(Settings.stopDist, Settings.stopDist, 0, 0, pixel, currentBlobs.get(0).id);
+		MovingBlob blob = currentBlobs.get(currentBlobs.size() - 1);
+		
+		blob.type = "Stop";
+		
+		System.out.println(blob);
+		System.out.println(blob.color.getColor());
+		
+		cycleStopping = true;
+		stopType = 1;
+		
+		determineStop(blob, sizeCons.SIGN_INFO.get(blob.type).get(6), control);
+	}
+	
+	public void incrementStopDist() {
+		Settings.stopDist += 2;
+		
+		if (Settings.stopDist > Settings.maxStopDist) {
+			Settings.stopDist = 0;
+		}
+		
+		System.out.println(Settings.stopDist);
 	}
 	
 	//Getting and setting our emergency stop boolean

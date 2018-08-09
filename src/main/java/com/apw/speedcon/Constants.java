@@ -13,8 +13,10 @@ public class Constants {
 	DEFAULT_WRITE_BLOBS_TO_CONSOLE = false,	//Sets the default state as to the printing of all blob information
 	DEFAULT_WRITE_SPEED_TO_CONSOLE = false;	//Sets the default state as to the printing of the current speed
 	public static final int
-	DEFAULT_COLOR_MODE = 0,			//Sets the default state as to the blob boundary color (0 = age, 1 = color, 2 = velocity) 
-	NUM_COLOR_MODES = 3;			//Sets the number current total number of blob boundary color modes
+	DEFAULT_COLOR_MODE = 1,			//Sets the default state as to the blob boundary color (0 = age, 1 = color, 2 = velocity) 
+	MAX_COLOR_MODE = 2,			//Sets the number current total number of blob boundary color modes
+	DEFAULT_STOP_DIST = 10,
+	MAX_STOP_DIST = 20;
 	
 	//Speed Related Constants
 	public static final double
