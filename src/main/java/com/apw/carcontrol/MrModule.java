@@ -1,5 +1,6 @@
 package com.apw.carcontrol;
 
+import com.apw.apw3.DriverCons;
 import com.apw.imagemanagement.ImageManagementModule;
 import com.apw.sbcio.PWMController;
 import com.apw.sbcio.fakefirm.ArduinoIO;
@@ -7,15 +8,13 @@ import com.apw.sbcio.fakefirm.ArduinoModule;
 import com.apw.speedcon.SpeedControlModule;
 
 import com.apw.steering.SteeringModule;
-import java.awt.image.Raster;
-import java.awt.image.WritableRaster;
 
 import javax.swing.*;
-import java.awt.*;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferInt;
+import java.security.Key;
+import java.sql.Driver;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.*;
@@ -23,35 +22,32 @@ import java.util.concurrent.*;
 public class MrModule extends JFrame implements Runnable, KeyListener {
 
     private ScheduledExecutorService executorService;
-    private BufferedImage displayImage, bufferImage;
-    private GraphicsDevice graphicsDevice;
     private PWMController driveSys = new ArduinoIO();
     private ArrayList<Module> modules;
     private CarControl control;
-    private boolean fullscreen;
 
-    // FIXME breaks if dimensions are not 912x480
-    private int windowWidth = 912;
-    private int windowHeight = 480;
+    private final int windowWidth = 912;
+    private final int windowHeight = 480;
+    
+    private final int FPS = 60;
+    private final int initDelay = 100;
 
-    private MrModule(boolean renderWindow) {
-        if (renderWindow) {
-            control = new TrakSimControl(driveSys);
-        } else {
+    private MrModule(boolean realcam) {
+        if (realcam)
             control = new CamControl(driveSys);
-        }
-        windowWidth = control.getImageWidth();
-        windowHeight = control.getImageHeight();
+        else
+            control = new TrakSimControl(driveSys);
 
         headlessInit();
-        setupWindow();
         createModules();
     }
 
     private void headlessInit() {
+        driveSys = new ArduinoIO();
         modules = new ArrayList<>();
+
         executorService = Executors.newSingleThreadScheduledExecutor();
-        executorService.scheduleAtFixedRate(this, 0, 1000 / 20, TimeUnit.MILLISECONDS);
+        executorService.scheduleAtFixedRate(this, initDelay, 1000 / FPS, TimeUnit.MILLISECONDS);
 
         Future run = executorService.submit(this);
 
@@ -62,19 +58,11 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         }
     }
 
-    private void setupWindow() {
-        graphicsDevice = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-        displayImage = new BufferedImage(windowWidth, windowHeight, BufferedImage.TYPE_INT_RGB);
-        bufferImage = new BufferedImage(windowWidth, windowHeight, BufferedImage.TYPE_INT_RGB);
-
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(windowWidth, windowHeight + 25);
-        setResizable(true);
-        setVisible(true);
-        addKeyListener(this);
-        setIgnoreRepaint(true);
-    }
     private void createModules() {
+        WindowModule windowModule = new WindowModule(windowWidth, windowHeight);
+        windowModule.addKeyListener(this);
+
+        modules.add(windowModule);
         modules.add(new ImageManagementModule(windowWidth, windowHeight, control.getTile()));
         modules.add(new SpeedControlModule());
         modules.add(new SteeringModule());
@@ -91,52 +79,39 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         }
 
         control.readCameraImage();
-        control.setEdges(getInsets());
-        control.updateWindowDims(getWidth(), getHeight());
-        for (Module module :
-        	modules) {
+        for (Module module : modules) {
             module.update(control);
         }
+
+/*
+        // bad code here for example
+        ImageManagementModule imageModule = (ImageManagementModule) modules.get(0);
+        CompletableFuture<int[]> futureBWImage =
+                CompletableFuture.supplyAsync(() -> imageModule.getBlackWhiteRaster(control.getRecentCameraImage()));
+        CompletableFuture<byte[]> futureSimpleImage =
+                CompletableFuture.supplyAsync(() -> imageModule.getSimpleColorRaster(control.getRecentCameraImage()));
+
+        // Call steering Module
+        CompletableFuture<Void> futureSteering = futureBWImage.thenAcceptAsync(image -> modules.get(2).update(control, futureBWImage));
+        // Call speed module
+        CompletableFuture<Void> futureSpeed = futureSimpleImage.thenAcceptAsync(image -> modules.get(1).update(control, futureSimpleImage));
+        // Wait for them all to finish
+        CompletableFuture<Void> futureComplete = CompletableFuture.allOf(futureSpeed, futureSteering)
+                .thenAccept(v -> paint())
+                // Handle errors
+                .exceptionally(ex -> null);
+        // This makes java wait
+        futureComplete.join();
+
+
+        // bad code here for example */
+
     }
 
-
     private void paint() {
-        int[] renderedImage = null;
-        Graphics g;
-        g = this.getGraphics();
-
-        if (control instanceof TrakSimControl) {
-            renderedImage = ((TrakSimControl) control).getRenderedImage();
-        }
-        else if (control instanceof CamControl) {
-            renderedImage = ((CamControl) control).getRenderedImage();
-        }
-
-        if (renderedImage != null) {
-            int[] displayPixels = ((DataBufferInt) bufferImage.getRaster().getDataBuffer()).getData();
-            System.arraycopy(renderedImage, 0, displayPixels, 0, renderedImage.length);
-
-            BufferedImage tempImage = displayImage;
-            displayImage = bufferImage;
-            bufferImage = tempImage;
-
-
-            g.drawImage(displayImage, getInsets().left, getInsets().top, getWidth() - getInsets().left - getInsets().right, getHeight() - getInsets().top - getInsets().bottom , null);
-            for (ColoredLine line : control.getLines()) {
-                g.setColor(line.getColor());
-                g.drawLine(line.getStart().x, line.getStart().y, line.getEnd().x, line.getEnd().y);
-            }
-            for (ColoredRect rect : control.getRects()) {
-                g.setColor(rect.getColor());
-                g.drawRect(rect.getPosition().x, rect.getPosition().y, rect.getWidth(), rect.getHeight());
-            }
-        }
-
-        control.clearLines();
-        control.clearRects();
-        for (Module module : modules) {
-            module.paint(control, g);
-        }
+        if (!modules.isEmpty())
+            for (Module module : modules)
+                module.paint(control, ((WindowModule) (modules.get(0))).getGraphics());
     }
 
     @Override
@@ -144,50 +119,31 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         try {
             update();
             paint();
-        } catch (RuntimeException e) {
-            Thread t = Thread.currentThread();
-            t.getUncaughtExceptionHandler().uncaughtException(t, e);
+        } catch(Exception e) {
+            e.printStackTrace();
         }
     }
 
     public static void main(String[] args) {
-        boolean renderWindow = true;
-        if(args.length > 0 && args[0].toLowerCase().equals("nosim")) {
-            renderWindow = true;
+        boolean realcam = DriverCons.D_LiveCam;
+        if(args.length > 0 && args[0].toLowerCase().equals("sim")) {
+            realcam = false;
         }
-        new MrModule(false);
+        new MrModule(realcam);
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (!(control instanceof TrakSimControl)) {
-            return;
-        }
-
-        if (e.getKeyCode() == KeyEvent.VK_F) {
-            fullscreen = !fullscreen;
-            setVisible(false);
-            dispose();
-            setUndecorated(fullscreen);
-            if (fullscreen) {
-                graphicsDevice.setFullScreenWindow(this);
-                validate();
-            } else {
-                graphicsDevice.setFullScreenWindow(null);
-                setVisible(true);
-            }
-        }
-
-        for (Map.Entry<Integer, Runnable> binding : ((TrakSimControl) control).keyBindings.entrySet()) {
-            if (e.getKeyCode() == binding.getKey()) {
-                binding.getValue().run();
-            }
-        }
+        if ((control instanceof TrakSimControl))
+            for (Map.Entry<Integer, Runnable> binding : ((TrakSimControl) control).keyBindings.entrySet())
+                if (e.getKeyCode() == binding.getKey())
+                    binding.getValue().run();
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {  }
+    public void keyReleased(KeyEvent e) { }
 
     @Override
-    public void keyReleased(KeyEvent e) {  }
+    public void keyTyped(KeyEvent e) { }
+
 }

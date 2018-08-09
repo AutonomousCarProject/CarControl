@@ -6,7 +6,7 @@ import com.apw.pedestrians.blobtrack.MovingBlob;
 import java.util.LinkedList;
 import java.util.List;
 
-public class BlobFilter implements IMovingBlobReduction {
+public class BlobFilter {
     /**
      * Checks the list of potential pedestrian blobs to distinguish pedestrians from non-pedestrians.
      * Non-pedestrians are removed from the list of blobs.
@@ -14,7 +14,6 @@ public class BlobFilter implements IMovingBlobReduction {
      * @param blobs the list of potential pedestrian blobs
      * @return the list of blobs determined to be pedestrians
      */
-    @Override
     public List<MovingBlob> filterMovingBlobs(List<MovingBlob> blobs) {
         List<MovingBlob> ret = new LinkedList<>();
         for (MovingBlob blob : blobs) {
@@ -36,7 +35,6 @@ public class BlobFilter implements IMovingBlobReduction {
 
     }
 
-    @Override
     public List<MovingBlob> filterUnifiedBlobs(List<MovingBlob> blobs) {
         List<MovingBlob> ret = new LinkedList<>();
         for (MovingBlob blob : blobs) {

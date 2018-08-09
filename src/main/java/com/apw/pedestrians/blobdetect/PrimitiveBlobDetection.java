@@ -3,29 +3,17 @@ package com.apw.pedestrians.blobdetect;
 import com.aparapi.Kernel;
 import com.aparapi.Range;
 import com.apw.pedestrians.image.Color;
-import com.apw.pedestrians.image.IImage;
-import com.apw.pedestrians.image.IPixel;
 import com.apw.pedestrians.image.Pixel;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.List;
+import static com.apw.pedestrians.blobdetect.PrimitiveBlob.*;
 
-public class PrimitiveBlobDetection implements IBlobDetection {
-    public static final int MAXIMUM_DIFFERENCE_IN_WIDTH_BETWEEN_TWO_BLOBS_IN_ORDER_TO_JOIN = 75;
-    private static final int BIP_TYPE = 0, BIP_TOP = 1, BIP_LEFT = 2, BIP_BOTTOM = 3, BIP_RIGHT = 4, BIP_COLOR = 5, BIP_NUMFIELDS = 6;
-    private static final int BIP_TYPE_NULL = 0, BIP_TYPE_VALUE = 1, BIP_TYPE_REFERENCE = 2;
-    
-    //creates data structures to organize different stages of blobs
-    private int[] bips;
-    private List<Blob> blobs = new LinkedList<>();
-    private Deque<Blob> unusedBlobs = new ArrayDeque<>();
+public class PrimitiveBlobDetection {
+    private static final int MAXIMUM_DIFFERENCE_IN_WIDTH_BETWEEN_TWO_BLOBS_IN_ORDER_TO_JOIN = 75;
 
-    @Override
-    public List<Blob> getBlobs(IImage image) {
-        IPixel[][] pixels = image.getImage();
+    private int[] blobs;
+    private int[] blobList;
 
+    public int[] getBlobs(Pixel[][] pixels) {
         if (pixels.length == 0) {
             return null;
         }
@@ -39,12 +27,12 @@ public class PrimitiveBlobDetection implements IBlobDetection {
             colors[i] = pixels[i / width][i % width].getColor().ordinal();
         }
 
-        int bipSize = width * height * BIP_NUMFIELDS;
-        if (bips == null || bips.length != bipSize) {
-            bips = new int[bipSize];
+        int blobSize = width * height * BLOB_NUM_INT_FIELDS;
+        if (blobs == null || blobs.length != blobSize) {
+            blobs = new int[blobSize];
         } else {
-            for (int i = 0; i < bips.length; i += BIP_NUMFIELDS) {
-                bips[i + BIP_TYPE] = BIP_TYPE_NULL;
+            for (int i = 0; i < blobs.length; i += BLOB_NUM_INT_FIELDS) {
+                blobs[i + BLOB_TYPE] = BLOB_TYPE_NULL;
             }
         }
 
@@ -59,31 +47,32 @@ public class PrimitiveBlobDetection implements IBlobDetection {
                     int color1 = colors[(row * width) + col];
                     int color2 = colors[(row * width) + col + 1];
 
-                    int bip1 = ((row * width) + col) * BIP_NUMFIELDS;
-                    int bip2 = ((row * width) + col + 1) * BIP_NUMFIELDS;
+                    int blob1 = ((row * width) + col) * BLOB_NUM_INT_FIELDS;
+                    int blob2 = ((row * width) + col + 1) * BLOB_NUM_INT_FIELDS;
 
                     if (color1 != color2) {
-                        //either adds to the bip if there is an existing one or creates a new one if there isn't
-                        if (bips[bip1 + BIP_TYPE] == BIP_TYPE_NULL) {
-                            bips[bip1 + BIP_TYPE] = BIP_TYPE_VALUE;
-                            bips[bip1 + BIP_TOP] = row;
-                            bips[bip1 + BIP_LEFT] = col;
-                            bips[bip1 + BIP_BOTTOM] = row;
-                            bips[bip1 + BIP_RIGHT] = col + 1;
-                            bips[bip1 + BIP_COLOR] = color1;
-                        } else if (bips[bip1 + BIP_TYPE] == BIP_TYPE_VALUE) {
-                            bips[bip1 + BIP_RIGHT] = max(bips[bip1 + BIP_RIGHT], col + 1);
-                        } else if (bips[bip1 + BIP_TYPE] == BIP_TYPE_REFERENCE) {
-                            // get pointer to actual bip value from top/left fields
-                            int tlBip = bip1;
-                            while (bips[tlBip + BIP_TYPE] == BIP_TYPE_REFERENCE) {
-                                tlBip = ((bips[tlBip + BIP_TOP] * width) + bips[tlBip + BIP_LEFT]) * BIP_NUMFIELDS;
+                        //either adds to the blob if there is an existing one or creates a new one if there isn't
+                        if (blobs[blob1 + BLOB_TYPE] == BLOB_TYPE_NULL) {
+                            blobs[blob1 + BLOB_TYPE] = BLOB_TYPE_VALUE;
+                            blobs[blob1 + BLOB_TOP] = row;
+                            blobs[blob1 + BLOB_LEFT] = col;
+                            blobs[blob1 + BLOB_BOTTOM] = row;
+                            blobs[blob1 + BLOB_RIGHT] = col + 1;
+                            blobs[blob1 + BLOB_COLOR] = color1;
+                            blobs[blob1 + BLOB_MATCHED] = BLOB_IS_UNMATCHED;
+                        } else if (blobs[blob1 + BLOB_TYPE] == BLOB_TYPE_VALUE) {
+                            blobs[blob1 + BLOB_RIGHT] = max(blobs[blob1 + BLOB_RIGHT], col + 1);
+                        } else if (blobs[blob1 + BLOB_TYPE] == BLOB_TYPE_REFERENCE) {
+                            // get pointer to actual blob value from top/left fields
+                            int tlBlob = blob1;
+                            while (blobs[tlBlob + BLOB_TYPE] == BLOB_TYPE_REFERENCE) {
+                                tlBlob = ((blobs[tlBlob + BLOB_TOP] * width) + blobs[tlBlob + BLOB_LEFT]) * BLOB_NUM_INT_FIELDS;
                             }
-                            bips[tlBip + BIP_RIGHT] = max(bips[tlBip + BIP_RIGHT], col + 1);
+                            blobs[tlBlob + BLOB_RIGHT] = max(blobs[tlBlob + BLOB_RIGHT], col + 1);
                         }
-                        bips[bip2 + BIP_TYPE] = BIP_TYPE_REFERENCE;
-                        bips[bip2 + BIP_TOP] = bips[bip1 + BIP_TOP];
-                        bips[bip2 + BIP_LEFT] = bips[bip1 + BIP_LEFT];
+                        blobs[blob2 + BLOB_TYPE] = BLOB_TYPE_REFERENCE;
+                        blobs[blob2 + BLOB_TOP] = blobs[blob1 + BLOB_TOP];
+                        blobs[blob2 + BLOB_LEFT] = blobs[blob1 + BLOB_LEFT];
                     }
                 }
             }
@@ -99,59 +88,59 @@ public class PrimitiveBlobDetection implements IBlobDetection {
                     int color1 = colors[(row * width) + col];
                     int color2 = colors[(row * width) + col + 1];
 
-                    int bip1 = ((row * width) + col) * BIP_NUMFIELDS;
-                    int bip2 = (((row + 1) * width) + col + 1) * BIP_NUMFIELDS;
+                    int blob1 = ((row * width) + col) * BLOB_NUM_INT_FIELDS;
+                    int blob2 = (((row + 1) * width) + col + 1) * BLOB_NUM_INT_FIELDS;
 
-                    int tlBip1 = bip1;
-                    while (bips[tlBip1 + BIP_TYPE] == BIP_TYPE_REFERENCE) {
-                        tlBip1 = ((bips[tlBip1 + BIP_TOP] * width) + bips[tlBip1 + BIP_LEFT]) * BIP_NUMFIELDS;
+                    int tlBlob1 = blob1;
+                    while (blobs[tlBlob1 + BLOB_TYPE] == BLOB_TYPE_REFERENCE) {
+                        tlBlob1 = ((blobs[tlBlob1 + BLOB_TOP] * width) + blobs[tlBlob1 + BLOB_LEFT]) * BLOB_NUM_INT_FIELDS;
                     }
 
-                    int tlBip2 = bip2;
-                    while (bips[tlBip2 + BIP_TYPE] == BIP_TYPE_REFERENCE) {
-                        tlBip2 = ((bips[tlBip2 + BIP_TOP] * width) + bips[tlBip2 + BIP_LEFT]) * BIP_NUMFIELDS;
+                    int tlBlob2 = blob2;
+                    while (blobs[tlBlob2 + BLOB_TYPE] == BLOB_TYPE_REFERENCE) {
+                        tlBlob2 = ((blobs[tlBlob2 + BLOB_TOP] * width) + blobs[tlBlob2 + BLOB_LEFT]) * BLOB_NUM_INT_FIELDS;
                     }
 
-                    int bip1Width = bips[tlBip1 + BIP_RIGHT] - bips[tlBip1 + BIP_LEFT] + 1;
-                    int bip2Width = bips[tlBip2 + BIP_RIGHT] - bips[tlBip2 + BIP_LEFT] + 1;
+                    int blob1Width = blobs[tlBlob1 + BLOB_RIGHT] - blobs[tlBlob1 + BLOB_LEFT] + 1;
+                    int blob2Width = blobs[tlBlob2 + BLOB_RIGHT] - blobs[tlBlob2 + BLOB_LEFT] + 1;
 
                     //merges pixels that are vertically nearby and of same color
                     if (color1 == color2) {
-                        if (bips[bip1 + BIP_TYPE] != BIP_TYPE_NULL
-                                && bips[bip2 + BIP_TYPE] != BIP_TYPE_NULL
-                                && abs(bip2Width - bip1Width) <= MAXIMUM_DIFFERENCE_IN_WIDTH_BETWEEN_TWO_BLOBS_IN_ORDER_TO_JOIN) {
+                        if (blobs[blob1 + BLOB_TYPE] != BLOB_TYPE_NULL
+                                && blobs[blob2 + BLOB_TYPE] != BLOB_TYPE_NULL
+                                && abs(blob2Width - blob1Width) <= MAXIMUM_DIFFERENCE_IN_WIDTH_BETWEEN_TWO_BLOBS_IN_ORDER_TO_JOIN) {
 
-                            bips[tlBip1 + BIP_LEFT] = min(bips[tlBip1 + BIP_LEFT], bips[tlBip2 + BIP_LEFT]);
-                            bips[tlBip1 + BIP_RIGHT] = max(bips[tlBip1 + BIP_RIGHT], bips[tlBip2 + BIP_RIGHT]);
-                            bips[tlBip1 + BIP_TOP] = min(bips[tlBip1 + BIP_TOP], bips[tlBip2 + BIP_TOP]);
-                            bips[tlBip1 + BIP_BOTTOM] = max(bips[tlBip1 + BIP_BOTTOM], bips[tlBip2 + BIP_BOTTOM]);
+                            blobs[tlBlob1 + BLOB_LEFT] = min(blobs[tlBlob1 + BLOB_LEFT], blobs[tlBlob2 + BLOB_LEFT]);
+                            blobs[tlBlob1 + BLOB_RIGHT] = max(blobs[tlBlob1 + BLOB_RIGHT], blobs[tlBlob2 + BLOB_RIGHT]);
+                            blobs[tlBlob1 + BLOB_TOP] = min(blobs[tlBlob1 + BLOB_TOP], blobs[tlBlob2 + BLOB_TOP]);
+                            blobs[tlBlob1 + BLOB_BOTTOM] = max(blobs[tlBlob1 + BLOB_BOTTOM], blobs[tlBlob2 + BLOB_BOTTOM]);
 
-                            bips[tlBip2 + BIP_TYPE] = BIP_TYPE_REFERENCE;
-                            bips[tlBip2 + BIP_TOP] = bips[tlBip1 + BIP_TOP];
-                            bips[tlBip2 + BIP_LEFT] = bips[tlBip1 + BIP_LEFT];
+                            blobs[tlBlob2 + BLOB_TYPE] = BLOB_TYPE_REFERENCE;
+                            blobs[tlBlob2 + BLOB_TOP] = blobs[tlBlob1 + BLOB_TOP];
+                            blobs[tlBlob2 + BLOB_LEFT] = blobs[tlBlob1 + BLOB_LEFT];
                         }
                         // Potentially re-add these later, but according to the original algorithm, these will not be called
                         // Also consider adding a case where they are both null
                         /*
-                        else if(bips[bip1 + BIP_TYPE] != BIP_TYPE_NULL
-                                && bips[bip2 + BIP_TYPE] == BIP_TYPE_NULL
-                                && bip1Width < MAXIMUM_DIFFERENCE_IN_WIDTH_BETWEEN_TWO_BLOBS_IN_ORDER_TO_JOIN) {
+                        else if(blobs[blob1 + BLOB_TYPE] != BLOB_TYPE_NULL
+                                && blobs[blob2 + BLOB_TYPE] == BLOB_TYPE_NULL
+                                && blob1Width < MAXIMUM_DIFFERENCE_IN_WIDTH_BETWEEN_TWO_BLOBS_IN_ORDER_TO_JOIN) {
 
-                            bips[tlBip1 + BIP_BOTTOM] = bips[tlBip1 + BIP_BOTTOM] + 1;
+                            blobs[tlBlob1 + BLOB_BOTTOM] = blobs[tlBlob1 + BLOB_BOTTOM] + 1;
 
-                            bips[tlBip2 + BIP_TYPE] = BIP_TYPE_REFERENCE;
-                            bips[tlBip2 + BIP_TOP] = bips[tlBip1 + BIP_TOP];
-                            bips[tlBip2 + BIP_LEFT] = bips[tlBip1 + BIP_LEFT];
+                            blobs[tlBlob2 + BLOB_TYPE] = BLOB_TYPE_REFERENCE;
+                            blobs[tlBlob2 + BLOB_TOP] = blobs[tlBlob1 + BLOB_TOP];
+                            blobs[tlBlob2 + BLOB_LEFT] = blobs[tlBlob1 + BLOB_LEFT];
                         }
-                        else if(bips[bip1 + BIP_TYPE] == BIP_TYPE_NULL
-                                && bips[bip2 + BIP_TYPE] != BIP_TYPE_NULL
-                                && bip2Width < MAXIMUM_DIFFERENCE_IN_WIDTH_BETWEEN_TWO_BLOBS_IN_ORDER_TO_JOIN) {
+                        else if(blobs[blob1 + BLOB_TYPE] == BLOB_TYPE_NULL
+                                && blobs[blob2 + BLOB_TYPE] != BLOB_TYPE_NULL
+                                && blob2Width < MAXIMUM_DIFFERENCE_IN_WIDTH_BETWEEN_TWO_BLOBS_IN_ORDER_TO_JOIN) {
 
-                            bips[tlBip2 + BIP_TOP] = bips[tlBip2 + BIP_TOP] + 1;
+                            blobs[tlBlob2 + BLOB_TOP] = blobs[tlBlob2 + BLOB_TOP] + 1;
 
-                            bips[tlBip1 + BIP_TYPE] = BIP_TYPE_REFERENCE;
-                            bips[tlBip1 + BIP_TOP] = bips[tlBip2 + BIP_TOP];
-                            bips[tlBip1 + BIP_LEFT] = bips[tlBip2 + BIP_LEFT];
+                            blobs[tlBlob1 + BLOB_TYPE] = BLOB_TYPE_REFERENCE;
+                            blobs[tlBlob1 + BLOB_TOP] = blobs[tlBlob2 + BLOB_TOP];
+                            blobs[tlBlob1 + BLOB_LEFT] = blobs[tlBlob2 + BLOB_LEFT];
                         }
                         */
                     }
@@ -161,41 +150,35 @@ public class PrimitiveBlobDetection implements IBlobDetection {
         bottomCheckKernel.execute(rowRange);
         bottomCheckKernel.dispose();
 
-        //eliminates blobs that are too large or too small or grey
-        for (int i = 0; i < bips.length; i += BIP_NUMFIELDS) {
-            if (bips[i + BIP_TYPE] == BIP_TYPE_VALUE) {
-                int bipWidth = bips[i + BIP_RIGHT] - bips[i + BIP_LEFT] + 1;
-                int bipHeight = bips[i + BIP_BOTTOM] - bips[i + BIP_TOP] + 1;
+        // eliminates blobs that are too large or too small or grey
+        // also brings the blobs as left as possible within the array
+        // this makes it so that there is no need to allocate a new array and reduces amount of iteration needed later
 
-                if (bipWidth >= 4 && bipHeight >= 4
-                        && bipWidth < (width / 2)
-                        && bipHeight < (height / 2)
-                        && bips[i + BIP_COLOR] != Color.GREY.ordinal()) {
-                    blobs.add(getBlob(i));
+        int eliminated = 0;
+
+        for (int i = 0; i < blobs.length; i += BLOB_NUM_INT_FIELDS) {
+            if (blobs[i + BLOB_TYPE] == BLOB_TYPE_VALUE) {
+                int blobWidth = blobs[i + BLOB_RIGHT] - blobs[i + BLOB_LEFT] + 1;
+                int blobHeight = blobs[i + BLOB_BOTTOM] - blobs[i + BLOB_TOP] + 1;
+
+                if (blobWidth >= 4 && blobHeight >= 4 && blobWidth < (width / 2) && blobHeight < (height / 2) && blobs[i + BLOB_COLOR] != Color.GREY.ordinal()) {
+                    // do not eliminate
+                    if(eliminated != 0) {
+                        // needs to be shifted left
+                        int newIndex = i - (eliminated * BLOB_NUM_INT_FIELDS);
+                        System.arraycopy(blobs, i, blobs, newIndex, BLOB_NUM_INT_FIELDS);
+                    }
+                } else {
+                    eliminated++;
                 }
+            } else {
+                eliminated++;
+            }
+
+            if (eliminated != 0) {
+                blobs[i + BLOB_TYPE] = BLOB_TYPE_NULL;
             }
         }
-
         return blobs;
-    }
-
-    // reduce, reuse, recycle for blobs in progress
-    // reduces the need for object allocation at runtime
-    private Blob getBlob(int bip) {
-        int bipWidth = bips[bip + BIP_RIGHT] - bips[bip + BIP_LEFT] + 1;
-        int bipHeight = bips[bip + BIP_BOTTOM] - bips[bip + BIP_TOP] + 1;
-
-        Color bipColor = Color.values()[bips[bip + BIP_COLOR]];
-        if (unusedBlobs.isEmpty()) {
-            return new Blob(bipWidth, bipHeight, bips[bip + BIP_LEFT], bips[bip + BIP_TOP], new Pixel(bipColor));
-        } else {
-            Blob blob = unusedBlobs.pop();
-            blob.width = bipWidth;
-            blob.height = bipHeight;
-            blob.x = bips[bip + BIP_LEFT];
-            blob.y = bips[bip + BIP_TOP];
-            blob.color = new Pixel(bipColor);
-            return blob;
-        }
     }
 }

@@ -6,7 +6,7 @@ import com.apw.speedcon.Settings;
 
 import java.util.*;
 
-public class MovingBlobDetection implements IMovingBlobDetection {
+public class MovingBlobDetection {
     //maximum time before unmatched MovingBlob is deleted
     private int maxTimeOffScreen = Constant.MAX_TIME_OFF_SCREEN;
     private int maxTimeOffScreenUnified = 3;
@@ -38,7 +38,6 @@ public class MovingBlobDetection implements IMovingBlobDetection {
         return movingBlobs;
     }
 
-    @Override
     public List<MovingBlob> getFilteredUnifiedBlobs(List<MovingBlob> blobList) {
         updateFilteredUnifiedBlobs(blobList);
         return filteredUnifiedBlobs;

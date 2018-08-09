@@ -60,7 +60,7 @@ public class SimCameraRGB extends FlyCamera {
             if (theSim == null) return false;
             byte[] pixels2 = new byte[pixels.length];
             boolean check = theSim.GetSimFrame(rose, colz, pixels2);
-            ImageManipulator.byteRGB(pixels2,pixels,colz,rose,(byte)0);
+            //ImageManipulator.byteRGB(pixels2,pixels,colz,rose,(byte)0);
             return check;
         } //~NextFrame // in apw3.SimCamera
 
