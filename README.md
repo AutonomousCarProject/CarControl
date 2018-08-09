@@ -1,7 +1,16 @@
-# Autonomous Car Project
+# Autonomous Vehicle Project
 Speed, steering, and object detection for an autonomous RC car
 
-[![Build Status](https://travis-ci.org/AutonomousCarProject/CarControl.svg?branch=master)](https://travis-ci.org/AutonomousCarProject/CarControl)
+### Branch specific build status
+Branch      | Ubuntu x86_64 | macOS High Sierra
+----------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------
+Master      | [![Travis (.org) branch](https://img.shields.io/travis/AutonomousCarProject/CarControl/master.svg?logo=travis)](https://travis-ci.org/AutonomousCarProject/CarControl)      | [![Travis (.org) branch](https://img.shields.io/travis/AutonomousCarProject/CarControl/master.svg?logo=travis)](https://travis-ci.org/AutonomousCarProject/CarControl)     
+Steering    | [![Travis (.org) branch](https://img.shields.io/travis/AutonomousCarProject/CarControl/steering.svg?logo=travis)](https://travis-ci.org/AutonomousCarProject/CarControl)    | [![Travis (.org) branch](https://img.shields.io/travis/AutonomousCarProject/CarControl/steering.svg?logo=travis)](https://travis-ci.org/AutonomousCarProject/CarControl)   
+Speed       | [![Travis (.org) branch](https://img.shields.io/travis/AutonomousCarProject/CarControl/speed.svg?logo=travis)](https://travis-ci.org/AutonomousCarProject/CarControl)       | [![Travis (.org) branch](https://img.shields.io/travis/AutonomousCarProject/CarControl/speed.svg?logo=travis)](https://travis-ci.org/AutonomousCarProject/CarControl)      
+Image       | [![Travis (.org) branch](https://img.shields.io/travis/AutonomousCarProject/CarControl/image.svg?logo=travis)](https://travis-ci.org/AutonomousCarProject/CarControl)       | [![Travis (.org) branch](https://img.shields.io/travis/AutonomousCarProject/CarControl/image.svg?logo=travis)](https://travis-ci.org/AutonomousCarProject/CarControl)      
+GPU         | [![Travis (.org) branch](https://img.shields.io/travis/AutonomousCarProject/CarControl/gpu.svg?logo=travis)](https://travis-ci.org/AutonomousCarProject/CarControl)         | [![Travis (.org) branch](https://img.shields.io/travis/AutonomousCarProject/CarControl/gpu.svg?logo=travis)](https://travis-ci.org/AutonomousCarProject/CarControl)        
+Interfacing | [![Travis (.org) branch](https://img.shields.io/travis/AutonomousCarProject/CarControl/Interfacing.svg?logo=travis)](https://travis-ci.org/AutonomousCarProject/CarControl) | [![Travis (.org) branch](https://img.shields.io/travis/AutonomousCarProject/CarControl/Interfacing.svg?logo=travis)](https://travis-ci.org/AutonomousCarProject/CarControl)
+
 
 ## Main Components
 
@@ -9,8 +18,9 @@ Stuff required for the car to drive, majority of the program.
 
 * Image processing.
 * Speed control.
-* Pedestrian & other obstacle detecion.
+* Pedestrian & object detection.
 * Steering.
+* PWM / Arduino Interfacing.
 
 ## Non-Essentials
 
@@ -28,7 +38,7 @@ This project is mostly focused on the software side of the problem but we are ru
 * RC Car
 * Onboard SBC - LattePanda (insert specific version here).
 * Arduino integrated with LP to control servos.
-* Frontmounted camera - FLIR Firefly Camera.
+* Frontmounted camera - FLIR Chameleon 3 Camera.
 
 ## Dependencies
 
@@ -45,7 +55,7 @@ Standalone driving simulation to test code without the required hardware
 
 * APW3
     * TrakSim and its supporting classes, as well as an exmple track to run it with.
-* DriveDemo
+* DriveDemo - **Deprecated since** [**eb8e01c**](https://github.com/AutonomousCarProject/CarControl/commit/eb8e01cc2d91feb26ebcebe2d798e27c0678d200)
     * A program designed to demonstrate how to use both TrakSim and the servo & camera interfaces simulated by TrakSim.
 * Fly2Cam
     * A minor revision of the Java interface to the JNI (C-coded) DLL which accesses the Pt.Grey Chameleon3 or FireFly camera driver DLLs. FlyCamera.dll is included here.
@@ -56,9 +66,11 @@ Standalone driving simulation to test code without the required hardware
 
 
 ## Running
-Setup the included Gradle project and make sure to include the [Aparapi](http://aparapi.com/) library.
+Setup the included Gradle project and make sure to include the [Aparapi](http://aparapi.com/) and [Raspivid-j](https://github.com/AutonomousCarProject/CarControl/commit/eb8e01cc2d91feb26ebcebe2d798e27c0678d200) libraries.
 
-Compile and run DrDemo.java in the `com.apw.drivedemo` package, this should open TrakSim in two windows: DriveTest & DrDemo.
+Compile and run MrModule.java in the `com.apw.carcontrol` package, by default its set to run on a car with the expected hardware and driver dlls but if
+you are running it on your own computer with TrakSim or any equivalent use the cmd argument `sim`, this should launch a new TrakSim window and start driving the car.
+If you wish to run the program with no visual display/window run with the argument `nosim`.
 
 ## Using TrakSim
 
@@ -73,15 +85,19 @@ Compile and run DrDemo.java in the `com.apw.drivedemo` package, this should open
 * **DOWN** - Decrease manual speed by 1.
 * **LEFT** - Steer left by 5.
 * **RIGHT** - Steer right by 5.
-* **P** - Alert program that its stopped at a stopsign.
-* **O** - Alert program that its stopped at a stop light.
-* **I** - Alert program that its at a green light.
+* **P** - Tell the car that its stopped at a red light.
+* **O** - Tell the car that its stopped at a yellow light.
+* **I** - Tell the car that its stopped at a green light.
+* **U** - Tell the car that its stopped at a stop sign.
+* **Y** - Increments stop distance.
 * **B** - Enable/disable blob rendering.
 * **V** - Enable/disable overlay rendering.
-* **G** -
-    * Pressed: GPU Optimizations on.
-    * Unpressed: GPU Optimizations off.
-
+* **F** - Begins camera calibration.
+* **C** - Enable/disable writing blobs to console.
+* **S** - Enable/disable writing speed to console.
+* **M** - Increment blob color mode.
+* **SPACE** - Change image filter.
+* **F11** - Toggle Fullscreen window (if using WindowModule).
 
 ### Track
 
@@ -99,7 +115,17 @@ or contact Tom at TPittman@IttyBittyComputers.com
 
 This project was created and is maintained by a group of highschool students in Portland, Oregon.
 
-You are welcome to submit issues and pull requests if you so desire (you probably dont).
+__Bugs and requests__: submit them through the project's issues tracker.<br>
+
+[![Issues](http://img.shields.io/github/issues/AutonomousCarProject/CarControl.svg?logo=github)]( https://github.com/AutonomousCarProject/CarControl/issues )
+
+__Questions__: ask them at StackOverflow with the tag *REPO*.<br>
+
+[![StackOverflow](http://img.shields.io/badge/stackoverflow-AVP_HS-blue.svg?logo=stackoverflow)]( http://stackoverflow.com/questions/tagged/AVP_HS )
+
+**Website**: [AVP_HS](http://www.avp-hs.org) 
+
+[![Website](https://img.shields.io/badge/website-up-magenta.svg?longCache=true&style=flat)](http://www.avp-hs.org)
 
 # CI
 
@@ -110,4 +136,4 @@ You are welcome to submit issues and pull requests if you so desire (you probabl
 [Google Java Style Guide](https://google.github.io/styleguide/javaguide.html), enforced by [Google Java Formatter](https://github.com/google/google-java-format) with [google-java-format-gradle-plugin](https://github.com/sherter/google-java-format-gradle-plugin).
 
 # License
-See LICENSE
+[![Apache license](http://img.shields.io/badge/license-Apache-brightgreen.svg)](http://opensource.org/licenses/Apache-2.0)
