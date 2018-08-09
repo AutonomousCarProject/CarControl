@@ -27,8 +27,8 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
 
     private boolean initialized = false;
 
-    private static final int windowWidth = 912;
-    private static final int windowHeight = 480;
+    private int windowWidth = 912;
+    private int windowHeight = 480;
 
 
     private MrModule(boolean realcam) {
@@ -37,6 +37,9 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         else
             control = new TrakSimControl(driveSys);
 
+        windowWidth = control.getImageWidth();
+        windowHeight = control.getImageHeight();
+        
         headlessInit();
         createModules();
     }
@@ -136,7 +139,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     }
 
     public static void main(String[] args) {
-        boolean realcam = DriverCons.D_LiveCam;
+        boolean realcam = true;
         if(args.length > 0 && args[0].toLowerCase().equals("sim")) {
             realcam = false;
         }

@@ -94,7 +94,7 @@ public class SpeedControlModule implements Module {
 		PedestrianDetector pedDetect = new PedestrianDetector();
 		
 		byte[] limitArray = new byte[Constants.SCREEN_FILTERED_WIDTH * Constants.SCREEN_HEIGHT];
-		ImageManipulator.limitTo(limitArray, control.getProcessedImage(), Constants.SCREEN_FILTERED_WIDTH, Constants.SCREEN_HEIGHT, Constants.SCREEN_FILTERED_WIDTH, Constants.SCREEN_HEIGHT, false);
+		ImageManipulator.limitTo(limitArray, control.getProcessedImage(), Constants.SCREEN_FILTERED_WIDTH, Constants.SCREEN_HEIGHT, Constants.SCREEN_FILTERED_WIDTH, Constants.SCREEN_HEIGHT);
 		
 		if(Settings.overlayOn){
 			//Draw our stoplight hitbox in constant designated color

@@ -243,12 +243,12 @@ public class CamControl implements CarControl {
 
 	@Override
 	public int getWindowHeight() {
-		return 0;
+		return nrows;
 	}
 
 	@Override
 	public int getWindowWidth() {
-		return 0;
+		return ncols;
 	}
 
     @Override

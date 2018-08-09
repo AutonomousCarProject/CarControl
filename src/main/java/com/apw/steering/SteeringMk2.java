@@ -79,6 +79,10 @@ public class SteeringMk2 extends SteeringBase {
      */
     @Override
     public void findPoints(int[] pixels) {
+    	if(pixels == null) {
+    		return;
+    	}
+    	
         int lastX = cameraWidth / 2;
         int midX = cameraWidth / 2; // midX is where the car thinks is the middle of the road
         double m = (cameraHeight * 0.24) / (cameraWidth * 0.91);

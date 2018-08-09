@@ -35,8 +35,6 @@ public class BottomCheckKernel extends Kernel {
                 int blob1 = ((row * width) + col) * BLOB_NUM_INT_FIELDS;
                 int blob2 = (((row + 1) * width) + col) * BLOB_NUM_INT_FIELDS;
 
-                // TODO: find cause of infinite loop
-
                 int tlBlob1 = blob1;
                 while (blobs[tlBlob1 + BLOB_TYPE] == BLOB_TYPE_REFERENCE) {
                     tlBlob1 = blobs[tlBlob1 + BLOB_REFERENCE_INDEX];

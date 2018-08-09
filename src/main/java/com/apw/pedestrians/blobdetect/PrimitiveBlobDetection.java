@@ -1,6 +1,12 @@
 package com.apw.pedestrians.blobdetect;
 
 import com.aparapi.Range;
+import com.aparapi.Kernel;
+import com.aparapi.Kernel.EXECUTION_MODE;
+import com.aparapi.device.OpenCLDevice;
+import com.aparapi.device.OpenCLDevice.DeviceSelector;
+import com.aparapi.device.Device;
+import com.aparapi.device.Device.TYPE;
 import com.apw.pedestrians.image.Color;
 import com.apw.pedestrians.image.Pixel;
 
@@ -51,11 +57,11 @@ public class PrimitiveBlobDetection extends BlobDetection {
                 blobs[i + BLOB_TYPE] = BLOB_TYPE_NULL;
             }
         }
-
+        
         //noinspection SuspiciousNameCombination
         Range rowRange = Range.create(height);
         Range colRange = Range.create(width / 2);
-
+;
         rightCheckKernel.setValues(colors, blobs, width);
         rightCheckKernel.execute(rowRange);
 
@@ -71,7 +77,7 @@ public class PrimitiveBlobDetection extends BlobDetection {
             }
         }
 
-        System.out.println(System.currentTimeMillis() - time);
+        System.out.println("!!!" + (System.currentTimeMillis() - time) + rightCheckKernel.getTargetDevice().getShortDescription());
 
         return blobList;
     }
@@ -83,7 +89,8 @@ public class PrimitiveBlobDetection extends BlobDetection {
         int y = blobs[i + BLOB_TOP];
         int width = blobs[i + BLOB_RIGHT] - blobs[i + BLOB_LEFT] + 1;
         int height = blobs[i + BLOB_BOTTOM] - blobs[i + BLOB_TOP] + 1;
-        Pixel color = colors[blobs[i + BLOB_COLOR]];
+        Pixel color = colors[
+                             blobs[i + BLOB_COLOR]];
 
 
         if (unusedBlobs.isEmpty()) {

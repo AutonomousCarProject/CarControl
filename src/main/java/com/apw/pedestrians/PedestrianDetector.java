@@ -10,6 +10,7 @@ import com.apw.pedestrians.image.Color;
 import com.apw.pedestrians.image.Pixel;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 public class PedestrianDetector {
@@ -20,9 +21,8 @@ public class PedestrianDetector {
     private BlobFilter blobFilter;
 
     public PedestrianDetector() {
-//        this(new BlobDetection(), new MovingBlobDetection(), new BlobFilter());
-//        this(new NonGPUPrimitiveBlobDetection(), new MovingBlobDetection(), new BlobFilter());
-        this(new PrimitiveBlobDetection(), new MovingBlobDetection(), new BlobFilter());
+        this(new BlobDetection(), new MovingBlobDetection(), new BlobFilter());
+//        this(new PrimitiveBlobDetection(), new MovingBlobDetection(), new BlobFilter());
     }
 
     public PedestrianDetector(BlobDetection blobDetection, MovingBlobDetection movingBlobDetection, BlobFilter blobFilter) {
@@ -32,6 +32,10 @@ public class PedestrianDetector {
     }
 
     public List<MovingBlob> getAllBlobs(byte[] colors, int width) {
+    	if(colors == null) {
+    		return new LinkedList<>();
+    	}
+    	
         int height = colors.length / width;
         Pixel[][] image = new Pixel[height][width];
         for (int i = 0; i < colors.length; i++) {

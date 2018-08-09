@@ -129,7 +129,7 @@ public class BlobDetection {
             }
         }
 
-        System.out.println(System.currentTimeMillis() - time);
+        System.out.println("!!!" + (System.currentTimeMillis() - time));
         
         return blobs;
     }
