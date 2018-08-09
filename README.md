@@ -1,8 +1,14 @@
 # Autonomous Vehicle Project
 Speed, steering, and object detection for an autonomous RC car
 
-[![Build Status](https://travis-ci.org/AutonomousCarProject/CarControl.svg?branch=master)](https://travis-ci.org/AutonomousCarProject/CarControl)
-
+Branch | Build Status
+------ | ------------
+Master | [![Build Status](https://travis-ci.org/AutonomousCarProject/CarControl.svg?branch=master)](https://travis-ci.org/AutonomousCarProject/CarControl)
+Steering | [![Build Status](https://travis-ci.org/AutonomousCarProject/CarControl.svg?branch=steering)](https://travis-ci.org/AutonomousCarProject/CarControl)
+Speed | [![Build Status](https://travis-ci.org/AutonomousCarProject/CarControl.svg?branch=speed)](https://travis-ci.org/AutonomousCarProject/CarControl)
+Image | [![Build Status](https://travis-ci.org/AutonomousCarProject/CarControl.svg?branch=image)](https://travis-ci.org/AutonomousCarProject/CarControl)
+GPU | [![Build Status](https://travis-ci.org/AutonomousCarProject/CarControl.svg?branch=gpu)](https://travis-ci.org/AutonomousCarProject/CarControl)
+Interfacing | [![Build Status](https://travis-ci.org/AutonomousCarProject/CarControl.svg?branch=Interfacing)](https://travis-ci.org/AutonomousCarProject/CarControl)
 ## Main Components
 
 Stuff required for the car to drive, majority of the program.
