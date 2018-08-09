@@ -4,12 +4,13 @@ Speed, steering, and object detection for an autonomous RC car
 ### Branch specific build status
 Branch      | Ubuntu x86_64 | macOS High Sierra
 ----------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------
-Master      | [![Travis (.org) branch](https://img.shields.io/travis/AutonomousCarProject/CarControl/master.svg)](https://travis-ci.org/AutonomousCarProject/CarControl)    | N/A
-Steering    | [![Travis (.org) branch](https://img.shields.io/travis/AutonomousCarProject/CarControl/steering.svg)](https://travis-ci.org/AutonomousCarProject/CarControl)    | N/A
-Speed       | [![Travis (.org) branch](https://img.shields.io/travis/AutonomousCarProject/CarControl/speed.svg)](https://travis-ci.org/AutonomousCarProject/CarControl)       | N/A
-Image       | [![Travis (.org) branch](https://img.shields.io/travis/AutonomousCarProject/CarControl/image.svg)](https://travis-ci.org/AutonomousCarProject/CarControl) | N/A
-GPU         | [![Travis (.org) branch](https://img.shields.io/travis/AutonomousCarProject/CarControl/gpu.svg)](https://travis-ci.org/AutonomousCarProject/CarControl) | N/A
-Interfacing | [![Travis (.org) branch](https://img.shields.io/travis/AutonomousCarProject/CarControl/Interfacing.svg)](https://travis-ci.org/AutonomousCarProject/CarControl) | N/A
+Master      | [![Travis (.org) branch](https://img.shields.io/travis/AutonomousCarProject/CarControl/master.svg?logo=travis)](https://travis-ci.org/AutonomousCarProject/CarControl)    | N/A
+Steering    | [![Travis (.org) branch](https://img.shields.io/travis/AutonomousCarProject/CarControl/steering.svg?logo=travis)](https://travis-ci.org/AutonomousCarProject/CarControl)    | N/A
+Speed       | [![Travis (.org) branch](https://img.shields.io/travis/AutonomousCarProject/CarControl/speed.svg?logo=travis)](https://travis-ci.org/AutonomousCarProject/CarControl)       | N/A
+Image       | [![Travis (.org) branch](https://img.shields.io/travis/AutonomousCarProject/CarControl/image.svg?logo=travis)](https://travis-ci.org/AutonomousCarProject/CarControl) | N/A
+GPU         | [![Travis (.org) branch](https://img.shields.io/travis/AutonomousCarProject/CarControl/gpu.svg?logo=travis)](https://travis-ci.org/AutonomousCarProject/CarControl) | N/A
+Interfacing | [![Travis (.org) branch](https://img.shields.io/travis/AutonomousCarProject/CarControl/Interfacing.svg?logo=travis)](https://travis-ci.org/AutonomousCarProject/CarControl) | N/A
+
 
 ## Main Components
 
@@ -116,11 +117,15 @@ This project was created and is maintained by a group of highschool students in 
 
 __Bugs and requests__: submit them through the project's issues tracker.<br>
 
-[![Issues](http://img.shields.io/github/issues/AutonomousCarProject/CarControl.svg)]( https://github.com/AutonomousCarProject/CarControl/issues )
+[![Issues](http://img.shields.io/github/issues/AutonomousCarProject/CarControl.svg?logo=github)]( https://github.com/AutonomousCarProject/CarControl/issues )
 
 __Questions__: ask them at StackOverflow with the tag *REPO*.<br>
 
-[![StackOverflow](http://img.shields.io/badge/stackoverflow-AVP_HS-blue.svg)]( http://stackoverflow.com/questions/tagged/AVP_HS )
+[![StackOverflow](http://img.shields.io/badge/stackoverflow-AVP_HS-blue.svg?logo=stackoverflow)]( http://stackoverflow.com/questions/tagged/AVP_HS )
+
+**Website**: [AVP_HS](http://www.avp-hs.org) 
+
+[![Website](https://img.shields.io/badge/website-up-magenta.svg?longCache=true&style=flat)](http://www.avp-hs.org)
 
 # CI
 
