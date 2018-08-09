@@ -1,6 +1,7 @@
 package com.apw.carcontrol;
 
 import com.apw.apw3.DriverCons;
+import com.apw.gpu.GPUImageModule;
 import com.apw.imagemanagement.ImageManagementModule;
 import com.apw.sbcio.PWMController;
 import com.apw.sbcio.fakefirm.ArduinoIO;

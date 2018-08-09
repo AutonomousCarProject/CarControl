@@ -1,4 +1,4 @@
-# Autonomous Car Project
+# Autonomous Vehicle Project
 Speed, steering, and object detection for an autonomous RC car
 
 [![Build Status](https://travis-ci.org/AutonomousCarProject/CarControl.svg?branch=master)](https://travis-ci.org/AutonomousCarProject/CarControl)
@@ -9,8 +9,9 @@ Stuff required for the car to drive, majority of the program.
 
 * Image processing.
 * Speed control.
-* Pedestrian & other obstacle detecion.
+* Pedestrian & object detection.
 * Steering.
+* PWM / Arduino Interfacing.
 
 ## Non-Essentials
 
@@ -45,7 +46,7 @@ Standalone driving simulation to test code without the required hardware
 
 * APW3
     * TrakSim and its supporting classes, as well as an exmple track to run it with.
-* DriveDemo
+* DriveDemo - **Deprecated since** [**eb8e01c**](https://github.com/AutonomousCarProject/CarControl/commit/eb8e01cc2d91feb26ebcebe2d798e27c0678d200)
     * A program designed to demonstrate how to use both TrakSim and the servo & camera interfaces simulated by TrakSim.
 * Fly2Cam
     * A minor revision of the Java interface to the JNI (C-coded) DLL which accesses the Pt.Grey Chameleon3 or FireFly camera driver DLLs. FlyCamera.dll is included here.
@@ -56,9 +57,11 @@ Standalone driving simulation to test code without the required hardware
 
 
 ## Running
-Setup the included Gradle project and make sure to include the [Aparapi](http://aparapi.com/) library.
+Setup the included Gradle project and make sure to include the [Aparapi](http://aparapi.com/) and [Raspivid-j](https://github.com/AutonomousCarProject/CarControl/commit/eb8e01cc2d91feb26ebcebe2d798e27c0678d200) libraries.
 
-Compile and run DrDemo.java in the `com.apw.drivedemo` package, this should open TrakSim in two windows: DriveTest & DrDemo.
+Compile and run MrModule.java in the `com.apw.carcontrol` package, by default its set to run on a car with the expected hardware and driver dlls but if
+you are running it on your own computer with TrakSim or any equivalent use the cmd argument `sim`, this should launch a new TrakSim window and start driving the car.
+If you wish to run the program with no visual display/window run with the argument `nosim`.
 
 ## Using TrakSim
 
@@ -73,15 +76,19 @@ Compile and run DrDemo.java in the `com.apw.drivedemo` package, this should open
 * **DOWN** - Decrease manual speed by 1.
 * **LEFT** - Steer left by 5.
 * **RIGHT** - Steer right by 5.
-* **P** - Alert program that its stopped at a stopsign.
-* **O** - Alert program that its stopped at a stop light.
-* **I** - Alert program that its at a green light.
+* **P** - Tell the car that its stopped at a red light.
+* **O** - Tell the car that its stopped at a yellow light.
+* **I** - Tell the car that its stopped at a green light.
+* **U** - Tell the car that its stopped at a stop sign.
+* **Y** - Increments stop distance.
 * **B** - Enable/disable blob rendering.
 * **V** - Enable/disable overlay rendering.
-* **G** -
-    * Pressed: GPU Optimizations on.
-    * Unpressed: GPU Optimizations off.
-
+* **F** - Begins camera calibration.
+* **C** - Enable/disable writing blobs to console.
+* **S** - Enable/disable writing speed to console.
+* **M** - Increment blob color mode.
+* **M** - Change image filter.
+* **F11** - Toggle Fullscreen window (if using WindowModule).
 
 ### Track
 
