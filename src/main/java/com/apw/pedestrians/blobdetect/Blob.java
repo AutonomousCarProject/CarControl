@@ -1,6 +1,5 @@
 package com.apw.pedestrians.blobdetect;
 
-import com.apw.pedestrians.image.Color;
 import com.apw.pedestrians.image.Pixel;
 
 public class Blob {
@@ -10,7 +9,6 @@ public class Blob {
     public Pixel color;
     public int id;
     public boolean seen;
-    public String type;
 
     public Blob(int width, int height, int x, int y, Pixel color) {
         set(width, height, x, y, color);

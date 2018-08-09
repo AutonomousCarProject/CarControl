@@ -11,7 +11,5 @@ public class Settings {
 
     public static int
     colorMode = Constants.DEFAULT_COLOR_MODE,
-    maxColorMode = Constants.MAX_COLOR_MODE,
-    stopDist = Constants.DEFAULT_STOP_DIST,
-    maxStopDist = Constants.MAX_STOP_DIST;
+    numColorModes = Constants.NUM_COLOR_MODES;
 }
