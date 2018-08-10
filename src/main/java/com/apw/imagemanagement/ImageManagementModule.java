@@ -1,5 +1,6 @@
 package com.apw.imagemanagement;
 
+import com.apw.apw3.DriverCons;
 import com.apw.carcontrol.CarControl;
 import com.apw.carcontrol.Module;
 
@@ -20,6 +21,8 @@ public class ImageManagementModule implements Module {
     private int blackWhiteRasterVersion = 1;
     private double luminanceMultiplier = 1.5;
 
+
+    int x = 0;
 
     //internal variables
     private int width, height;
@@ -320,7 +323,11 @@ public class ImageManagementModule implements Module {
 
     @Override
     public void update(CarControl control) {
-        setupArrays(control.getRecentCameraImage());
+
+        if(x%DriverCons.D_LagFrames==0&&!DriverCons.D_LiveCam) {
+            setupArrays(control.getRecentCameraImage());
+        }
+        x++;
         synchronized(displayThread){
             displayThread.notifyAll();
         }
