@@ -89,7 +89,7 @@ public class SteeringMk2 extends SteeringBase {
             lastX = midPoints.get(midPoints.size() - 1).x;
         }
         if(lastX != midX){
-            lastX = (int) (midX + Math.abs(lastX - midX)/(lastX - midX)*(midX - (midX - Math.abs(lastX - midX))/1.25));
+            lastX = (int) (midX + Math.abs(lastX - midX)/(lastX - midX)*(midX - (midX - Math.abs(lastX - midX))/1.2));
         }
 
         double m = (cameraHeight * 0.24) / (cameraWidth * 0.91);
