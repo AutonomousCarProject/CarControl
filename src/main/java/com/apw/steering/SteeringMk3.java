@@ -29,11 +29,11 @@ public class SteeringMk3 extends SteeringBase {
 	public boolean[] onCurve;
 
 	private final int heightOfArea = 32; // How high the car looks for lines
-	private final int startingHeight = 272; // how high the car starts looking for lines
+	private final int startingHeight = 400; // how high the car starts looking for lines
 
 	private int startingPoint = 0; // Where the car starts looking for lines on either side.
 	private Point[] leadingMidPoints = new Point[startingHeight + heightOfArea];
-	private Point[] pointsAhead = new Point[startingHeight - (cameraHeight / 2)]; // points far ahead
+	private Point[] pointsAhead = new Point[startingHeight - (cameraHeight / 4)]; // points far ahead
 	private double weight = 1.0; // >1 = right lane, <1 = left lane
 	private boolean weightLane = false;
 	private boolean turnAhead = false;

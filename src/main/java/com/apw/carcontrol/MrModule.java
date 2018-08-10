@@ -121,7 +121,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         // Start Thread to get the RGB image. (for camera)
         CompletableFuture<CarControl> futureRGBImage = CompletableFuture.supplyAsync(() -> {
             carControl.setRGBImage(imageModule.getRGBRaster(carControl.getRecentCameraImage()));
-            carControl.setRenderedImage(carControl.getRGBImage());
+            carControl.setRenderedImage(imageModule.getRGBRaster(carControl.getRecentCameraImage()));
             return carControl;
         });
         // Start Thread to get the black and white image (for steering)
@@ -174,7 +174,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     }
 
     public static void main(String[] args) {
-        boolean realcam = false;
+        boolean realcam = true;
         boolean window = true;
         if(args.length > 0) {
         	if(args[0].toLowerCase().equals("sim")) {

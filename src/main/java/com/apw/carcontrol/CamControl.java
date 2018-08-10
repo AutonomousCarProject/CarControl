@@ -157,12 +157,12 @@ public class CamControl implements CarControl {
     @Override
     public void steer(boolean absolute, int angle) {
         System.out.println("Angle to steer: " + angle);
-
+        int TEMPANGLE = angle;
     	
         if (!absolute) {
             angle = currentSteering + angle;
         }
-        angle = MyMath.iMax(MyMath.iMin(angle, 90), -90);
+        /*(angle = MyMath.iMax(MyMath.iMin(angle, 90), -90);
         if (angle != 0) if (angle == currentSteering) return;
         currentSteering = angle;
         if (angle < 0) {
@@ -180,6 +180,8 @@ public class CamControl implements CarControl {
         	System.out.println("Dsys null");
             return;
         }
+        */
+        System.out.println("SHOULD BE 0: " + (angle - TEMPANGLE));
         driveSys.setServoAngle(SteerPin, angle + 90);
         System.out.println("Steered");
     }

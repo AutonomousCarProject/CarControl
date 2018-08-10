@@ -22,7 +22,7 @@ public abstract class SteeringBase implements Steerable {
     List<Point> leftPoints = new ArrayList<>();
     List<Point> rightPoints = new ArrayList<>();
     List<Point> midPoints = new ArrayList<>();
-    private boolean usePID = false;
+    private boolean usePID = true;
     private double integral, // The integral of the
             previousError;  // PID
     private List<Double> posLog = new ArrayList<>(); // Array list for logging positions fed into it
@@ -50,7 +50,7 @@ public abstract class SteeringBase implements Steerable {
         int tempDeg = (int) (Math.atan2(-xOffset, yOffset) * (180 / Math.PI));
 
         //System.out.println("\n\n\n" + tempDeg + " " + myPID() + "\n\n\n");
-        return (int) ((Math.atan2(-((usePID && (curveSteepness(tempDeg) > 0.3)) ? myPID() : xOffset), yOffset)) * (180 / Math.PI));
+        return (int) ((Math.atan2(-(usePID ? myPID() : xOffset), yOffset)) * (180 / Math.PI));
     }
 
     /**
@@ -61,7 +61,7 @@ public abstract class SteeringBase implements Steerable {
     private double myPID() {
 
         int error = origin.x - steerPoint.x;
-        double kP = 1;
+        double kP = 0.8;
         double kI = 0;
         double kD = 0;
         double derivative;
