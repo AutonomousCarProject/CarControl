@@ -18,8 +18,8 @@ public class GPUImageModule implements Module {
     private double luminanceMultiplier = 1.6;
     private int width, height;
     private int[] imagePixels;
-    private int frameWidth = 640;
     private byte tile;
+    private int frameWidth = 640;
     private SimpleColorRasterKernel simpleColorRasterKernel;
     private BlackWhiteRasterKernel blackWhiteRasterKernel;
     private BlackWhiteRaster2Kernel blackWhiteRaster2Kernel;

@@ -1,6 +1,7 @@
 package com.apw.carcontrol;
 
 import com.apw.apw3.DriverCons;
+import com.apw.gpu.GPUImageModule;
 import com.apw.imagemanagement.ImageManagementModule;
 import com.apw.sbcio.PWMController;
 import com.apw.sbcio.fakefirm.ArduinoIO;
@@ -13,8 +14,7 @@ import javax.swing.*;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.security.Key;
-import java.sql.Driver;
+
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.*;
@@ -26,24 +26,35 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     private ArrayList<Module> modules;
     private CarControl control;
 
-    private final int windowWidth = 912;
-    private final int windowHeight = 480;
-    
-    private final int FPS = 60;
-    private final int initDelay = 100;
+    private boolean initialized = false;
 
-    private MrModule(boolean realcam) {
+    private int windowWidth = 912;
+    private int windowHeight = 480;
+
+    private static final int FPS = 60;
+    private static final int initDelay = 100;
+    
+    private boolean window;
+
+    private MrModule(boolean realcam, boolean window) {
         if (realcam)
             control = new CamControl(driveSys);
         else
             control = new TrakSimControl(driveSys);
 
+        windowWidth = control.getImageWidth();
+        windowHeight = control.getImageHeight();
+        
+        System.out.println(windowWidth);
+        
+        this.window = window;
+        
         headlessInit();
-        createModules();
+        createModules(window);
     }
 
     private void headlessInit() {
-        driveSys = new ArduinoIO();
+        //driveSys = new ArduinoIO();
         modules = new ArrayList<>();
 
         executorService = Executors.newSingleThreadScheduledExecutor();
@@ -58,27 +69,35 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         }
     }
 
-    private void createModules() {
-        WindowModule windowModule = new WindowModule(windowWidth, windowHeight);
-        windowModule.addKeyListener(this);
-
-        modules.add(windowModule);
+    private void createModules(boolean window) {
+    	if(window) {
+	        WindowModule windowModule = new WindowModule(windowWidth, windowHeight);
+	        windowModule.addKeyListener(this);
+	        modules.add(windowModule);
+    	}
+    	
         modules.add(new ImageManagementModule(windowWidth, windowHeight, control.getTile()));
         modules.add(new SpeedControlModule());
         modules.add(new SteeringModule());
         modules.add(new ArduinoModule(driveSys));
+        modules.add(new LatencyTestModule());
 
         for (Module module : modules) {
             module.initialize(control);
         }
+
+        initialized = true;
     }
 
     private void update() {
         if (control instanceof TrakSimControl) {
             ((TrakSimControl) control).cam.theSim.SimStep(1);
         }
-
+        
         control.readCameraImage();
+        control.setEdges(getInsets());
+        control.updateWindowDims(getWidth(), getHeight());
+
         for (Module module : modules) {
             module.update(control);
         }
@@ -108,14 +127,13 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
 
     }
 
-    private void paint() {
-        if (!modules.isEmpty())
-            for (Module module : modules)
-                module.paint(control, ((WindowModule) (modules.get(0))).getGraphics());
-    }
 
     @Override
     public void run() {
+        if(!initialized) {
+            return;
+        }
+
         try {
             update();
             paint();
@@ -124,20 +142,41 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         }
     }
 
-    public static void main(String[] args) {
-        boolean realcam = DriverCons.D_LiveCam;
-        if(args.length > 0 && args[0].toLowerCase().equals("sim")) {
-            realcam = false;
+    private void paint() {
+        if (!modules.isEmpty()) {
+            for (Module module : modules) {
+            	if(window) {
+            		module.paint(control, ((WindowModule) (modules.get(0))).getGraphics());
+            	}
+            }
         }
-        new MrModule(realcam);
+    }
+
+    public static void main(String[] args) {
+        boolean realcam = true;
+        boolean window = true;
+        if(args.length > 0) {
+        	if(args[0].toLowerCase().equals("sim")) {
+        		realcam = false;
+        	}
+        	if(args[0].toLowerCase().equals("headless")) {
+        		window = false;
+        	}
+        }
+        new MrModule(realcam, window);
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if ((control instanceof TrakSimControl))
+        if (control instanceof TrakSimControl) {
             for (Map.Entry<Integer, Runnable> binding : ((TrakSimControl) control).keyBindings.entrySet())
                 if (e.getKeyCode() == binding.getKey())
                     binding.getValue().run();
+        } else if (control instanceof CamControl) {
+        	for (Map.Entry<Integer, Runnable> binding : ((CamControl) control).keyBindings.entrySet())
+                if (e.getKeyCode() == binding.getKey())
+                    binding.getValue().run();
+        }
     }
 
     @Override

@@ -29,6 +29,9 @@ public class CamControl implements CarControl {
     public CamControl(PWMController driveSys) {
         cam = new FlyCamera();
         cam.Connect(4); // 30 FPS
+        
+        //while (cam.Dimz() == 0);
+        
         nrows = cam.Dimz() >> 16;
         ncols = cam.Dimz() << 16 >> 16;
         
@@ -243,12 +246,12 @@ public class CamControl implements CarControl {
 
 	@Override
 	public int getWindowHeight() {
-		return 0;
+		return nrows;
 	}
 
 	@Override
 	public int getWindowWidth() {
-		return 0;
+		return ncols;
 	}
 
     @Override
@@ -267,5 +270,9 @@ public class CamControl implements CarControl {
     @Override
     public void clearRects() { }
 
-
+	@Override
+	public double getPosition(boolean horizontal) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

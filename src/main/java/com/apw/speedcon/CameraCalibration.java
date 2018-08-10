@@ -1,9 +1,16 @@
 package com.apw.speedcon;
 
+import com.apw.carcontrol.CamControl;
 import com.apw.carcontrol.CarControl;
 import com.apw.pedestrians.PedestrianDetector;
 import com.apw.pedestrians.blobtrack.MovingBlob;
 import com.apw.pedestrians.image.Color;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
 
 import java.util.List;
 
@@ -34,55 +41,129 @@ public class CameraCalibration {
 	 */
 
 
-	private PedestrianDetector pedDetect;
 
 	//Camera information
-	private double cameraFocalLength = 800;	//If used in sim, leave at 35, if testing IRL leave blank and use calibrateCamera
-	private double signWidth;				//The width of a standared stop sign in mm
+	private double cameraFocalLength;	//If used in sim, leave at 35, if testing IRL leave blank and use calibrateCamera
 
 	private MovingBlob testBlob;
-	private double testBlobWidthHeight = 9;	//the width and height of a square used to calibrate the camera
-	private double testBlobDistance = 20;	//The distance the test blob is away from the camera
+	private double testBlobWidthHeight;	//the width and height of a square used to calibrate the camera
+	public double testBlobDistance;	//The distance the test blob is away from the camera
 	public double relativeWorldScale;		//The scale of the world (if 1/3 scale, set to 3)
+	private FileWriter fileWriter;
+	private FileReader fileReader;
 
 	//Used to set world scale, and width of known objects
 	public CameraCalibration() {
-
+		
+		//cameraFocalLength = 35;
 		relativeWorldScale = 8;
 
-		this.pedDetect = new PedestrianDetector();
+		testBlobWidthHeight = 9; //Set this to the width of the blob you will be testing for calibration
+		testBlobDistance = 18;    //Set this to the distance the blob is away from the camera lens
+
+		
+		//Tries to find a file containing the focal length
+		try{
+
+		fileReader = new FileReader("calibrationData.txt");
+		BufferedReader reader = new BufferedReader(fileReader);
+
+		String line;
+		if ((line = reader.readLine()) != null) {
+			System.out.println("Found focal length " + line);
+			cameraFocalLength = Double.parseDouble(line);
+			System.out.println("Set Focal Length To " + cameraFocalLength);
+		}
+		reader.close();
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+		
 
 	}
 
 	
 	//Finds focal length which can then be used for distance, read above for detail
-	public void calibrateCamera(CarControl control) {
+	public void calibrateCamera(CarControl control, List<MovingBlob> currentBlobs) {
 		//Searches for a blue blob
-		List<MovingBlob> blobs = this.pedDetect.getAllBlobs(control.getProcessedImage(), 912);
-		for (MovingBlob i : blobs) {
+		int pixelWidth = 0;
+		
+		for (MovingBlob i : currentBlobs) {
 			if (i.color.getColor() == Color.BLUE) {
-				testBlob = i;
-				findFocalLength(testBlob);
-				break;
+			pixelWidth = Math.max(pixelWidth, i.width);
 			}
 		}
+		
+		if (control instanceof CamControl) {
+			testBlobWidthHeight = 9; //Set this to the width of the blob you will be testing for calibration
+			testBlobDistance = 18;    //Set this to the distance the blob is away from the camera lens
+		}
+		else {
+			testBlobDistance = Math.sqrt(Math.pow(Math.abs(control.getPosition(true) - (2 * 29.5)), 2) + Math.pow(Math.abs(control.getPosition(false) - (2 * 30)), 2));
+			testBlobWidthHeight = ((double) 29 / (double) 44); //Find this in the txt file, image index
+		}
+		
+		findFocalLength(pixelWidth, control);
+		
+		System.out.println(distanceToObj(testBlobWidthHeight, pixelWidth, control));
+		
+		//Saves the camera calibration data, only needed once or when changing cameras
+		try{
+			fileWriter = new FileWriter("calibrationData.txt");
+			fileWriter.write(Double.toString(cameraFocalLength));
+			fileWriter.close();
+		}catch(IOException e){
+			e.printStackTrace();
+		}
 
-		//Used to test distance to found test blob, should be same as testBlobDistance
-		distanceToObj(testBlobWidthHeight, testBlob.width);
 	}
 	
 
 	//Formula that calculates focal length of the test blob
-	void findFocalLength(MovingBlob blob) {
-		cameraFocalLength = (blob.width * testBlobDistance) / testBlobWidthHeight;
-		System.out.print("Focal Length = " + cameraFocalLength);
+	void findFocalLength(int pixelWidth, CarControl control) {
+		if (control instanceof CamControl) {
+			System.out.println("Calibration blob distance: " + testBlobDistance);
+			System.out.println("Calibration blob pixel: " + pixelWidth);
+			System.out.println("Cam sensor width: " + Constants.SENSOR_CAM_WIDTH);
+			System.out.println("Calibration blob width: " + testBlobWidthHeight); // (dist * obj height pix * sensor height mm) / real height mm * image height pixels 
+			System.out.println("Screen width: " + Constants.SCREEN_FILTERED_WIDTH);
+			System.out.println("Focal Length = " + ((testBlobDistance * pixelWidth * Constants.SENSOR_CAM_WIDTH) / (testBlobWidthHeight * control.getImageWidth())));
+			cameraFocalLength = ((testBlobDistance * pixelWidth * Constants.SENSOR_CAM_WIDTH) / (testBlobWidthHeight * control.getImageWidth())); //(pixelWidth * testBlobDistance) / testBlobWidthHeight;
+		}
+		else {
+			System.out.println("Calibration blob distance: " + testBlobDistance);
+			System.out.println("Calibration blob pixel: " + pixelWidth);
+			System.out.println("Trak sensor width: " + Constants.SENSOR_TRAK_WIDTH);
+			System.out.println("Calibration blob width: " + testBlobWidthHeight); // (dist * obj height pix * sensor height mm) / real height mm * image height pixels 
+			System.out.println("Screen width: " + Constants.SCREEN_FILTERED_WIDTH);
+			System.out.println("Focal Length = " + ((testBlobDistance * pixelWidth * Constants.SENSOR_TRAK_WIDTH) / (testBlobWidthHeight * Constants.SCREEN_FILTERED_WIDTH)));
+			cameraFocalLength = ((testBlobDistance * pixelWidth * Constants.SENSOR_TRAK_WIDTH) / (testBlobWidthHeight * Constants.SCREEN_FILTERED_WIDTH));
+		}
 	}
 
 
 	//Calculates the distance to a blob if the real world size is known
-	public double distanceToObj(double knownWidth, double objPixelWidth) {
-		//System.out.print("Distance to object = " + (knownWidth * cameraFocalLength) / objPixelWidth);
-		return ( knownWidth * cameraFocalLength) / objPixelWidth;
+	public double distanceToObj(double knownWidth, double objPixelWidth, CarControl control) {
+		if (control instanceof CamControl) {
+			System.out.println("Distance to object = " + (cameraFocalLength * knownWidth * control.getImageWidth()) / (objPixelWidth * Constants.SENSOR_CAM_WIDTH));
+			return (cameraFocalLength * knownWidth * control.getImageWidth()) / (objPixelWidth * Constants.SENSOR_CAM_WIDTH);	
+		}
+		else {
+			System.out.println("Distance to object = " + (cameraFocalLength * knownWidth * Constants.SCREEN_FILTERED_WIDTH) / (objPixelWidth * Constants.SENSOR_TRAK_WIDTH));
+			return (cameraFocalLength * knownWidth * Constants.SCREEN_FILTERED_WIDTH) / (objPixelWidth * Constants.SENSOR_TRAK_WIDTH);
+		}
+	}
+
+	//Calculates the distance to a blob if the real world size is known, finds more accurate dist with height
+	public double distanceToObj(double knownWidth, double objPixelWidth, double objectHeight, CarControl control) {
+		//System.out.println("Distance to object = " + (knownWidth * cameraFocalLength) / objPixelWidth);
+		System.out.println("special stop");
+		System.out.println("Known width = " + knownWidth);
+		double hyp =  distanceToObj(knownWidth, objPixelWidth, control);
+		System.out.println("Hyp = " + hyp);
+		double a = Math.pow(hyp, 2) - Math.pow(objectHeight, 2);
+		System.out.println("special = " + Math.sqrt(a));
+		return Math.sqrt(a);
 	}
 
 	//Break Rate Math

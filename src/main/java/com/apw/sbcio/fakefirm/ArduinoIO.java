@@ -30,12 +30,13 @@ import com.apw.speedcon.Constants;
 import jssc.SerialPort;
 import jssc.SerialPortException;
 
-// import nojssc.SerialPort; // use this instead for working with TrackSim
+//import nojssc.SerialPort; // use this instead for working with TrackSim
 //                           // ..on a computer with no serial port.
 //import com.apw.Interfacing.SerialPort;
 
 public class ArduinoIO implements PWMController { // Adapted to Java from arduino.cs ... (FakeFirmata)
   // (subclass this to add input capability)
+
   public static final boolean UseServos = false;
 
   public static final String CommPortNo = "COM3";

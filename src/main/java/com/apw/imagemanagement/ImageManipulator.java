@@ -232,7 +232,6 @@ public class ImageManipulator {
 				int pix =(red<<16)+(green<<8)+blue;
 				rgb[r*ncols + c] = pix;
 			}
-			
 		}
 	}
 
@@ -353,7 +352,7 @@ public class ImageManipulator {
 	public static void limitTo(byte[] output, byte[] input, int ncols, int nrows, int width, int height) {
 		for (int r = 0; r < height; r++) {
 			for (int c = 0; c < width; c++) {
-				//System.out.println(r*width+c);
+				System.out.println(r*width+c);
 				output[width*r+c]=input[r*ncols+c];
 			}
 		}

@@ -18,7 +18,7 @@ public class ImageManagementModule implements Module {
 	//adjustable variables
     private int viewType = 4;
     private int blackWhiteRasterVersion = 1;
-    private double luminanceMultiplier = 1.4;
+    private double luminanceMultiplier = 1.5;
 
 
     //internal variables
@@ -29,8 +29,8 @@ public class ImageManagementModule implements Module {
     public byte[] simplePixels;
     private byte tile;
     private int frameWidth = 640;
-    boolean removeNoise = false;
-    boolean dilate = true;
+    boolean removeNoise = true;
+    boolean dilate = false;
     
     ImageThread displayThread = new ImageThread(this, 1,true);
     ImageThread BWThread = new ImageThread(this, 1,false);
@@ -104,7 +104,7 @@ public class ImageManagementModule implements Module {
             }
         }else if (tile == 1){
             for(int r = 0;r<max;r+=rowV){
-                for(int c = 0;c<rowV;c+=colV){
+                for(int c = 0;c<halfRowV;c+=colV){
                     R[sum] = pixels[r+c+1];
                     G[sum] = pixels[r+c];
                     B[sum] = pixels[r+c+halfRow];
@@ -113,7 +113,7 @@ public class ImageManagementModule implements Module {
             }
         }else if (tile == 2){
             for(int r = 0;r<max;r+=rowV){
-                for(int c = 0;c<rowV;c+=colV){
+                for(int c = 0;c<halfRowV;c+=colV){
                     R[sum] = pixels[r+c+halfRow];
                     G[sum] = pixels[r+c];
                     B[sum] = pixels[r+c+1];
@@ -122,7 +122,7 @@ public class ImageManagementModule implements Module {
             }
         }else if (tile == 3){
             for(int r = 0;r<max;r+=rowV){
-                for(int c = 0;c<rowV;c+=colV){
+                for(int c = 0;c<halfRowV;c+=colV){
                     R[sum] = pixels[r+c+halfRow1];
                     G[sum] = pixels[r+c+1];
                     B[sum] = pixels[r+c];
