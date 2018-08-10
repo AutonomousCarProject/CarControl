@@ -85,6 +85,13 @@ public class SteeringMk2 extends SteeringBase {
     	
         int lastX = cameraWidth / 2;
         int midX = cameraWidth / 2; // midX is where the car thinks is the middle of the road
+        if (!midPoints.isEmpty()) {
+            lastX = midPoints.get(midPoints.size() - 1).x;
+        }
+        if(lastX != midX){
+            lastX = (int) (midX + Math.abs(lastX - midX)/(lastX - midX)*(midX - (midX - Math.abs(lastX - midX))/1.25));
+        }
+
         double m = (cameraHeight * 0.24) / (cameraWidth * 0.91);
         double b = (-m * (0.06 * cameraWidth)) + (cameraHeight * 0.52);
         boolean haveNewMidX = false;
