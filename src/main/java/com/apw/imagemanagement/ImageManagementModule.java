@@ -32,7 +32,7 @@ public class ImageManagementModule implements Module {
     public byte[] simplePixels;
     private byte tile;
     private int frameWidth = 640;
-    boolean removeNoise = true;
+    boolean removeNoise = false;
     boolean dilate = false;
     
     ImageThread displayThread = new ImageThread(this, 1,true);

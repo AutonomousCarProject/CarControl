@@ -74,7 +74,7 @@ public abstract class DriverCons { // TrakSim constant parameters
             D_xTrLiteTime = 3, // 2^x seconds red time = green time +2secs yellow
             D_Crummy = 255,    // (power of 2) size of BreadCrumbs list for map display
             D_CheckerBd = 1,   // (power of 2) =1 to checker 1x1m, =2 for 2x2, =0 off
-            D_LagFrames = 8,    // How many frames should occur before image updates (Used for simulating the lag of a real camera)
+            D_LagFrames = 30,    // How many frames should occur before image updates (Used for simulating the lag of a real camera)
             D_steeringVersion = 2; // Which Version of steering to use
 
     public static final double D_TurnRadius = 7.0, // nom. meters in park coords

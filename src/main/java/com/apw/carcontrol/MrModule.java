@@ -91,6 +91,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
 
     private void update() {
         if (control instanceof TrakSimControl) {
+            ((TrakSimControl) control).cam.theSim.SimStep(0);
             ((TrakSimControl) control).cam.theSim.SimStep(1);
         }
         
