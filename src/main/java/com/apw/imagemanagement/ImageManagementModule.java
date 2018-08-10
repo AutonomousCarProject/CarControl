@@ -140,6 +140,40 @@ public class ImageManagementModule implements Module {
             }
         }
     }
+    public void removeShadows(){
+        double Y, Y1, Y2, U, U1, U2, V, V1, V2;
+        int dif = 11;
+        for(int r = height-2;r>0;r--){
+            for(int c = frameWidth-2; c>0;c--){
+                Y = (R[r*width+c]&0xFF) *  .299000 + (G[r*width+c]&0xFF) *  .587000 + (B[r*width+c]&0xFF) *  .114000;
+                Y1 = (R[r*width+c+1]&0xFF) *  .299000 + (G[r*width+c+1]&0xFF) *  .587000 + (B[r*width+c+1]&0xFF) *  .114000;
+                Y2 = (R[(r+1)*width+c]&0xFF) *  .299000 + (G[(r+1)*width+c]&0xFF) *  .587000 + (B[(r+1)*width+c]&0xFF) *  .114000;
+                U = (R[r*width+c]&0xFF) * -.168736 + (G[r*width+c]&0xFF) * -.331264 + (B[r*width+c]&0xFF) *  .500000 + 128;
+                U1 = (R[r*width+c+1]&0xFF) * -.168736 + (G[r*width+c+1]&0xFF) * -.331264 + (B[r*width+c+1]&0xFF) *  .500000 + 128;
+                U2 = (R[(r+1)*width+c]&0xFF) * -.168736 + (G[(r+1)*width+c]&0xFF) * -.331264 + (B[(r+1)*width+c]&0xFF) *  .500000 + 128;
+                V = (R[r*width+c]&0xFF) *  .500000 + (G[r*width+c]&0xFF) * -.418688 + (B[r*width+c]&0xFF) * -.081312 + 128;
+                V1 = (R[r*width+c+1]&0xFF) *  .500000 + (G[r*width+c+1]&0xFF) * -.418688 + (B[r*width+c+1]&0xFF) * -.081312 + 128;
+                V2 = (R[(r+1)*width+c]&0xFF) *  .500000 + (G[(r+1)*width+c]&0xFF) * -.418688 + (B[(r+1)*width+c]&0xFF) * -.081312 + 128;
+                if(Math.abs(U1-U)<dif&&Math.abs(V1-V)<dif){
+                    Y=Y1;
+                    U=U1;
+                    V=V1;
+                }else if(Math.abs(U2-U)<dif&&Math.abs(V2-V)<dif){
+                    Y=Y2;
+                    U=U2;
+                    V=V2;
+                }
+                R[r*width+c] = (byte) (Y + 1.4075 * (V - 128));
+                G[r*width+c] = (byte) (Y - 0.3455 * (U - 128) - (0.7169 * (V - 128)));
+                B[r*width+c] = (byte) (Y + 1.7790 * (U - 128));
+
+            }
+        }
+
+    }
+
+
+
 
     /**
      * Serves monochrome raster of given image
@@ -321,6 +355,7 @@ public class ImageManagementModule implements Module {
     @Override
     public void update(CarControl control) {
         setupArrays(control.getRecentCameraImage());
+        removeShadows();
         synchronized(displayThread){
             displayThread.notifyAll();
         }
