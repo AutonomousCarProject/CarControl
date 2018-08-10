@@ -381,7 +381,7 @@ public class ImageManagementModule implements Module {
     @Override
     public void update(CarControl control) {
         setupArrays(control.getRecentCameraImage());
-        removeShadows();
+        //removeShadows();
         synchronized(displayThread){
             displayThread.notifyAll();
         }

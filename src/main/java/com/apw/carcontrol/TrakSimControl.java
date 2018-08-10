@@ -1,9 +1,6 @@
 package com.apw.carcontrol;
 
-import com.apw.apw3.DriverCons;
-import com.apw.apw3.MyMath;
-import com.apw.apw3.SimCamera;
-import com.apw.apw3.SimCameraRGB;
+import com.apw.apw3.*;
 import com.apw.sbcio.PWMController;
 import com.apw.steering.Point;
 
@@ -17,7 +14,7 @@ public class TrakSimControl implements CarControl {
 
     protected HashMap<Integer, Runnable> keyBindings;
     private PWMController driveSys;
-    protected SimCamera cam;
+    protected ScreenCamera cam;
     private Insets edges;
     private ArrayList<ColoredLine> lines;
     private ArrayList<ColoredRect> rects;
@@ -35,7 +32,7 @@ public class TrakSimControl implements CarControl {
     private final int SteerPin, GasPin;
 
     public TrakSimControl(PWMController drivesys) {
-        cam = new SimCamera();
+        cam = new ScreenCamera();
         cam.Connect(4); // 30 FPS
 
         SteerPin = DriverCons.D_SteerServo;
