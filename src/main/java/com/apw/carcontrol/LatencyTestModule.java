@@ -9,7 +9,7 @@ public class LatencyTestModule implements Module {
 	public void update(CarControl control) {
 		long time = System.currentTimeMillis();
 		if(lastTime != -1) {
-	        System.out.println("Time since last run cycle: " + (time - lastTime) + "ms.");
+			//System.out.println("Time since last run cycle: " + (time - lastTime) + "ms.");
 		}
 		lastTime = time;
 	}

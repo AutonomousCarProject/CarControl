@@ -97,8 +97,8 @@ public class SpeedControlModule implements Module {
 		}
 		
 		onUpdate(control);
-		control.accelerate(true, (int)Math.min(Constants.MAX_SPEED, getNextSpeed()));
-		System.out.println("getNextSpeed(): " + getNextSpeed());
+		control.accelerate(true, (int) Math.min(Constants.MAX_SPEED, getNextSpeed()));
+		System.out.println("getNextSpeed(): " + (int) Math.min(Constants.MAX_SPEED, getNextSpeed()));
 	}
 	
 	@Override
@@ -267,7 +267,7 @@ public class SpeedControlModule implements Module {
 				cycleStopping = true;
 				
 				blob.type = "Stop";
-				System.out.println("Found a stopsign: " + "Color: " + blob.color.getColor() + blob);
+				System.out.println("Found a stopsign: " + "Color: " + blob.color.getColor() + " " + blob);
 				
 
 				determineStop(blob, sizeCons.SIGN_INFO.get(blob.type).get(6), control);
@@ -280,7 +280,7 @@ public class SpeedControlModule implements Module {
 				cycleStopping = true;
 				
 				blob.type = "StopLightWidth";
-				System.out.println("Found a " + blob.color.getColor() + "light: " + "Color: " + blob.color.getColor() + blob);
+				System.out.println("Found a " + blob.color.getColor() + "light: " + "Color: " + blob.color.getColor() + " " + blob);
 				
 				determineStop(blob, sizeCons.SIGN_INFO.get(blob.type).get(6), control);
 				
@@ -292,7 +292,7 @@ public class SpeedControlModule implements Module {
 				cycleStopping = true;
 				
 				blob.type = "StopLightWidth";
-				System.out.println("Found a " + blob.color.getColor() + "light: " + "Color: " + blob.color.getColor() + blob);
+				System.out.println("Found a " + blob.color.getColor() + "light: " + "Color: " + blob.color.getColor() + " " + blob);
 				
 				determineStop(blob, sizeCons.SIGN_INFO.get(blob.type).get(6), control);
 
@@ -306,14 +306,14 @@ public class SpeedControlModule implements Module {
 				}
 				
 				blob.type = "StopLightWidth";
-				System.out.println("Found a " + blob.color.getColor() + "light: " + "Color: " + blob.color.getColor() + blob);
+				System.out.println("Found a " + blob.color.getColor() + "light: " + "Color: " + blob.color.getColor() + " " + blob);
 				blob.seen = true;
 			}
 		}
 		
 		if (cycleStopping) {
 			if (stopType != 0) {
-				System.out.println("Stopped because stopping was true but it didn't find any signs or lights");	
+				System.out.println("Subsequent stop");	
 			}
 			
 			determineStop();
@@ -401,25 +401,25 @@ public class SpeedControlModule implements Module {
 			stopsignWaitFirst();
 			
 			double blobRealSize = getStopReal(stoppingBlob); //Gets real size
-			distToBlob = cameraCalibrator.distanceToObj(blobRealSize, stoppingBlob.width, sizeCons.SIGN_INFO.get(stoppingBlob.type).get(6)); //Finds distance to closest blob based on real wrold size and pixel size
+			distToBlob = cameraCalibrator.distanceToObj(blobRealSize, stoppingBlob.width, sizeCons.SIGN_INFO.get(stoppingBlob.type).get(6), control); //Finds distance to closest blob based on real wrold size and pixel size
 			//change this to initDistToBlob when adding rotations
 			//stoppingRotations = driveSys.totalRotations;
 			
 			//System.out.println("frameWait: " + frameWait);
 			//System.out.println("stopType: " + stopType);
-			//System.out.println("desiredSpeed: " + desiredSpeed);
+			System.out.println("desiredSpeed: " + desiredSpeed);
 			//System.out.println("getEstimatedSpeed: " + getEstimatedSpeed());
-			//System.out.println("distToBlob: " + distToBlob);
+			System.out.println("distToBlob: " + distToBlob);
 			//System.out.println("blobRealSize: " + blobRealSize);
 			//System.out.println("stoppingBlob.width: " + stoppingBlob.width);
 			//System.out.println("sizeCons.SIGN_INFO.get(stoppingBlob.type).get(6): " + sizeCons.SIGN_INFO.get(stoppingBlob.type).get(6));
 			//System.out.println("Actual dist: " + Math.sqrt(Math.pow(Math.abs(control.getPosition(true) - (2 * 28.75)), 2) + Math.pow(Math.abs(control.getPosition(false) - (2 * 29.5)), 2)));
 			//System.out.println(cameraCalibrator.calcStopRate(getEstimatedSpeed(), cameraCalibrator.getStopTime(distToBlob, getEstimatedSpeed())));
 			
-			this.desiredSpeed = desiredSpeed - cameraCalibrator.calcStopRate(getEstimatedSpeed(), cameraCalibrator.getStopTime(distToBlob, getEstimatedSpeed()));
+			this.desiredSpeed -= Math.abs(cameraCalibrator.calcStopRate(getEstimatedSpeed(), cameraCalibrator.getStopTime(distToBlob, getEstimatedSpeed())));
 		
-			if (desiredSpeed < 1) {
-				desiredSpeed = 1;
+			if (desiredSpeed < 0) {
+				desiredSpeed = 0;
 			}
 		}
 	}
@@ -434,21 +434,18 @@ public class SpeedControlModule implements Module {
 			//distToBlob -= driveSys.getSpeed(); //will return null if tracksim, will return number of times driveshaft turned in the last second, often 0?
 			distToBlob -= getEstimatedSpeed() * (Constant.TIME_DIFFERENCE / 1000.0);
 			
-			//System.out.println("frameWait: " + frameWait);
+			System.out.println("frameWait: " + frameWait);
 			//System.out.println("stopType: " + stopType);
-			//System.out.println("distToBlob: " + distToBlob);
-			//System.out.println(getEstimatedSpeed());
-			//System.out.println(Constant.TIME_DIFFERENCE);
-			//System.out.println("desiredSpeed: " + desiredSpeed);
-			//System.out.println(getEstimatedSpeed());
-			//System.out.println(Constant.TIME_DIFFERENCE);
-			//System.out.println("desiredSpeed: " + desiredSpeed);
+			System.out.println("distToBlob: " + distToBlob);
+			System.out.println("Speed: " + getEstimatedSpeed());
+			System.out.println("Time dif: " + Constant.TIME_DIFFERENCE);
+			System.out.println("desiredSpeed: " + desiredSpeed);
 			//System.out.println("Change in desiredSpeed: " + cameraCalibrator.calcStopRate(getEstimatedSpeed(), cameraCalibrator.getStopTime(distToBlob, getEstimatedSpeed())));
 			
-			this.desiredSpeed = desiredSpeed - cameraCalibrator.calcStopRate(getEstimatedSpeed(), cameraCalibrator.getStopTime(distToBlob, getEstimatedSpeed()));
+			this.desiredSpeed -= Math.abs(cameraCalibrator.calcStopRate(getEstimatedSpeed(), cameraCalibrator.getStopTime(distToBlob, getEstimatedSpeed())));
 			
-			if (desiredSpeed < 1) {
-				desiredSpeed = 1;
+			if (desiredSpeed < 0) {
+				desiredSpeed = 0;
 			}
 		}
 	}

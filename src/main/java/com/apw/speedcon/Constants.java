@@ -36,7 +36,7 @@ public class Constants {
 	//Stop Frames
 	public static final int
 	WAIT_AT_STOPSIGN_FRAMES = 50,	//Frames to wait at stopsign once stopped
-	MAX_SPEED_INCREMENT = 5;		//Min increment amount between current and next frame speed
+	MAX_SPEED_INCREMENT = 1;		//Min increment amount between current and next frame speed
 	
 	//Blob Filters
 	public static final int
