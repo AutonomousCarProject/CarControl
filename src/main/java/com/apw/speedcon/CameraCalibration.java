@@ -59,7 +59,7 @@ public class CameraCalibration {
 		relativeWorldScale = 8;
 
 		testBlobWidthHeight = 9; //Set this to the width of the blob you will be testing for calibration
-		testBlobDistance = 21;    //Set this to the distance the blob is away from the camera lens
+		testBlobDistance = 18;    //Set this to the distance the blob is away from the camera lens
 
 		
 		//Tries to find a file containing the focal length
@@ -89,7 +89,7 @@ public class CameraCalibration {
 		int pixelWidth = 0;
 		
 		for (MovingBlob i : currentBlobs) {
-			if (i.color.getColor() == Color.RED) {
+			if (i.color.getColor() == Color.BLUE) {
 			pixelWidth = Math.max(pixelWidth, i.width);
 			}
 		}

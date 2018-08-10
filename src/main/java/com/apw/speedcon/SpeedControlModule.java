@@ -35,7 +35,7 @@ public class SpeedControlModule implements Module {
 	
 	private PedestrianDetector pedDetect;
 	private CameraCalibration cameraCalibrator;
-	private ArduinoIO driveSys;
+	//private ArduinoIO driveSys;
 	
 	private List<MovingBlob> currentBlobs;
 	//private List<MovingBlob> currentPeds;
@@ -51,7 +51,7 @@ public class SpeedControlModule implements Module {
 		this.currentBlobs = new ArrayList<>();
 		this.cameraCalibrator = new CameraCalibration();
 		this.sizeCons = new SizeConstants();
-		this.driveSys = new ArduinoIO();
+		//this.driveSys = new ArduinoIO();
 	}
 	
 	/**
@@ -274,7 +274,7 @@ public class SpeedControlModule implements Module {
 				
 				blob.seen = true;
 			}
-			if (detectLight(blob) == 1) {
+			/*if (detectLight(blob) == 1) {
 				stopType = 2;	
 				
 				cycleStopping = true;
@@ -308,7 +308,7 @@ public class SpeedControlModule implements Module {
 				blob.type = "StopLightWidth";
 				System.out.println("Found a " + blob.color.getColor() + "light: " + "Color: " + blob.color.getColor() + " " + blob);
 				blob.seen = true;
-			}
+			}*/
 		}
 		
 		if (cycleStopping) {
@@ -354,10 +354,12 @@ public class SpeedControlModule implements Module {
 	 */
 
 	public boolean detectBlobOverlappingBlob(MovingBlob outsideBlob, MovingBlob insideBlob) {
-		return (insideBlob.x < outsideBlob.x + outsideBlob.width && 
+		return ((insideBlob.x < outsideBlob.x + outsideBlob.width && 
 				insideBlob.width + insideBlob.x > outsideBlob.x) || 
 				(insideBlob.y < outsideBlob.y + outsideBlob.height && 
-				insideBlob.height + insideBlob.y > outsideBlob.y);
+				insideBlob.height + insideBlob.y > outsideBlob.y) && 
+				(((double) outsideBlob.height / (double) insideBlob.height) > Constants.BLACK_BOX_MIN_HEIGHT_RATIO) &&
+				(((double) outsideBlob.width / (double) insideBlob.width) > Constants.BLACK_BOX_MIN_WIDTH_RATIO));
 	}
 	
 	/**
@@ -556,7 +558,7 @@ public class SpeedControlModule implements Module {
 	 * @param bloblist all of the blobs on screen
 	 * @return returns a light code, see above for light codes
 	 */
-	
+	/*
 	public int detectLight(MovingBlob blob) {
 		int lightColor = 0;
 		if (blob.color.getColor() == Color.RED &&
@@ -576,7 +578,7 @@ public class SpeedControlModule implements Module {
 			for (MovingBlob b : currentBlobs) {
 				if (b.color.getColor() == Color.BLACK) {
 					if (detectBlobOverlappingBlob(b, blob)) {
-						lightColor = 1;
+						//lightColor = 1;
 					}
 				}
 			}
@@ -598,7 +600,7 @@ public class SpeedControlModule implements Module {
 			for (MovingBlob b : currentBlobs) {
 				if (b.color.getColor() == Color.BLACK) {
 					if (detectBlobOverlappingBlob(b, blob)) {
-						lightColor = 2;
+						//lightColor = 2;
 					}
 				}
 			}
@@ -620,13 +622,13 @@ public class SpeedControlModule implements Module {
 			for (MovingBlob b : currentBlobs) {
 				if (b.color.getColor() == Color.BLACK) {
 					if (detectBlobOverlappingBlob(b, blob)) {
-						lightColor = 3;
+						//lightColor = 3;
 					}
 				}
 			}
 		}
 	return lightColor;
-	}
+	}*/
 	
 	public CameraCalibration getCalibrator() {
 		return cameraCalibrator;

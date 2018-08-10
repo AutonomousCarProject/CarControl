@@ -54,7 +54,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     }
 
     private void headlessInit() {
-        driveSys = new ArduinoIO();
+        //driveSys = new ArduinoIO();
         modules = new ArrayList<>();
 
         executorService = Executors.newSingleThreadScheduledExecutor();
@@ -153,7 +153,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     }
 
     public static void main(String[] args) {
-        boolean realcam = false;
+        boolean realcam = true;
         boolean window = true;
         if(args.length > 0) {
         	if(args[0].toLowerCase().equals("sim")) {

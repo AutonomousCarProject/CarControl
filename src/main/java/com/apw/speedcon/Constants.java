@@ -3,7 +3,7 @@ package com.apw.speedcon;
 public class Constants {
   //Arduino settings
   public static final boolean
-	useServos = false,
+	useServos = true,
 	readMessages = false;
   
 	//Default Debug Overlays
@@ -40,11 +40,11 @@ public class Constants {
 	
 	//Blob Filters
 	public static final int
-	BLOB_MIN_HEIGHT = 4,			//Filtered minimum height of a blob in pixels
-	BLOB_MAX_HEIGHT = 20,			//Filtered maximum height of a blob in pixels
-	BLOB_MIN_WIDTH = 4,				//Filtered minimum width of a blob in pixels
-	BLOB_MAX_WIDTH = 20,			//Filtered maximum width of a blob in pixels
-	BLOB_AGE = 1,					//Filtered age of a blob in frames
+	BLOB_MIN_HEIGHT = 8,			//Filtered minimum height of a blob in pixels
+	BLOB_MAX_HEIGHT = 100,			//Filtered maximum height of a blob in pixels
+	BLOB_MIN_WIDTH = 8,				//Filtered minimum width of a blob in pixels
+	BLOB_MAX_WIDTH = 100,			//Filtered maximum width of a blob in pixels
+	BLOB_AGE = 3,					//Filtered age of a blob in frames
 	STOPLIGHT_MIN_Y = 0,			//Filtered position of a blob in pixels
 	STOPLIGHT_MAX_Y = 240,			//Filtered position of a blob in pixels
 	STOPLIGHT_MIN_X = 160,			//Filtered position of a blob in pixels
@@ -54,7 +54,9 @@ public class Constants {
 	STOPSIGN_MIN_X = 400,			//Filtered position of a blob in pixels
 	STOPSIGN_MAX_X = 640;			//Filtered position of a blob in pixels
 	public static final double
-	BLOB_RATIO_DIF = 0.9,			//Filtered allowed multiplier difference between blob height and width
+	BLOB_RATIO_DIF = 0.4,			//Filtered allowed multiplier difference between blob height and width
+	BLACK_BOX_MIN_HEIGHT_RATIO = 1,
+	BLACK_BOX_MIN_WIDTH_RATIO = 0.5,
 	DISPLAY_AGE_MAX = 5,			//Max age compared to for age based blob boundary color
 	DISPLAY_AGE_MIN = 0;			//Min age compared to for age based blob boundary color
 	
