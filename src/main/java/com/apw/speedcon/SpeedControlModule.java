@@ -375,7 +375,8 @@ public class SpeedControlModule implements Module {
 	public void calculateDesiredSpeed(double wheelAngle, int manualSpeed) {
 		//Logic for determining if we need to be slowing down due to a roadsign/light, and why
 		if (stopType == 0) {
-			this.desiredSpeed = Math.min(Math.max((1 - Math.abs((double) (wheelAngle) / 90.0)) * Constants.MAX_SPEED + manualSpeed, Constants.MIN_SPEED), Constants.MAX_SPEED);
+			this.desiredSpeed = Math.min(Math.max((1 - Math.abs((double) (wheelAngle) / 90.0)) * Constants.MAX_SPEED +
+					manualSpeed, Constants.MIN_SPEED), Constants.MAX_SPEED);
 		} 
 	}
 	

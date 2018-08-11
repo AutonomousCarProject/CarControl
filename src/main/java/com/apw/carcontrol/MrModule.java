@@ -1,6 +1,5 @@
 package com.apw.carcontrol;
 
-import com.apw.apw3.DriverCons;
 import com.apw.imagemanagement.ImageManagementModule;
 import com.apw.sbcio.PWMController;
 import com.apw.sbcio.fakefirm.ArduinoIO;
@@ -9,34 +8,33 @@ import com.apw.speedcon.SpeedControlModule;
 
 import com.apw.steering.SteeringModule;
 
-import javax.swing.*;
-
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.concurrent.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import javax.swing.JFrame;
 
 public class MrModule extends JFrame implements Runnable, KeyListener {
 
-    private ScheduledExecutorService executorService; // Used to run thread
     private PWMController driveSys = new ArduinoIO();
     private ArrayList<Module> modules = new ArrayList<>(); // Contains each module
-    private CarControl carControl; // A CarControl that holds data for each module
+    private final CarControl carControl; // A CarControl that holds data for each module
     private CarControl speedControl; // A CarControl that holds data specifically for speed
     private CarControl steeringControl; // A CarControl that holds data specifically for steering
 
     private boolean initialized = false;
 
-    private int windowWidth = 912;
-    private int windowHeight = 480;
+    private static final int FPS = 50; // Number of frames per second run is called
+    private static final int initDelay = 100; // Initial delay before run is called
 
-    private final int FPS = 50; // Number of frames per second run is called
-    private final int initDelay = 100; // Initial delay before run is called
-    private boolean window;
-
-    private MrModule(boolean realCam, boolean window) {
+    private MrModule(boolean realCam, boolean hasWindow) {
         if (realCam) {
             carControl = new CamControl(driveSys);
             speedControl = new CamControl(driveSys);
@@ -47,14 +45,12 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
             steeringControl = new TrakSimControl(driveSys);
         }
 
-        windowWidth = carControl.getImageWidth();
-        windowHeight = carControl.getImageHeight();
+        final int winWidth = carControl.getImageWidth();
+        final int winHeight = carControl.getImageHeight();
+        carControl.updateWindowDims(getWidth(), getHeight());
 
-        System.out.println(windowWidth);
+        createModules(hasWindow, winWidth, winHeight);
 
-        this.window = window;
-
-        createModules(window);
         headlessInit();
     }
 
@@ -63,8 +59,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
      */
     private void headlessInit() {
         // driveSys = new ArduinoIO();
-
-        executorService = Executors.newSingleThreadScheduledExecutor();
+        final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
         executorService.scheduleAtFixedRate(this, initDelay, Math.round(1000.0 / FPS), TimeUnit.MILLISECONDS);
 
         Future run = executorService.submit(this);
@@ -76,14 +71,14 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         }
     }
 
-    private void createModules(boolean window) {
-    	if(window) {
-	        WindowModule windowModule = new WindowModule(windowWidth, windowHeight);
+    private void createModules(boolean useWindowModule, int winWidth, int winHeight) {
+    	if(useWindowModule) {
+	        WindowModule windowModule = new WindowModule(winWidth, winHeight);
 	        windowModule.addKeyListener(this);
 	        modules.add(windowModule);
     	}
 
-        modules.add(new ImageManagementModule(windowWidth, windowHeight, carControl.getTile()));
+        modules.add(new ImageManagementModule(winWidth, winHeight, carControl.getTile()));
         modules.add(new SpeedControlModule());
         modules.add(new SteeringModule());
         modules.add(new ArduinoModule(driveSys));
@@ -105,14 +100,9 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
      * </p>
      */
     private void update() {
-        if (carControl instanceof TrakSimControl) {
-            ((TrakSimControl) carControl).cam.theSim.SimStep(1);
-        }
-
         //read the camera image, and update windowModule.
         carControl.readCameraImage();
         carControl.setEdges(getInsets());
-        carControl.updateWindowDims(getWidth(), getHeight());
         modules.get(0).update(carControl);
         modules.get(4).update(carControl);
 

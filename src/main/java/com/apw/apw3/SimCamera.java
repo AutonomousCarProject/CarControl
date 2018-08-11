@@ -35,7 +35,7 @@ public class SimCamera extends FlyCamera {
 
     private static final boolean NoisyFaker = DriverCons.D_Mini_Log;
 
-    public TrakSim theSim = null;
+    private TrakSim theSim;
 
     public SimCamera() {
         if (NoisyFaker) System.out.println(HandyOps.Dec2Log("apw3.SimCamera ", CamHi,
@@ -56,8 +56,14 @@ public class SimCamera extends FlyCamera {
      * @return True if success, false otherwise
      */
     public boolean NextFrame(byte[] pixels) { // fills pixels, false if can't (SimCam)
-        if (theSim == null) return false;
-        return theSim.GetSimFrame(rose, colz, pixels);
+        boolean result = false;
+        if (theSim != null) {
+            result = theSim.GetSimFrame(rose, colz, pixels);
+            if (result) {
+                theSim.SimStep(1);
+            }
+        }
+        return result;
     } //~NextFrame // in apw3.SimCamera
 
     /**
@@ -108,6 +114,18 @@ public class SimCamera extends FlyCamera {
                     HandyOps.Dec2Log("/", CamWi, HandyOps.Dec2Log(" ", why, "")))); // why =
         return why == 0;
     } //~Connect
+
+    @Override
+    public void fillRectangle(int colo, int rx, int cx, int rz, int cz) {
+        // By default not supported
+        theSim.RectFill(colo, rx, cx, rz, cz);
+    }
+
+    @Override
+    public double getPosition(boolean returnHorizontal) {
+        // By default not supported, return 0
+        return theSim.GetPosn(returnHorizontal);
+    }
 
     /**
      * Tells if this camera is live or fake.
