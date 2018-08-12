@@ -3,18 +3,14 @@ package com.apw.speedcon;
 import com.apw.carcontrol.CamControl;
 import com.apw.carcontrol.CarControl;
 import com.apw.carcontrol.Module;
-import com.apw.imagemanagement.ImageManipulator;
 import com.apw.pedestrians.Constant;
 import com.apw.pedestrians.PedestrianDetector;
 import com.apw.pedestrians.blobtrack.MovingBlob;
 import com.apw.pedestrians.image.Color;
 import com.apw.pedestrians.image.Pixel;
-import com.apw.sbcio.PWMController;
-import com.apw.sbcio.fakefirm.ArduinoIO;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -98,7 +94,7 @@ public class SpeedControlModule implements Module {
 		
 		onUpdate(control);
 		control.accelerate(true, (int) Math.min(Constants.MAX_SPEED, getNextSpeed()));
-		System.out.println("getNextSpeed(): " + (int) Math.min(Constants.MAX_SPEED, getNextSpeed()));
+		//System.out.println("getNextSpeed(): " + (int) Math.min(Constants.MAX_SPEED, getNextSpeed()));
 	}
 	
 	@Override
