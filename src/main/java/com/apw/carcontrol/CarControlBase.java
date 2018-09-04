@@ -8,8 +8,6 @@ import com.apw.sbcio.PWMController;
 import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.HashMap;
-import lombok.Getter;
-import lombok.Setter;
 
 public class CarControlBase implements CarControl {
     protected final int SteerPin, GasPin;
@@ -25,9 +23,7 @@ public class CarControlBase implements CarControl {
     private int currentSteering = 0;
     private int currentVelocity = 0;
     private int currentManualSpeed = 0;
-    @Getter @Setter
     private int windowWidth;
-    @Getter @Setter
     private int windowHeight;
     private int imageWidth = 912;
     private int imageHeight = 480;
