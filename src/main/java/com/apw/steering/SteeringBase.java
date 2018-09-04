@@ -61,7 +61,7 @@ public abstract class SteeringBase implements Steerable {
     private double myPID() {
 
         int error = origin.x - steerPoint.x;
-        double kP = 0.8;
+        double kP = 0.4;
         double kI = 0;
         double kD = 0;
         double derivative;

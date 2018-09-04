@@ -1,6 +1,5 @@
 package com.apw.carcontrol;
 
-import com.apw.apw3.DriverCons;
 import com.apw.imagemanagement.ImageManagementModule;
 import com.apw.sbcio.PWMController;
 import com.apw.sbcio.fakefirm.ArduinoIO;
@@ -9,34 +8,51 @@ import com.apw.speedcon.SpeedControlModule;
 
 import com.apw.steering.SteeringModule;
 
-import javax.swing.*;
-
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
-import java.util.concurrent.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
+import javax.swing.JFrame;
+import org.jetbrains.annotations.NotNull;
 
 public class MrModule extends JFrame implements Runnable, KeyListener {
 
-    private ScheduledExecutorService executorService; // Used to run thread
+    private ExecutorService steeringExec = Executors.newSingleThreadExecutor(new NamedThreadFactory("steering"));
+    private ExecutorService speedExec = Executors.newSingleThreadExecutor(new NamedThreadFactory("speed"));
+    private ExecutorService imageRGBExec = Executors.newSingleThreadExecutor(new NamedThreadFactory("imageRGB"));
+    private ExecutorService imageBWExec = Executors.newSingleThreadExecutor(new NamedThreadFactory("imageBW"));
+    private ExecutorService imageSimpleExec = Executors.newSingleThreadExecutor(new NamedThreadFactory("imageSimple"));
+    private ExecutorService cameraImageExec = Executors.newSingleThreadExecutor(new NamedThreadFactory("cameraReader"));
     private PWMController driveSys = new ArduinoIO();
-    private ArrayList<Module> modules = new ArrayList<>(); // Contains each module
-    private CarControl carControl; // A CarControl that holds data for each module
+    private List<Module> modules = new ArrayList<>(); // Contains each module
+    private final WindowModule windowModule;
+    private final ArduinoModule arduinoModule;
+    private final ImageManagementModule imageManagementModule;
+    private final SpeedControlModule speedControlModule;
+    private final SteeringModule steeringModule;
+    private final CarControl carControl; // A CarControl that holds data for each module
     private CarControl speedControl; // A CarControl that holds data specifically for speed
     private CarControl steeringControl; // A CarControl that holds data specifically for steering
+    private long frameNumber = 0L;
+    private long lastTime = 0L;
 
     private boolean initialized = false;
 
-    private int windowWidth = 912;
-    private int windowHeight = 480;
+    private static final int FPS = 50; // Number of frames per second run is called
+    private static final int initDelay = 100; // Initial delay before run is called
 
-    private final int FPS = 50; // Number of frames per second run is called
-    private final int initDelay = 100; // Initial delay before run is called
-    private boolean window;
-
-    private MrModule(boolean realCam, boolean window) {
+    private MrModule(boolean realCam, boolean hasWindow) {
         if (realCam) {
             carControl = new CamControl(driveSys);
             speedControl = new CamControl(driveSys);
@@ -47,14 +63,19 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
             steeringControl = new TrakSimControl(driveSys);
         }
 
-        windowWidth = carControl.getImageWidth();
-        windowHeight = carControl.getImageHeight();
+        final int winWidth = carControl.getImageWidth();
+        final int winHeight = carControl.getImageHeight();
+        carControl.updateWindowDims(getWidth(), getHeight());
 
-        System.out.println(windowWidth);
+        // Create modules
+        windowModule = createWindowModule(hasWindow, winWidth, winHeight);
+        arduinoModule = new ArduinoModule(driveSys);
+        imageManagementModule = new ImageManagementModule(winWidth, winHeight, carControl.getTile());
+        speedControlModule = new SpeedControlModule();
+        steeringModule = new SteeringModule();
 
-        this.window = window;
+        initializeModules(windowModule, arduinoModule, imageManagementModule, speedControlModule, steeringModule);
 
-        createModules(window);
         headlessInit();
     }
 
@@ -63,8 +84,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
      */
     private void headlessInit() {
         // driveSys = new ArduinoIO();
-
-        executorService = Executors.newSingleThreadScheduledExecutor();
+        final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor(new NamedThreadFactory("Frame Scheduler"));
         executorService.scheduleAtFixedRate(this, initDelay, Math.round(1000.0 / FPS), TimeUnit.MILLISECONDS);
 
         Future run = executorService.submit(this);
@@ -76,24 +96,25 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         }
     }
 
-    private void createModules(boolean window) {
-    	if(window) {
-	        WindowModule windowModule = new WindowModule(windowWidth, windowHeight);
-	        windowModule.addKeyListener(this);
-	        modules.add(windowModule);
-    	}
-
-        modules.add(new ImageManagementModule(windowWidth, windowHeight, carControl.getTile()));
-        modules.add(new SpeedControlModule());
-        modules.add(new SteeringModule());
-        modules.add(new ArduinoModule(driveSys));
-        //modules.add(new LatencyTestModule());
+    private void initializeModules(Module... moduleArray) {
+        modules = Arrays.asList(moduleArray);
 
         for (Module module : modules) {
             module.initialize(carControl);
         }
 
         initialized = true;
+    }
+
+    private WindowModule createWindowModule(boolean useWindowModule, int winWidth, int winHeight) {
+    	final WindowModule winModule;
+    	if (useWindowModule) {
+	        winModule = new WindowModule(winWidth, winHeight);
+	        winModule.addKeyListener(this);
+    	} else {
+    	    winModule = null;
+        }
+        return winModule;
     }
 
     /**
@@ -104,51 +125,66 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
      * run after ImageManagement process their respective image.
      * </p>
      */
-    private void update() {
-        if (carControl instanceof TrakSimControl) {
-            ((TrakSimControl) carControl).cam.theSim.SimStep(1);
-        }
-
+    private void update(long frameNumber) {
         //read the camera image, and update windowModule.
-        carControl.readCameraImage();
-        carControl.setEdges(getInsets());
-        carControl.updateWindowDims(getWidth(), getHeight());
-        modules.get(0).update(carControl);
-        modules.get(4).update(carControl);
+        CompletableFuture<Void> cameraImage = CompletableFuture
+                .runAsync(() -> {
+                            carControl.readCameraImage();
+                            carControl.setEdges(getInsets());
+                            windowModule.update(carControl);
+                            arduinoModule.update(carControl);
+                        }, cameraImageExec);
 
         // FIXME: Does not print exceptions to console.
-        ImageManagementModule imageModule = (ImageManagementModule) modules.get(1);
-        // Start Thread to get the RGB image. (for camera)
-        CompletableFuture<CarControl> futureRGBImage = CompletableFuture.supplyAsync(() -> {
-            carControl.setRGBImage(imageModule.getRGBRaster(carControl.getRecentCameraImage()));
-            carControl.setRenderedImage(imageModule.getRGBRaster(carControl.getRecentCameraImage()));
-            return carControl;
-        });
-        // Start Thread to get the black and white image (for steering)
-        CompletableFuture<CarControl> futureBWImage = CompletableFuture.supplyAsync(() -> {
-            steeringControl.setRGBImage(imageModule.getBlackWhiteRaster(carControl.getRecentCameraImage()));
-            return steeringControl;
-        });
-        // Start Thread to get the simple image (for speed)
-        CompletableFuture<CarControl> futureSimpleImage = CompletableFuture.supplyAsync(() -> {
-            speedControl.setProcessedImage(imageModule.getSimpleColorRaster(carControl.getRecentCameraImage()));
-            return speedControl;
-        });
 
-        // Call steering Module after futureBWImage is finished
-        CompletableFuture<Void> futureSteering = futureBWImage.thenAcceptAsync(carControl -> modules.get(3).update(carControl));
+        final byte[] recentImage = carControl.getRecentCameraImage();
+
+        // Start Thread to get the black and white image (for steering)
+        CompletableFuture<Void> futureSteering = cameraImage
+                .thenApplyAsync(v -> setBWImage(recentImage), imageBWExec)
+                // Call steering Module after futureBWImage is finished
+                .thenAcceptAsync(steeringModule::update, steeringExec);
+
+        CompletableFuture<CarControl> futureRGBImage = CompletableFuture.completedFuture(null);
+        if (frameNumber % 2 == 1) {
+            futureRGBImage = cameraImage
+                    .thenApplyAsync(v -> setRGBImage(recentImage), imageRGBExec);
+        }
+
         // Call speed module after futureSimpleImage is finished
-        CompletableFuture<Void> futureSpeed = futureSimpleImage.thenAcceptAsync(carControl -> modules.get(2).update(carControl));
+        CompletableFuture<Void> futureSpeed = CompletableFuture.completedFuture(null);
+        if (frameNumber % 3 == 1) {
+            // Start Thread to get the simple image (for speed)
+            futureSpeed = cameraImage
+                    .thenApplyAsync(v -> setSimpleImage(recentImage), imageSimpleExec)
+                    .thenAcceptAsync(speedControlModule::update, speedExec);
+        }
 
         // Run when all finished.
         CompletableFuture.allOf(futureSpeed, futureSteering, futureRGBImage)
                 .thenAccept(v -> paint())
                 .exceptionally(ex -> {
-                    System.out.println(ex.getMessage());
+                    ex.printStackTrace();
                     return null;
                 })
                 .join();
 
+    }
+
+    private CarControl setRGBImage(byte[] recentImage) {
+        carControl.setRGBImage(imageManagementModule.getRGBRaster(recentImage));
+        carControl.setRenderedImage(carControl.getRGBImage());
+        return carControl;
+    }
+
+    private CarControl setBWImage(byte[] recentImage) {
+        steeringControl.setRGBImage(imageManagementModule.getBlackWhiteRaster(recentImage));
+        return steeringControl;
+    }
+
+    private CarControl setSimpleImage(byte[] recentImage) {
+        speedControl.setProcessedImage(imageManagementModule.getSimpleColorRaster(recentImage));
+        return speedControl;
     }
 
     private void paint() {
@@ -161,16 +197,24 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
 
     @Override
     public void run() {
-        if(!initialized) {
-            return;
+        if (initialized) {
+            //printElapsedTime();
+            try {
+                update(++frameNumber);
+                //paint();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+    }
 
-        try {
-            update();
-            //paint();
-        } catch(Exception e) {
-            e.printStackTrace();
+    private void printElapsedTime() {
+        final long curTime = System.currentTimeMillis();
+        if (lastTime == 0) {
+            lastTime = curTime;
         }
+        System.out.println("Time: " + (lastTime - curTime));
+        lastTime = curTime;
     }
 
     public static void main(String[] args) {
@@ -206,4 +250,16 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     @Override
     public void keyTyped(KeyEvent e) { }
 
+    public static class NamedThreadFactory implements ThreadFactory {
+        private final String name;
+
+        public NamedThreadFactory(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public Thread newThread(@NotNull Runnable r) {
+            return new Thread(r, name);
+        }
+    }
 }

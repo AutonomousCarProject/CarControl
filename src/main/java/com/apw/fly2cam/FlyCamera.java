@@ -36,6 +36,16 @@ public class FlyCamera { // (in Java/fly2cam)
         errn = 0;
     }
 
+    public void fillRectangle(int colo, int rx, int cx, int rz, int cz) {
+        // By default not supported
+    }
+
+
+    public double getPosition(boolean returnHorizontal) {
+        // By default not supported, return 0
+        return 0d;
+    }
+
     /**
      * Gets a text description of an error number.
      *
