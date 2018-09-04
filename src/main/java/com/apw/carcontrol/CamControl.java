@@ -10,8 +10,7 @@ public class CamControl extends CarControlBase {
 
         //while (cam.Dimz() == 0);
 
-        setWindowHeight(cam.Dimz() >> 16);
-        setWindowWidth(cam.Dimz() << 16 >> 16);
+        updateWindowDims(cam.Dimz() >> 16, cam.Dimz() << 16 >> 16);
     }
 
     @Override
