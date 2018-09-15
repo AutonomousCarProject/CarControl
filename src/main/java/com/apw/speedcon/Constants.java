@@ -8,7 +8,7 @@ public class Constants {
   
 	//Default Debug Overlays
 	public static final boolean
-	DEFAULT_OVERLAY = false,		//Sets the default state as to the display of blob detection boxes
+	DEFAULT_OVERLAY = true,		//Sets the default state as to the display of blob detection boxes
 	DEFAULT_BLOBS = true,			//Sets the default state as to the display of blob boundaries
 	DEFAULT_WRITE_BLOBS_TO_CONSOLE = false,	//Sets the default state as to the printing of all blob information
 	DEFAULT_WRITE_SPEED_TO_CONSOLE = false;	//Sets the default state as to the printing of the current speed

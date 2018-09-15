@@ -17,8 +17,8 @@ public class SteeringMk2 extends SteeringBase {
 
     private final int NUM_PREVIOUS = 1; // Number of previous frames to average degree to steer to
     private final int MAX_DIFF = 3; // Maximum X Pixel difference from one row to the next
-    private final double MIN_DIST_LOOK = 0.6; // Percent of midPoints to start at
-    private final double MAX_DIST_LOOK = 0.8; // Percent of midPoints to end at.
+    private final double MIN_DIST_LOOK = 0.8; // Percent of midPoints to start at
+    private final double MAX_DIST_LOOK = 0.9; // Percent of midPoints to end at.
 
     private boolean leftSideFound = false;
     private boolean rightSideFound = false;
@@ -142,7 +142,7 @@ public class SteeringMk2 extends SteeringBase {
                 // If One lane is found, add midpoint 100 pixels towards middle.
             } else if (rightSideFound) {
                 Point lastRightPoint = rightPoints.get(rightPoints.size() - 1);
-                midX = lastRightPoint.x - 280;
+                midX = lastRightPoint.x - 100;
                 if (Math.abs(midX - lastX) > MAX_DIFF) {
                     if (midX > lastX) {
                         midX = lastX + MAX_DIFF;
@@ -153,7 +153,7 @@ public class SteeringMk2 extends SteeringBase {
                 midPoints.add(new Point(midX, cameraRow));
             } else if (leftSideFound) {
                 Point lastLeftPoint = leftPoints.get(leftPoints.size() - 1);
-                midX = lastLeftPoint.x + 280;
+                midX = lastLeftPoint.x + 100;
                 if (Math.abs(midX - lastX) > MAX_DIFF) {
                     if (midX > lastX) {
                         midX = lastX + MAX_DIFF;
