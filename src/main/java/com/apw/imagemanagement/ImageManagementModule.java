@@ -26,8 +26,8 @@ public class ImageManagementModule implements Module {
     private int[] imagePixels;
     private byte tile;
     private int frameWidth = 640;
-    boolean removeNoise = true;
-    boolean dilate = false;
+    boolean removeNoise = false;
+    boolean dilate = true;
 
     /**
      * Main constructor for imageManagement

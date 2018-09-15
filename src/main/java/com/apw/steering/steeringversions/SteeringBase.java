@@ -1,8 +1,13 @@
-package com.apw.steering;
+package com.apw.steering.steeringversions;
 import com.apw.apw3.DriverCons;
 
+import com.apw.carcontrol.CarControl;
+import com.apw.steering.steeringclasses.Point;
+import com.apw.steering.Steerable;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * steering base is the base code for all child steering objects.
@@ -12,20 +17,51 @@ import java.util.List;
  * @author Nathan Ng ©2018
  */
 public abstract class SteeringBase implements Steerable {
-    int startTarget = 0;
-    int endTarget = 0;
-    int cameraHeight = 0;
-    int cameraWidth = 0;
-    int screenWidth = 912;
-    Point origin;
-    Point steerPoint = new Point(0, 0); // Point to where the car attempts to steer towards
-    List<Point> leftPoints = new ArrayList<>();
-    List<Point> rightPoints = new ArrayList<>();
-    List<Point> midPoints = new ArrayList<>();
+    @Getter @Setter
+    private int startTarget = 0;
+    @Getter @Setter
+    private int endTarget = 0;
+    @Getter
+    private final int cameraHeight;
+    @Getter
+    private final int cameraWidth;
+    @Getter
+    private final int screenWidth;
+    @Getter
+    private final Point origin;
+    @Getter @Setter
+    private Point steerPoint = new Point(0, 0); // Point to where the car attempts to steer towards
+    @Getter @Setter
+    private List<Point> leftPoints = new ArrayList<>();
+    @Getter @Setter
+    private List<Point> rightPoints = new ArrayList<>();
+    @Getter @Setter
+    private List<Point> midPoints = new ArrayList<>();
     private boolean usePID = false;
     private double integral, // The integral of the
             previousError;  // PID
     private List<Double> posLog = new ArrayList<>(); // Array list for logging positions fed into it
+
+    public SteeringBase(int cameraWidth, int cameraHeight, int screenWidth) {
+        this.cameraWidth = cameraWidth;
+        this.cameraHeight = cameraHeight;
+        this.screenWidth = screenWidth;
+        origin = new Point(cameraWidth / 2, cameraHeight);
+    }
+
+    public SteeringBase(CarControl control) {
+        this.cameraWidth = control.getImageWidth();
+        this.cameraHeight = control.getImageHeight();
+        this.screenWidth = this.cameraWidth;
+        origin = new Point(cameraWidth / 2, cameraHeight);
+    }
+
+    public SteeringBase() {
+        cameraWidth = 0;
+        cameraHeight = 0;
+        screenWidth = 0;
+        origin = new Point(0, 0);
+    }
 
     /**
      * How steep the curve is
@@ -43,7 +79,7 @@ public abstract class SteeringBase implements Steerable {
      *
      * @return the degreeOffset, as a integer.
      */
-    int getDegreeOffset() {
+    public int getDegreeOffset() {
         int xOffset = origin.x - steerPoint.x;
         int yOffset = Math.abs(origin.y - steerPoint.y);
 
@@ -82,21 +118,13 @@ public abstract class SteeringBase implements Steerable {
     }
 
     /**
-     * Find, and process the image data to assign Points to leftPoints, rightPoints, and midPoints.
-     *
-     * @param pixels An array of pixels
-     */
-    public abstract void findPoints(int[] pixels);
-
-
-    /**
      * Adds the car's current x coordinate, y coordinate, and heading to the posLog arrayList
      *
      * @param x         x coordinate
      * @param y         y coordinate
      * @param heading   car's current heading (degrees)
      */
-    public void updatePosLog(double x, double y, double heading) { // Reference positions by doing point# * 3 + (0 for x, 1 for y, 2 for heading)
+    private void updatePosLog(double x, double y, double heading) { // Reference positions by doing point# * 3 + (0 for x, 1 for y, 2 for heading)
         posLog.add(x);
         posLog.add(y);
         posLog.add(heading);

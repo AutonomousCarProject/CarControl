@@ -99,6 +99,9 @@ public class ImageManipulator {
 
 
 	public static void convertToBlackWhiteRaster(byte[] bayer, int[] mono, int nrows, int ncols, int frameWidth, byte tile) {
+		if (bayer == null) {
+			return;
+		}
 		int pixelsAveraged = 3;
 		for (int r = nrows >> 1; r < nrows; r++) {
 			int averageLuminance = 0;
@@ -292,6 +295,11 @@ public class ImageManipulator {
 		 * 5 = BLACK
 		 * 6 = YELLOW
 		 */
+
+		if (bayer == null) {
+			return;
+		}
+
 		for(int r = 0; r < nrows; r++){
 			for(int c = 0; c < frameWidth; c++){
 				int R = (bayer[getPos(c,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);
@@ -337,6 +345,9 @@ public class ImageManipulator {
 	 * @param tile tiling pattern of the bayer8 image
 	 */
 	public static void convertToRGBRaster(byte[] bayer, int[] rgb, int nrows, int ncols, byte tile) {
+	    if (bayer == null) {
+	    	return;
+		}
 		for (int r = 0; r < nrows; r++) {
 			for (int c = 0; c < ncols; c++) {
 				int R = (bayer[getPos(c,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);

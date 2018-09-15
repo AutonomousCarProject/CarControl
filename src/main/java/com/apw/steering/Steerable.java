@@ -1,6 +1,8 @@
 package com.apw.steering;
 
 
+import com.apw.steering.steeringversions.SteeringBase;
+
 /**
  * Interface to allow multiple versions of steering code.
  *
@@ -20,11 +22,4 @@ public interface Steerable {
     double curveSteepness(double turnAngle);
 
     int drive(int pixels[]);
-
-    /**
-     * Find, and process the image data to assign Points to leftPoints, rightPoints, and midPoints.
-     *
-     * @param pixels An array of pixels
-     */
-    void findPoints(int[] pixels);
 }

@@ -4,12 +4,14 @@ import com.apw.apw3.DriverCons;
 import com.apw.carcontrol.CamControl;
 import com.apw.carcontrol.CarControl;
 import com.apw.carcontrol.Module;
-import com.apw.speedcon.SpeedControlModule;
 
+import com.apw.steering.steeringclasses.Point;
+import com.apw.steering.steeringversions.SteeringBase;
+import com.apw.steering.steeringversions.SteeringMk1;
+import com.apw.steering.steeringversions.SteeringMk2;
+import com.apw.steering.steeringversions.SteeringMk4;
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.io.PrintStream;
-import java.util.concurrent.CompletableFuture;
 
 public class SteeringModule implements Module {
 
@@ -39,6 +41,8 @@ public class SteeringModule implements Module {
             steering = new SteeringMk2(640, 480, 912);
         } else if (DriverCons.D_steeringVersion == 3) {
             //steering = new SteeringMk3(640, 480, 912);
+        } else if (DriverCons.D_steeringVersion == 4) {
+            steering = new SteeringMk4(640, 480, 912);
         }
 
     }
@@ -58,42 +62,19 @@ public class SteeringModule implements Module {
     		return;
     	}
 
-        double widthMultiplier = (1.0 * control.getWindowWidth() / steering.screenWidth);
-        double heightMultiplier = (1.0 * control.getWindowHeight() / steering.cameraHeight);
-        int tempDeg = angle;
-       /*
-         if (steering.drawnMap) {
-    		//System.out.println(steering.pathTraveled[0]);
-    		for (int i = 0; i < steering.pathTraveled.length; i++) {
-    			
-    			g.setColor(Color.RED);
-    			if (steering.onCurve[i]==true) {
-    				g.setColor(Color.BLUE);
-    			}
-    			Point p1 = steering.pathTraveled[i];
-    			//System.out.println(p1.x + " " + p1.y);
-    			g.drawRect(DriverCons.D_ImWi + 100 + (int) ((double) p1.x), 200 + p1.y, 1, 1);
-    			//graf.drwawRect(DriverCons.D_ImWi + 30 + (int) ((double) p2.x), 150 + p2.y, 1, 1);
-    			//graf.drawRect(DriverCons.D_ImWi + 30 + (int) ((double) p3.x), 150 + p3.y, 1, 1);
-    		}
-    		//System.out.println(steering.curvePos.size());
-    		for (int i = 0; i<steering.curvePos.size(); i++) {
+        double widthMultiplier = (1.0 * control.getWindowWidth() / steering.getScreenWidth());
+        double heightMultiplier = (1.0 * control.getWindowHeight() / steering.getCameraHeight());
 
-    			g.setColor(Color.GREEN);
-    			g.fillRect(DriverCons.D_ImWi + 100 + steering.curvePos.get(i).x, steering.curvePos.get(i).y + 200, 3,3);
-    		}
-    	}//*/
-
-        for (int idx = 0; idx < steering.midPoints.size(); idx++) {
-            if (idx >= steering.startTarget && idx <= steering.endTarget) {
+        for (int idx = 0; idx < steering.getMidPoints().size(); idx++) {
+            if (idx >= steering.getStartTarget() && idx <= steering.getEndTarget()) {
                 g.setColor(Color.green);
-                g.fillRect((int) ((steering.midPoints.get(idx).x - 2) * widthMultiplier),
-                        (int) ((steering.midPoints.get(idx).y + 10) * heightMultiplier),
+                g.fillRect((int) ((steering.getMidPoints().get(idx).x - 2) * widthMultiplier),
+                        (int) ((steering.getMidPoints().get(idx).y + 10) * heightMultiplier),
                         4, 4);
             } else {
                 g.setColor(Color.blue);
-                g.fillRect((int)((steering.midPoints.get(idx).x - 2) * widthMultiplier),
-                        (int)((steering.midPoints.get(idx).y + 10) * heightMultiplier),
+                g.fillRect((int)((steering.getMidPoints().get(idx).x - 2) * widthMultiplier),
+                        (int)((steering.getMidPoints().get(idx).y + 10) * heightMultiplier),
                         4, 4);
             }
         }
@@ -102,19 +83,21 @@ public class SteeringModule implements Module {
         g.setColor(Color.yellow);
         if (DriverCons.D_DrawOnSides) {
             g.setColor(Color.yellow);
-            for (Point point : steering.leftPoints) {
+            for (com.apw.steering.steeringclasses.Point point : steering.getLeftPoints()) {
+                g.setColor(Color.MAGENTA);
                 int xL = point.x - 4;
                 int yL = point.y - 4;
                 g.fillRect((int) (xL * widthMultiplier), (int) (yL * heightMultiplier) + 10, 8, 8);
             }
-            for (Point point : steering.rightPoints) {
+            for (Point point : steering.getRightPoints()) {
+                g.setColor(Color.green);
                 int xR = point.x - 4;
                 int yR = point.y - 4;
                 g.fillRect((int) (xR * widthMultiplier), (int) (yR * heightMultiplier) + 10, 8, 8);
             }
         }
         g.setColor(Color.cyan);
-        g.fillRect((int) ((steering.steerPoint.x - 5) * widthMultiplier),
-                (int) ((steering.steerPoint.y - 5) * heightMultiplier) + 10, 10, 10);
+        g.fillRect((int) ((steering.getSteerPoint().x - 5) * widthMultiplier),
+                (int) ((steering.getSteerPoint().y - 5) * heightMultiplier) + 10, 10, 10);
     }
 }
