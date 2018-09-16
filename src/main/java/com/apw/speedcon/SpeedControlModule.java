@@ -248,6 +248,7 @@ public class SpeedControlModule implements Module {
 	public void onUpdate(CarControl control) {
 		int gasAmount = control.getVelocity();
 		int steerDegs = control.getSteering();
+		System.out.println("Passed angle: " + steerDegs);
 		int manualSpeed = control.getManualSpeed();
 		
 		com.apw.pedestrians.Constant.LAST_FRAME_MILLIS = com.apw.pedestrians.Constant.CURRENT_FRAME_MILLIS;

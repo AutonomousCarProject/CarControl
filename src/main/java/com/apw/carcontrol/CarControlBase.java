@@ -160,6 +160,8 @@ public class CarControlBase implements CarControl {
         if (!absolute) {
             angle = currentSteering + angle;
         }
+        currentSteering = angle;
+        System.out.println("currentSteering: " + currentSteering);
         if (driveSys != null) {
             driveSys.setServoAngle(SteerPin, angle + 90);
         }
