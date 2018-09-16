@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.apw.steering.steeringclasses.Point;
+import static com.apw.steering.SteeringConstants.HEIGHT_OF_AREA;
+import static com.apw.steering.SteeringConstants.STARTING_HEIGHT;
 
 
 public class SteeringMk3 extends SteeringBase {
@@ -24,12 +26,9 @@ public class SteeringMk3 extends SteeringBase {
 	public Point[] pathTraveled;
 	public boolean[] onCurve;
 
-	private final int heightOfArea = 32; // How high the car looks for lines
-	private final int startingHeight = 272; // how high the car starts looking for lines
-
 	private int startingPoint = 0; // Where the car starts looking for lines on either side.
-	private Point[] leadingMidPoints = new Point[startingHeight + heightOfArea];
-	private Point[] pointsAhead = new Point[startingHeight - (getCameraHeight() / 2)]; // points far ahead
+	private Point[] leadingMidPoints = new Point[STARTING_HEIGHT + HEIGHT_OF_AREA];
+	private Point[] pointsAhead = new Point[STARTING_HEIGHT - (getCameraHeight() / 2)]; // points far ahead
 	private double weight = 1.0; // >1 = right lane, <1 = left lane
 	private boolean weightLane = false;
 	private boolean turnAhead = false;
@@ -44,7 +43,7 @@ public class SteeringMk3 extends SteeringBase {
 	 * Constructor that Initializes all points in array.
 	 */
 	public SteeringMk3() {
-		for (int i = 0; i < heightOfArea; i++) {
+		for (int i = 0; i < HEIGHT_OF_AREA; i++) {
 			getLeftPoints().add(new Point(0, 0));
 			getRightPoints().add(new Point(0, 0));
 			getMidPoints().add(new Point(0, 0));
@@ -179,7 +178,7 @@ public class SteeringMk3 extends SteeringBase {
 
 	/**
 	 * <p>
-	 * Process the image data From an array of pixels. Starts at the startingHeight
+	 * Process the image data From an array of pixels. Starts at the STARTING_HEIGHT
 	 * (up from the bottom)screen, then works up the screen going out from the
 	 * center. It looks for pixels that are higher than average luminance, and
 	 * recognises that as a line.
@@ -200,7 +199,7 @@ public class SteeringMk3 extends SteeringBase {
 		Boolean found = false;
 		int count = 0;
 		// first before first, find average luminance
-		for (int i = getCameraWidth() * getCameraHeight() - 1; i > startingHeight * getCameraWidth(); i--) {
+		for (int i = getCameraWidth() * getCameraHeight() - 1; i > STARTING_HEIGHT * getCameraWidth(); i--) {
 			averageLuminance = averageLuminance + pixels[i];
 			count++;
 		}
@@ -210,7 +209,7 @@ public class SteeringMk3 extends SteeringBase {
 		// first, find where road starts on both sides
 		leftSideFound = false;
 		rightSideFound = false;
-		for (int i = getCameraHeight() - 22; i > startingHeight + heightOfArea; i--) {
+		for (int i = getCameraHeight() - 22; i > STARTING_HEIGHT + HEIGHT_OF_AREA; i--) {
 			for (int j = roadMiddle / 2; j >= 0; j--) {
 				if (pixels[(getScreenWidth() * (i)) + j] >= averageLuminance) {
 					leftSideFound = true;
@@ -239,7 +238,7 @@ public class SteeringMk3 extends SteeringBase {
 
 		count = 0;
 
-		for (int i = startingPoint; i > startingHeight + heightOfArea; i--) {
+		for (int i = startingPoint; i > STARTING_HEIGHT + HEIGHT_OF_AREA; i--) {
 			for (int j = roadMiddle / 2; j >= 0; j--) {
 				if (pixels[getScreenWidth() * i + j] >= averageLuminance) {
 					leftSideTemp = j;
@@ -272,7 +271,7 @@ public class SteeringMk3 extends SteeringBase {
 		}
 		int tempCount = count;
 		count = 0;
-		for (int i = startingHeight + heightOfArea; i > startingHeight; i--) {
+		for (int i = STARTING_HEIGHT + HEIGHT_OF_AREA; i > STARTING_HEIGHT; i--) {
 			// center to left
 			found = false;
 			getLeftPoints().get(count).y = i;
@@ -330,7 +329,7 @@ public class SteeringMk3 extends SteeringBase {
 
 		int count = 0;
 
-		for (int i = startingHeight; i > getCameraHeight() / 2; i--) {
+		for (int i = STARTING_HEIGHT; i > getCameraHeight() / 2; i--) {
 			for (int j = roadMiddle / 2; j >= 0; j--) {
 				if (pixels[getScreenWidth() * i + j] == 16777215) {
 					leftSideTemp = j;
@@ -401,9 +400,9 @@ public class SteeringMk3 extends SteeringBase {
 		double weightFactor = 1;
 
 		// Sum the x's and the y's
-		for (int i = 0; i < startingPoint - (startingHeight + heightOfArea); i++) {
+		for (int i = 0; i < startingPoint - (STARTING_HEIGHT + HEIGHT_OF_AREA); i++) {
 			Point point = new Point(leadingMidPoints[i].x, leadingMidPoints[i].y);
-			if (i > (startingPoint - (startingHeight + heightOfArea)) / 2)
+			if (i > (startingPoint - (STARTING_HEIGHT + HEIGHT_OF_AREA)) / 2)
 				shouldWeight = true;
 			tempX += shouldWeight ? weightFactor * point.x : point.x;
 			tempY += point.y;

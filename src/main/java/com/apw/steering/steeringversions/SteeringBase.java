@@ -8,6 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
+import static com.apw.steering.SteeringConstants.MAX_DIST_LOOK;
+import static com.apw.steering.SteeringConstants.MIN_DIST_LOOK;
+import static com.apw.steering.SteeringConstants.USE_PID;
+import static com.apw.steering.SteeringConstants.K_D;
+import static com.apw.steering.SteeringConstants.K_I;
+import static com.apw.steering.SteeringConstants.K_P;
 
 /**
  * steering base is the base code for all child steering objects.
@@ -37,10 +43,9 @@ public abstract class SteeringBase implements Steerable {
     private List<Point> rightPoints = new ArrayList<>();
     @Getter @Setter
     private List<Point> midPoints = new ArrayList<>();
-    private boolean usePID = false;
+    private List<Double> posLog = new ArrayList<>(); // Array list for logging positions fed into it
     private double integral, // The integral of the
             previousError;  // PID
-    private List<Double> posLog = new ArrayList<>(); // Array list for logging positions fed into it
 
     public SteeringBase(int cameraWidth, int cameraHeight, int screenWidth) {
         this.cameraWidth = cameraWidth;
@@ -86,7 +91,7 @@ public abstract class SteeringBase implements Steerable {
         int tempDeg = (int) (Math.atan2(-xOffset, yOffset) * (180 / Math.PI));
 
         //System.out.println("\n\n\n" + tempDeg + " " + myPID() + "\n\n\n");
-        return (int) ((Math.atan2(-((usePID && (curveSteepness(tempDeg) > 0.3)) ? myPID() : xOffset), yOffset)) * (180 / Math.PI));
+        return (int) ((Math.atan2(-((USE_PID && (curveSteepness(tempDeg) > 0.3)) ? myPID() : xOffset), yOffset)) * (180 / Math.PI));
     }
 
     /**
@@ -97,9 +102,6 @@ public abstract class SteeringBase implements Steerable {
     private double myPID() {
 
         int error = origin.x - steerPoint.x;
-        double kP = 1;
-        double kI = 0;
-        double kD = 0;
         double derivative;
 
 
@@ -113,8 +115,26 @@ public abstract class SteeringBase implements Steerable {
 
         derivative = (error - previousError) / DriverCons.D_FrameTime;
         previousError = error;
-        return error * kP + integral * kI + derivative * kD;
+        return error * K_P + integral * K_I + derivative * K_D;
 
+    }
+
+    public Point calculateSteerPoint() {
+        setStartTarget((int) (getMidPoints().size() * MIN_DIST_LOOK));
+        setEndTarget((int) (getMidPoints().size() * MAX_DIST_LOOK));
+
+        double ySum = 0;
+        double xSum = 0;
+
+        // Sum the x's and the y's
+        for (int idx = getStartTarget(); idx < getEndTarget(); idx++) {
+            xSum += getMidPoints().get(idx).x;
+            ySum += getMidPoints().get(idx).y;
+        }
+
+        int x = (int) (xSum / (getEndTarget() - getStartTarget()));
+        int y = (int) (ySum / (getEndTarget() - getStartTarget()));
+        return new Point(x, y);
     }
 
     /**

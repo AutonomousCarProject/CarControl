@@ -9,9 +9,11 @@ import com.apw.steering.steeringclasses.Point;
 import com.apw.steering.steeringversions.SteeringBase;
 import com.apw.steering.steeringversions.SteeringMk1;
 import com.apw.steering.steeringversions.SteeringMk2;
+import com.apw.steering.steeringversions.SteeringMk3;
 import com.apw.steering.steeringversions.SteeringMk4;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import static com.apw.steering.SteeringConstants.STEERING_VERSION;
 
 public class SteeringModule implements Module {
 
@@ -30,19 +32,36 @@ public class SteeringModule implements Module {
         
 
         if (control instanceof CamControl) {
-           if (DriverCons.D_steeringVersion == 1) {
-               steering = new SteeringMk1(control);
-           } else if (DriverCons.D_steeringVersion == 2) {
-               steering = new SteeringMk2(control);
-           }
-        } else if (DriverCons.D_steeringVersion == 1) {
-            steering = new SteeringMk1(640, 480, 912);
-        } else if (DriverCons.D_steeringVersion == 2) {
-            steering = new SteeringMk2(640, 480, 912);
-        } else if (DriverCons.D_steeringVersion == 3) {
-            //steering = new SteeringMk3(640, 480, 912);
-        } else if (DriverCons.D_steeringVersion == 4) {
-            steering = new SteeringMk4(640, 480, 912);
+            switch (STEERING_VERSION) {
+                case 1:
+                    steering = new SteeringMk1(control);
+                    break;
+                case 2:
+                    steering = new SteeringMk2(control);
+                    break;
+                case 3:
+                    //steering = new SteeringMk3(control);
+                    break;
+                case 4:
+                    steering = new SteeringMk4(control);
+                    break;
+            }
+        } else {
+            switch (STEERING_VERSION) {
+                case 1:
+                    steering = new SteeringMk1(640, 480, 912);
+                    break;
+                case 2:
+                    steering = new SteeringMk2(640, 480, 912);
+                    break;
+                case 3:
+                    //steering = new SteeringMk3(640, 480, 912);
+                    break;
+                case 4:
+                    steering = new SteeringMk4(640, 480, 912);
+                    break;
+
+            }
         }
 
     }

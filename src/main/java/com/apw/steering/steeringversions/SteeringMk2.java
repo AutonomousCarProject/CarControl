@@ -4,6 +4,10 @@ import com.apw.carcontrol.CarControl;
 
 import com.apw.steering.steeringclasses.Point;
 import java.util.ArrayList;
+import static com.apw.steering.SteeringConstants.MAX_DIFF;
+import static com.apw.steering.SteeringConstants.MAX_DIST_LOOK;
+import static com.apw.steering.SteeringConstants.MIN_DIST_LOOK;
+import static com.apw.steering.SteeringConstants.NUM_PREVIOUS;
 
 /**
  * <p>Version 2 of steering. This version improves center detection by adding the
@@ -15,11 +19,6 @@ import java.util.ArrayList;
  * @author nathan
  */
 public class SteeringMk2 extends SteeringBase {
-
-    private final int NUM_PREVIOUS = 3; // Number of previous frames to average degree to steer to
-    private final int MAX_DIFF = 5; // Maximum X Pixel difference from one row to the next
-    private final double MIN_DIST_LOOK = 0.4; // Percent of midPoints to start at
-    private final double MAX_DIST_LOOK = 0.6; // Percent of midPoints to end at.
 
     private boolean leftSideFound = false;
     private boolean rightSideFound = false;
@@ -66,7 +65,7 @@ public class SteeringMk2 extends SteeringBase {
     @Override
     public int drive(int pixels[]) {
         findPoints(pixels);
-        averagePoints();
+        calculateSteerPoint();
         int frameDeg = getDegreeOffset();
         double averageDeg = 0;
 
@@ -177,7 +176,7 @@ public class SteeringMk2 extends SteeringBase {
             rightSideFound = false;
             leftSideFound = false;
         }
-        averagePoints();
+        calculateSteerPoint();
     }
 
     /**
@@ -187,29 +186,6 @@ public class SteeringMk2 extends SteeringBase {
         getLeftPoints().clear();
         getRightPoints().clear();
         getMidPoints().clear();
-    }
-
-    /**
-     * Average the midpoints to create the steerPoint.
-     */
-    private void averagePoints() {
-
-        setStartTarget((int) (getMidPoints().size() * MIN_DIST_LOOK));
-        setEndTarget((int) (getMidPoints().size() * MAX_DIST_LOOK));
-
-        double ySum = 0;
-        double xSum = 0;
-        int temp = 0;
-
-        // Sum the x's and the y's
-        for (int idx = getStartTarget(); idx < getEndTarget(); idx++) {
-            xSum += getMidPoints().get(idx).x;
-            ySum += getMidPoints().get(idx).y;
-            temp++;
-        }
-
-        getSteerPoint().x = (int) (xSum / (getEndTarget() - getStartTarget()));
-        getSteerPoint().y = (int) (ySum / (getEndTarget() - getStartTarget()));
     }
 
 }

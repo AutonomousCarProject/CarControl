@@ -2,6 +2,7 @@ package com.apw.steering.steeringclasses;
 
 import com.apw.steering.Steerable;
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Point class holds an x, and y.
@@ -13,9 +14,9 @@ import lombok.Getter;
  * @see Steerable
  */
 public class Point {
-    @Getter
+    @Getter @Setter
     public int x;
-    @Getter
+    @Getter @Setter
     public int y;
     @Getter
     private final boolean isEmpty;

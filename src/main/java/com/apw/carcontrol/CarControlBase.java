@@ -164,20 +164,6 @@ public class CarControlBase implements CarControl {
         if (!absolute) {
             angle = currentSteering + angle;
         }
-        angle = MyMath.iMax(MyMath.iMin(angle, 90), -90);
-        if (angle != 0) if (angle == currentSteering) return;
-        currentSteering = angle;
-        if (angle < 0) {
-            //noinspection ConstantConditions
-            if (LefScaleSt < 1.0) { // LefScaleSt = LeftSteer/90.0
-                angle = (int) Math.round(LefScaleSt * ((double) angle));
-            }
-        } else if (angle > 0) {
-            //noinspection ConstantConditions
-            if (RitScaleSt > 1.0) {
-                angle = (int) Math.round(RitScaleSt * ((double) angle));
-            }
-        }
         if (driveSys != null) {
             driveSys.setServoAngle(SteerPin, angle + 90);
         }
