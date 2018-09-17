@@ -53,7 +53,7 @@ public class SteeringMk3 extends SteeringBase {
 		}
 	}
 
-	public int drive(int pixels[]) {
+	public int getSteeringAngle(int pixels[]) {
 		int angleToTurn = 0;
 		//System.out.println(ranThroughOrigin);
 		if (ranThroughOrigin == -1) {

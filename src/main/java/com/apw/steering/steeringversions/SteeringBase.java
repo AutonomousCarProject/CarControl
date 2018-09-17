@@ -125,15 +125,17 @@ public abstract class SteeringBase implements Steerable {
 
         double ySum = 0;
         double xSum = 0;
+        int count = 0;
 
         // Sum the x's and the y's
         for (int idx = getStartTarget(); idx < getEndTarget(); idx++) {
             xSum += getMidPoints().get(idx).x;
             ySum += getMidPoints().get(idx).y;
+            count++;
         }
 
-        int x = (int) (xSum / (getEndTarget() - getStartTarget()));
-        int y = (int) (ySum / (getEndTarget() - getStartTarget()));
+        int x = (int) (xSum / count);
+        int y = (int) (ySum / count);
         return new Point(x, y);
     }
 

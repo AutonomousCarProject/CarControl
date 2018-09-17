@@ -1,7 +1,17 @@
 package com.apw.steering;
 
+import java.awt.Color;
+
 public class SteeringConstants {
+
+    // SteeringModule Constants
     static final int STEERING_VERSION = 4; // Which Version of steering to use
+    static final boolean DRAW_STEERING_LINES = true;
+    static final Color RIGHT_LANE_COLOR = Color.yellow;
+    static final Color LEFT_LANE_COLOR = Color.yellow;
+    static final Color MIDPOINT_COLOR = Color.blue;
+    static final Color TARGET_POINT_COLOR = Color.red;
+    static final Color STEER_POINT_COLOR = Color.cyan;
 
     // SteeringBase Constants
     public static final boolean USE_PID = false; // Weather or not to use PID
@@ -16,8 +26,8 @@ public class SteeringConstants {
     // SteeringMk2 Constants
     public static final int NUM_PREVIOUS = 3; // Number of previous frames to average degree to steer to
     public static final int MAX_DIFF = 5; // Maximum X Pixel difference from one row to the next
-    public static final double MIN_DIST_LOOK = 0.0; // Percent of midPoints to start at
-    public static final double MAX_DIST_LOOK = 1; // Percent of midPoints to end at.
+    public static final double MIN_DIST_LOOK = 0; // Percent of midPoints to start at
+    public static final double MAX_DIST_LOOK = 0.7; // Percent of midPoints to end at.
 
 
     // SteeringMk3 Constants
@@ -30,4 +40,5 @@ public class SteeringConstants {
     public static final int SEARCH_OFFSET = 100; // Number of pixels to offset
     public static final int DEFAULT_ROAD_WIDTH = 400; // The road width if slope is unknown
     public static final int MINIMUM_RELIABLE_OFFSET = 20; // Minimum required pixel difference to be considered reliable.
+    public static final boolean USE_NO_LANE_DETECTION = false;
 }

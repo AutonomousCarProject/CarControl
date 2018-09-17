@@ -59,7 +59,7 @@ public class SteeringMk1 extends SteeringBase {
      * @return The Degree that the servos should be set to.
      */
     @Override
-    public int drive(int pixels[]) {
+    public int getSteeringAngle(int pixels[]) {
         findPoints(pixels);
         averageMidpoints();
         return getDegreeOffset();

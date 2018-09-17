@@ -57,15 +57,15 @@ public class SteeringMk2 extends SteeringBase {
     }
 
     /**
-     * Called to drive the car
+     * Called to getSteeringAngle the car
      *
      * @param pixels the array of screen pixels.
      * @return Degree the car needs to turn.
      */
     @Override
-    public int drive(int pixels[]) {
+    public int getSteeringAngle(int pixels[]) {
         findPoints(pixels);
-        calculateSteerPoint();
+        setSteerPoint(calculateSteerPoint());
         int frameDeg = getDegreeOffset();
         double averageDeg = 0;
 
@@ -176,7 +176,6 @@ public class SteeringMk2 extends SteeringBase {
             rightSideFound = false;
             leftSideFound = false;
         }
-        calculateSteerPoint();
     }
 
     /**
