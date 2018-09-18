@@ -21,7 +21,6 @@ allprojects {
 dependencies {
     compile group: 'com.aparapi', name: 'aparapi', version:'1.9.0'
     compile group: 'com.aparapi', name: 'aparapi-jni', version:'1.4.1'
-    compileOnly 'org.projectlombok:lombok:1.18.2'
     implementation 'com.github.AutonomousCarProject:raspivid-j:0.1.0'
     implementation 'org.bidib.com.pi4j:pi4j-distribution:1.2.M1'
 }

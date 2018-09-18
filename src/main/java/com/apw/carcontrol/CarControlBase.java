@@ -8,8 +8,6 @@ import com.apw.sbcio.PWMController;
 import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.HashMap;
-import lombok.Getter;
-import lombok.Setter;
 
 public class CarControlBase implements CarControl {
     protected final int SteerPin, GasPin;
@@ -25,9 +23,7 @@ public class CarControlBase implements CarControl {
     private int currentSteering = 0;
     private int currentVelocity = 0;
     private int currentManualSpeed = 0;
-    @Getter @Setter
     private int windowWidth;
-    @Getter @Setter
     private int windowHeight;
     private int imageWidth = 912;
     private int imageHeight = 480;
@@ -164,20 +160,8 @@ public class CarControlBase implements CarControl {
         if (!absolute) {
             angle = currentSteering + angle;
         }
-        angle = MyMath.iMax(MyMath.iMin(angle, 90), -90);
-        if (angle != 0) if (angle == currentSteering) return;
         currentSteering = angle;
-        if (angle < 0) {
-            //noinspection ConstantConditions
-            if (LefScaleSt < 1.0) { // LefScaleSt = LeftSteer/90.0
-                angle = (int) Math.round(LefScaleSt * ((double) angle));
-            }
-        } else if (angle > 0) {
-            //noinspection ConstantConditions
-            if (RitScaleSt > 1.0) {
-                angle = (int) Math.round(RitScaleSt * ((double) angle));
-            }
-        }
+        System.out.println("currentSteering: " + currentSteering);
         if (driveSys != null) {
             driveSys.setServoAngle(SteerPin, angle + 90);
         }

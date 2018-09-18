@@ -100,7 +100,7 @@ public class ImageManipulator {
 
 	public static void convertToBlackWhiteRaster(byte[] bayer, int[] mono, int nrows, int ncols, int frameWidth, byte tile) {
 		int pixelsAveraged = 3;
-		for (int r = nrows >> 1; r < nrows; r++) {
+		for (int r = 300; r < nrows; r++) {
 			int averageLuminance = 0;
 			for(int c = 0; c < frameWidth; c++) {
 				int R = (bayer[getPos(c,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);

@@ -42,7 +42,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     private final SpeedControlModule speedControlModule;
     private final SteeringModule steeringModule;
     private final CarControl carControl; // A CarControl that holds data for each module
-    private CarControl speedControl; // A CarControl that holds data specifically for speed
+    //private CarControl speedControl; // A CarControl that holds data specifically for speed
     private CarControl steeringControl; // A CarControl that holds data specifically for steering
     private long frameNumber = 0L;
     private long lastTime = 0L;
@@ -55,11 +55,11 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     private MrModule(boolean realCam, boolean hasWindow) {
         if (realCam) {
             carControl = new CamControl(driveSys);
-            speedControl = new CamControl(driveSys);
+            //speedControl = new CamControl(driveSys);
             steeringControl = new CamControl(driveSys);
         } else {
             carControl = new TrakSimControl(driveSys);
-            speedControl = new TrakSimControl(driveSys);
+            //speedControl = new TrakSimControl(driveSys);
             steeringControl = new TrakSimControl(driveSys);
         }
 
@@ -100,7 +100,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         modules = Arrays.asList(moduleArray);
 
         for (Module module : modules) {
-            module.initialize(carControl);
+            module.initialize(steeringControl);
         }
 
         initialized = true;
@@ -137,7 +137,6 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
 
         // FIXME: Does not print exceptions to console.
 
-        // Start Thread to get the RGB image. (for camera)
         final byte[] recentImage = carControl.getRecentCameraImage();
 
         // Start Thread to get the black and white image (for steering)
@@ -147,7 +146,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
                 .thenAcceptAsync(steeringModule::update, steeringExec);
 
         CompletableFuture<CarControl> futureRGBImage = CompletableFuture.completedFuture(null);
-        if (frameNumber % 2 == 1) {
+        if (frameNumber % 1 == 0) {
             futureRGBImage = cameraImage
                     .thenApplyAsync(v -> setRGBImage(recentImage), imageRGBExec);
         }
@@ -184,8 +183,8 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     }
 
     private CarControl setSimpleImage(byte[] recentImage) {
-        speedControl.setProcessedImage(imageManagementModule.getSimpleColorRaster(recentImage));
-        return speedControl;
+        steeringControl.setProcessedImage(imageManagementModule.getSimpleColorRaster(recentImage));
+        return steeringControl;
     }
 
     private void paint() {
@@ -219,7 +218,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     }
 
     public static void main(String[] args) {
-        boolean realcam = false;
+        boolean realcam = true;
         boolean window = true;
         if(args.length > 0) {
         	if(args[0].toLowerCase().equals("sim")) {

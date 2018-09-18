@@ -248,6 +248,7 @@ public class SpeedControlModule implements Module {
 	public void onUpdate(CarControl control) {
 		int gasAmount = control.getVelocity();
 		int steerDegs = control.getSteering();
+		System.out.println("Passed angle: " + steerDegs);
 		int manualSpeed = control.getManualSpeed();
 		
 		com.apw.pedestrians.Constant.LAST_FRAME_MILLIS = com.apw.pedestrians.Constant.CURRENT_FRAME_MILLIS;
@@ -257,6 +258,7 @@ public class SpeedControlModule implements Module {
 		this.calculateDesiredSpeed(steerDegs, manualSpeed);
 		
 		for (MovingBlob blob: currentBlobs) {
+			/*
 			if (detectStopSign(blob)) {
 				stopType = 1;
 				
@@ -269,7 +271,7 @@ public class SpeedControlModule implements Module {
 				determineStop(blob, sizeCons.SIGN_INFO.get(blob.type).get(6), control);
 				
 				blob.seen = true;
-			}
+			}*/
 			/*if (detectLight(blob) == 1) {
 				stopType = 2;	
 				

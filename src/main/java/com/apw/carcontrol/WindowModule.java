@@ -66,6 +66,7 @@ public class WindowModule extends JFrame implements Module {
             displayImage = bufferImage;
             bufferImage = tempImage;
 
+            
             g.drawImage(displayImage, control.getEdges().left, control.getEdges().top,
                     control.getWindowWidth() - control.getEdges().left - control.getEdges().right,
                     control.getWindowHeight() - control.getEdges().top - control.getEdges().bottom ,
