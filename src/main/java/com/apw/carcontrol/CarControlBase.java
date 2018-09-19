@@ -40,6 +40,9 @@ public class CarControlBase implements CarControl {
         LefScaleSt = ((double) DriverCons.D_LeftSteer) / 90.0;
         RitScaleSt = ((double) DriverCons.D_RiteSteer) / 90.0;
 
+        imageHeight = cam.Dimz() >> 16;
+        imageWidth = cam.Dimz() << 16 >> 16;
+        
         driveSys = drivesys;
 
         keyBindings = new HashMap<>();
@@ -50,8 +53,8 @@ public class CarControlBase implements CarControl {
 
     @Override
     public byte[] readCameraImage() {
-        int nrows = cam.Dimz() >> 16;
-        int ncols = cam.Dimz() << 16 >> 16;
+        int nrows = imageHeight;
+        int ncols = imageWidth;
         if (cameraImage == null || (nrows * ncols * 4) != cameraImage.length) {
             cameraImage = new byte[nrows * ncols * 4];
         }
