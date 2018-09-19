@@ -49,7 +49,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
 
     private boolean initialized = false;
 
-    private static final int FPS = 5; // Number of frames per second run is called
+    private static final int FPS = 50; // Number of frames per second run is called
     private static final int initDelay = 100; // Initial delay before run is called
 
     private MrModule(boolean realCam, boolean hasWindow) {

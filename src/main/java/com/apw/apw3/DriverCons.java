@@ -39,7 +39,7 @@ public abstract class DriverCons { // TrakSim constant parameters
             D_DoCloseUp = true,     // T: show close-up map if there is room
             D_RampServos = false,   // T: servos take time to arrive at setting
             D_TrakNoPix = true,    // T: draw track only, omit artifacts & trees
-            D_UseTexTrak = true,    // T: use text file to build track to drive
+            D_UseTexTrak = false,    // T: use text file to build track to drive
             D_Reversible = false,   // T: allow reverse (untested)
             D_StartInCalibrate = false, // T: use this to calibrate servo limits
             D_Log_Draw = false, D_Log_Log = false, D_Fax_Log = false,
