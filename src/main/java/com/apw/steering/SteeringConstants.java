@@ -26,8 +26,8 @@ public class SteeringConstants {
     // SteeringMk2 Constants
     public static final int NUM_PREVIOUS = 3; // Number of previous frames to average degree to steer to
     public static final int MAX_DIFF = 5; // Maximum X Pixel difference from one row to the next
-    public static final double MIN_DIST_LOOK = 0; // Percent of midPoints to start at
-    public static final double MAX_DIST_LOOK = 1; // Percent of midPoints to end at.
+    public static final double MIN_DIST_LOOK = 0.6; // Percent of midPoints to start at
+    public static final double MAX_DIST_LOOK = 0.7; // Percent of midPoints to end at.
 
 
     // SteeringMk3 Constants
