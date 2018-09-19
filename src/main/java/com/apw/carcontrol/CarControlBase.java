@@ -228,6 +228,11 @@ public class CarControlBase implements CarControl {
     }
 
     @Override
+    public int getFutureSteeringAngle() {
+        return futureSteeringAngle;
+    }
+
+    @Override
     public ArrayList<ColoredLine> getLines() {
         return lines;
     }

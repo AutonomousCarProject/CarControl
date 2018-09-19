@@ -43,9 +43,7 @@ public class SteeringMk4 extends SteeringBase {
      */
     public SteeringMk4(int cameraWidth, int cameraHeight, int screenWidth) {
         super(cameraWidth, cameraHeight, screenWidth);
-        for (int idx = 0; idx < PREVIOUS_SLOPES; idx++) {
-            pastSlopes.add(START_SLOPE);
-        }
+        slope = initializeSlope();
     }
 
     /**
@@ -54,9 +52,7 @@ public class SteeringMk4 extends SteeringBase {
      */
     public SteeringMk4(CarControl control) {
         super(control);
-        for (int idx = 0; idx < PREVIOUS_SLOPES; idx++) {
-            pastSlopes.add(START_SLOPE);
-        }
+        slope = initializeSlope();
     }
 
     /**
@@ -177,7 +173,7 @@ public class SteeringMk4 extends SteeringBase {
         int x2 = point2.getX();
         int y2 = point2.getY();
         pastSlopes.remove(0);
-        pastSlopes.add((float) (y1 - y2) / (x1 - x2));
+        pastSlopes.add(((float) (y1 - y2)) / (x1 - x2));
 
         // Average the slopes in pastSlopes
         for (Float slope : pastSlopes) {
@@ -211,5 +207,12 @@ public class SteeringMk4 extends SteeringBase {
      */
     private boolean isReliable(Point point1, Point point2) {
         return Math.abs(point1.getY() - point2.getY()) > MINIMUM_RELIABLE_OFFSET;
+    }
+
+    private float initializeSlope() {
+        for (int idx = 0; idx < PREVIOUS_SLOPES; idx++) {
+            pastSlopes.add(START_SLOPE);
+        }
+        return START_SLOPE;
     }
 }

@@ -247,14 +247,15 @@ public class SpeedControlModule implements Module {
 	 */
 	public void onUpdate(CarControl control) {
 		int gasAmount = control.getVelocity();
-		int steerDegs = control.getSteering();
+		int steerDegs = control.getFutureSteeringAngle();
 		int manualSpeed = control.getManualSpeed();
-		
+
 		com.apw.pedestrians.Constant.LAST_FRAME_MILLIS = com.apw.pedestrians.Constant.CURRENT_FRAME_MILLIS;
 		com.apw.pedestrians.Constant.CURRENT_FRAME_MILLIS = System.currentTimeMillis();
 		com.apw.pedestrians.Constant.TIME_DIFFERENCE = com.apw.pedestrians.Constant.CURRENT_FRAME_MILLIS - com.apw.pedestrians.Constant.LAST_FRAME_MILLIS;
 		this.calculateEstimatedSpeed(gasAmount);
 		this.calculateDesiredSpeed(steerDegs, manualSpeed);
+		//System.out.println("Speed: " + desiredSpeed + "\nFutureAngle: " + steerDegs + "\nActual Angle: " + control.getSteering());
 		
 		for (MovingBlob blob: currentBlobs) {
 			/*

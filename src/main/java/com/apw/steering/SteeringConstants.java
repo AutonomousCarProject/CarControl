@@ -6,6 +6,8 @@ public class SteeringConstants {
 
     // SteeringModule Constants
     static final int STEERING_VERSION = 4; // Which Version of steering to use
+    static final int PAST_STEERING_ANGLES = 1;
+    static final int MAX_STEER_DIFFERENCE = 5;
     static final boolean DRAW_STEERING_LINES = true;
     static final Color RIGHT_LANE_COLOR = Color.yellow;
     static final Color LEFT_LANE_COLOR = Color.yellow;

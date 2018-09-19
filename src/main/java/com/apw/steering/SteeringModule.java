@@ -3,7 +3,6 @@ package com.apw.steering;
 import com.apw.apw3.DriverCons;
 import com.apw.carcontrol.CamControl;
 import com.apw.carcontrol.CarControl;
-import com.apw.carcontrol.CarControlBase;
 import com.apw.carcontrol.Module;
 
 import com.apw.steering.steeringclasses.Point;
@@ -13,9 +12,12 @@ import com.apw.steering.steeringversions.SteeringMk2;
 import com.apw.steering.steeringversions.SteeringMk4;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import static com.apw.steering.SteeringConstants.DRAW_STEERING_LINES;
 import static com.apw.steering.SteeringConstants.LEFT_LANE_COLOR;
+import static com.apw.steering.SteeringConstants.MAX_STEER_DIFFERENCE;
 import static com.apw.steering.SteeringConstants.MIDPOINT_COLOR;
+import static com.apw.steering.SteeringConstants.PAST_STEERING_ANGLES;
 import static com.apw.steering.SteeringConstants.RIGHT_LANE_COLOR;
 import static com.apw.steering.SteeringConstants.STEERING_VERSION;
 import static com.apw.steering.SteeringConstants.STEER_POINT_COLOR;
@@ -24,8 +26,7 @@ import static com.apw.steering.SteeringConstants.TARGET_POINT_COLOR;
 public class SteeringModule implements Module {
 
     private SteeringBase steering;
-    private int angle = 0;
-
+    private ArrayList<Integer> pastSteeringAngles = new ArrayList<>();
 
     public SteeringModule() {
     }
@@ -34,7 +35,10 @@ public class SteeringModule implements Module {
     public void initialize(CarControl control) {
         control.addKeyEvent(KeyEvent.VK_LEFT, () -> control.steer(false, -5));
         control.addKeyEvent(KeyEvent.VK_RIGHT, () -> control.steer(false, 5));
-        
+
+        for (int idx = 0; idx < PAST_STEERING_ANGLES; idx++) {
+            pastSteeringAngles.add(0);
+        }
 
         if (control instanceof CamControl) {
             switch (STEERING_VERSION) {
@@ -73,8 +77,25 @@ public class SteeringModule implements Module {
 
     @Override
     public void update(CarControl control) {
-        angle = steering.getSteeringAngle(control.getRGBImage());
-        control.steer(true, angle);
+
+        int angleSum = steering.getSteeringAngle(control.getRGBImage());
+        for (Integer angle : pastSteeringAngles) {
+            angleSum += angle;
+        }
+        int averagedSteerAngle = (int) Math.round(((double) angleSum) / (pastSteeringAngles.size() + 1));
+
+        int lastAngle = pastSteeringAngles.get(pastSteeringAngles.size() - 1);
+        if (Math.abs(averagedSteerAngle - lastAngle) > MAX_STEER_DIFFERENCE) {
+            if (averagedSteerAngle > lastAngle) {
+                averagedSteerAngle = lastAngle + MAX_STEER_DIFFERENCE;
+            } else {
+                averagedSteerAngle = lastAngle - MAX_STEER_DIFFERENCE;
+            }
+        }
+
+        pastSteeringAngles.add(averagedSteerAngle);
+        pastSteeringAngles.remove(0);
+        control.steer(true, averagedSteerAngle);
         if (!steering.getMidPoints().isEmpty()) {
             Point furthestPoint = steering.getMidPoints().get(steering.getMidPoints().size() - 1);
             control.setFutureSteeringAngle((int) steering.getFutureSteepness(furthestPoint));

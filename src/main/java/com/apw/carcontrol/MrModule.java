@@ -68,7 +68,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         carControl.updateWindowDims(getWidth(), getHeight());
 
         // Create modules
-        windowModule = createWindowModule(hasWindow, 640, 480);
+        windowModule = createWindowModule(hasWindow, winWidth, winHeight);
         arduinoModule = new ArduinoModule(driveSys);
         imageManagementModule = new ImageManagementModule(winWidth, winHeight, carControl.getTile());
         speedControlModule = new SpeedControlModule();
@@ -172,7 +172,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     }
 
     private CarControl setRGBImage(byte[] recentImage) {
-        carControl.setRGBImage(imageManagementModule.getBlackWhiteRaster(recentImage));
+        carControl.setRGBImage(imageManagementModule.getRGBRaster(recentImage));
         carControl.setRenderedImage(carControl.getRGBImage());
         return carControl;
     }

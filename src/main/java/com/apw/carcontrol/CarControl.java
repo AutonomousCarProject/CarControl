@@ -235,4 +235,6 @@ public interface CarControl {
     void clearRects();
 
     void setFutureSteeringAngle(int futureSteeringAngle);
+
+    int getFutureSteeringAngle();
 }
