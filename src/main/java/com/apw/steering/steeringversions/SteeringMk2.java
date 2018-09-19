@@ -74,7 +74,8 @@ public class SteeringMk2 extends SteeringBase {
         for (Integer deg : previousHeadings) {
             averageDeg += deg;
         }
-        return (int) (averageDeg / NUM_PREVIOUS);
+        return (int) (averageDeg / NUM_PREVIOUS) + 5;
+        //return 0;
     }
 
 
@@ -167,6 +168,7 @@ public class SteeringMk2 extends SteeringBase {
                     }
                 }
                 getMidPoints().add(new Point(midX, cameraRow));
+                //midPoints.add(new Point(midX, cameraRow));
             }
             if (midX != getCameraWidth() / 2 && !haveNewMidX) {
                 previousMidX = midX;

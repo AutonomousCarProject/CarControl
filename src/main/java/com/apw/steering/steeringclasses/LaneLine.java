@@ -1,10 +1,8 @@
 package com.apw.steering.steeringclasses;
 
 import java.util.ArrayList;
-import lombok.Getter;
 
 public class LaneLine {
-    @Getter
     private ArrayList<Point> lanePoints;
     private int white = 0xffffff;
     private int lastLeftX;
@@ -52,5 +50,9 @@ public class LaneLine {
 
     public void clearPoints() {
         lanePoints.clear();
+    }
+
+    public ArrayList<Point> getLanePoints() {
+        return lanePoints;
     }
 }

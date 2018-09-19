@@ -8,8 +8,8 @@ public class Constants {
   
 	//Default Debug Overlays
 	public static final boolean
-	DEFAULT_OVERLAY = false,		//Sets the default state as to the display of blob detection boxes
-	DEFAULT_BLOBS = false,			//Sets the default state as to the display of blob boundaries
+	DEFAULT_OVERLAY = true,		//Sets the default state as to the display of blob detection boxes
+	DEFAULT_BLOBS = true,			//Sets the default state as to the display of blob boundaries
 	DEFAULT_WRITE_BLOBS_TO_CONSOLE = false,	//Sets the default state as to the printing of all blob information
 	DEFAULT_WRITE_SPEED_TO_CONSOLE = false;	//Sets the default state as to the printing of the current speed
 	public static final int
@@ -20,7 +20,7 @@ public class Constants {
 	
 	//Speed Related Constants
 	public static final double
-	MAX_SPEED = 13,					//Car's maximum speed
+	MAX_SPEED = 16,					//Car's maximum speed
 	MIN_SPEED = 12,					//Car's minimum speed
 	PIN_TO_METER_PER_SECOND = 0.4,	//Conversion for motor position to m/s. DO NOT TOUCH
 	MAX_OBJECT_WIDTH = 320,			//Maximum width in pixels of object height before car slows
@@ -35,7 +35,7 @@ public class Constants {
 	
 	//Stop Frames
 	public static final int
-	WAIT_AT_STOPSIGN_FRAMES = 50,	//Frames to wait at stopsign once stopped
+	WAIT_AT_STOPSIGN_FRAMES = 20,	//Frames to wait at stopsign once stopped
 	MAX_SPEED_INCREMENT = 1;		//Min increment amount between current and next frame speed
 	
 	//Blob Filters

@@ -6,8 +6,6 @@ import com.apw.steering.steeringclasses.Point;
 import com.apw.steering.Steerable;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.Getter;
-import lombok.Setter;
 import static com.apw.steering.SteeringConstants.MAX_DIST_LOOK;
 import static com.apw.steering.SteeringConstants.MIN_DIST_LOOK;
 import static com.apw.steering.SteeringConstants.USE_PID;
@@ -23,25 +21,15 @@ import static com.apw.steering.SteeringConstants.K_P;
  * @author Nathan Ng ©2018
  */
 public abstract class SteeringBase implements Steerable {
-    @Getter @Setter
     private int startTarget = 0;
-    @Getter @Setter
     private int endTarget = 0;
-    @Getter
     private final int cameraHeight;
-    @Getter
     private final int cameraWidth;
-    @Getter
     private final int screenWidth;
-    @Getter
     private final Point origin;
-    @Getter @Setter
     private Point steerPoint = new Point(0, 0); // Point to where the car attempts to steer towards
-    @Getter @Setter
     private List<Point> leftPoints = new ArrayList<>();
-    @Getter @Setter
     private List<Point> rightPoints = new ArrayList<>();
-    @Getter @Setter
     private List<Point> midPoints = new ArrayList<>();
     private List<Double> posLog = new ArrayList<>(); // Array list for logging positions fed into it
     private double integral, // The integral of the
@@ -154,5 +142,93 @@ public abstract class SteeringBase implements Steerable {
         posLog.add(x);
         posLog.add(y);
         posLog.add(heading);
+    }
+
+    public int getStartTarget() {
+        return startTarget;
+    }
+
+    public void setStartTarget(int startTarget) {
+        this.startTarget = startTarget;
+    }
+
+    public int getEndTarget() {
+        return endTarget;
+    }
+
+    public void setEndTarget(int endTarget) {
+        this.endTarget = endTarget;
+    }
+
+    public int getCameraHeight() {
+        return cameraHeight;
+    }
+
+    public int getCameraWidth() {
+        return cameraWidth;
+    }
+
+    public int getScreenWidth() {
+        return screenWidth;
+    }
+
+    public Point getOrigin() {
+        return origin;
+    }
+
+    public Point getSteerPoint() {
+        return steerPoint;
+    }
+
+    public void setSteerPoint(Point steerPoint) {
+        this.steerPoint = steerPoint;
+    }
+
+    public List<Point> getLeftPoints() {
+        return leftPoints;
+    }
+
+    public void setLeftPoints(List<Point> leftPoints) {
+        this.leftPoints = leftPoints;
+    }
+
+    public List<Point> getRightPoints() {
+        return rightPoints;
+    }
+
+    public void setRightPoints(List<Point> rightPoints) {
+        this.rightPoints = rightPoints;
+    }
+
+    public List<Point> getMidPoints() {
+        return midPoints;
+    }
+
+    public void setMidPoints(List<Point> midPoints) {
+        this.midPoints = midPoints;
+    }
+
+    public List<Double> getPosLog() {
+        return posLog;
+    }
+
+    public void setPosLog(List<Double> posLog) {
+        this.posLog = posLog;
+    }
+
+    public double getIntegral() {
+        return integral;
+    }
+
+    public void setIntegral(double integral) {
+        this.integral = integral;
+    }
+
+    public double getPreviousError() {
+        return previousError;
+    }
+
+    public void setPreviousError(double previousError) {
+        this.previousError = previousError;
     }
 }

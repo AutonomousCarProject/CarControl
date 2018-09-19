@@ -103,7 +103,7 @@ public class ImageManipulator {
 			return;
 		}
 		int pixelsAveraged = 3;
-		for (int r = nrows >> 1; r < nrows; r++) {
+		for (int r = 240; r < nrows; r++) {
 			int averageLuminance = 0;
 			for(int c = 0; c < frameWidth; c++) {
 				int R = (bayer[getPos(c,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);

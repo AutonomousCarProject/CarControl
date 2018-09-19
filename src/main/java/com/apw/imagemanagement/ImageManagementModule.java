@@ -16,9 +16,9 @@ import java.awt.event.KeyEvent;
 public class ImageManagementModule implements Module {
 
 	//adjustable variables
-    private int viewType = 1;
+    private int viewType = 4;
     private int blackWhiteRasterVersion = 1;
-    private double luminanceMultiplier = 1.5;
+    private double luminanceMultiplier = 1.3;
 
 
     //internal variables

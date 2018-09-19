@@ -1,8 +1,6 @@
 package com.apw.steering.steeringclasses;
 
 import com.apw.steering.Steerable;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Point class holds an x, and y.
@@ -14,11 +12,8 @@ import lombok.Setter;
  * @see Steerable
  */
 public class Point {
-    @Getter @Setter
     public int x;
-    @Getter @Setter
     public int y;
-    @Getter
     private final boolean isEmpty;
 
     /**
@@ -36,5 +31,25 @@ public class Point {
 
     public Point() {
         this.isEmpty = true;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public boolean isEmpty() {
+        return isEmpty;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
     }
 }
