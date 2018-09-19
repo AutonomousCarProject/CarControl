@@ -1,4 +1,6 @@
-package com.apw.steering;
+package com.apw.steering.steeringclasses;
+
+import com.apw.steering.Steerable;
 
 /**
  * Point class holds an x, and y.
@@ -12,6 +14,7 @@ package com.apw.steering;
 public class Point {
     public int x;
     public int y;
+    private final boolean isEmpty;
 
     /**
      * This is a basic constructor that assigns this.x, any this.y to the x and y passed in through the
@@ -21,7 +24,32 @@ public class Point {
      * @param y pixel starting from top of screen
      */
     public Point(int x, int y) {
+        this.isEmpty = false;
         this.x = x;
+        this.y = y;
+    }
+
+    public Point() {
+        this.isEmpty = true;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public boolean isEmpty() {
+        return isEmpty;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
         this.y = y;
     }
 }

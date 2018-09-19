@@ -1,13 +1,11 @@
-package com.apw.steering;
+package com.apw.steering.steeringversions;
 
-import java.awt.Color;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.apw.steering.*;
-
-import com.apw.steering.Point;
+import com.apw.steering.steeringclasses.Point;
+import static com.apw.steering.SteeringConstants.HEIGHT_OF_AREA;
+import static com.apw.steering.SteeringConstants.STARTING_HEIGHT;
 
 
 public class SteeringMk3 extends SteeringBase {
@@ -28,12 +26,9 @@ public class SteeringMk3 extends SteeringBase {
 	public Point[] pathTraveled;
 	public boolean[] onCurve;
 
-	private final int heightOfArea = 32; // How high the car looks for lines
-	private final int startingHeight = 400; // how high the car starts looking for lines
-
 	private int startingPoint = 0; // Where the car starts looking for lines on either side.
-	private Point[] leadingMidPoints = new Point[startingHeight + heightOfArea];
-	private Point[] pointsAhead = new Point[startingHeight - (cameraHeight / 4)]; // points far ahead
+	private Point[] leadingMidPoints = new Point[STARTING_HEIGHT + HEIGHT_OF_AREA];
+	private Point[] pointsAhead = new Point[STARTING_HEIGHT - (getCameraHeight() / 2)]; // points far ahead
 	private double weight = 1.0; // >1 = right lane, <1 = left lane
 	private boolean weightLane = false;
 	private boolean turnAhead = false;
@@ -48,17 +43,17 @@ public class SteeringMk3 extends SteeringBase {
 	 * Constructor that Initializes all points in array.
 	 */
 	public SteeringMk3() {
-		for (int i = 0; i < heightOfArea; i++) {
-			leftPoints.add(new Point(0, 0));
-			rightPoints.add(new Point(0, 0));
-			midPoints.add(new Point(0, 0));
+		for (int i = 0; i < HEIGHT_OF_AREA; i++) {
+			getLeftPoints().add(new Point(0, 0));
+			getRightPoints().add(new Point(0, 0));
+			getMidPoints().add(new Point(0, 0));
 		}
 		for (int i = 0; i < leadingMidPoints.length; i++) {
 			leadingMidPoints[i] = new Point(0, 0);
 		}
 	}
 
-	public int drive(int pixels[]) {
+	public int getSteeringAngle(int pixels[]) {
 		int angleToTurn = 0;
 		//System.out.println(ranThroughOrigin);
 		if (ranThroughOrigin == -1) {
@@ -110,7 +105,7 @@ public class SteeringMk3 extends SteeringBase {
 		} else {
 			findPoints(pixels);
 			averageMidpoints();
-			angleToTurn = getDegreeOffset();
+			angleToTurn = getDegreeOffset(getOrigin(), getSteerPoint());
 
 			double turnRadiusIn = 2.68 / Math.tan(Math.toRadians(angleToTurn * 0.7665 - 3.0287));
 			double turnRadiusOut = 2.68 / Math.tan(Math.toRadians(angleToTurn * 0.5654 - 2.4337));
@@ -183,7 +178,7 @@ public class SteeringMk3 extends SteeringBase {
 
 	/**
 	 * <p>
-	 * Process the image data From an array of pixels. Starts at the startingHeight
+	 * Process the image data From an array of pixels. Starts at the STARTING_HEIGHT
 	 * (up from the bottom)screen, then works up the screen going out from the
 	 * center. It looks for pixels that are higher than average luminance, and
 	 * recognises that as a line.
@@ -192,8 +187,8 @@ public class SteeringMk3 extends SteeringBase {
 	 * @param pixels
 	 *            An array of pixels (the image)
 	 */
-	public void findPoints(int[] pixels) {
-		int roadMiddle = cameraWidth;
+	private void findPoints(int[] pixels) {
+		int roadMiddle = getCameraWidth();
 		int leftSideTemp = 0;
 		int rightSideTemp = 0;
 		startingPoint = 0;
@@ -204,7 +199,7 @@ public class SteeringMk3 extends SteeringBase {
 		Boolean found = false;
 		int count = 0;
 		// first before first, find average luminance
-		for (int i = cameraWidth * cameraHeight - 1; i > startingHeight * cameraWidth; i--) {
+		for (int i = getCameraWidth() * getCameraHeight() - 1; i > STARTING_HEIGHT * getCameraWidth(); i--) {
 			averageLuminance = averageLuminance + pixels[i];
 			count++;
 		}
@@ -214,15 +209,15 @@ public class SteeringMk3 extends SteeringBase {
 		// first, find where road starts on both sides
 		leftSideFound = false;
 		rightSideFound = false;
-		for (int i = cameraHeight - 22; i > startingHeight + heightOfArea; i--) {
+		for (int i = getCameraHeight() - 22; i > STARTING_HEIGHT + HEIGHT_OF_AREA; i--) {
 			for (int j = roadMiddle / 2; j >= 0; j--) {
-				if (pixels[(screenWidth * (i)) + j] >= averageLuminance) {
+				if (pixels[(getScreenWidth() * (i)) + j] >= averageLuminance) {
 					leftSideFound = true;
 					break;
 				}
 			}
-			for (int j = roadMiddle / 2; j < cameraWidth; j++) {
-				if (pixels[(screenWidth * (i)) + j] >= averageLuminance) {
+			for (int j = roadMiddle / 2; j < getCameraWidth(); j++) {
+				if (pixels[(getScreenWidth() * (i)) + j] >= averageLuminance) {
 					rightSideFound = true;
 					break;
 				}
@@ -243,21 +238,21 @@ public class SteeringMk3 extends SteeringBase {
 
 		count = 0;
 
-		for (int i = startingPoint; i > startingHeight + heightOfArea; i--) {
+		for (int i = startingPoint; i > STARTING_HEIGHT + HEIGHT_OF_AREA; i--) {
 			for (int j = roadMiddle / 2; j >= 0; j--) {
-				if (pixels[screenWidth * i + j] >= averageLuminance) {
+				if (pixels[getScreenWidth() * i + j] >= averageLuminance) {
 					leftSideTemp = j;
 					break;
 				}
 			}
-			for (int j = roadMiddle / 2; j < cameraWidth; j++) {
-				if (pixels[screenWidth * i + j] >= averageLuminance) {
+			for (int j = roadMiddle / 2; j < getCameraWidth(); j++) {
+				if (pixels[getScreenWidth() * i + j] >= averageLuminance) {
 					rightSideTemp = j;
 					break;
 				}
 			}
 
-			if (weightLane && midPoints != null) {
+			if (weightLane && getMidPoints() != null) {
 				averageMidpoints();
 				checkPointsAhead(pixels);
 				if (turnAhead) {
@@ -276,41 +271,41 @@ public class SteeringMk3 extends SteeringBase {
 		}
 		int tempCount = count;
 		count = 0;
-		for (int i = startingHeight + heightOfArea; i > startingHeight; i--) {
+		for (int i = STARTING_HEIGHT + HEIGHT_OF_AREA; i > STARTING_HEIGHT; i--) {
 			// center to left
 			found = false;
-			leftPoints.get(count).y = i;
+			getLeftPoints().get(count).y = i;
 
 			for (int j = roadMiddle / 2; j >= 0; j--) {
-				if (pixels[screenWidth * i + j] >= averageLuminance) {
-					leftPoints.get(count).x = j;
+				if (pixels[getScreenWidth() * i + j] >= averageLuminance) {
+					getLeftPoints().get(count).x = j;
 					found = true;
 					break;
 				}
 
 			}
 			if (found == false) {
-				leftPoints.get(count).x = 0;
+				getLeftPoints().get(count).x = 0;
 			}
 
 			// center to right
 			found = false;
-			rightPoints.get(count).y = leftPoints.get(count).y;
-			for (int j = roadMiddle / 2; j < cameraWidth; j++) {
-				if (pixels[screenWidth * i + j] >= averageLuminance) {
-					rightPoints.get(count).x = j;
+			getRightPoints().get(count).y = getLeftPoints().get(count).y;
+			for (int j = roadMiddle / 2; j < getCameraWidth(); j++) {
+				if (pixels[getScreenWidth() * i + j] >= averageLuminance) {
+					getRightPoints().get(count).x = j;
 					found = true;
 					break;
 				}
 
 			}
 			if (found == false) {
-				rightPoints.get(count).x = cameraWidth;
+				getRightPoints().get(count).x = getCameraWidth();
 			}
 
-			midPoints.get(count).x = roadMiddle / 2;
-			midPoints.get(count).y = (leftPoints.get(count).y);
-			roadMiddle = (leftPoints.get(count).x + rightPoints.get(count).x);
+			getMidPoints().get(count).x = roadMiddle / 2;
+			getMidPoints().get(count).y = (getLeftPoints().get(count).y);
+			roadMiddle = (getLeftPoints().get(count).x + getRightPoints().get(count).x);
 			count++;
 		}
 	}
@@ -324,7 +319,7 @@ public class SteeringMk3 extends SteeringBase {
 	 */
 	Point avgPointAhead(int[] pixels) { // Look ahead in the road to see if there is a turn (for following the racing
 										// curve)
-		int roadMiddle = cameraWidth;
+		int roadMiddle = getCameraWidth();
 		int leftSideTemp = 0;
 		int rightSideTemp = 0;
 		boolean foundTurn = false;
@@ -334,15 +329,15 @@ public class SteeringMk3 extends SteeringBase {
 
 		int count = 0;
 
-		for (int i = startingHeight; i > cameraHeight / 2; i--) {
+		for (int i = STARTING_HEIGHT; i > getCameraHeight() / 2; i--) {
 			for (int j = roadMiddle / 2; j >= 0; j--) {
-				if (pixels[screenWidth * i + j] == 16777215) {
+				if (pixels[getScreenWidth() * i + j] == 16777215) {
 					leftSideTemp = j;
 					break;
 				}
 			}
-			for (int j = roadMiddle / 2; j < cameraWidth; j++) {
-				if (pixels[screenWidth * i + j] == 16777215) {
+			for (int j = roadMiddle / 2; j < getCameraWidth(); j++) {
+				if (pixels[getScreenWidth() * i + j] == 16777215) {
 					rightSideTemp = j;
 					break;
 				}
@@ -381,10 +376,10 @@ public class SteeringMk3 extends SteeringBase {
 	 */
 	void checkPointsAhead(int[] pixels) {
 		Point ahead = avgPointAhead(pixels);
-		if (Math.abs(ahead.x - origin.x) >= Math
-				.abs((steerPoint.x - origin.x) / (steerPoint.y - origin.y) * (ahead.y - origin.y))) {
+		if (Math.abs(ahead.x - getOrigin().x) >= Math
+				.abs((getSteerPoint().x - getOrigin().x) / (getSteerPoint().y - getOrigin().y) * (ahead.y - getOrigin().y))) {
 			turnAhead = true;
-			if (ahead.x - origin.x > 0)
+			if (ahead.x - getOrigin().x > 0)
 				turnRightAhead = true;
 			else
 				turnRightAhead = false;
@@ -405,9 +400,9 @@ public class SteeringMk3 extends SteeringBase {
 		double weightFactor = 1;
 
 		// Sum the x's and the y's
-		for (int i = 0; i < startingPoint - (startingHeight + heightOfArea); i++) {
+		for (int i = 0; i < startingPoint - (STARTING_HEIGHT + HEIGHT_OF_AREA); i++) {
 			Point point = new Point(leadingMidPoints[i].x, leadingMidPoints[i].y);
-			if (i > (startingPoint - (startingHeight + heightOfArea)) / 2)
+			if (i > (startingPoint - (STARTING_HEIGHT + HEIGHT_OF_AREA)) / 2)
 				shouldWeight = true;
 			tempX += shouldWeight ? weightFactor * point.x : point.x;
 			tempY += point.y;
@@ -416,9 +411,9 @@ public class SteeringMk3 extends SteeringBase {
 		}
 		shouldWeight = false;
 		if (tempCount == 0) {
-			for (int i = 0; i < midPoints.size(); i++) {
-				Point point = new Point(midPoints.get(i).x, midPoints.get(i).y);
-				if (i > midPoints.size() / 2)
+			for (int i = 0; i < getMidPoints().size(); i++) {
+				Point point = new Point(getMidPoints().get(i).x, getMidPoints().get(i).y);
+				if (i > getMidPoints().size() / 2)
 					shouldWeight = true;
 				tempX += shouldWeight ? weightFactor * point.x : point.x;
 				tempY += point.y;
@@ -427,8 +422,8 @@ public class SteeringMk3 extends SteeringBase {
 			}
 		}
 
-		steerPoint.x = (int) (tempX / tempCount + weightCount);
-		steerPoint.y = (int) (tempY / tempCount);
+		getSteerPoint().x = (int) (tempX / tempCount + weightCount);
+		getSteerPoint().y = (int) (tempY / tempCount);
 
 	}
 

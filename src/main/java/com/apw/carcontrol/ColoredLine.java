@@ -1,6 +1,6 @@
 package com.apw.carcontrol;
 
-import com.apw.steering.Point;
+import com.apw.steering.steeringclasses.Point;
 
 import java.awt.*;
 

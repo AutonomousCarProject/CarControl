@@ -18,7 +18,7 @@ public class ImageManagementModule implements Module {
 	//adjustable variables
     private int viewType = 4;
     private int blackWhiteRasterVersion = 1;
-    private double luminanceMultiplier = 1.6;
+    private double luminanceMultiplier = 1.3;
 
 
     //internal variables
@@ -26,8 +26,8 @@ public class ImageManagementModule implements Module {
     private int[] imagePixels;
     private byte tile;
     private int frameWidth = 640;
-    boolean removeNoise = true;
-    boolean dilate = false;
+    boolean removeNoise = false;
+    boolean dilate = true;
 
     /**
      * Main constructor for imageManagement

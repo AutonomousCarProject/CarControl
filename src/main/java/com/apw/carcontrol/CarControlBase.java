@@ -29,6 +29,7 @@ public class CarControlBase implements CarControl {
     private int imageHeight = 480;
     private ArrayList<ColoredLine> lines;
     private ArrayList<ColoredRect> rects;
+    private int futureSteeringAngle = 0;
 
     public CarControlBase(FlyCamera camera, PWMController drivesys) {
         cam = camera;
@@ -160,8 +161,9 @@ public class CarControlBase implements CarControl {
         if (!absolute) {
             angle = currentSteering + angle;
         }
+
         currentSteering = angle;
-        System.out.println("currentSteering: " + currentSteering);
+
         if (driveSys != null) {
             driveSys.setServoAngle(SteerPin, angle + 90);
         }
@@ -218,6 +220,11 @@ public class CarControlBase implements CarControl {
     }
 
     @Override
+    public void setFutureSteeringAngle(int futureSteeringAngle) {
+        this.futureSteeringAngle = futureSteeringAngle;
+    }
+
+    @Override
     public ArrayList<ColoredLine> getLines() {
         return lines;
     }
@@ -262,5 +269,4 @@ public class CarControlBase implements CarControl {
     public int getWindowWidth() {
         return windowWidth;
     }
-
 }
