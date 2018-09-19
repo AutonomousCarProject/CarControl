@@ -78,19 +78,23 @@ public abstract class SteeringBase implements Steerable {
         return Math.abs(turnAngle) / (45);
     }
 
+    public double getFutureSteepness(Point furthestPoint) {
+        double furthestPointXOffset = Math.round(furthestPoint.getX() - steerPoint.getX());
+        return Math.atan(furthestPointXOffset / steerPoint.getY()) * (180 / Math.PI);
+    }
+
     /**
      * Gets the degree offset between the origin (center bottom of the screen), and the steerPoint (The point
      * where the car is attempting to steer towards).
      *
      * @return the degreeOffset, as a integer.
      */
-    public int getDegreeOffset() {
-        int xOffset = origin.x - steerPoint.x;
-        int yOffset = Math.abs(origin.y - steerPoint.y);
+    public int getDegreeOffset(Point refPoint, Point offPoint) {
+        int xOffset = refPoint.x - offPoint.x;
+        int yOffset = Math.abs(refPoint.y - offPoint.y);
 
         int tempDeg = (int) (Math.atan2(-xOffset, yOffset) * (180 / Math.PI));
 
-        //System.out.println("\n\n\n" + tempDeg + " " + myPID() + "\n\n\n");
         return (int) ((Math.atan2(-((USE_PID && (curveSteepness(tempDeg) > 0.3)) ? myPID() : xOffset), yOffset)) * (180 / Math.PI));
     }
 

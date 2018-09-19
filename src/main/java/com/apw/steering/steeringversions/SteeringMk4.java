@@ -73,7 +73,7 @@ public class SteeringMk4 extends SteeringBase {
         setSteerPoint(calculateSteerPoint());
         setLeftPoints(leftLine.getLanePoints());
         setRightPoints(rightLine.getLanePoints());
-        return getDegreeOffset();
+        return getDegreeOffset(getOrigin(), getSteerPoint());
     }
 
     /**

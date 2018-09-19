@@ -3,6 +3,7 @@ package com.apw.steering;
 import com.apw.apw3.DriverCons;
 import com.apw.carcontrol.CamControl;
 import com.apw.carcontrol.CarControl;
+import com.apw.carcontrol.CarControlBase;
 import com.apw.carcontrol.Module;
 
 import com.apw.steering.steeringclasses.Point;
@@ -74,6 +75,10 @@ public class SteeringModule implements Module {
     public void update(CarControl control) {
         angle = steering.getSteeringAngle(control.getRGBImage());
         control.steer(true, angle);
+        if (!steering.getMidPoints().isEmpty()) {
+            Point furthestPoint = steering.getMidPoints().get(steering.getMidPoints().size() - 1);
+            control.setFutureSteeringAngle((int) steering.getFutureSteepness(furthestPoint));
+        }
     }
 
 

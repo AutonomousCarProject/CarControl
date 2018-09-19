@@ -62,7 +62,7 @@ public class SteeringMk1 extends SteeringBase {
     public int getSteeringAngle(int pixels[]) {
         findPoints(pixels);
         averageMidpoints();
-        return getDegreeOffset();
+        return getDegreeOffset(getOrigin(), getSteerPoint());
     }
 
     /**

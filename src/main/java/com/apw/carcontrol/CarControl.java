@@ -233,4 +233,6 @@ public interface CarControl {
      * Clears the rect of <Code>ColoredRect</Code>s rendered in MrModule.
      */
     void clearRects();
+
+    void setFutureSteeringAngle(int futureSteeringAngle);
 }

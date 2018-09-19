@@ -105,7 +105,7 @@ public class SteeringMk3 extends SteeringBase {
 		} else {
 			findPoints(pixels);
 			averageMidpoints();
-			angleToTurn = getDegreeOffset();
+			angleToTurn = getDegreeOffset(getOrigin(), getSteerPoint());
 
 			double turnRadiusIn = 2.68 / Math.tan(Math.toRadians(angleToTurn * 0.7665 - 3.0287));
 			double turnRadiusOut = 2.68 / Math.tan(Math.toRadians(angleToTurn * 0.5654 - 2.4337));

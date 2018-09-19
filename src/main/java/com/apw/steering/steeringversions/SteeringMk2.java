@@ -66,7 +66,7 @@ public class SteeringMk2 extends SteeringBase {
     public int getSteeringAngle(int pixels[]) {
         findPoints(pixels);
         setSteerPoint(calculateSteerPoint());
-        int frameDeg = getDegreeOffset();
+        int frameDeg = getDegreeOffset(getOrigin(), getSteerPoint());
         double averageDeg = 0;
 
         previousHeadings.add(frameDeg);
