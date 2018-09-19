@@ -132,8 +132,10 @@ public class SteeringMk4 extends SteeringBase {
             int yValue = getCameraHeight() - (START_SEARCH + idx); // The y value of the left and right points.
 
             // If neither line is found, add a point at cameraWidth / 2, yValue
-            if (leftPoint.isEmpty() && rightPoint.isEmpty() && USE_NO_LANE_DETECTION) {
-                midPoints.add(new Point(getCameraWidth() / 2, yValue));
+            if (leftPoint.isEmpty() && rightPoint.isEmpty()) {
+                if (USE_NO_LANE_DETECTION) {
+                    midPoints.add(new Point(getCameraWidth() / 2, yValue));
+                }
             // If Ony the right Point is found, add a point at the x rightPoint - road width / 2.
             } else if (leftPoint.isEmpty()) {
                 midPoints.add(new Point(rightPoint.getX() - (calculateRoadWidth(yValue) / 2), yValue));
