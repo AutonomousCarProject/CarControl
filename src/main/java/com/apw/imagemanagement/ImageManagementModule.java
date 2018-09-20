@@ -17,8 +17,8 @@ public class ImageManagementModule implements Module {
 
 	//adjustable variables
     private int viewType = 4;
-    private int blackWhiteRasterVersion = 1;
-    private double luminanceMultiplier = 1.4;
+    private int blackWhiteRasterVersion = 2;
+    private double luminanceMultiplier = 10;
 
 
     //internal variables
@@ -170,7 +170,7 @@ public class ImageManagementModule implements Module {
     public int[] getBlackWhiteRaster() {
     	int[] output = new int[width * height];
         if(blackWhiteRasterVersion == 2) {
-            //ImageManipulator.convertToBlackWhite2Raster(pixels, output, height, width, tile);
+            ImageManipulator.convertToBlackWhite2Raster(R,G,B, output, height, width, frameWidth);
         }
         else {
             ImageManipulator.convertToBlackWhiteRaster(R,G,B, output, height, width, frameWidth);

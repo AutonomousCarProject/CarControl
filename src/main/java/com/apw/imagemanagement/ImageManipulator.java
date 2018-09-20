@@ -103,35 +103,68 @@ public class ImageManipulator {
 		}
 	}
 
+	public static void convertToBlackWhiteRaster(int[] rgb, int[] blackWhite, int nrows, int ncols, int frameWidth) {
+		int pixelsAveraged = 3; //number of pixels averaged to see if the middle pixel counts as white.
+		// Increasing this number reduces noise but severely increases processing time
+		for (int r = nrows >> 1; r < nrows; r++) {
+			int averageLuminance = 0;
+			for(int c = 0; c < frameWidth; c++) {
+				int red = rgb[ncols*r+c]/0xFFFF;
+				int green = (rgb[ncols*r+c]%0xFFFF)/0xFF;
+				int blue = rgb[ncols*r+c]%0xFF;
+				averageLuminance += (red + green + blue);
+			}
+
+
+			int borderWidth = pixelsAveraged >> 1; //int division
+			for (int c = borderWidth; c < frameWidth-borderWidth; c++) {
+				int pix = 0;
+				for(int i = 0; i < pixelsAveraged; i++) {
+					pix+= rgb[ncols*r+c-borderWidth + i]/0xFFFF;
+					pix+= (rgb[ncols*r+c-borderWidth + i]%0xFFFF)/0xFF;
+					pix+= rgb[ncols*r+c-borderWidth + i]%0xFF;
+				}
+				if (pix * frameWidth > luminanceMultiplier * averageLuminance * pixelsAveraged) {
+					blackWhite[r * ncols + c] = 0xFFFFFF;
+				} else {
+					blackWhite[r * ncols + c] = 0;
+				}
+			}
+		}
+	}
+
 	/** Converts a bayer8 image to a black and white image based on how much each pixel increases
 	 *  the average luminance of each row
-	 * @param R red values of bayer8 image
-	 * @param G green values of bayer8 image
-	 * @param B blue values of bayer8 image
 	 * @param blackWhite	black and white output
 	 * @param nrows	number of rows of pixels in the image
 	 * @param ncols number of columns of pixels in the image
 	 */
-	public static void convertToBlackWhite2Raster(byte[] R, byte[] G, byte[] B, byte[] blackWhite, int nrows, int ncols) {
-		for (int r = nrows/2; r < nrows; r++) {
+	public static void convertToBlackWhite2Raster(byte[] R, byte[] G, byte[] B, int[] blackWhite, int nrows, int ncols, int frameWidth) {
+		int pixelsAveraged = 3; //number of pixels averaged to see if the middle pixel counts as white.
+		// Increasing this number reduces noise but severely increases processing time
+		for (int r = nrows >> 1; r < nrows; r++) {
 			int averageLuminance = 0;
-			for(int c = 0; c < ncols; c++) {
+			double stddev = 0;
+			for(int c = 0; c < frameWidth; c++) {
 				int red = R[ncols*r+c]&0xFF;
 				int green = G[ncols*r+c]&0xFF;
 				int blue = B[ncols*r+c]&0xFF;
-				if(c == 0){
-					averageLuminance = (red+green+blue)/3;
-				}
-				if(!(c >= 640 || r < 240 || r > 455)) {
-					if ((averageLuminance + (red+green+blue)/3)/2 > averageLuminance * 1.5) {
-						blackWhite[r * ncols + c] = 1;
-					} else {
-						blackWhite[r * ncols + c] = 0;
-					}
+				averageLuminance += (red + green + blue);
+			}
+			averageLuminance /= frameWidth;
+			for(int c = 0; c < frameWidth; c++){
+				stddev = (R[ncols*r+c] +G[ncols*r+c] + B[ncols*r+c] - averageLuminance)*(R[ncols*r+c] + G[ncols*r+c] + B[ncols*r+c] - averageLuminance);
+			}
+			stddev /= frameWidth;
+			stddev = Math.sqrt(stddev);
+			System.out.println(stddev);
+			for (int c = 0; c < frameWidth; c++) {
+				//System.out.println(averageLuminance);
+				if ((R[ncols*r+c]&0xFF) + (G[ncols*r+c]&0xFF) + (B[ncols*r+c]&0xFF) - averageLuminance > (stddev * luminanceMultiplier) ) {
+					blackWhite[r * ncols + c] = 0xFFFFFF;
 				} else {
 					blackWhite[r * ncols + c] = 0;
 				}
-				averageLuminance = (averageLuminance + (red+green+blue)/3)/2;
 			}
 		}
 	}
