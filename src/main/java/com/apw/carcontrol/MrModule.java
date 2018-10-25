@@ -235,9 +235,16 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         if (carControl instanceof TrakSimControl) {
-            for (Map.Entry<Integer, Runnable> binding : ((TrakSimControl) carControl).keyBindings.entrySet())
-                if (e.getKeyCode() == binding.getKey())
+            for (Map.Entry<Integer, Runnable> binding : ((TrakSimControl) carControl).keyBindings.entrySet()) {
+                if (e.getKeyCode() == binding.getKey()) {
                     binding.getValue().run();
+                }
+            }
+            for (Map.Entry<Integer, Runnable> binding : ((TrakSimControl) steeringControl).keyBindings.entrySet()) {
+                if (e.getKeyCode() == binding.getKey()) {
+                    binding.getValue().run();
+                }
+            }
         } else if (carControl instanceof CamControl) {
         	for (Map.Entry<Integer, Runnable> binding : ((CamControl) carControl).keyBindings.entrySet())
                 if (e.getKeyCode() == binding.getKey())

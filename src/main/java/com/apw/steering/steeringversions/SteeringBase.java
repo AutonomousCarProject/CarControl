@@ -21,6 +21,7 @@ import static com.apw.steering.SteeringConstants.K_P;
  * @author Nathan Ng ©2018
  */
 public abstract class SteeringBase implements Steerable {
+    private int[] pixels;
     private int startTarget = 0;
     private int endTarget = 0;
     private final int cameraHeight;
@@ -206,6 +207,14 @@ public abstract class SteeringBase implements Steerable {
 
     public void setMidPoints(List<Point> midPoints) {
         this.midPoints = midPoints;
+    }
+
+    public int[] getPixels() {
+        return pixels;
+    }
+
+    public void setPixels(int[] pixels) {
+        this.pixels = pixels;
     }
 
     public List<Double> getPosLog() {

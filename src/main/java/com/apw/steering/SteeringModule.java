@@ -4,13 +4,12 @@ import com.apw.apw3.DriverCons;
 import com.apw.carcontrol.CamControl;
 import com.apw.carcontrol.CarControl;
 import com.apw.carcontrol.Module;
-
 import com.apw.steering.steeringclasses.Point;
 import com.apw.steering.steeringversions.SteeringBase;
 import com.apw.steering.steeringversions.SteeringMk1;
 import com.apw.steering.steeringversions.SteeringMk2;
 import com.apw.steering.steeringversions.SteeringMk4;
-import java.awt.*;
+import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import static com.apw.steering.SteeringConstants.DRAW_STEERING_LINES;
@@ -27,6 +26,7 @@ public class SteeringModule implements Module {
 
     private SteeringBase steering;
     private ArrayList<Integer> pastSteeringAngles = new ArrayList<>();
+    private DataCollection dataCollection= new DataCollection(912, 480);
 
     public SteeringModule() {
     }
@@ -35,6 +35,7 @@ public class SteeringModule implements Module {
     public void initialize(CarControl control) {
         control.addKeyEvent(KeyEvent.VK_LEFT, () -> control.steer(false, -5));
         control.addKeyEvent(KeyEvent.VK_RIGHT, () -> control.steer(false, 5));
+        control.addKeyEvent(KeyEvent.VK_D, () -> dataCollection.writeArray(steering.getPixels(), "RightCurve.txt"));
 
         for (int idx = 0; idx < PAST_STEERING_ANGLES; idx++) {
             pastSteeringAngles.add(0);
@@ -143,5 +144,13 @@ public class SteeringModule implements Module {
             g.fillRect((int) ((steering.getSteerPoint().x - 5) * widthMultiplier),
                     (int) ((steering.getSteerPoint().y - 5) * heightMultiplier) + 10, 10, 10);
         }
+    }
+
+
+    public static void main(String args[]) {
+        DataCollection dataCollection = new DataCollection(912, 480);
+        dataCollection.paint("RightCurve.txt");
+        SteeringMk4 steeringMk4 = new SteeringMk4(640, 480, 912);
+        System.out.print(steeringMk4.getSteeringAngle(dataCollection.readArray("RightCurve.txt")));
     }
 }
