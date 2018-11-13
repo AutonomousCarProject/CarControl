@@ -1,5 +1,8 @@
 package com.apw.steering;
 
+import com.aparapi.internal.tool.InstructionHelper;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.io.File;
@@ -10,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import javax.swing.JFrame;
+import org.jetbrains.annotations.NotNull;
 
 public class DataCollection extends JFrame {
 
@@ -29,7 +33,7 @@ public class DataCollection extends JFrame {
 
     public void writeArray(int[] pixels, String fileName) {
         try {
-            PrintStream ps = new PrintStream(new FileOutputStream(fileName));
+            PrintStream ps = new PrintStream(new FileOutputStream("testdata/" + fileName));
             for (int pixel : pixels) {
                 ps.println(pixel);
             }
@@ -40,7 +44,7 @@ public class DataCollection extends JFrame {
     }
 
     public int[] readArray(String filePath) {
-        File dataFile = new File(filePath);
+        File dataFile = new File("testdata/" + filePath);
         List<Integer> tempArray = new ArrayList<>();
         try {
             fileScanner = new Scanner(dataFile);
@@ -83,6 +87,12 @@ public class DataCollection extends JFrame {
             intArray[i] = integers.get(i);
         }
         return intArray;
+    }
+
+    public void drawPoint(int x, int y, int size, Color color) {
+        Graphics g = this.getGraphics();
+        g.setColor(color);
+        g.fillRect(x, y, size, size);
     }
 }
 

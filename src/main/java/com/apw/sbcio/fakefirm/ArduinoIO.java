@@ -171,7 +171,9 @@ public class ArduinoIO implements PWMController { // Adapted to Java from arduin
     msg[2] = (byte) (angle); //angle
     try {
       surrealPort.writeBytes(msg);
-      if (HookFunctions != null) HookFunctions.SendBytes(msg, 3);
+      if (HookFunctions != null) {
+        HookFunctions.SendBytes(msg, 3);
+      }
     } catch (Exception ex) {
       System.out.println(ex);
     }

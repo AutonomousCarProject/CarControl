@@ -220,11 +220,11 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     public static void main(String[] args) {
         boolean realcam = true;
         boolean window = true;
-        if(args.length > 0) {
-        	if(args[0].toLowerCase().equals("sim")) {
+        if (args.length > 0) {
+        	if (args[0].toLowerCase().equals("sim")) {
         		realcam = false;
         	}
-        	if(args[0].toLowerCase().equals("headless")) {
+        	if (args[0].toLowerCase().equals("headless")) {
         		window = false;
         	}
         }

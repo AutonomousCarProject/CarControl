@@ -1,3 +1,4 @@
+package com.apw.imagemanagement;
 
 /**
  * This class contains functions to apply filters and convert images
@@ -11,9 +12,6 @@
  *
  * @see com.apw.ImageManagement.ImageManager
  */
-
-package com.apw.imagemanagement;
-
 public class ImageManipulator {
 
 	private static double luminanceMultiplier = 1;

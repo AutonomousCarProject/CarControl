@@ -24,7 +24,6 @@ import static com.apw.steering.SteeringConstants.USE_NO_LANE_DETECTION;
  * @author kevin
  */
 public class SteeringMk4 extends SteeringBase {
-    // Constants
 
     private Point calcSlopePoint1 = new Point();
     private Point calcSlopePoint2 = new Point();
@@ -33,8 +32,6 @@ public class SteeringMk4 extends SteeringBase {
     private LaneLine leftLine = new LaneLine(); // LaneLine that contains the right line.
     private ArrayList<Float> pastSlopes = new ArrayList<>(); // ArrayList that contains the past few slopes
 
-    int temp = 0;
-    int isFirst = 0;
 
     /**
      * Constructor used for trakSim
@@ -72,15 +69,6 @@ public class SteeringMk4 extends SteeringBase {
         setSteerPoint(calculateSteerPoint());
         setLeftPoints(leftLine.getLanePoints());
         setRightPoints(rightLine.getLanePoints());
-        /*
-        if (getDegreeOffset(getOrigin(), getSteerPoint()) <= -30 && isfirst > 1000) {
-            steeringDataCollection.writeArray(pixels, "RightCurveLane.txt");
-        }
-        isFirst++;/*
-        if (temp == 0) {
-            temp++;
-            System.out.println(getSteeringAngle(steeringDataCollection.readArray("LeftCurveLane.txt")));
-        }//*/
         return getDegreeOffset(getOrigin(), getSteerPoint());
     }
 

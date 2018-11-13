@@ -1,9 +1,11 @@
 package com.apw.steering;
 
 import com.apw.apw3.DriverCons;
+import java.awt.Color;
 import com.apw.carcontrol.CamControl;
 import com.apw.carcontrol.CarControl;
 import com.apw.carcontrol.Module;
+import com.apw.pedestrians.image.Pixel;
 import com.apw.steering.steeringclasses.Point;
 import com.apw.steering.steeringversions.SteeringBase;
 import com.apw.steering.steeringversions.SteeringMk1;
@@ -149,8 +151,61 @@ public class SteeringModule implements Module {
 
     public static void main(String args[]) {
         DataCollection dataCollection = new DataCollection(912, 480);
-        dataCollection.paint("RightCurve.txt");
-        SteeringMk4 steeringMk4 = new SteeringMk4(640, 480, 912);
-        System.out.print(steeringMk4.getSteeringAngle(dataCollection.readArray("RightCurve.txt")));
+        dataCollection.paint("LeftCurve.txt");
+        System.out.println("  yHeight | Width  1 | Width  2 | Width  3 | Width  4 | Width  5 | Width  6 | Width  7 |");
+        ArrayList<ArrayList<Point>> lineWidths = lineWidth(dataCollection.readArray("LeftCurve.txt"));
+        for (ArrayList<Point> list : lineWidths) {
+
+            for (int idx = 0; idx < 8; idx++) {
+                if (idx < list.size()) {
+                    System.out.printf(" %8d |", list.get(idx).getY());
+                } else {
+                    System.out.print("          |");
+                }
+            }
+            System.out.println();
+
+            for (int idx = 1; idx < list.size(); idx++) {
+                dataCollection.drawPoint(list.get(1).getX(), list.get(0).getY(), 3, java.awt.Color.RED);
+                dataCollection.drawPoint(list.get(idx).getX() + list.get(idx).getY(), list.get(0).getY(), 3, java.awt.Color.cyan);
+            }
+        }
+
+        //SteeringMk4 steeringMk4 = new SteeringMk4(640, 480, 912);
+        //System.out.print(steeringMk4.getSteeringAngle(dataCollection.readArray("RightCurve.txt")));
+    }
+
+    private static ArrayList<ArrayList<Point>> lineWidth(int[] pixels) {
+        ArrayList<ArrayList<Point>> widthAtHeightArray = new ArrayList<>();
+        int currentWidth = 0;
+
+        for (int yValue = 0; yValue < 480; yValue++) {
+            ArrayList<Point> widthAtY = new ArrayList<>();
+            widthAtY.add(new Point(0, yValue + 22));
+            int xPos = 0;
+            for (int xValue = 0; xValue < 640; xValue++) {
+                if (pixels[(yValue * 912) + xValue] == 0) {
+                    if (currentWidth > 0) {
+                        widthAtY.add(new Point(xPos, currentWidth));
+                        currentWidth = 0;
+                    }
+                } else {
+                    if (currentWidth == 0) {
+                        xPos = xValue;
+                    }
+                    currentWidth++;
+                }
+            }
+
+            if (currentWidth > 0) {
+                widthAtY.add(new Point(xPos, currentWidth));
+            }
+
+            if (widthAtY.size() > 1) {
+                widthAtHeightArray.add(widthAtY);
+            }
+        }
+
+        return widthAtHeightArray;
     }
 }
