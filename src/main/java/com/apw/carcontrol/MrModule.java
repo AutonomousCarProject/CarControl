@@ -139,16 +139,17 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
 
         final byte[] recentImage = carControl.getRecentCameraImage();
 
-        // Start Thread to get the black and white image (for steering)
+        /*/ Start Thread to get the black and white image (for steering)
         CompletableFuture<Void> futureSteering = cameraImage
                 .thenApplyAsync(v -> setBWImage(recentImage), imageBWExec)
                 // Call steering Module after futureBWImage is finished
-                .thenAcceptAsync(steeringModule::update, steeringExec);
+                .thenAcceptAsync(steeringModule::update, steeringExec);//*/
 
-        CompletableFuture<CarControl> futureRGBImage = CompletableFuture.completedFuture(null);
+        CompletableFuture<Void> futureRGBImage = CompletableFuture.completedFuture(null);
         if (frameNumber % 1 == 0) {
             futureRGBImage = cameraImage
-                    .thenApplyAsync(v -> setRGBImage(recentImage), imageRGBExec);
+                    .thenApplyAsync(v -> setRGBImage(recentImage), imageRGBExec)
+                    .thenAcceptAsync(steeringModule::update, steeringExec);
         }
 
         // Call speed module after futureSimpleImage is finished
@@ -161,7 +162,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         }
 
         // Run when all finished.
-        CompletableFuture.allOf(futureSpeed, futureSteering, futureRGBImage)
+        CompletableFuture.allOf(futureSpeed, futureRGBImage)
                 .thenAccept(v -> paint())
                 .exceptionally(ex -> {
                     ex.printStackTrace();
@@ -172,13 +173,15 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     }
 
     private CarControl setRGBImage(byte[] recentImage) {
-        carControl.setRGBImage(imageManagementModule.getRGBRaster(recentImage));
+        int[] RGBImage = imageManagementModule.getRGBRaster(recentImage);
+        carControl.setRGBImage(RGBImage);
         carControl.setRenderedImage(carControl.getRGBImage());
-        return carControl;
+        steeringControl.setRGBImage(RGBImage);
+        return steeringControl;
     }
 
     private CarControl setBWImage(byte[] recentImage) {
-        steeringControl.setRGBImage(imageManagementModule.getBlackWhiteRaster(recentImage));
+        steeringControl.setRGBImage(imageManagementModule.getRGBRaster(recentImage));
         return steeringControl;
     }
 

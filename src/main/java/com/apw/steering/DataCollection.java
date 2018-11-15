@@ -37,6 +37,7 @@ public class DataCollection extends JFrame {
             for (int pixel : pixels) {
                 ps.println(pixel);
             }
+            ps.close();
         } catch (IOException e) {
             System.out.println(e);
         }

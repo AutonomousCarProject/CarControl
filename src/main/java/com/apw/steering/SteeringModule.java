@@ -28,7 +28,7 @@ public class SteeringModule implements Module {
 
     private SteeringBase steering;
     private ArrayList<Integer> pastSteeringAngles = new ArrayList<>();
-    private DataCollection dataCollection= new DataCollection(912, 480);
+    private DataCollection dataCollection = new DataCollection(912, 480);
 
     public SteeringModule() {
     }
@@ -37,7 +37,7 @@ public class SteeringModule implements Module {
     public void initialize(CarControl control) {
         control.addKeyEvent(KeyEvent.VK_LEFT, () -> control.steer(false, -5));
         control.addKeyEvent(KeyEvent.VK_RIGHT, () -> control.steer(false, 5));
-        control.addKeyEvent(KeyEvent.VK_D, () -> dataCollection.writeArray(steering.getPixels(), "RightCurve.txt"));
+        control.addKeyEvent(KeyEvent.VK_D, () -> dataCollection.writeArray(steering.getPixels(), "ColorDataReal.txt"));
 
         for (int idx = 0; idx < PAST_STEERING_ANGLES; idx++) {
             pastSteeringAngles.add(0);
@@ -151,8 +151,8 @@ public class SteeringModule implements Module {
 
     public static void main(String args[]) {
         DataCollection dataCollection = new DataCollection(912, 480);
-        dataCollection.paint("LeftCurve.txt");
-        System.out.println("  yHeight | Width  1 | Width  2 | Width  3 | Width  4 | Width  5 | Width  6 | Width  7 |");
+        dataCollection.paint("ColorDataSim.txt");
+        /*System.out.println("  yHeight | Width  1 | Width  2 | Width  3 | Width  4 | Width  5 | Width  6 | Width  7 |");
         ArrayList<ArrayList<Point>> lineWidths = lineWidth(dataCollection.readArray("LeftCurve.txt"));
         for (ArrayList<Point> list : lineWidths) {
 
@@ -172,7 +172,7 @@ public class SteeringModule implements Module {
         }
 
         //SteeringMk4 steeringMk4 = new SteeringMk4(640, 480, 912);
-        //System.out.print(steeringMk4.getSteeringAngle(dataCollection.readArray("RightCurve.txt")));
+        //System.out.print(steeringMk4.getSteeringAngle(dataCollection.readArray("RightCurve.txt")));//*/
     }
 
     private static ArrayList<ArrayList<Point>> lineWidth(int[] pixels) {
