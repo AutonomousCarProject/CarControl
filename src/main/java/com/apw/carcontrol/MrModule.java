@@ -237,6 +237,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
+    	System.out.println("KEY PRESSED");
         if (carControl instanceof TrakSimControl) {
             for (Map.Entry<Integer, Runnable> binding : ((TrakSimControl) carControl).keyBindings.entrySet()) {
                 if (e.getKeyCode() == binding.getKey()) {
@@ -250,6 +251,9 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
             }
         } else if (carControl instanceof CamControl) {
         	for (Map.Entry<Integer, Runnable> binding : ((CamControl) carControl).keyBindings.entrySet())
+                if (e.getKeyCode() == binding.getKey())
+                    binding.getValue().run();
+        	for (Map.Entry<Integer, Runnable> binding : ((CamControl) steeringControl).keyBindings.entrySet())
                 if (e.getKeyCode() == binding.getKey())
                     binding.getValue().run();
         }

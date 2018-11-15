@@ -32,6 +32,7 @@ public class DataCollection extends JFrame {
     }
 
     public void writeArray(int[] pixels, String fileName) {
+    	System.out.println("been here");
         try {
             PrintStream ps = new PrintStream(new FileOutputStream("testdata/" + fileName));
             for (int pixel : pixels) {
