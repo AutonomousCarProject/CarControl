@@ -62,7 +62,10 @@ public class DataCollection extends JFrame {
 
     public void paint(String filePath) {
         int[] renderedImage = readArray(filePath);
+        paint(renderedImage);
+    }
 
+    public void paint(int[] renderedImage) {
         if (renderedImage != null) {
             int[] displayPixels = ((DataBufferInt) bufferImage.getRaster().getDataBuffer()).getData();
             System.arraycopy(renderedImage, 0, displayPixels, 0, renderedImage.length);
@@ -71,7 +74,7 @@ public class DataCollection extends JFrame {
             displayImage = bufferImage;
             bufferImage = tempImage;
 
-            getGraphics().drawImage(displayImage, 0, 22, 912, 480, null);
+            getGraphics().drawImage(displayImage, 0, 22, windowWidth, windowHeight, null);
         }
     }
 

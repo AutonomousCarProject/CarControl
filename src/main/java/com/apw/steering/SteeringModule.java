@@ -148,10 +148,81 @@ public class SteeringModule implements Module {
         }
     }
 
-
     public static void main(String args[]) {
-        DataCollection dataCollection = new DataCollection(912, 480);
-        dataCollection.paint("ColorDataSim.txt");
+        DataCollection dataCollection = new DataCollection(640, 480);
+
+        /*int num[] = {16776682, 16777207, 16777200};
+        int array[] = new int[900 * 900];
+        for (int band = 0; band < 3; band++) {
+            for (int x = 0; x < 900; x++) {
+                for (int y = 0; y < 300; y++) {
+                    array[(band * 270000) + (y * 900) + x] = num[band];
+                }
+            }
+        }
+        //dataCollection.writeArray(array, "TempFile.txt");
+        dataCollection.paint("TempFile.txt");//*/
+
+
+        int startX = 260;
+        int startY = 330;
+        int pixels[] = dataCollection.readArray("ColorDataReal.txt");
+        ArrayList<Integer> listOfNo = new ArrayList<>();
+        int newPixels[] = new int[640 * 480];
+        for (int x = 0; x < 100; x++) {
+            for (int y = 0; x < 100; x++) {
+                listOfNo.add(pixels[((startY + y) * 480) + (startX + x)]);
+            }
+        }
+        int min = listOfNo.get(0);
+        int max = min;
+        double mean = 0;
+        for (int element : listOfNo) {
+            if (element < min) {
+                min = element;
+            }
+            if (element > max) {
+                max = element;
+            }
+            mean += element;
+        }
+        mean = mean / listOfNo.size();
+        double standardDev = calculateStandardDev(listOfNo, mean);
+        System.out.println("Average: " + Math.round(mean));
+        System.out.println("Minimum: " + min + "\n\tDiff from average: " + (mean - min));
+        System.out.println("Maximum: " + max + "\n\tDiff from average: " + (max - mean));
+        System.out.println("Standard Deviation: " + standardDev);
+
+        for (int idx = 0; idx < pixels.length; idx++) {
+            if (idx > (232 * 640)) {
+                if (Math.abs(mean - pixels[idx]) > standardDev) {
+                    newPixels[idx] = 0xffffff;
+                } else {
+                    newPixels[idx] = 0;
+                }
+            } else {
+                newPixels[idx] = 0;
+            }
+        }
+
+        dataCollection.paint(newPixels);//*/
+
+
+        /*dataCollection.paint("ColorDataReal.txt");
+        /*int pixels[] = dataCollection.readArray("ColorDataReal.txt");
+        int searchColor = pixels[(640 * (338)) + (525)];
+
+        for (int y = 0; y < 480; y++) {
+            for (int x = 0; x < 640; x++) {
+                int thisPixel = pixels[(y * 640) + x];
+                if ((searchColor - 5000) <= thisPixel && thisPixel <= (searchColor + 5000)) {
+                    dataCollection.drawPoint(x, y + 22, 5, Color.blue);
+                }
+            }
+        }//*/
+        //dataCollection.drawPoint(524, 360, 5, Color.red);
+
+
         /*System.out.println("  yHeight | Width  1 | Width  2 | Width  3 | Width  4 | Width  5 | Width  6 | Width  7 |");
         ArrayList<ArrayList<Point>> lineWidths = lineWidth(dataCollection.readArray("LeftCurve.txt"));
         for (ArrayList<Point> list : lineWidths) {
@@ -173,6 +244,42 @@ public class SteeringModule implements Module {
 
         //SteeringMk4 steeringMk4 = new SteeringMk4(640, 480, 912);
         //System.out.print(steeringMk4.getSteeringAngle(dataCollection.readArray("RightCurve.txt")));//*/
+    }
+
+    private static int[] removeNoise(int[] pixels) {
+        for (int idx = 0; idx < pixels.length; idx++) {
+            if (pixels[idx] == 0xffffff) {
+                int numWiteFound = 0;
+                for (int i = -3; i < 3; i++) {
+                    if (0 <= (idx + i) && (idx + i) < pixels.length) {
+                        if (pixels[idx + i] == 0xffffff && (idx + i) != idx) {
+                            numWiteFound++;
+                        }
+                    }
+                }
+                if (numWiteFound >= 6) {
+                    pixels[idx] = 0;
+                }
+            }
+        }
+        return pixels;
+    }
+
+    private static boolean isInList(int searchValue, ArrayList<Integer> list) {
+        //for (int element : list) {
+            if ((7673359 - 4252639) <= searchValue && searchValue <= (7673359 + 6273471)) {
+                return true;
+            }
+        //}
+        return false;
+    }
+
+    private static double calculateStandardDev(ArrayList<Integer> list, double mean) {
+        double meanOfDev = 0;
+        for (int element : list) {
+            meanOfDev += Math.pow(mean -  element, 2);
+        }
+        return Math.sqrt(meanOfDev / list.size());
     }
 
     private static ArrayList<ArrayList<Point>> lineWidth(int[] pixels) {
