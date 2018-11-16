@@ -37,7 +37,7 @@ public class SteeringModule implements Module {
     public void initialize(CarControl control) {
         control.addKeyEvent(KeyEvent.VK_LEFT, () -> control.steer(false, -5));
         control.addKeyEvent(KeyEvent.VK_RIGHT, () -> control.steer(false, 5));
-        control.addKeyEvent(KeyEvent.VK_D, () -> dataCollection.writeArray(steering.getPixels(), "ColorDataReal.txt"));
+        control.addKeyEvent(KeyEvent.VK_D, () -> dataCollection.writeArray(steering.getPixels(), "ColorDataReal2.txt"));
 
         for (int idx = 0; idx < PAST_STEERING_ANGLES; idx++) {
             pastSteeringAngles.add(0);

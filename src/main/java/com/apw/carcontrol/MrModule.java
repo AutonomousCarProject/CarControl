@@ -174,7 +174,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
 
     private CarControl setRGBImage(byte[] recentImage) {
         int[] RGBImage = imageManagementModule.getRGBRaster(recentImage);
-        carControl.setRGBImage(RGBImage);
+        carControl.setRGBImage(imageManagementModule.getRGBRaster(recentImage));
         carControl.setRenderedImage(carControl.getRGBImage());
         steeringControl.setRGBImage(RGBImage);
         return steeringControl;
