@@ -60,7 +60,7 @@ void sendMessage(){
       byte msg[3] = {out[0], out[1], out[2]};
       Serial.write(msg, 3); //Send the first 3 items in the out list
   
-      //Move values backwards in the list for the next run
+      //Move coefficients backwards in the list for the next run
       for (byte n = 0; n < outsize-3; n++){
         out[n] = out[n+3];
       }

@@ -81,7 +81,7 @@ public class SteeringMk4 extends SteeringBase {
      * @param leftStartingX The current X-level the method begins searching out from to find a white pixel (On the Left)
      * @param rightStartingX The current X-level the method begins searching out from to find a white pixel (on the right)
      */
-    private void findLaneLines(int[] pixels, int row, int leftStartingX, int rightStartingX) {
+    void findLaneLines(int[] pixels, int row, int leftStartingX, int rightStartingX) {
         if (row > getCameraHeight() * LOOK_DIST) {
             Point lastLeftPoint  = leftLine.getLeftPoint(pixels, row, getScreenWidth(), leftStartingX);
             Point lastRightPoint = rightLine.getRightPoint(pixels, row, getScreenWidth(), rightStartingX, getCameraWidth());
@@ -174,6 +174,7 @@ public class SteeringMk4 extends SteeringBase {
         int x2 = point2.getX();
         int y2 = point2.getY();
         pastSlopes.remove(0);
+        System.out.println((float) (y1 - y2) / (x1 - x2));
         pastSlopes.add(((float) (y1 - y2)) / (x1 - x2));
 
         // Average the slopes in pastSlopes
@@ -215,5 +216,17 @@ public class SteeringMk4 extends SteeringBase {
             pastSlopes.add(START_SLOPE);
         }
         return START_SLOPE;
+    }
+
+    public LaneLine getRightLine() {
+        return rightLine;
+    }
+
+    public LaneLine getLeftLine() {
+        return leftLine;
+    }
+
+    public float getSlope() {
+        return slope;
     }
 }

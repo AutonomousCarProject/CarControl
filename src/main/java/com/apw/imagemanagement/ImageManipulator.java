@@ -104,9 +104,9 @@ public class ImageManipulator {
 		for (int r = 240; r < nrows; r++) {
 			int averageLuminance = 0;
 			for(int c = 0; c < frameWidth; c++) {
-				int R = (bayer[getPos(c,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);
-				int G = (bayer[getPos(c,r,combineTile((byte)1,tile),ncols,nrows)]&0xFF);
-				int B = (bayer[getPos(c,r,combineTile((byte)3,tile),ncols,nrows)]&0xFF);
+				int R = bayer[getPos(c, r, combineTile((byte) 0, tile), ncols, nrows)] & 0xFF;
+				int G = bayer[getPos(c, r, combineTile((byte) 1, tile), ncols, nrows)] & 0xFF;
+				int B = bayer[getPos(c, r, combineTile((byte) 3, tile), ncols, nrows)] & 0xFF;
 				averageLuminance += (R + G + B);
 			}
 
@@ -567,7 +567,9 @@ public class ImageManipulator {
 	 */
 	public static int getPos(int x, int y, byte tile, int ncols, int nrows){
 		//return (y*ncols*(3*boolBit(bayer)+1)+2*x+getBit(tile,1)*(boolBit(bayer)+1)*ncols+getBit(tile,0))%((3*boolBit(bayer)+1)*ncols*nrows);
-		return (y*ncols*(4-getBit(tile,2))+(2+getBit(tile,2))*x+getBit(tile,1)*(2*ncols-(2*ncols-1)*getBit(tile,2))+getBit(tile,0))%((4-getBit(tile,2))*ncols*nrows);
+		return (y * ncols * (4 - getBit(tile, 2)) + (2 + getBit(tile, 2)) * x + getBit(tile, 1) *
+                (2 * ncols - (2 * ncols - 1) * getBit(tile, 2)) + getBit(tile, 0)) %
+                ((4 - getBit(tile, 2)) * ncols*nrows);
 	}
 	public static byte combineTile(byte tile1, byte tile2){
 		return (byte)(((int)tile1)^((int)tile2));
