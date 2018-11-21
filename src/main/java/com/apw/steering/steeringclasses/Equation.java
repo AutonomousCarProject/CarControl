@@ -12,8 +12,8 @@ public class Equation {
         this.result = result;
     }
 
-    public void makeValue1(int valueNum) {
-        double scalar = 1 / coefficients.get(valueNum);
+    public void makeValue1(long valueNum) {
+        double scalar = 1 / coefficients.get((int) valueNum);
         scale(scalar);
     }
 
@@ -38,6 +38,12 @@ public class Equation {
 
     public double getResult() {
         return result;
+    }
+
+    public void combineEquations(Equation equation, long offset) {
+        for (int idx = (int) offset; idx < equation.size() + offset; idx++) {
+            coefficients.set(idx, equation.getCoefficients().get(idx - ((int) offset)));
+        }
     }
 
     public void subtract(Equation equation) {

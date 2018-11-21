@@ -1,5 +1,6 @@
 package com.apw.steering;
 
+import com.apw.steering.steeringclasses.LaneLine;
 import com.apw.steering.steeringclasses.Point;
 import com.apw.steering.steeringclasses.QuadraticRegression;
 import com.apw.steering.steeringversions.SteeringMk4;
@@ -21,14 +22,16 @@ public class tempTestingClass {
         testData.add(new Point(9, 20));
         testData.add(new Point(12, 18));
         testData.add(new Point(13, 23));
-        testData.add(new Point(20, 26));
-        QuadraticRegression regression = new QuadraticRegression(testData);
+        testData.add(new Point(20, 26));//
+        testData.add(new Point(28, 19));
+        QuadraticRegression regression = new QuadraticRegression(testData, 3);
+        System.out.println(regression.toString());//*/
 
 
 
-        /*
-        DataCollection dataCollection = new DataCollection(640, 480);
-        int modifiedImage[] = dataCollection.readArray("ColorDataReal1.txt");
+
+        /*DataCollection dataCollection = new DataCollection(640, 480);
+        int modifiedImage[] = dataCollection.readArray("ColorDataReal.txt");
         SteeringMk4 steering = new SteeringMk4(640,480,640);
 
         modifiedImage = toBW2(modifiedImage);
@@ -38,10 +41,30 @@ public class tempTestingClass {
 
 
         steering.getSteeringAngle(modifiedImage);
+        ArrayList<QuadraticRegression> regressions = new ArrayList<>();
+        regressions.add(new QuadraticRegression(rotateAndFlip(steering.getLeftLine().getNonEmptyPoints()), 5));
+        regressions.add(new QuadraticRegression(rotateAndFlip(steering.getRightLine().getNonEmptyPoints()), 5));
+        regressions.add(new QuadraticRegression(rotateAndFlip(steering.getMidPoints()), 5));
         paintLines(steering, dataCollection);
+        paintRegression(dataCollection, regressions.get(0), Color.magenta);
+        paintRegression(dataCollection, regressions.get(1), Color.magenta);
+        paintRegression(dataCollection, regressions.get(2), Color.CYAN);
+        System.out.println("LeftLine Regression:\n" + regressions.get(0).toString() + "\n");
+        System.out.println("RightLine Regression:\n" + regressions.get(1).toString() + "\n");
+        System.out.println("MidPoints Regression:\n" + regressions.get(2).toString() + "\n");
+
+
         //drawApproxLine(steering.getMidPoints(), dataCollection);
         //drawApproxLine(steering.getRightPoints(), dataCollection);
         //drawApproxLine(steering.getLeftPoints(), dataCollection);//*/
+    }
+
+    private static ArrayList<Point> rotateAndFlip(ArrayList<Point> list) {
+        ArrayList<Point> rotatedArray = new ArrayList<>();
+        for (Point point : list) {
+            rotatedArray.add(new Point(point.getY(), 640 - point.getX()));
+        }
+        return rotatedArray;
     }
 
     private static int[] toBW2(int[] pixels) {
@@ -225,6 +248,12 @@ public class tempTestingClass {
         return xySum;
     }
 
+    private static void paintRegression(DataCollection dataCollection, QuadraticRegression regression, Color color) {
+        for (int y = 0; y < 480; y++) {
+            dataCollection.drawPoint(640 - (int) regression.getYValueAtX(y), y, 2, Color.cyan);
+        }
+    }
+
     private static void paintLines(SteeringMk4 steering, DataCollection dataCollection) {
         Point steerPoint = steering.getSteerPoint();
         dataCollection.drawPoint(steerPoint.getX(), steerPoint.getY(), 10, Color.cyan);
@@ -234,11 +263,13 @@ public class tempTestingClass {
 
         for (Point point : steering.getLeftPoints()) {
             dataCollection.drawPoint(point.getX(), point.getY() + 22, 5, Color.yellow);
+
         }
 
         for (Point point : steering.getRightPoints()) {
             dataCollection.drawPoint(point.getX(), point.getY() + 22, 5, Color.yellow);
         }//*/
+
     }
 
     private static void drawApproxLine(List<Point> points, DataCollection dataCollection) {

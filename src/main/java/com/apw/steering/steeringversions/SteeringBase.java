@@ -29,9 +29,9 @@ public abstract class SteeringBase implements Steerable {
     private final int screenWidth;
     private final Point origin;
     private Point steerPoint = new Point(0, 0); // Point to where the car attempts to steer towards
-    private List<Point> leftPoints = new ArrayList<>();
-    private List<Point> rightPoints = new ArrayList<>();
-    private List<Point> midPoints = new ArrayList<>();
+    private ArrayList<Point> leftPoints = new ArrayList<>();
+    private ArrayList<Point> rightPoints = new ArrayList<>();
+    private ArrayList<Point> midPoints = new ArrayList<>();
     private List<Double> posLog = new ArrayList<>(); // Array list for logging positions fed into it
     private double integral, // The integral of the
             previousError;  // PID
@@ -185,27 +185,27 @@ public abstract class SteeringBase implements Steerable {
         this.steerPoint = steerPoint;
     }
 
-    public List<Point> getLeftPoints() {
+    public ArrayList<Point> getLeftPoints() {
         return leftPoints;
     }
 
-    public void setLeftPoints(List<Point> leftPoints) {
+    public void setLeftPoints(ArrayList<Point> leftPoints) {
         this.leftPoints = leftPoints;
     }
 
-    public List<Point> getRightPoints() {
+    public ArrayList<Point> getRightPoints() {
         return rightPoints;
     }
 
-    public void setRightPoints(List<Point> rightPoints) {
+    public void setRightPoints(ArrayList<Point> rightPoints) {
         this.rightPoints = rightPoints;
     }
 
-    public List<Point> getMidPoints() {
+    public ArrayList<Point> getMidPoints() {
         return midPoints;
     }
 
-    public void setMidPoints(List<Point> midPoints) {
+    public void setMidPoints(ArrayList<Point> midPoints) {
         this.midPoints = midPoints;
     }
 
@@ -221,7 +221,7 @@ public abstract class SteeringBase implements Steerable {
         return posLog;
     }
 
-    public void setPosLog(List<Double> posLog) {
+    public void setPosLog(ArrayList<Double> posLog) {
         this.posLog = posLog;
     }
 
