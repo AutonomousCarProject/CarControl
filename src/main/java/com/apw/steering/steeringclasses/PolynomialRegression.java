@@ -3,14 +3,14 @@ package com.apw.steering.steeringclasses;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
-public class QuadraticRegression {
+public class PolynomialRegression {
 
     private ArrayList<Point> points;
-    private ArrayList<Double> aValues;
+    private ArrayList<BigDecimal> aValues;
     private ArrayList<Equation> equations;
     private long degree;
 
-    public QuadraticRegression(ArrayList<Point> points, long degree) {
+    public PolynomialRegression(ArrayList<Point> points, long degree) {
 
 
         this.points = points;
@@ -22,9 +22,9 @@ public class QuadraticRegression {
     }
 
     private void calculateRegression(ArrayList<Point> points, long degree) {
-        ArrayList<Long> values = calculateValues(points, degree);
-        ArrayList<Long> results = calculateResults(points, degree);
-        values.add(0, (long) points.size());
+        ArrayList<BigDecimal> values = calculateValues(points, degree);
+        ArrayList<BigDecimal> results = calculateResults(points, degree);
+        values.add(0, new BigDecimal(points.size()));
 
         ArrayList<Equation> originalEquations = assignEquations(values, results, degree);
 
@@ -42,15 +42,15 @@ public class QuadraticRegression {
         return results;
     }
 
-    private String toScientificNotation(double value) {
+    private String toScientificNotation(BigDecimal value) {
         long power = 0;
-        while (Math.abs(value) < 1) {
+        while (value.abs().doubleValue() < 1) {
             power++;
-            value = value * 10;
+            value = value.multiply(new BigDecimal(10));
         }
-        while (Math.abs(value) >= 10) {
+        while (value.abs().doubleValue() >= 10) {
             power--;
-            value = value / 10;
+            value = new BigDecimal(value.doubleValue() / 10);
         }
         return value + " * 10^" + power;
     }
@@ -81,16 +81,17 @@ public class QuadraticRegression {
     }
 
 
-    private static ArrayList<Double> calculateAValues(ArrayList<Equation> equations) {
-        ArrayList<Double> aValues = new ArrayList<>();
+    private static ArrayList<BigDecimal> calculateAValues(ArrayList<Equation> equations) {
+        ArrayList<BigDecimal> aValues = new ArrayList<>();
 
         for (int idx = 1; idx <= equations.size(); idx++) {
             Equation equation = equations.get(equations.size() - idx);
-            ArrayList<Double> coefficients = equation.getCoefficients();
-            Double aValue = equation.getResult();
+            ArrayList<BigDecimal> coefficients = equation.getCoefficients();
+            BigDecimal aValue = equation.getResult();
 
             for (int numCoefficients = 0; numCoefficients < idx - 1; numCoefficients++) {
-                aValue -= coefficients.get(equation.size() - 1 - numCoefficients) * aValues.get(numCoefficients);
+                aValue = aValue.subtract(coefficients.get(equation.size() - 1 - numCoefficients)
+                        .multiply(aValues.get(numCoefficients)));
             }
             aValues.add(aValue);
         }
@@ -114,57 +115,57 @@ public class QuadraticRegression {
     }
 
 
-    private ArrayList<Equation> assignEquations(ArrayList<Long> values, ArrayList<Long> results, long degree) {
+    private ArrayList<Equation> assignEquations(ArrayList<BigDecimal> values, ArrayList<BigDecimal> results, long degree) {
         ArrayList<Equation> equations = new ArrayList<>();
         for (int numEquations = 0; numEquations < degree + 1; numEquations++) {
-            ArrayList<Double> valuesInEquation = new ArrayList<>();
+            ArrayList<BigDecimal> valuesInEquation = new ArrayList<>();
             for (int numValues = 0; numValues < degree + 1; numValues++) {
-                valuesInEquation.add((double) values.get(numEquations + numValues));
+                valuesInEquation.add(values.get(numEquations + numValues));
             }
             equations.add(new Equation(valuesInEquation, results.get(numEquations)));
         }
         return equations;
     }
 
-    public long getYValueAtX(long x) {
-        long y = 0;
+    public BigDecimal getYValueAtX(long x) {
+        BigDecimal y = new BigDecimal(0);
         for (int idx = 0; degree - idx >= 0; idx++) {
-            y += aValues.get(idx) * Math.pow(x, degree - idx);
+            y = y.add(aValues.get(idx).multiply(new BigDecimal(Math.pow(x, (int) degree - idx))));
         }
         return y;
     }
 
-    private static ArrayList<Long> calculateValues(ArrayList<Point> points, long degree) {
-        ArrayList<Long> values = new ArrayList<>();
+    private static ArrayList<BigDecimal> calculateValues(ArrayList<Point> points, long degree) {
+        ArrayList<BigDecimal> values = new ArrayList<>();
         for (int numValues = 1; numValues <= degree * 2; numValues++) {
             values.add(addXValues(points, numValues));
         }
         return values;
     }
 
-    private static ArrayList<Long> calculateResults(ArrayList<Point> points, long degree) {
-        ArrayList<Long> results = new ArrayList<>();
+    private static ArrayList<BigDecimal> calculateResults(ArrayList<Point> points, long degree) {
+        ArrayList<BigDecimal> results = new ArrayList<>();
         for (int numResults = 0; numResults <= degree; numResults++) {
             results.add(addXYValues(points, numResults));
         }
         return results;
     }
 
-    private static long addXValues(ArrayList<Point> points, long degree) {
-        long sum = 0;
+    private static BigDecimal addXValues(ArrayList<Point> points, long degree) {
+        BigDecimal sum = new BigDecimal(0);
         for (Point point : points) {
             if (!point.isEmpty()) {
-                sum += Math.pow(point.getX(), degree);
+                sum = sum.add(new BigDecimal(Math.pow(point.getX(), degree)));
             }
         }
         return sum;
     }
 
-    private static long addXYValues(ArrayList<Point> points, long degree) {
-        long sum = 0;
+    private static BigDecimal addXYValues(ArrayList<Point> points, long degree) {
+        BigDecimal sum = new BigDecimal(0);
         for (Point point : points) {
             if (!point.isEmpty()) {
-                sum += point.getY() * Math.pow(point.getX(), degree);
+                sum = sum.add(new BigDecimal(point.getY() * Math.pow(point.getX(), degree)));
             }
         }
         return sum;

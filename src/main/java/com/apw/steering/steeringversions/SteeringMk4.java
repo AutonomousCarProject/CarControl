@@ -201,6 +201,49 @@ public class SteeringMk4 extends SteeringBase {
         return roadWidth;
     }
 
+    public void removeOutliers(ArrayList<Point> list) {
+
+        //double mean = calculateMean(list);
+        //double standardDev = calculateStandardDev(list, mean);
+        Point lastPoint = list.get(0);
+        for (Point point : list) {
+            if (!point.isEmpty()) {
+                lastPoint = point;
+                break;
+            }
+        }
+
+        for (Point point : list) {
+            if (!point.isEmpty()) {
+                if (Math.abs(lastPoint.getX() - point.getX()) > 10) {
+                    point.makeEmpty();
+                } else {
+                    lastPoint = point;
+                }
+            }
+        }
+    }
+
+    private static double calculateStandardDev(ArrayList<Point> list, double mean) {
+        double sum = 0;
+        int numValues = 0;
+        for (Point point : list) {
+            if (!point.isEmpty()) {
+                numValues++;
+                sum += Math.pow(point.getX() - mean, 2);
+            }
+        }
+        return Math.sqrt(sum / numValues);
+    }
+
+    private static double calculateMean(ArrayList<Point> list) {
+        int sum = 0;
+        for (Point point : list) {
+            sum += point.getX();
+        }
+        return sum / list.size();
+    }
+
     /**
      * Checks to see if point 1 and point 2 are far enough away to be considered reliable.
      * @param point1 First Point to use

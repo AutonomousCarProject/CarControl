@@ -1,42 +1,43 @@
 package com.apw.steering.steeringclasses;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public class Equation {
 
-    private ArrayList<Double> coefficients;
-    private double result;
+    private ArrayList<BigDecimal> coefficients;
+    private BigDecimal result;
 
-    public Equation(ArrayList<Double> coefficients, double result) {
+    public Equation(ArrayList<BigDecimal> coefficients, BigDecimal result) {
         this.coefficients = coefficients;
         this.result = result;
     }
 
     public void makeValue1(long valueNum) {
-        double scalar = 1 / coefficients.get((int) valueNum);
+        BigDecimal scalar = new BigDecimal(1 / coefficients.get((int) valueNum).doubleValue());
         scale(scalar);
     }
 
-    public void scale(double scalar) {
+    public void scale(BigDecimal scalar) {
         for (int idx = 0; idx < coefficients.size(); idx++) {
-            coefficients.set(idx, coefficients.get(idx) * scalar);
+            coefficients.set(idx, coefficients.get(idx).multiply(scalar));
         }
-        result = result * scalar;
+        result = result.multiply(scalar);
     }
 
     public int size() {
         return coefficients.size();
     }
 
-    public ArrayList<Double> getCoefficients() {
+    public ArrayList<BigDecimal> getCoefficients() {
         return coefficients;
     }
 
-    public void setCoefficients(ArrayList<Double> coefficients) {
+    public void setCoefficients(ArrayList<BigDecimal> coefficients) {
         this.coefficients = coefficients;
     }
 
-    public double getResult() {
+    public BigDecimal getResult() {
         return result;
     }
 
@@ -49,16 +50,16 @@ public class Equation {
     public void subtract(Equation equation) {
         for (int coefficientsIdx = 0; coefficientsIdx < this.coefficients.size(); coefficientsIdx++) {
             this.coefficients.set(coefficientsIdx,
-                    this.coefficients.get(coefficientsIdx) - equation.getCoefficients().get(coefficientsIdx));
+                    this.coefficients.get(coefficientsIdx).subtract(equation.getCoefficients().get(coefficientsIdx)));
         }
-        result -= equation.getResult();
+        result = result.subtract(equation.getResult());
     }
 
     public void add(Equation equation) {
         for (int coefficientsIdx = 0; coefficientsIdx < this.coefficients.size(); coefficientsIdx++) {
             this.coefficients.set(coefficientsIdx,
-                    this.coefficients.get(coefficientsIdx) + equation.getCoefficients().get(coefficientsIdx));
+                    this.coefficients.get(coefficientsIdx).add(equation.getCoefficients().get(coefficientsIdx)));
         }
-        result += equation.getResult();
+        result = result.add(equation.getResult());
     }
 }

@@ -14,7 +14,7 @@ import com.apw.steering.Steerable;
 public class Point {
     public int x;
     public int y;
-    private final boolean isEmpty;
+    private boolean isEmpty;
 
     /**
      * This is a basic constructor that assigns this.x, any this.y to the x and y passed in through the
@@ -27,6 +27,12 @@ public class Point {
         this.isEmpty = false;
         this.x = x;
         this.y = y;
+    }
+
+    public void makeEmpty() {
+        this.x = 0;
+        this.y = 0;
+        isEmpty = true;
     }
 
     public Point() {

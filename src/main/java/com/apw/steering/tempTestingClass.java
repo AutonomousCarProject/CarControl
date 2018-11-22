@@ -1,8 +1,7 @@
 package com.apw.steering;
 
-import com.apw.steering.steeringclasses.LaneLine;
 import com.apw.steering.steeringclasses.Point;
-import com.apw.steering.steeringclasses.QuadraticRegression;
+import com.apw.steering.steeringclasses.PolynomialRegression;
 import com.apw.steering.steeringversions.SteeringMk4;
 import java.awt.Color;
 import java.util.ArrayList;
@@ -14,7 +13,7 @@ public class tempTestingClass {
 
     public static void main(String args[]) {
 
-        ArrayList<Point> testData = new ArrayList<>();
+        /*ArrayList<Point> testData = new ArrayList<>();
         testData.add(new Point(-1, 4));
         testData.add(new Point(0, -2));
         testData.add(new Point(2, 0));
@@ -24,14 +23,14 @@ public class tempTestingClass {
         testData.add(new Point(13, 23));
         testData.add(new Point(20, 26));//
         testData.add(new Point(28, 19));
-        QuadraticRegression regression = new QuadraticRegression(testData, 3);
+        PolynomialRegression regression = new PolynomialRegression(testData, 8);
         System.out.println(regression.toString());//*/
 
 
 
 
-        /*DataCollection dataCollection = new DataCollection(640, 480);
-        int modifiedImage[] = dataCollection.readArray("ColorDataReal.txt");
+        DataCollection dataCollection = new DataCollection(640, 480);
+        int modifiedImage[] = dataCollection.readArray("ColorDataReal2.txt");
         SteeringMk4 steering = new SteeringMk4(640,480,640);
 
         modifiedImage = toBW2(modifiedImage);
@@ -41,17 +40,21 @@ public class tempTestingClass {
 
 
         steering.getSteeringAngle(modifiedImage);
-        ArrayList<QuadraticRegression> regressions = new ArrayList<>();
-        regressions.add(new QuadraticRegression(rotateAndFlip(steering.getLeftLine().getNonEmptyPoints()), 5));
-        regressions.add(new QuadraticRegression(rotateAndFlip(steering.getRightLine().getNonEmptyPoints()), 5));
-        regressions.add(new QuadraticRegression(rotateAndFlip(steering.getMidPoints()), 5));
+
+        ArrayList<PolynomialRegression> regressions = new ArrayList<>();
+        int degree = 4;
+        regressions.add(new PolynomialRegression(rotateAndFlip(steering.getLeftLine().getNonEmptyPoints()), degree));
+        regressions.add(new PolynomialRegression(rotateAndFlip(steering.getRightLine().getNonEmptyPoints()), degree));
+        //regressions.add(new PolynomialRegression(rotateAndFlip(steering.getMidPoints()), degree));
+
         paintLines(steering, dataCollection);
         paintRegression(dataCollection, regressions.get(0), Color.magenta);
         paintRegression(dataCollection, regressions.get(1), Color.magenta);
-        paintRegression(dataCollection, regressions.get(2), Color.CYAN);
+        paintMidline(regressions.get(0), regressions.get(1), dataCollection, Color.cyan);
+        //paintRegression(dataCollection, regressions.get(2), Color.CYAN);
         System.out.println("LeftLine Regression:\n" + regressions.get(0).toString() + "\n");
         System.out.println("RightLine Regression:\n" + regressions.get(1).toString() + "\n");
-        System.out.println("MidPoints Regression:\n" + regressions.get(2).toString() + "\n");
+        //System.out.println("MidPoints Regression:\n" + regressions.get(2).toString() + "\n");
 
 
         //drawApproxLine(steering.getMidPoints(), dataCollection);
@@ -248,9 +251,19 @@ public class tempTestingClass {
         return xySum;
     }
 
-    private static void paintRegression(DataCollection dataCollection, QuadraticRegression regression, Color color) {
+    private static void paintRegression(DataCollection dataCollection, PolynomialRegression regression, Color color) {
         for (int y = 0; y < 480; y++) {
-            dataCollection.drawPoint(640 - (int) regression.getYValueAtX(y), y, 2, Color.cyan);
+            dataCollection.drawPoint(640 - (int) Math.round(regression.getYValueAtX(y).doubleValue()), y + 22,
+                    2, color);
+        }
+    }
+
+    private static void paintMidline(PolynomialRegression leftLine, PolynomialRegression rightLine,
+                                     DataCollection dataCollection, Color color) {
+        for (int y = 0; y < 480; y++) {
+            int xValue = (int) Math.round((leftLine.getYValueAtX(y).doubleValue() +
+                    rightLine.getYValueAtX(y).doubleValue()) / 2);
+            dataCollection.drawPoint(640 - xValue, y + 22, 2, color);
         }
     }
 
@@ -271,6 +284,7 @@ public class tempTestingClass {
         }//*/
 
     }
+
 
     private static void drawApproxLine(List<Point> points, DataCollection dataCollection) {
         int numberOfPoints = 0;

@@ -24,13 +24,10 @@ public class SteeringMk5 extends SteeringMk4 {
         getLeftLine().clearPoints();
         getRightLine().clearPoints();
         findLaneLines(pixels, getCameraHeight() - START_SEARCH, getCameraWidth() / 2, getCameraWidth() / 2);
-        getLeftLine().calculateSlopeAndB();
-        getRightLine().calculateSlopeAndB();
-        Point intersectionPoint = findIntersectionPoint();
-        setSteerPoint(intersectionPoint);
-        setLeftPoints(getLeftLine().getLanePoints());
-        setRightPoints(getRightLine().getLanePoints());
-        return getDegreeOffset(getOrigin(), intersectionPoint);
+
+
+
+        return 0;
     }
 
     private void ininializeLaneLines(ArrayList<LaneLine> laneLines, LaneLine laneLine) {
