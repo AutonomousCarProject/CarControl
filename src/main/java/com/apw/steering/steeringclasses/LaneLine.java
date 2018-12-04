@@ -140,6 +140,26 @@ public class LaneLine {
         g.drawLine((int) x1, (int) y1 + 22, (int) x2, (int) y2 + 22);
     }
 
+    public void removeOutliers(int maximumDeviation) {
+        Point lastPoint = lanePoints.get(0);
+        for (Point point : lanePoints) {
+            if (!point.isEmpty()) {
+                lastPoint = point;
+                break;
+            }
+        }
+
+        for (Point point : lanePoints) {
+            if (!point.isEmpty()) {
+                if (Math.abs(point.getX() - lastPoint.getX()) >= maximumDeviation) {
+                    point.makeEmpty();
+                }
+            } else {
+                lastPoint = point;
+            }
+        }
+    }
+
     public ArrayList<Point> getNonEmptyPoints() {
         ArrayList<Point> nonEmptyPoints = new ArrayList<>();
         for (Point point : lanePoints) {

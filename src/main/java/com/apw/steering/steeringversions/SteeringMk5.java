@@ -8,9 +8,6 @@ import static com.apw.steering.SteeringConstants.START_SEARCH;
 
 public class SteeringMk5 extends SteeringMk4 {
 
-    ArrayList<LaneLine> leftLaneLines = new ArrayList<>();
-    ArrayList<LaneLine> rightLaneLines = new ArrayList<>();
-
     public SteeringMk5(int cameraWidth, int cameraHeight, int screenWidth) {
         super(cameraWidth, cameraHeight, screenWidth);
     }
@@ -24,8 +21,8 @@ public class SteeringMk5 extends SteeringMk4 {
         getLeftLine().clearPoints();
         getRightLine().clearPoints();
         findLaneLines(pixels, getCameraHeight() - START_SEARCH, getCameraWidth() / 2, getCameraWidth() / 2);
-
-
+        removeOutliers(getLeftLine().getNonEmptyPoints());
+        //removeOutliers();
 
         return 0;
     }

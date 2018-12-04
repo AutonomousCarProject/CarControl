@@ -139,18 +139,19 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
 
         final byte[] recentImage = carControl.getRecentCameraImage();
 
-        /*/ Start Thread to get the black and white image (for steering)
-        CompletableFuture<Void> futureSteering = cameraImage
-                .thenApplyAsync(v -> setBWImage(recentImage), imageBWExec)
-                // Call steering Module after futureBWImage is finished
-                .thenAcceptAsync(steeringModule::update, steeringExec);//*/
 
         CompletableFuture<Void> futureRGBImage = CompletableFuture.completedFuture(null);
         if (frameNumber % 1 == 0) {
             futureRGBImage = cameraImage
-                    .thenApplyAsync(v -> setRGBImage(recentImage), imageRGBExec)
-                    .thenAcceptAsync(steeringModule::update, steeringExec);
+                    .thenAcceptAsync(v -> setRGBImage(recentImage), imageRGBExec);
+                    //.thenAcceptAsync(steeringModule::update, steeringExec);
         }
+
+        // Start Thread to get the black and white image (for steering)
+        CompletableFuture<Void> futureSteering = futureRGBImage
+                .thenApplyAsync(v -> setBWImage(steeringControl.getRGBImage()), imageBWExec)
+                // Call steering Module after futureBWImage is finished
+                .thenAcceptAsync(steeringModule::update, steeringExec);//*/
 
         // Call speed module after futureSimpleImage is finished
         CompletableFuture<Void> futureSpeed = CompletableFuture.completedFuture(null);
@@ -162,7 +163,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         }
 
         // Run when all finished.
-        CompletableFuture.allOf(futureSpeed, futureRGBImage)
+        CompletableFuture.allOf(futureSpeed, futureRGBImage, futureSteering)
                 .thenAccept(v -> paint())
                 .exceptionally(ex -> {
                     ex.printStackTrace();
@@ -180,8 +181,8 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         return steeringControl;
     }
 
-    private CarControl setBWImage(byte[] recentImage) {
-        steeringControl.setRGBImage(imageManagementModule.getRGBRaster(recentImage));
+    private CarControl setBWImage(int[] recentImage) {
+        steeringControl.setRGBImage(imageManagementModule.getBlackWhiteRaster(recentImage));
         return steeringControl;
     }
 

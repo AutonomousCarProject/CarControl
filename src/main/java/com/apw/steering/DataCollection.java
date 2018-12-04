@@ -80,7 +80,7 @@ public class DataCollection extends JFrame {
 
     private void initialize() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(windowWidth, windowHeight + 25);
+        setSize(windowWidth, windowHeight + 22);
         setResizable(true);
         setVisible(true);
         setIgnoreRepaint(true);
@@ -98,6 +98,14 @@ public class DataCollection extends JFrame {
         Graphics g = this.getGraphics();
         g.setColor(color);
         g.fillRect(x, y, size, size);
+    }
+
+    public void drawPoint(int idx, int size, Color color) {
+        Graphics g =  this.getGraphics();
+        g.setColor(color);
+        int x = idx % windowWidth;
+        int y = idx / windowWidth;
+        g.fillRect(x, y + 22, size, size);
     }
 
     public void drawLine(int x1, int y1, int x2, int y2, Color color) {

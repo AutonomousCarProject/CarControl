@@ -11,6 +11,10 @@ public class tempTestingClass {
     private static int white = 0xffffff;
     private static int black = 0;
 
+    private static int width = 640;
+    private static int height = 480;
+    private static int screenWidth = 640; // 912 640
+
     public static void main(String args[]) {
 
         /*ArrayList<Point> testData = new ArrayList<>();
@@ -29,17 +33,20 @@ public class tempTestingClass {
 
 
 
-        DataCollection dataCollection = new DataCollection(640, 480);
-        int modifiedImage[] = dataCollection.readArray("ColorDataReal2.txt");
-        SteeringMk4 steering = new SteeringMk4(640,480,640);
+        DataCollection dataCollection = new DataCollection(screenWidth, height);
+        int modifiedImage[] = dataCollection.readArray("ColorDataReal1.txt");
+        SteeringMk4 steering = new SteeringMk4(width, height, screenWidth);
+        //dataCollection.paint(modifiedImage);
 
-        modifiedImage = toBW2(modifiedImage);
-        modifiedImage = removeNoise2(modifiedImage);//
-        modifiedImage = removeNoise(modifiedImage);
+        //modifiedImage = toBW2(modifiedImage);
+        //modifiedImage = removeNoise2(modifiedImage);//
+        //modifiedImage = removeNoise(modifiedImage);
         dataCollection.paint(modifiedImage);
+        //dataCollection.drawPoint(259120, 3, Color.red);
+        //dataCollection.drawPoint(112, 306, 1, Color.red);
 
 
-        steering.getSteeringAngle(modifiedImage);
+        /*steering.getSteeringAngle(modifiedImage);
 
         ArrayList<PolynomialRegression> regressions = new ArrayList<>();
         int degree = 4;
@@ -65,33 +72,98 @@ public class tempTestingClass {
     private static ArrayList<Point> rotateAndFlip(ArrayList<Point> list) {
         ArrayList<Point> rotatedArray = new ArrayList<>();
         for (Point point : list) {
-            rotatedArray.add(new Point(point.getY(), 640 - point.getX()));
+            rotatedArray.add(new Point(point.getY(), screenWidth - point.getX()));
         }
         return rotatedArray;
     }
 
+    private static int[] toBW3(int[] pixels) {
+
+        int newPixels[] = new int[screenWidth * height];
+        int numToAverage = 10;
+        int averageColor = 0;
+        double differenceMultiplier = 0.2;
+
+        for (int y = 0; y < height; y++) {
+            int lastWhiteX = 0;
+            for (int x = 0; x < width; x++) {
+
+                int pixelIdx = getNumberFromCord(x, y);
+                if (y < height * 0.5) {
+                    newPixels[pixelIdx] = black;
+                    continue;
+                }
+                averageColor = calculateNextAverage(pixels, x, y, numToAverage, lastWhiteX, false);
+                int currentPixel = pixels[pixelIdx];
+
+                if (Math.abs(currentPixel - averageColor) > differenceMultiplier * averageColor) {
+
+                    newPixels[pixelIdx] = white;
+                    averageColor = calculateNextAverage(pixels, x + 2, y, 3, lastWhiteX, true);
+                    lastWhiteX = 0;
+
+                    while (Math.abs(pixels[getNumberFromCord(x + 1, y)] - averageColor) < 0.15 * averageColor && x + 1 < width) {
+                        averageColor = calculateNextAverage(pixels, x + 3, y, 3, lastWhiteX, true);
+                        x++;
+                        newPixels[getNumberFromCord(x, y)] = white;
+                    }//*/
+                    lastWhiteX = 0;
+                    continue;
+                } else {
+                    newPixels[pixelIdx] = black;
+                }
+                lastWhiteX++;
+            }
+
+        }
+
+        return newPixels;
+
+    }
+
+    private static int calculateNextAverage(int[] pixels, int x, int y, int numToAverage, int lastWhiteX, boolean mustBeClose) {
+
+        double average = pixels[getNumberFromCord(x, y)];
+        int count = 1;
+        for (int i = 1; i < numToAverage && i < lastWhiteX; i++) {
+            average += pixels[getNumberFromCord(x - i, y)];
+            count++;
+        }
+        average = average / count;
+
+        return (int) Math.round(average);
+    }
+
+    private static boolean isClose(int num1, int num2) {
+        return Math.abs(num1 - num2) < 0.3 * num1;
+    }
+
     private static int[] toBW2(int[] pixels) {
 
-        int newPixels[] = new int[640 * 480];
+        int newPixels[] = new int[screenWidth * height];
         ArrayList<Integer> previousColors = new ArrayList<>();
         double averageColor;
         int numPastFrames = 10;
 
         for (int i = 0; i < numPastFrames; i++) {
-            previousColors.add(pixels[640 * 480 - 1 - i]);
+            previousColors.add(pixels[screenWidth * height - (screenWidth - width) - 1 - i]);
         }
 
         double averageRightColor = 0;
-        for (int y = 250; y < 480; y++) {
-            averageRightColor += pixels[getNumberFromCord(639, y)];
+        for (int y = 250; y < height; y++) {
+            averageRightColor += pixels[getNumberFromCord(width - 1, y)];
         }
-        averageRightColor = averageRightColor / (480 - 250);
+        averageRightColor = averageRightColor / (height - 250);
 
         for (int pixelIdx = pixels.length - 1; pixelIdx > 0; pixelIdx--) {
-            if (pixelIdx < 250 * 640) {
+            if (pixelIdx < 250 * screenWidth) {
+                newPixels[pixelIdx] = black;
+                continue;
+            } else if (pixelIdx % screenWidth >= width) {
                 newPixels[pixelIdx] = black;
                 continue;
             }
+
             int currentPixel = pixels[pixelIdx];
             averageColor = averageArray(previousColors);
 
@@ -101,7 +173,7 @@ public class tempTestingClass {
                 newPixels[pixelIdx] = black;
             }
 
-            if (pixelIdx % 640 == 639) {
+            if (pixelIdx % screenWidth == width - 1) {
                 previousColors.clear();
                 for (int i = 0; i < numPastFrames; i++) {
                     previousColors.add(pixels[pixelIdx - i]);
@@ -149,7 +221,7 @@ public class tempTestingClass {
     }
 
     private static int getNumberFromCord(int x, int y) {
-        return (y * 640) + x;
+        return (y * screenWidth) + x;
     }
 
     private static int numOfWhiteAround(int[] pixels, int x, int y) {
@@ -160,7 +232,7 @@ public class tempTestingClass {
                     continue;
                 }
 
-                if (getNumberFromCord(x + i, y + j) < 480 * 640) {
+                if (getNumberFromCord(x + i, y + j) < height * screenWidth) {
                     if (pixels[getNumberFromCord(x + i, y + j)] == white) {
                         count++;
                     }
@@ -171,7 +243,7 @@ public class tempTestingClass {
     }
 
     private static int[] removeNoise(int[] pixels) {
-        for (int x = 0; x < 640; x++) {
+        for (int x = 0; x < screenWidth; x++) {
             for (int y = 479; y > 232; y--) {
                 if (pixels[getNumberFromCord(x, y)] == white && numOfWhiteAround(pixels, x, y) <= 3) {
                     pixels[getNumberFromCord(x, y)] = black;
@@ -252,18 +324,18 @@ public class tempTestingClass {
     }
 
     private static void paintRegression(DataCollection dataCollection, PolynomialRegression regression, Color color) {
-        for (int y = 0; y < 480; y++) {
-            dataCollection.drawPoint(640 - (int) Math.round(regression.getYValueAtX(y).doubleValue()), y + 22,
+        for (int y = 0; y < height; y++) {
+            dataCollection.drawPoint(screenWidth - (int) Math.round(regression.getYValueAtX(y).doubleValue()), y + 22,
                     2, color);
         }
     }
 
     private static void paintMidline(PolynomialRegression leftLine, PolynomialRegression rightLine,
                                      DataCollection dataCollection, Color color) {
-        for (int y = 0; y < 480; y++) {
+        for (int y = 0; y < height; y++) {
             int xValue = (int) Math.round((leftLine.getYValueAtX(y).doubleValue() +
                     rightLine.getYValueAtX(y).doubleValue()) / 2);
-            dataCollection.drawPoint(640 - xValue, y + 22, 2, color);
+            dataCollection.drawPoint(screenWidth - xValue, y + 22, 2, color);
         }
     }
 
@@ -305,8 +377,8 @@ public class tempTestingClass {
         long x1 = 0;
         System.out.println("Y Intercept: " + b);
         long y1 = calculateApproxValueAtX(0, slope, b);
-        long x2 = 640;
-        long y2 = calculateApproxValueAtX(640, slope, b);
+        long x2 = screenWidth;
+        long y2 = calculateApproxValueAtX(screenWidth, slope, b);
         System.out.println("At x = 640: " + y2);
 
         dataCollection.drawLine((int) x1, (int) y1 + 22, (int) x2, (int) y2 + 22, Color.magenta);

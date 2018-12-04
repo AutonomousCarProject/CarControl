@@ -1,5 +1,7 @@
 package com.apw.imagemanagement;
 
+import java.util.ArrayList;
+
 /**
  * This class contains functions to apply filters and convert images
  * between bayer8 and rgb formats. Functions in this class are only
@@ -10,7 +12,7 @@ package com.apw.imagemanagement;
  * @author Riley J
  * @author Nathan P
  *
- * @see com.apw.ImageManagement.ImageManager
+ * @see com.apw.imagemanagement
  */
 public class ImageManipulator {
 
@@ -52,9 +54,6 @@ public class ImageManipulator {
 	/** Converts a bayer8 image to a black and white image based on average luminance of each row
 	 *
 	 * @param bayer bayer8 image
-	 * @param mono	black and white output
-	 * @param nrows	number of rows of pixels in the image
-	 * @param ncols number of columns of pixels in the image
 	 * @param tile tiling pattern of the bayer8 image
 	 */
 //	public static void convertToBlackWhiteRaster(byte[] bayer, byte[] mono, int nrows, int ncols, byte tile) {
@@ -95,6 +94,67 @@ public class ImageManipulator {
 //		}
 //	}
 
+	private static int getPixel(byte[] bayer, int column, int row, byte tile, int nCols, int nRows) {
+		int R = (bayer[getPos(column, row, combineTile((byte) 0, tile), nCols, nRows)] & 0xFF);
+		int G = (bayer[getPos(column, row, combineTile((byte) 1, tile), nCols, nRows)] & 0xFF);
+		int B = (bayer[getPos(column, row, combineTile((byte) 3, tile), nCols, nRows)] & 0xFF);
+		return (R<<16)+(G<<8)+B;
+	}
+
+	public static int[] convertToBlackWhiteRaster(byte[] bayer, int numRows, int numColumns, int frameWidth, byte tile) {
+	    int pixelsRGB[] = new int[numRows * numColumns];
+		int pixelsBW[] = new int[numRows * numColumns];
+		int horizonLine = 240;
+		int averageColor;
+		int lastWhiteX = 0;
+		int white = 0xffffff;
+		int black = 0;
+
+		for (int row = 0; row < numRows; row++) {
+			for (int column = 0; column < numColumns; column++) {
+			    int currentIdx = getNumberFromCord(column, row, frameWidth);
+				int currentPixel = getPixel(bayer, column, row, tile, numColumns, numRows);
+				pixelsRGB[currentIdx] = currentPixel;
+
+                if (row < horizonLine) {
+                    continue;
+                }
+				averageColor = calculateNextAverage(pixelsRGB, row, column, 10, lastWhiteX, frameWidth);
+
+				if (Math.abs(currentPixel - averageColor) > 0.2 * averageColor) {
+				    pixelsBW[currentIdx] = white;
+				    lastWhiteX = 0;
+                    averageColor = calculateNextAverage(pixelsRGB, column, row, 3, lastWhiteX, frameWidth);
+                    currentPixel = getPixel(bayer, column++, row, tile, numColumns, numRows);
+
+                    //while (Math.abs(currentPixel - averageColor) < 0.15 * averageColor && column + 1 < numRows) {
+                    //
+                    //}
+                }
+			}
+			lastWhiteX = 0;
+		}
+
+		return pixelsBW;
+	}
+
+    private static int calculateNextAverage(int[] pixels, int x, int y, int numToAverage, int lastWhiteX, int frameWidth) {
+        double average = pixels[getNumberFromCord(x, y, frameWidth)];
+        int count = 1;
+
+        for (int i = 1; i < numToAverage && i < lastWhiteX; i++) {
+            average += pixels[getNumberFromCord(x - i, y, frameWidth)];
+            count++;
+        }
+        average = average / count;
+
+        return (int) Math.round(average);
+    }
+
+
+    private static int getNumberFromCord(int x, int y, int frameWidth) {
+        return (y * frameWidth) + x;
+    }
 
 	public static void convertToBlackWhiteRaster(byte[] bayer, int[] mono, int nrows, int ncols, int frameWidth, byte tile) {
 		if (bayer == null) {
@@ -481,7 +541,6 @@ public class ImageManipulator {
 	}
 
 
-
 	public static void limitTo(byte[] output, byte[] input, int ncols, int nrows, int width, int height) {
 		for (int r = 0; r < height; r++) {
 			for (int c = 0; c < width; c++) {
@@ -569,7 +628,7 @@ public class ImageManipulator {
 		//return (y*ncols*(3*boolBit(bayer)+1)+2*x+getBit(tile,1)*(boolBit(bayer)+1)*ncols+getBit(tile,0))%((3*boolBit(bayer)+1)*ncols*nrows);
 		return (y * ncols * (4 - getBit(tile, 2)) + (2 + getBit(tile, 2)) * x + getBit(tile, 1) *
                 (2 * ncols - (2 * ncols - 1) * getBit(tile, 2)) + getBit(tile, 0)) %
-                ((4 - getBit(tile, 2)) * ncols*nrows);
+                ((4 - getBit(tile, 2)) * ncols * nrows);
 	}
 	public static byte combineTile(byte tile1, byte tile2){
 		return (byte)(((int)tile1)^((int)tile2));

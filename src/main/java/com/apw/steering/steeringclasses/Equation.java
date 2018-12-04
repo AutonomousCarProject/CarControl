@@ -13,6 +13,11 @@ public class Equation {
         this.result = result;
     }
 
+    public Equation(ArrayList<BigDecimal> coefficients) {
+        this.coefficients = coefficients;
+        result = new BigDecimal(-1);
+    }
+
     public void makeValue1(long valueNum) {
         BigDecimal scalar = new BigDecimal(1 / coefficients.get((int) valueNum).doubleValue());
         scale(scalar);
@@ -33,18 +38,8 @@ public class Equation {
         return coefficients;
     }
 
-    public void setCoefficients(ArrayList<BigDecimal> coefficients) {
-        this.coefficients = coefficients;
-    }
-
     public BigDecimal getResult() {
         return result;
-    }
-
-    public void combineEquations(Equation equation, long offset) {
-        for (int idx = (int) offset; idx < equation.size() + offset; idx++) {
-            coefficients.set(idx, equation.getCoefficients().get(idx - ((int) offset)));
-        }
     }
 
     public void subtract(Equation equation) {
@@ -62,4 +57,5 @@ public class Equation {
         }
         result = result.add(equation.getResult());
     }
+
 }

@@ -65,6 +65,8 @@ public class SteeringMk4 extends SteeringBase {
         leftLine.clearPoints();
         rightLine.clearPoints();
         findLaneLines(pixels, getCameraHeight() - START_SEARCH, getCameraWidth() / 2, getCameraWidth() / 2);
+        //getLeftLine().removeOutliers(400);
+        //getRightLine().removeOutliers(400);
         setMidPoints(calculateMidPoints());
         setSteerPoint(calculateSteerPoint());
         setLeftPoints(leftLine.getLanePoints());

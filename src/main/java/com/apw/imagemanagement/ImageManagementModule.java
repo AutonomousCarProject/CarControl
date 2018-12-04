@@ -17,7 +17,7 @@ public class ImageManagementModule implements Module {
 
 	//adjustable variables
     private int viewType = 4;
-    private int blackWhiteRasterVersion = 1;
+    private int blackWhiteRasterVersion = 3;
     private double luminanceMultiplier = 1.8;
 
 
@@ -108,6 +108,13 @@ public class ImageManagementModule implements Module {
             output = ImageManipulator.dilate(output, height, width);
         }
         return output;
+    }
+
+    public int[] getBlackWhiteRaster(int[] pixels) {
+        //int output[] = ImageManipulator.convertToBlackWhiteRaster(pixels, height, width, 912);
+        //output = ImageManipulator.removeNoise2(pixels, height, width);
+        //return ImageManipulator.convertToBlackWhiteRaster(pixels, height, width, 912);
+        return new int[9];
     }
 
     public int[] getEdgeBlackWhiteRaster(){

@@ -35,6 +35,10 @@ public class Point {
         isEmpty = true;
     }
 
+    public double getDistance(Point point) {
+        return Math.sqrt(Math.pow(point.getX() - this.getX(), 2) + Math.pow(point.getY() + this.getY(), 2));
+    }
+
     public Point() {
         this.isEmpty = true;
     }
