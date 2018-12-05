@@ -1,72 +1,104 @@
 package com.apw.steering;
 
+import com.apw.steering.steeringclasses.PolynomialEquation;
 import com.apw.steering.steeringclasses.Point;
 import com.apw.steering.steeringclasses.PolynomialRegression;
 import com.apw.steering.steeringversions.SteeringMk4;
 import java.awt.Color;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class tempTestingClass {
+public class tempTestingClass implements KeyListener {
     private static int white = 0xffffff;
     private static int black = 0;
 
     private static int width = 640;
     private static int height = 480;
     private static int screenWidth = 640; // 912 640
+    private int[] originalImage;
+    private double multiplier = 0.47;
+
+    private String fileName = "ColorDataReal1.txt";
+
+    private DataCollection dataCollection;
 
     public static void main(String args[]) {
+        new tempTestingClass();
+    }
 
-        /*ArrayList<Point> testData = new ArrayList<>();
-        testData.add(new Point(-1, 4));
-        testData.add(new Point(0, -2));
-        testData.add(new Point(2, 0));
-        testData.add(new Point(6, 9));
-        testData.add(new Point(9, 20));
-        testData.add(new Point(12, 18));
-        testData.add(new Point(13, 23));
-        testData.add(new Point(20, 26));//
-        testData.add(new Point(28, 19));
-        PolynomialRegression regression = new PolynomialRegression(testData, 8);
-        System.out.println(regression.toString());//*/
+    public tempTestingClass() {
 
 
+        dataCollection = new DataCollection(screenWidth, height);
+        dataCollection.addKeyListener(this);
 
-
-        DataCollection dataCollection = new DataCollection(screenWidth, height);
-        int modifiedImage[] = dataCollection.readArray("ColorDataReal1.txt");
+        originalImage = dataCollection.readArray(fileName);
         SteeringMk4 steering = new SteeringMk4(width, height, screenWidth);
-        //dataCollection.paint(modifiedImage);
 
-        //modifiedImage = toBW2(modifiedImage);
-        //modifiedImage = removeNoise2(modifiedImage);//
-        //modifiedImage = removeNoise(modifiedImage);
+        int[] modifiedImage = toBW2(originalImage);
         dataCollection.paint(modifiedImage);
-        //dataCollection.drawPoint(259120, 3, Color.red);
-        //dataCollection.drawPoint(112, 306, 1, Color.red);
 
 
-        /*steering.getSteeringAngle(modifiedImage);
+        steering.getSteeringAngle(modifiedImage);
 
         ArrayList<PolynomialRegression> regressions = new ArrayList<>();
         int degree = 4;
-        regressions.add(new PolynomialRegression(rotateAndFlip(steering.getLeftLine().getNonEmptyPoints()), degree));
-        regressions.add(new PolynomialRegression(rotateAndFlip(steering.getRightLine().getNonEmptyPoints()), degree));
-        //regressions.add(new PolynomialRegression(rotateAndFlip(steering.getMidPoints()), degree));
+        PolynomialEquation leftRegression = new PolynomialRegression(rotateAndFlip(steering.getLeftLine().getNonEmptyPoints()), degree);
+        PolynomialEquation rightRegression = new PolynomialRegression(rotateAndFlip(steering.getRightLine().getNonEmptyPoints()), degree);
 
-        paintLines(steering, dataCollection);
-        paintRegression(dataCollection, regressions.get(0), Color.magenta);
-        paintRegression(dataCollection, regressions.get(1), Color.magenta);
-        paintMidline(regressions.get(0), regressions.get(1), dataCollection, Color.cyan);
-        //paintRegression(dataCollection, regressions.get(2), Color.CYAN);
-        System.out.println("LeftLine Regression:\n" + regressions.get(0).toString() + "\n");
-        System.out.println("RightLine Regression:\n" + regressions.get(1).toString() + "\n");
-        //System.out.println("MidPoints Regression:\n" + regressions.get(2).toString() + "\n");
+        //paintLines(steering, dataCollection);
+        int leftMin = steering.getLeftLine().getNonEmptyPoints().get(steering.getLeftLine().getNonEmptyPoints().size() - 1).getY();
+        int leftMax = steering.getLeftLine().getNonEmptyPoints().get(0).getY();
+        paintEquation(dataCollection, leftRegression, Color.magenta, leftMin, leftMax);
+        int rightMin = steering.getRightLine().getNonEmptyPoints().get(steering.getRightLine().getNonEmptyPoints().size() - 1).getY();
+        int rightMax = steering.getRightLine().getNonEmptyPoints().get(0).getY();
+        paintEquation(dataCollection, rightRegression, Color.magenta, rightMin, rightMax);
+        int midMin = Math.max(leftMin, rightMin);
+        int midMax = Math.min(leftMax, rightMax);
+        paintMidLine(leftRegression, rightRegression, dataCollection, Color.cyan, midMin, midMax);
 
+        System.out.println("LeftLine Regression:\n" + leftRegression.toString() + "\n");
+        System.out.println("RightLine Regression:\n" + rightRegression.toString() + "\n");
+        //System.out.println("MidPoints Regression:\n" + regressions.get(2).toString() + "\n");//*/
+    }
 
-        //drawApproxLine(steering.getMidPoints(), dataCollection);
-        //drawApproxLine(steering.getRightPoints(), dataCollection);
-        //drawApproxLine(steering.getLeftPoints(), dataCollection);//*/
+    public void keyReleased(KeyEvent e) { }
+    public void keyTyped(KeyEvent e) {
+    }
+    @Override
+    public void keyPressed(KeyEvent e) {
+        int keyCode = e.getKeyCode();
+        if (keyCode == KeyEvent.VK_LEFT) {
+            multiplier -= 0.01;
+            dataCollection.paint(toBW4(originalImage));
+        } else if (keyCode == KeyEvent.VK_RIGHT) {
+            multiplier += 0.01;
+            dataCollection.paint(toBW4(originalImage));
+        }
+        System.out.println(multiplier);
+    }
+
+    private int[] toBW4(int[] pixels) {
+        int previousColor = 0;
+        int[] newPixels = new int[height * screenWidth];
+        for (int pixelIdx = 0; pixelIdx < pixels.length; pixelIdx++) {
+            if (Math.abs(pixels[pixelIdx] - previousColor) > multiplier * previousColor) {
+                newPixels[pixelIdx] = white;
+                previousColor = pixels[pixelIdx];
+                pixelIdx++;
+                while (Math.abs(pixels[pixelIdx] - previousColor) <= multiplier * previousColor && pixelIdx + 1 < pixels.length) {
+                    newPixels[pixelIdx] = white;
+                    previousColor = pixels[pixelIdx];
+                    pixelIdx++;
+                }
+            } else {
+                newPixels[pixelIdx] = black;
+                previousColor = pixels[pixelIdx];
+            }
+        }
+        return newPixels;
     }
 
     private static ArrayList<Point> rotateAndFlip(ArrayList<Point> list) {
@@ -79,8 +111,8 @@ public class tempTestingClass {
 
     private static int[] toBW3(int[] pixels) {
 
-        int newPixels[] = new int[screenWidth * height];
-        int numToAverage = 10;
+        int[] newPixels = new int[screenWidth * height];
+        int numToAverage = -1;
         int averageColor = 0;
         double differenceMultiplier = 0.2;
 
@@ -93,17 +125,17 @@ public class tempTestingClass {
                     newPixels[pixelIdx] = black;
                     continue;
                 }
-                averageColor = calculateNextAverage(pixels, x, y, numToAverage, lastWhiteX, false);
+                averageColor = calculateNextAverage(pixels, x, y, numToAverage, lastWhiteX);
                 int currentPixel = pixels[pixelIdx];
 
                 if (Math.abs(currentPixel - averageColor) > differenceMultiplier * averageColor) {
 
                     newPixels[pixelIdx] = white;
-                    averageColor = calculateNextAverage(pixels, x + 2, y, 3, lastWhiteX, true);
-                    lastWhiteX = 0;
+                    //averageColor = calculateNextAverage(pixels, x + 2, y, -2, lastWhiteX);
+                    //lastWhiteX = 0;
 
-                    while (Math.abs(pixels[getNumberFromCord(x + 1, y)] - averageColor) < 0.15 * averageColor && x + 1 < width) {
-                        averageColor = calculateNextAverage(pixels, x + 3, y, 3, lastWhiteX, true);
+                    /*while (Math.abs(pixels[getNumberFromCord(x + 1, y)] - averageColor) < 0.15 * averageColor && x + 1 < width) {
+                        averageColor = calculateNextAverage(pixels, x + 3, y, -3, lastWhiteX);
                         x++;
                         newPixels[getNumberFromCord(x, y)] = white;
                     }//*/
@@ -118,16 +150,21 @@ public class tempTestingClass {
         }
 
         return newPixels;
-
     }
 
-    private static int calculateNextAverage(int[] pixels, int x, int y, int numToAverage, int lastWhiteX, boolean mustBeClose) {
+    private static int calculateNextAverage(int[] pixels, int x, int y, int numToAverage, int lastWhiteX) {
 
         double average = pixels[getNumberFromCord(x, y)];
         int count = 1;
-        for (int i = 1; i < numToAverage && i < lastWhiteX; i++) {
+        int i = x + numToAverage;
+        while (i != x && lastWhiteX - count > 0) {
             average += pixels[getNumberFromCord(x - i, y)];
             count++;
+            if (i < x) {
+                i++;
+            } else {
+                i--;
+            }
         }
         average = average / count;
 
@@ -138,7 +175,7 @@ public class tempTestingClass {
         return Math.abs(num1 - num2) < 0.3 * num1;
     }
 
-    private static int[] toBW2(int[] pixels) {
+    private int[] toBW2(int[] pixels) {
 
         int newPixels[] = new int[screenWidth * height];
         ArrayList<Integer> previousColors = new ArrayList<>();
@@ -167,7 +204,7 @@ public class tempTestingClass {
             int currentPixel = pixels[pixelIdx];
             averageColor = averageArray(previousColors);
 
-            if (Math.abs(currentPixel - averageColor) > 0.25 * averageColor) {
+            if (Math.abs(currentPixel - averageColor) > multiplier * averageColor) {
                 newPixels[pixelIdx] = white;
             } else {
                 newPixels[pixelIdx] = black;
@@ -178,17 +215,22 @@ public class tempTestingClass {
                 for (int i = 0; i < numPastFrames; i++) {
                     previousColors.add(pixels[pixelIdx - i]);
                 }
-                if (averageArray(previousColors) > 1.25 * averageRightColor) {
+                if (averageArray(previousColors) > (1 + multiplier) * averageRightColor) {
                     previousColors.clear();
                     for (int i = 0; i < numPastFrames; i++) {
                         previousColors.add((int) averageRightColor);
                     }
                 }
             }
-            if (newPixels[pixelIdx] == black) {
+            if (newPixels[pixelIdx] == black || (pixels[pixelIdx] != white && width != screenWidth)) {
                 previousColors.add(currentPixel);
                 previousColors.remove(0);
             }
+        }
+
+        //newPixels = removeNoise(newPixels);
+        if (screenWidth == 640) {
+            newPixels = removeNoise2(newPixels);
         }
 
         return newPixels;
@@ -202,7 +244,7 @@ public class tempTestingClass {
                 whiteWidth++;
                 idx++;
             }
-            if (6 >= whiteWidth || whiteWidth >= 40 ) {
+            if (5 >= whiteWidth || whiteWidth >= 40 ) {
                 for (int idxToRemove = idx; idxToRemove >= idx - whiteWidth; idxToRemove--) {
                     pixels[idxToRemove] = black;
                 }
@@ -323,19 +365,20 @@ public class tempTestingClass {
         return xySum;
     }
 
-    private static void paintRegression(DataCollection dataCollection, PolynomialRegression regression, Color color) {
-        for (int y = 0; y < height; y++) {
-            dataCollection.drawPoint(screenWidth - (int) Math.round(regression.getYValueAtX(y).doubleValue()), y + 22,
-                    2, color);
+    private static void paintEquation(DataCollection dataCollection, PolynomialEquation regression, Color color,
+                                      int min, int max) {
+        for (int y = min; y < max; y++) {
+            dataCollection.drawPoint(screenWidth - (int) Math.round(regression.getYValueAtX(y).doubleValue()), y,
+                    3, color);
         }
     }
 
-    private static void paintMidline(PolynomialRegression leftLine, PolynomialRegression rightLine,
-                                     DataCollection dataCollection, Color color) {
-        for (int y = 0; y < height; y++) {
+    private static void paintMidLine(PolynomialEquation leftLine, PolynomialEquation rightLine,
+                                     DataCollection dataCollection, Color color, int min, int max) {
+        for (int y = min; y < max; y++) {
             int xValue = (int) Math.round((leftLine.getYValueAtX(y).doubleValue() +
                     rightLine.getYValueAtX(y).doubleValue()) / 2);
-            dataCollection.drawPoint(screenWidth - xValue, y + 22, 2, color);
+            dataCollection.drawPoint(screenWidth - xValue, y, 2, color);
         }
     }
 
@@ -343,44 +386,17 @@ public class tempTestingClass {
         Point steerPoint = steering.getSteerPoint();
         dataCollection.drawPoint(steerPoint.getX(), steerPoint.getY(), 10, Color.cyan);
         for (Point point : steering.getMidPoints()) {
-            dataCollection.drawPoint(point.getX(), point.getY() + 22, 5, Color.blue);
+            dataCollection.drawPoint(point.getX(), point.getY(), 5, Color.blue);
         }
 
         for (Point point : steering.getLeftPoints()) {
-            dataCollection.drawPoint(point.getX(), point.getY() + 22, 5, Color.yellow);
+            dataCollection.drawPoint(point.getX(), point.getY(), 5, Color.yellow);
 
         }
 
         for (Point point : steering.getRightPoints()) {
-            dataCollection.drawPoint(point.getX(), point.getY() + 22, 5, Color.yellow);
+            dataCollection.drawPoint(point.getX(), point.getY(), 5, Color.yellow);
         }//*/
 
-    }
-
-
-    private static void drawApproxLine(List<Point> points, DataCollection dataCollection) {
-        int numberOfPoints = 0;
-        for (Point point : points) {
-            if (!point.isEmpty()) {
-                numberOfPoints++;
-            }
-        }
-        long xSum = calculateXSum(points);
-        long ySum = calculateYSum(points);
-        long xSquaredSum = calculateXSquaredSum(points);
-        long xySum = calculateXYSum(points);
-        double slope = calculateSlope(numberOfPoints, xSum, ySum, xSquaredSum, xySum);
-        double b = calculateB(numberOfPoints, xSum, ySum, xSquaredSum, xySum);
-
-        System.out.println("Slope:" + slope);
-
-        long x1 = 0;
-        System.out.println("Y Intercept: " + b);
-        long y1 = calculateApproxValueAtX(0, slope, b);
-        long x2 = screenWidth;
-        long y2 = calculateApproxValueAtX(screenWidth, slope, b);
-        System.out.println("At x = 640: " + y2);
-
-        dataCollection.drawLine((int) x1, (int) y1 + 22, (int) x2, (int) y2 + 22, Color.magenta);
     }
 }

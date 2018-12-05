@@ -8,12 +8,10 @@ import java.util.ArrayList;
  * Given any amount of points, this class will return a polynomial of any degree that best
  * approximates the data.
  *
- * @see Equation
+ * @see PolynomialEquation
  * @author kevin
  */
-public class PolynomialRegression extends Equation {
-
-    private long degree; // The degree to which the polynomial is set.
+public class PolynomialRegression extends PolynomialEquation {
 
     /**
      * Constructor that calculates the coefficients of the
@@ -24,7 +22,7 @@ public class PolynomialRegression extends Equation {
      */
     public PolynomialRegression(ArrayList<Point> points, long degree) {
         super(calculateRegression(removeEmptyPoints(points), degree));
-        this.degree = degree;
+        setDegree(degree);
     }
 
     /**
@@ -77,15 +75,15 @@ public class PolynomialRegression extends Equation {
      * @param equations List of equations, who's length is equal to the number of coefficients in each equation.
      * @return Formatted List of equations.
      */
-    private static ArrayList<Equation> formatEquations(ArrayList<Equation> equations) {
+    private static ArrayList<PolynomialEquation> formatEquations(ArrayList<PolynomialEquation> equations) {
 
-        ArrayList<Equation> finalEquations = new ArrayList<>();
+        ArrayList<PolynomialEquation> finalEquations = new ArrayList<>();
 
         long column = equations.get(0).size() - equations.size();
 
         // Make the first Coefficient 1 in all equations
-        for (Equation equation : equations) {
-            equation.makeValue1(column);
+        for (PolynomialEquation polynomialEquation : equations) {
+            polynomialEquation.makeValue1(column);
         }
 
         // Subtract first equation from all other equations.
@@ -112,18 +110,18 @@ public class PolynomialRegression extends Equation {
      * @param equations List of formatted equations.
      * @return List of aValues for the polynomial.
      */
-    private static ArrayList<BigDecimal> calculateCoefficients(ArrayList<Equation> equations) {
+    private static ArrayList<BigDecimal> calculateCoefficients(ArrayList<PolynomialEquation> equations) {
         ArrayList<BigDecimal> aValues = new ArrayList<>();
 
         // Iterate equations.size() times.
         for (int idx = 1; idx <= equations.size(); idx++) {
-            Equation equation = equations.get(equations.size() - idx);
-            ArrayList<BigDecimal> coefficients = equation.getCoefficients();
-            BigDecimal aValue = equation.getResult();
+            PolynomialEquation polynomialEquation = equations.get(equations.size() - idx);
+            ArrayList<BigDecimal> coefficients = polynomialEquation.getCoefficients();
+            BigDecimal aValue = polynomialEquation.getResult();
 
-            // Iterate over each non-1 and non-0 coefficient in equation.
+            // Iterate over each non-1 and non-0 coefficient in polynomialEquation.
             for (int numCoefficients = 0; numCoefficients < idx - 1; numCoefficients++) {
-                aValue = aValue.subtract(coefficients.get(equation.size() - 1 - numCoefficients)
+                aValue = aValue.subtract(coefficients.get(polynomialEquation.size() - 1 - numCoefficients)
                         .multiply(aValues.get(numCoefficients)));
             }
             aValues.add(aValue);
@@ -132,8 +130,8 @@ public class PolynomialRegression extends Equation {
     }
 
 
-    private static ArrayList<Equation> assignEquations(ArrayList<BigDecimal> values, ArrayList<BigDecimal> results, long degree) {
-        ArrayList<Equation> equations = new ArrayList<>();
+    private static ArrayList<PolynomialEquation> assignEquations(ArrayList<BigDecimal> values, ArrayList<BigDecimal> results, long degree) {
+        ArrayList<PolynomialEquation> equations = new ArrayList<>();
 
         for (int numEquations = 0; numEquations < degree + 1; numEquations++) {
             ArrayList<BigDecimal> valuesInEquation = new ArrayList<>();
@@ -141,7 +139,7 @@ public class PolynomialRegression extends Equation {
             for (int numValues = 0; numValues < degree + 1; numValues++) {
                 valuesInEquation.add(values.get(numEquations + numValues));
             }
-            equations.add(new Equation(valuesInEquation, results.get(numEquations)));
+            equations.add(new PolynomialEquation(valuesInEquation, results.get(numEquations)));
         }
         return equations;
     }
@@ -193,11 +191,4 @@ public class PolynomialRegression extends Equation {
         return nonEmptyPoints;
     }
 
-    public BigDecimal getYValueAtX(long x) {
-        BigDecimal y = new BigDecimal(0);
-        for (int idx = 0; this.degree - idx >= 0; idx++) {
-            y = y.add(getCoefficients().get(idx).multiply(new BigDecimal(Math.pow(x, (int) this.degree - idx))));
-        }
-        return y;
-    }
 }

@@ -18,7 +18,7 @@ public class ImageManagementModule implements Module {
 	//adjustable variables
     private int viewType = 4;
     private int blackWhiteRasterVersion = 3;
-    private double luminanceMultiplier = 1.8;
+    private double luminanceMultiplier = 1.3;
 
 
     //internal variables
@@ -26,8 +26,8 @@ public class ImageManagementModule implements Module {
     private int[] imagePixels;
     private byte tile;
     private int frameWidth = 640;
-    boolean removeNoise = true;
-    boolean dilate = false;
+    boolean removeNoise = false;
+    boolean dilate = true;
 
     /**
      * Main constructor for imageManagement
@@ -95,11 +95,12 @@ public class ImageManagementModule implements Module {
      */
     public int[] getBlackWhiteRaster(byte[] pixels) {
     	int[] output = new int[width * height];
-        if(blackWhiteRasterVersion == 2) {
+        if (blackWhiteRasterVersion == 2) {
             //ImageManipulator.convertToBlackWhite2Raster(pixels, output, height, width, tile);
-        }
-        else {
+        } else if (blackWhiteRasterVersion == 1) {
             ImageManipulator.convertToBlackWhiteRaster(pixels, output, height, width, frameWidth, tile);
+        } else {
+            output = ImageManipulator.convertToBlackWhiteRaster(pixels, height, width, frameWidth, tile);
         }
         if(removeNoise) {
             output = ImageManipulator.removeNoise(output, height, width);

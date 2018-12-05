@@ -5,7 +5,7 @@ import java.awt.Color;
 public class SteeringConstants {
 
     // SteeringModule Constants
-    static final int STEERING_VERSION = 5; // Which Version of steering to use
+    static final int STEERING_VERSION = 4; // Which Version of steering to use
     static final int PAST_STEERING_ANGLES = 1;
     static final int MAX_STEER_DIFFERENCE = 5;
     static final boolean DRAW_STEERING_LINES = true;
@@ -35,7 +35,7 @@ public class SteeringConstants {
     // SteeringMk3 Constants
 
     // SteeringMk4 Constants
-    public static final float LOOK_DIST = 0.4f; // How high on the screen the car calculates road points
+    public static final float LOOK_DIST = 0.565f; // How high on the screen the car calculates road points
     public static final float PREVIOUS_SLOPES = 10f; // How many previous slopes the car averages
     public static final float START_SLOPE = 0.28686327f; // Starting slope for the road width
     public static final int START_SEARCH = 50; // Pixel to start line search (Number of pixels from the bottom of the screen)

@@ -8,6 +8,7 @@ import com.apw.speedcon.SpeedControlModule;
 
 import com.apw.steering.SteeringModule;
 
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -139,19 +140,17 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
 
         final byte[] recentImage = carControl.getRecentCameraImage();
 
+        // Start Thread to get the black and white image (for steering)
+        CompletableFuture<Void> futureSteering = cameraImage
+                .thenApplyAsync(v -> setBWImage(recentImage), imageBWExec)
+                // Call steering Module after futureBWImage is finished
+                .thenAcceptAsync(steeringModule::update, steeringExec);
 
-        CompletableFuture<Void> futureRGBImage = CompletableFuture.completedFuture(null);
+        CompletableFuture<CarControl> futureRGBImage = CompletableFuture.completedFuture(null);
         if (frameNumber % 1 == 0) {
             futureRGBImage = cameraImage
-                    .thenAcceptAsync(v -> setRGBImage(recentImage), imageRGBExec);
-                    //.thenAcceptAsync(steeringModule::update, steeringExec);
+                    .thenApplyAsync(v -> setRGBImage(recentImage), imageRGBExec);
         }
-
-        // Start Thread to get the black and white image (for steering)
-        CompletableFuture<Void> futureSteering = futureRGBImage
-                .thenApplyAsync(v -> setBWImage(steeringControl.getRGBImage()), imageBWExec)
-                // Call steering Module after futureBWImage is finished
-                .thenAcceptAsync(steeringModule::update, steeringExec);//*/
 
         // Call speed module after futureSimpleImage is finished
         CompletableFuture<Void> futureSpeed = CompletableFuture.completedFuture(null);
@@ -163,7 +162,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
         }
 
         // Run when all finished.
-        CompletableFuture.allOf(futureSpeed, futureRGBImage, futureSteering)
+        CompletableFuture.allOf(futureSpeed, futureSteering, futureRGBImage)
                 .thenAccept(v -> paint())
                 .exceptionally(ex -> {
                     ex.printStackTrace();
@@ -174,14 +173,12 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     }
 
     private CarControl setRGBImage(byte[] recentImage) {
-        int[] RGBImage = imageManagementModule.getRGBRaster(recentImage);
-        carControl.setRGBImage(imageManagementModule.getRGBRaster(recentImage));
+        carControl.setRGBImage(imageManagementModule.getBlackWhiteRaster(recentImage));
         carControl.setRenderedImage(carControl.getRGBImage());
-        steeringControl.setRGBImage(RGBImage);
-        return steeringControl;
+        return carControl;
     }
 
-    private CarControl setBWImage(int[] recentImage) {
+    private CarControl setBWImage(byte[] recentImage) {
         steeringControl.setRGBImage(imageManagementModule.getBlackWhiteRaster(recentImage));
         return steeringControl;
     }
@@ -210,15 +207,6 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
                 e.printStackTrace();
             }
         }
-    }
-
-    private void printElapsedTime() {
-        final long curTime = System.currentTimeMillis();
-        if (lastTime == 0) {
-            lastTime = curTime;
-        }
-        System.out.println("Time: " + (lastTime - curTime));
-        lastTime = curTime;
     }
 
     public static void main(String[] args) {

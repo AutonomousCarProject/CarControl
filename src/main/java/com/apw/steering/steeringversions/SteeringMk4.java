@@ -65,8 +65,6 @@ public class SteeringMk4 extends SteeringBase {
         leftLine.clearPoints();
         rightLine.clearPoints();
         findLaneLines(pixels, getCameraHeight() - START_SEARCH, getCameraWidth() / 2, getCameraWidth() / 2);
-        //getLeftLine().removeOutliers(400);
-        //getRightLine().removeOutliers(400);
         setMidPoints(calculateMidPoints());
         setSteerPoint(calculateSteerPoint());
         setLeftPoints(leftLine.getLanePoints());
@@ -176,7 +174,6 @@ public class SteeringMk4 extends SteeringBase {
         int x2 = point2.getX();
         int y2 = point2.getY();
         pastSlopes.remove(0);
-        System.out.println((float) (y1 - y2) / (x1 - x2));
         pastSlopes.add(((float) (y1 - y2)) / (x1 - x2));
 
         // Average the slopes in pastSlopes

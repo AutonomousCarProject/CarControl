@@ -3,17 +3,18 @@ package com.apw.steering.steeringclasses;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
-public class Equation {
+public class PolynomialEquation {
 
     private ArrayList<BigDecimal> coefficients;
     private BigDecimal result;
+    private long degree;
 
-    public Equation(ArrayList<BigDecimal> coefficients, BigDecimal result) {
+    public PolynomialEquation(ArrayList<BigDecimal> coefficients, BigDecimal result) {
         this.coefficients = coefficients;
         this.result = result;
     }
 
-    public Equation(ArrayList<BigDecimal> coefficients) {
+    public PolynomialEquation(ArrayList<BigDecimal> coefficients) {
         this.coefficients = coefficients;
         result = new BigDecimal(-1);
     }
@@ -42,20 +43,36 @@ public class Equation {
         return result;
     }
 
-    public void subtract(Equation equation) {
+    public void subtract(PolynomialEquation polynomialEquation) {
         for (int coefficientsIdx = 0; coefficientsIdx < this.coefficients.size(); coefficientsIdx++) {
             this.coefficients.set(coefficientsIdx,
-                    this.coefficients.get(coefficientsIdx).subtract(equation.getCoefficients().get(coefficientsIdx)));
+                    this.coefficients.get(coefficientsIdx).subtract(polynomialEquation.getCoefficients().get(coefficientsIdx)));
         }
-        result = result.subtract(equation.getResult());
+        result = result.subtract(polynomialEquation.getResult());
     }
 
-    public void add(Equation equation) {
+    public void setDegree(long degree) {
+        this.degree = degree;
+    }
+
+    public long getDegree() {
+        return degree;
+    }
+
+    public BigDecimal getYValueAtX(long x) {
+        BigDecimal y = new BigDecimal(0);
+        for (int idx = 0; this.degree - idx >= 0; idx++) {
+            y = y.add(getCoefficients().get(idx).multiply(new BigDecimal(Math.pow(x, (int) this.degree - idx))));
+        }
+        return y;
+    }
+
+    public void add(PolynomialEquation polynomialEquation) {
         for (int coefficientsIdx = 0; coefficientsIdx < this.coefficients.size(); coefficientsIdx++) {
             this.coefficients.set(coefficientsIdx,
-                    this.coefficients.get(coefficientsIdx).add(equation.getCoefficients().get(coefficientsIdx)));
+                    this.coefficients.get(coefficientsIdx).add(polynomialEquation.getCoefficients().get(coefficientsIdx)));
         }
-        result = result.add(equation.getResult());
+        result = result.add(polynomialEquation.getResult());
     }
 
 }

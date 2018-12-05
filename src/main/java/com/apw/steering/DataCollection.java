@@ -29,6 +29,8 @@ public class DataCollection extends JFrame {
         bufferImage = new BufferedImage(windowWidth, windowHeight, BufferedImage.TYPE_INT_RGB);
 
         initialize();
+
+        initialize();
     }
 
     public void writeArray(int[] pixels, String fileName) {
@@ -81,8 +83,9 @@ public class DataCollection extends JFrame {
     private void initialize() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(windowWidth, windowHeight + 22);
-        setResizable(true);
+        setResizable(false);
         setVisible(true);
+        setFocusable(true);
         setIgnoreRepaint(true);
     }
 
@@ -97,7 +100,7 @@ public class DataCollection extends JFrame {
     public void drawPoint(int x, int y, int size, Color color) {
         Graphics g = this.getGraphics();
         g.setColor(color);
-        g.fillRect(x, y, size, size);
+        g.fillRect(x, y + 22, size, size);
     }
 
     public void drawPoint(int idx, int size, Color color) {

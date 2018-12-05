@@ -1,6 +1,7 @@
 package com.apw.imagemanagement;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class contains functions to apply filters and convert images
@@ -51,50 +52,8 @@ public class ImageManipulator {
 		}
 	}
 
-	/** Converts a bayer8 image to a black and white image based on average luminance of each row
-	 *
-	 * @param bayer bayer8 image
-	 * @param tile tiling pattern of the bayer8 image
-	 */
-//	public static void convertToBlackWhiteRaster(byte[] bayer, byte[] mono, int nrows, int ncols, byte tile) {
-//		for (int r = nrows/2; r < nrows; r++) {
-//    		int averageLuminance = 0;
-//        	for(int c = 0; c < ncols; c++) {
-//				int R = (bayer[getPos(c,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);
-//				int G = (bayer[getPos(c,r,combineTile((byte)1,tile),ncols,nrows)]&0xFF);
-//				int B = (bayer[getPos(c,r,combineTile((byte)3,tile),ncols,nrows)]&0xFF);
-//				averageLuminance += (R + G + B)/3;
-//			}
-//        	averageLuminance /= ncols;
-//
-//            for (int c = 1; c < ncols-1; c++) {
-//
-//				int R1 = (bayer[getPos(c-1,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);
-//				int G1 = (bayer[getPos(c-1,r,combineTile((byte)1,tile),ncols,nrows)]&0xFF);
-//				int B1 = (bayer[getPos(c-1,r,combineTile((byte)3,tile),ncols,nrows)]&0xFF);
-//				int R2 = (bayer[getPos(c,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);
-//				int G2 = (bayer[getPos(c,r,combineTile((byte)1,tile),ncols,nrows)]&0xFF);
-//				int B2 = (bayer[getPos(c,r,combineTile((byte)3,tile),ncols,nrows)]&0xFF);
-//				int R3 = (bayer[getPos(c+1,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);
-//				int G3 = (bayer[getPos(c+1,r,combineTile((byte)1,tile),ncols,nrows)]&0xFF);
-//				int B3 = (bayer[getPos(c+1,r,combineTile((byte)3,tile),ncols,nrows)]&0xFF);
-//
-//				int pix =(R1 + R2 + R3 + B1 + B2 + B3 + G1 + G2 + G3)/9;
-////				int pix = (R2 + G2 + B2)/3;
-//				if(!(c >= 640 || r < 240 || r > 455)) {
-//					if (pix > luminanceMultiplier * averageLuminance) {
-//						mono[r * ncols + c] = 1;
-//					} else {
-//						mono[r * ncols + c] = 0;
-//					}
-//				} else {
-//					mono[r * ncols + c] = 0;
-//				}
-//			}
-//		}
-//	}
 
-	private static int getPixel(byte[] bayer, int column, int row, byte tile, int nCols, int nRows) {
+	private static int getRGBPixel(byte[] bayer, int column, int row, byte tile, int nCols, int nRows) {
 		int R = (bayer[getPos(column, row, combineTile((byte) 0, tile), nCols, nRows)] & 0xFF);
 		int G = (bayer[getPos(column, row, combineTile((byte) 1, tile), nCols, nRows)] & 0xFF);
 		int B = (bayer[getPos(column, row, combineTile((byte) 3, tile), nCols, nRows)] & 0xFF);
@@ -102,55 +61,107 @@ public class ImageManipulator {
 	}
 
 	public static int[] convertToBlackWhiteRaster(byte[] bayer, int numRows, int numColumns, int frameWidth, byte tile) {
-	    int pixelsRGB[] = new int[numRows * numColumns];
-		int pixelsBW[] = new int[numRows * numColumns];
-		int horizonLine = 240;
-		int averageColor;
-		int lastWhiteX = 0;
-		int white = 0xffffff;
-		int black = 0;
+		int[] pixels = new int[numColumns * numRows];
+		if (bayer != null) {
+			int white = 0xffffff;
+			int black = 0;
+			ArrayList<Integer> previousColors = new ArrayList<>();
+			double averageColor;
+			int numPastFrames = 10;
+			double multiplier = 0.47;
 
-		for (int row = 0; row < numRows; row++) {
-			for (int column = 0; column < numColumns; column++) {
-			    int currentIdx = getNumberFromCord(column, row, frameWidth);
-				int currentPixel = getPixel(bayer, column, row, tile, numColumns, numRows);
-				pixelsRGB[currentIdx] = currentPixel;
-
-                if (row < horizonLine) {
-                    continue;
-                }
-				averageColor = calculateNextAverage(pixelsRGB, row, column, 10, lastWhiteX, frameWidth);
-
-				if (Math.abs(currentPixel - averageColor) > 0.2 * averageColor) {
-				    pixelsBW[currentIdx] = white;
-				    lastWhiteX = 0;
-                    averageColor = calculateNextAverage(pixelsRGB, column, row, 3, lastWhiteX, frameWidth);
-                    currentPixel = getPixel(bayer, column++, row, tile, numColumns, numRows);
-
-                    //while (Math.abs(currentPixel - averageColor) < 0.15 * averageColor && column + 1 < numRows) {
-                    //
-                    //}
-                }
+			for (int i = 1; i <= numPastFrames; i++) {
+				previousColors.add(getRGBPixel(bayer, frameWidth - i, numRows - 1, tile, numColumns, numRows));
 			}
-			lastWhiteX = 0;
+
+			double averageRightColor = 0;
+			//FIXME Make 250 a percentage
+			for (int row = 250; row < numRows; row++) {
+				averageRightColor += getRGBPixel(bayer, frameWidth - 1, row, tile, numColumns, numRows);
+			}
+			averageRightColor = averageRightColor / (numRows - 250);
+
+			for (int pixelIdx = pixels.length - 1; pixelIdx > 0; pixelIdx--) {
+				//FIXME Make 250 a percentage
+				if (pixelIdx < 251 * numColumns) {
+					pixels[pixelIdx] = black;
+					continue;
+				} else if (pixelIdx % numColumns >= frameWidth) {
+					pixels[pixelIdx] = black;
+					continue;
+				}
+				int currentRow = getRowFromIndex(pixelIdx, numColumns);
+				int currentColumn = getColumnFromIndex(pixelIdx, numColumns);
+				int currentPixel = getRGBPixel(bayer, currentColumn, currentRow, tile, numColumns, numRows);
+				averageColor = averageArray(previousColors);
+
+				//FIXME Same a above.
+				if (Math.abs(currentPixel - averageColor) > multiplier * averageColor) {
+					pixels[pixelIdx] = white;
+				} else {
+					pixels[pixelIdx] = black;
+				}
+
+				if (pixelIdx % numColumns == frameWidth - 1) {
+					previousColors.clear();
+					for (int i = 0; i < numPastFrames; i++) {
+						previousColors.add(getRGBPixel(bayer, getColumnFromIndex(pixelIdx - i, numColumns),
+								getRowFromIndex(pixelIdx - i, numColumns), tile, numColumns, numRows));
+					}
+					if (averageArray(previousColors) > (1 + multiplier) * averageRightColor) {
+						previousColors.clear();
+						for (int i = 0; i < numPastFrames; i++) {
+							previousColors.add((int) averageRightColor);
+						}
+					}
+				}
+				if (pixels[pixelIdx] == black || (currentPixel != white && frameWidth != numColumns)) {
+					previousColors.add(currentPixel);
+					previousColors.remove(0);
+				}
+			}
 		}
 
-		return pixelsBW;
+		if (numColumns == frameWidth) {
+			pixels = removeNoise2(pixels);
+		}
+
+		return pixels;
 	}
 
-    private static int calculateNextAverage(int[] pixels, int x, int y, int numToAverage, int lastWhiteX, int frameWidth) {
-        double average = pixels[getNumberFromCord(x, y, frameWidth)];
-        int count = 1;
+	private static double averageArray(List<Integer> list) {
+		int sum = 0;
+		for (int num : list) {
+			sum += num;
+		}
+		return sum / list.size();
+	}
 
-        for (int i = 1; i < numToAverage && i < lastWhiteX; i++) {
-            average += pixels[getNumberFromCord(x - i, y, frameWidth)];
-            count++;
-        }
-        average = average / count;
+	private static int[] removeNoise2(int pixels[]) {
+		int whiteWidth = 0;
+		for (int idx = 0; idx < pixels.length; idx++) {
 
-        return (int) Math.round(average);
-    }
+			while (pixels[idx] == 0xffffff && idx < pixels.length) {
+				whiteWidth++;
+				idx++;
+			}
+			if (5 >= whiteWidth || whiteWidth >= 40 ) {
+				for (int idxToRemove = idx; idxToRemove >= idx - whiteWidth; idxToRemove--) {
+					pixels[idxToRemove] = 0;
+				}
+			}
+			whiteWidth = 0;
+		}
+		return pixels;
+	}
 
+    private static int getRowFromIndex(int index, int numCols) {
+		return index / numCols;
+	}
+
+	private static int getColumnFromIndex(int index, int numCols) {
+		return index % numCols;
+	}
 
     private static int getNumberFromCord(int x, int y, int frameWidth) {
         return (y * frameWidth) + x;
@@ -408,10 +419,7 @@ public class ImageManipulator {
 		}
 		for (int r = 0; r < nrows; r++) {
 			for (int c = 0; c < ncols; c++) {
-				int R = (bayer[getPos(c,r,combineTile((byte)0,tile),ncols,nrows)]&0xFF);
-				int G = (bayer[getPos(c,r,combineTile((byte)1,tile),ncols,nrows)]&0xFF);
-				int B = (bayer[getPos(c,r,combineTile((byte)3,tile),ncols,nrows)]&0xFF);
-				int pix =(R<<16)+(G<<8)+B;
+				int pix = getRGBPixel(bayer, c, r, tile, ncols, nrows);
 				rgb[r*ncols + c] = pix;
 			}
 		}

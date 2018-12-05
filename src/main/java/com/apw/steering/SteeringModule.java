@@ -2,12 +2,11 @@ package com.apw.steering;
 
 import com.apw.apw3.DriverCons;
 import com.apw.steering.steeringclasses.LaneLine;
-import com.apw.steering.steeringversions.SteeringMk5;
+
 import java.awt.Color;
 import com.apw.carcontrol.CamControl;
 import com.apw.carcontrol.CarControl;
 import com.apw.carcontrol.Module;
-import com.apw.pedestrians.image.Pixel;
 import com.apw.steering.steeringclasses.Point;
 import com.apw.steering.steeringversions.SteeringBase;
 import com.apw.steering.steeringversions.SteeringMk1;
@@ -39,7 +38,7 @@ public class SteeringModule implements Module {
     public void initialize(CarControl control) {
         control.addKeyEvent(KeyEvent.VK_LEFT, () -> control.steer(false, -5));
         control.addKeyEvent(KeyEvent.VK_RIGHT, () -> control.steer(false, 5));
-        control.addKeyEvent(KeyEvent.VK_D, () -> dataCollection.writeArray(steering.getPixels(), "ColorDataReal2.txt"));
+        control.addKeyEvent(KeyEvent.VK_D, () -> dataCollection.writeArray(steering.getPixels(), "ColorDataSim2.txt"));
 
         for (int idx = 0; idx < PAST_STEERING_ANGLES; idx++) {
             pastSteeringAngles.add(0);
@@ -60,7 +59,6 @@ public class SteeringModule implements Module {
                     steering = new SteeringMk4(control);
                     break;
                 case 5:
-                    steering = new SteeringMk5(control);
                     break;
             }
         } else {
@@ -78,7 +76,6 @@ public class SteeringModule implements Module {
                     steering = new SteeringMk4(640, 480, 912);
                     break;
                 case 5:
-                    steering = new SteeringMk5(640, 480, 912);
                     break;
 
             }
@@ -154,13 +151,6 @@ public class SteeringModule implements Module {
             g.fillRect((int) ((steering.getSteerPoint().x - 5) * widthMultiplier),
                     (int) ((steering.getSteerPoint().y - 5) * heightMultiplier) + 10, 10, 10);
 
-            if (steering instanceof SteeringMk5) {
-                LaneLine leftLine = ((SteeringMk5) steering).getLeftLine();
-                LaneLine rightLine = ((SteeringMk5) steering).getRightLine();
-
-                leftLine.drawApproximatedLine(g, Color.magenta);
-                rightLine.drawApproximatedLine(g, Color.magenta);
-            }
         }
     }
 
