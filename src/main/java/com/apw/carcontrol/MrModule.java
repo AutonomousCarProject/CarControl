@@ -50,7 +50,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
 
     private boolean initialized = false;
 
-    private static final int FPS = 50; // Number of frames per second run is called
+    private static final int FPS = 10; // Number of frames per second run is called
     private static final int initDelay = 100; // Initial delay before run is called
 
     private MrModule(boolean realCam, boolean hasWindow) {
@@ -173,7 +173,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     }
 
     private CarControl setRGBImage(byte[] recentImage) {
-        carControl.setRGBImage(imageManagementModule.getBlackWhiteRaster(recentImage));
+        carControl.setRGBImage(imageManagementModule.getRGBRaster(recentImage));
         carControl.setRenderedImage(carControl.getRGBImage());
         return carControl;
     }
