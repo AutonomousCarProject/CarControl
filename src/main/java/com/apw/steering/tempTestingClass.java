@@ -4,7 +4,8 @@ import com.apw.steering.steeringclasses.PolynomialEquation;
 import com.apw.steering.steeringclasses.Point;
 import com.apw.steering.steeringclasses.PolynomialRegression;
 import com.apw.steering.steeringversions.SteeringMk4;
-import java.awt.Color;
+
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
@@ -38,7 +39,8 @@ public class tempTestingClass implements KeyListener {
         SteeringMk4 steering = new SteeringMk4(width, height, screenWidth);
 
         int[] modifiedImage = toBW2(originalImage);
-        dataCollection.paint(modifiedImage);
+        dataCollection.copyRenderedImage(modifiedImage);
+        Graphics g = dataCollection.getBufferImage().getGraphics();
 
 
         steering.getSteeringAngle(modifiedImage);
@@ -51,17 +53,20 @@ public class tempTestingClass implements KeyListener {
         //paintLines(steering, dataCollection);
         int leftMin = steering.getLeftLine().getNonEmptyPoints().get(steering.getLeftLine().getNonEmptyPoints().size() - 1).getY();
         int leftMax = steering.getLeftLine().getNonEmptyPoints().get(0).getY();
-        paintEquation(dataCollection, leftRegression, Color.magenta, leftMin, leftMax);
+        paintEquation(g, leftRegression, Color.magenta, leftMin, leftMax);
         int rightMin = steering.getRightLine().getNonEmptyPoints().get(steering.getRightLine().getNonEmptyPoints().size() - 1).getY();
         int rightMax = steering.getRightLine().getNonEmptyPoints().get(0).getY();
-        paintEquation(dataCollection, rightRegression, Color.magenta, rightMin, rightMax);
+        paintEquation(g, rightRegression, Color.magenta, rightMin, rightMax);
         int midMin = Math.max(leftMin, rightMin);
         int midMax = Math.min(leftMax, rightMax);
-        paintMidLine(leftRegression, rightRegression, dataCollection, Color.cyan, midMin, midMax);
+        paintMidLine(leftRegression, rightRegression, g, Color.cyan, midMin, midMax);
 
         System.out.println("LeftLine Regression:\n" + leftRegression.toString() + "\n");
         System.out.println("RightLine Regression:\n" + rightRegression.toString() + "\n");
         //System.out.println("MidPoints Regression:\n" + regressions.get(2).toString() + "\n");//*/
+
+
+        dataCollection.paint();
     }
 
     public void keyReleased(KeyEvent e) { }
@@ -72,10 +77,8 @@ public class tempTestingClass implements KeyListener {
         int keyCode = e.getKeyCode();
         if (keyCode == KeyEvent.VK_LEFT) {
             multiplier -= 0.01;
-            dataCollection.paint(toBW4(originalImage));
         } else if (keyCode == KeyEvent.VK_RIGHT) {
             multiplier += 0.01;
-            dataCollection.paint(toBW4(originalImage));
         }
         System.out.println(multiplier);
     }
@@ -365,20 +368,21 @@ public class tempTestingClass implements KeyListener {
         return xySum;
     }
 
-    private static void paintEquation(DataCollection dataCollection, PolynomialEquation regression, Color color,
+    private static void paintEquation(Graphics g, PolynomialEquation regression, Color color,
                                       int min, int max) {
+        g.setColor(color);
         for (int y = min; y < max; y++) {
-            dataCollection.drawPoint(screenWidth - (int) Math.round(regression.getYValueAtX(y).doubleValue()), y,
-                    3, color);
+            g.fillRect(screenWidth - (int) Math.round(regression.getYValueAtX(y).doubleValue()), y, 3, 3);
         }
     }
 
     private static void paintMidLine(PolynomialEquation leftLine, PolynomialEquation rightLine,
-                                     DataCollection dataCollection, Color color, int min, int max) {
+                                     Graphics g, Color color, int min, int max) {
+        g.setColor(color);
         for (int y = min; y < max; y++) {
             int xValue = (int) Math.round((leftLine.getYValueAtX(y).doubleValue() +
                     rightLine.getYValueAtX(y).doubleValue()) / 2);
-            dataCollection.drawPoint(screenWidth - xValue, y, 2, color);
+            g.fillRect(screenWidth - xValue, y, 2, 2);
         }
     }
 

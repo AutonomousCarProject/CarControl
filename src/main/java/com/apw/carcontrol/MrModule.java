@@ -8,7 +8,6 @@ import com.apw.speedcon.SpeedControlModule;
 
 import com.apw.steering.SteeringModule;
 
-import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -50,7 +49,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
 
     private boolean initialized = false;
 
-    private static final int FPS = 10; // Number of frames per second run is called
+    private static final int FPS = 50; // Number of frames per second run is called
     private static final int initDelay = 100; // Initial delay before run is called
 
     private MrModule(boolean realCam, boolean hasWindow) {
@@ -136,7 +135,6 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
                             arduinoModule.update(carControl);
                         }, cameraImageExec);
 
-        // FIXME: Does not print exceptions to console.
 
         final byte[] recentImage = carControl.getRecentCameraImage();
 
@@ -190,9 +188,11 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
 
     private void paint() {
         if (!modules.isEmpty()) {
-            for (Module module : modules) {
-                module.paint(carControl, ((WindowModule) (modules.get(0))).getGraphics());
+            ((WindowModule) modules.get(0)).copyRenderedImage(carControl);
+            for (int i = 1; i < modules.size(); i++) {
+                modules.get(i).paint(carControl, ((WindowModule) (modules.get(0))).getBufferImage().getGraphics());
             }
+            modules.get(0).paint(carControl, ((WindowModule) modules.get(0)).getGraphics());
         }
     }
 

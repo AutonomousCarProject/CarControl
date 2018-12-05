@@ -54,34 +54,41 @@ public class WindowModule extends JFrame implements Module {
         control.updateWindowDims(getWidth(), getHeight());
     }
 
-    @Override
-    public void paint(CarControl control, Graphics g) {
+    public void copyRenderedImage(CarControl control) {
         int[] renderedImage = control.getRenderedImage();
 
         if (renderedImage != null) {
             int[] displayPixels = ((DataBufferInt) bufferImage.getRaster().getDataBuffer()).getData();
             System.arraycopy(renderedImage, 0, displayPixels, 0, renderedImage.length);
+        }
+    }
 
-            BufferedImage tempImage = displayImage;
-            displayImage = bufferImage;
-            bufferImage = tempImage;
+    @Override
+    public void paint(CarControl control, Graphics g) {
 
-            
-            g.drawImage(displayImage, control.getEdges().left, control.getEdges().top,
-                    control.getWindowWidth() - control.getEdges().left - control.getEdges().right,
-                    control.getWindowHeight() - control.getEdges().top - control.getEdges().bottom ,
-                    null);
-            for (ColoredLine line : control.getLines()) {
-                g.setColor(line.getColor());
-                g.drawLine(line.getStart().x, line.getStart().y, line.getEnd().x, line.getEnd().y);
-            }
-            for (ColoredRect rect : control.getRects()) {
-                g.setColor(rect.getColor());
-                g.drawRect(rect.getPosition().x, rect.getPosition().y, rect.getWidth(), rect.getHeight());
-            }
+        BufferedImage tempImage = displayImage;
+        displayImage = bufferImage;
+        bufferImage = tempImage;
+
+        g.drawImage(displayImage, control.getEdges().left, control.getEdges().top,
+                control.getWindowWidth() - control.getEdges().left - control.getEdges().right,
+                control.getWindowHeight() - control.getEdges().top - control.getEdges().bottom ,
+                null);
+
+        for (ColoredLine line : control.getLines()) {
+            g.setColor(line.getColor());
+            g.drawLine(line.getStart().x, line.getStart().y, line.getEnd().x, line.getEnd().y);
+        }
+        for (ColoredRect rect : control.getRects()) {
+            g.setColor(rect.getColor());
+            g.drawRect(rect.getPosition().x, rect.getPosition().y, rect.getWidth(), rect.getHeight());
         }
 
         control.clearLines();
         control.clearRects();
+    }
+
+    public BufferedImage getBufferImage() {
+        return bufferImage;
     }
 }

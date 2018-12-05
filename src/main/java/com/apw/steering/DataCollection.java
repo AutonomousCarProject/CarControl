@@ -64,20 +64,23 @@ public class DataCollection extends JFrame {
 
     public void paint(String filePath) {
         int[] renderedImage = readArray(filePath);
-        paint(renderedImage);
+        paint();
     }
 
-    public void paint(int[] renderedImage) {
+    public void copyRenderedImage(int[] renderedImage) {
         if (renderedImage != null) {
             int[] displayPixels = ((DataBufferInt) bufferImage.getRaster().getDataBuffer()).getData();
             System.arraycopy(renderedImage, 0, displayPixels, 0, renderedImage.length);
-
-            BufferedImage tempImage = displayImage;
-            displayImage = bufferImage;
-            bufferImage = tempImage;
-
-            getGraphics().drawImage(displayImage, 0, 22, windowWidth, windowHeight, null);
         }
+    }
+
+    public void paint() {
+
+        BufferedImage tempImage = displayImage;
+        displayImage = bufferImage;
+        bufferImage = tempImage;
+
+        getGraphics().drawImage(displayImage, 0, 22, windowWidth, windowHeight, null);
     }
 
     private void initialize() {
@@ -115,6 +118,10 @@ public class DataCollection extends JFrame {
         Graphics g = this.getGraphics();
         g.setColor(color);
         g.drawLine(x1, y1, x2, y2);
+    }
+
+    public BufferedImage getBufferImage() {
+        return bufferImage;
     }
 }
 
