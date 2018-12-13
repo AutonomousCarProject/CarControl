@@ -6,6 +6,7 @@ import com.apw.sbcio.fakefirm.ArduinoIO;
 import com.apw.sbcio.fakefirm.ArduinoModule;
 import com.apw.speedcon.SpeedControlModule;
 
+import com.apw.steering.DataCollection;
 import com.apw.steering.SteeringModule;
 
 import java.awt.event.KeyEvent;
@@ -34,7 +35,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     private ExecutorService imageBWExec = Executors.newSingleThreadExecutor(new NamedThreadFactory("imageBW"));
     private ExecutorService imageSimpleExec = Executors.newSingleThreadExecutor(new NamedThreadFactory("imageSimple"));
     private ExecutorService cameraImageExec = Executors.newSingleThreadExecutor(new NamedThreadFactory("cameraReader"));
-    private PWMController driveSys = new ArduinoIO();
+    private PWMController driveSys;
     private List<Module> modules = new ArrayList<>(); // Contains each module
     private final WindowModule windowModule;
     private final ArduinoModule arduinoModule;
@@ -53,6 +54,7 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
     private static final int initDelay = 100; // Initial delay before run is called
 
     private MrModule(boolean realCam, boolean hasWindow) {
+        driveSys = new ArduinoIO(false);
         if (realCam) {
             carControl = new CamControl(driveSys);
             //speedControl = new CamControl(driveSys);
@@ -246,6 +248,10 @@ public class MrModule extends JFrame implements Runnable, KeyListener {
                 if (e.getKeyCode() == binding.getKey())
                     binding.getValue().run();
         }
+        /*if (e.getKeyCode() == KeyEvent.VK_U) {
+            DataCollection dataCollection = new DataCollection(912, 480);
+            dataCollection.writeArray(carControl.getRecentCameraImage(), "ByteImage.txt");
+        }*/
     }
 
     @Override

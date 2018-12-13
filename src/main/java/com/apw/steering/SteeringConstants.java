@@ -5,15 +5,15 @@ import java.awt.Color;
 public class SteeringConstants {
 
     // SteeringModule Constants
-    static final int STEERING_VERSION = 4; // Which Version of steering to use
-    static final int PAST_STEERING_ANGLES = 1;
-    static final int MAX_STEER_DIFFERENCE = 5;
-    static final boolean DRAW_STEERING_LINES = true;
-    static final Color RIGHT_LANE_COLOR = Color.yellow;
-    static final Color LEFT_LANE_COLOR = Color.yellow;
-    static final Color MIDPOINT_COLOR = Color.blue;
-    static final Color TARGET_POINT_COLOR = Color.red;
-    static final Color STEER_POINT_COLOR = Color.cyan;
+    public static final int STEERING_VERSION = 4; // Which Version of steering to use
+    public static final int PAST_STEERING_ANGLES = 1;
+    public static final int MAX_STEER_DIFFERENCE = 5;
+    public static final boolean DRAW_STEERING_LINES = true;
+    public static final Color RIGHT_LANE_COLOR = Color.yellow;
+    public static final Color LEFT_LANE_COLOR = Color.yellow;
+    public static final Color MIDPOINT_COLOR = Color.blue;
+    public static final Color TARGET_POINT_COLOR = Color.red;
+    public static final Color STEER_POINT_COLOR = Color.cyan;
 
     // SteeringBase Constants
     public static final boolean USE_PID = false; // Weather or not to use PID

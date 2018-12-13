@@ -60,8 +60,8 @@ public class ArduinoIO implements PWMController { // Adapted to Java from arduin
   public static final double RotDistConversion = 1; //rotation to distance ratio
   
 
-  public ArduinoIO() { // outer class constructor..
-    surrealPort = (Constants.useServos) ? new SerialPort(CommPortNo) : new SerialPortDump(CommPortNo);
+  public ArduinoIO(boolean useServos) { // outer class constructor..
+    surrealPort = (useServos) ? new SerialPort(CommPortNo) : new SerialPortDump(CommPortNo);
     System.out.println("new Arduino " + CommPortNo + " " + (surrealPort != null));
     digitalOutputData = new int[MAX_DATA_BYTES];
     Open();

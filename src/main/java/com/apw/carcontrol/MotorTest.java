@@ -4,7 +4,7 @@ import com.apw.sbcio.PWMController;
 import com.apw.sbcio.fakefirm.ArduinoIO;
 
 public class MotorTest {
-    private static PWMController driveSys = new ArduinoIO();
+    private static PWMController driveSys = new ArduinoIO(true);
     private static final int GasPin = 10, velocity = 6;
     
     private static final long initTime = 5000, runTime = 5000;

@@ -1,5 +1,6 @@
 package com.apw.steering;
 
+import com.apw.imagemanagement.ImageManipulator;
 import com.apw.steering.steeringclasses.PolynomialEquation;
 import com.apw.steering.steeringclasses.Point;
 import com.apw.steering.steeringclasses.PolynomialRegression;
@@ -26,7 +27,14 @@ public class tempTestingClass implements KeyListener {
     private DataCollection dataCollection;
 
     public static void main(String args[]) {
-        new tempTestingClass();
+
+        DataCollection dataCollection = new DataCollection(912, 480);
+        int[] pixels = new int[912 * 480];
+        ImageManipulator.convertToRGBRaster((byte[]) dataCollection.readArray("ByteImage.txt", true), pixels, 480, 912, (byte) 0);
+        pixels = ImageManipulator.convertToBlackWhiteRaster((byte[]) dataCollection.readArray("ByteImage.txt", true), 480, 912, 640, (byte) 0);
+        dataCollection.copyRenderedImage(pixels);
+        dataCollection.paint();
+
     }
 
     public tempTestingClass() {
@@ -35,7 +43,7 @@ public class tempTestingClass implements KeyListener {
         dataCollection = new DataCollection(screenWidth, height);
         dataCollection.addKeyListener(this);
 
-        originalImage = dataCollection.readArray(fileName);
+        originalImage = (int[]) dataCollection.readArray(fileName, false);
         SteeringMk4 steering = new SteeringMk4(width, height, screenWidth);
 
         int[] modifiedImage = toBW2(originalImage);

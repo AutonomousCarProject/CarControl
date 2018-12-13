@@ -8,10 +8,9 @@ import com.apw.carcontrol.CamControl;
 import com.apw.carcontrol.CarControl;
 import com.apw.carcontrol.Module;
 import com.apw.steering.steeringclasses.Point;
+import com.apw.steering.steeringversions.*;
 import com.apw.steering.steeringversions.SteeringBase;
-import com.apw.steering.steeringversions.SteeringMk1;
-import com.apw.steering.steeringversions.SteeringMk2;
-import com.apw.steering.steeringversions.SteeringMk4;
+
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -59,6 +58,7 @@ public class SteeringModule implements Module {
                     steering = new SteeringMk4(control);
                     break;
                 case 5:
+                    steering = new SteeringMk5(control);
                     break;
             }
         } else {
@@ -76,6 +76,7 @@ public class SteeringModule implements Module {
                     steering = new SteeringMk4(640, 480, 912);
                     break;
                 case 5:
+                    steering = new SteeringMk5(640, 480, 912);
                     break;
 
             }
@@ -115,7 +116,7 @@ public class SteeringModule implements Module {
     public void paint(CarControl control, Graphics g) {
 
         if (DRAW_STEERING_LINES) {
-
+            //((SteeringMk5) steering).paint(g);
             for (int idx = 0; idx < steering.getMidPoints().size(); idx++) {
                 if (idx >= steering.getStartTarget() && idx <= steering.getEndTarget()) {
                     g.setColor(TARGET_POINT_COLOR);
@@ -145,7 +146,6 @@ public class SteeringModule implements Module {
             }
             g.setColor(STEER_POINT_COLOR);
             g.fillRect(steering.getSteerPoint().x - 5, steering.getSteerPoint().y, 10, 10);
-
         }
     }
 

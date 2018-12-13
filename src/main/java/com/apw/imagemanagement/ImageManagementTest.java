@@ -12,7 +12,7 @@ public class ImageManagementTest {
         boolean millis = true;
         boolean recall = true;
         long time = System.currentTimeMillis();
-        ArduinoIO driveSys = new ArduinoIO();
+        ArduinoIO driveSys = new ArduinoIO(false);
         int amount = (int)Math.pow(10,6);
         //new TrakSim();
         TrakSimControl simControl = new TrakSimControl(driveSys);

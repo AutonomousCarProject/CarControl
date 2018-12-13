@@ -33,6 +33,28 @@ public class DataCollection extends JFrame {
         initialize();
     }
 
+    public void writeArray(byte[] bayer, String fileName) {
+        System.out.println("been here");
+        try {
+            PrintStream ps = new PrintStream(new FileOutputStream("testdata/" + fileName));
+            String line = "";
+            int count = 0;
+            for (byte pixel : bayer) {
+                line = line + " " + pixel;
+                count++;
+                if (count % 4 == 0) {
+                    ps.println(line);
+                    line = "";
+                }
+            }
+            ps.println(line);
+            ps.close();
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+        System.exit(0);
+    }
+
     public void writeArray(int[] pixels, String fileName) {
     	System.out.println("been here");
         try {
@@ -47,24 +69,27 @@ public class DataCollection extends JFrame {
         System.exit(0);
     }
 
-    public int[] readArray(String filePath) {
+    public Object readArray(String filePath, boolean isByte) {
         File dataFile = new File("testdata/" + filePath);
-        List<Integer> tempArray = new ArrayList<>();
+        List tempArray = new ArrayList();
         try {
             fileScanner = new Scanner(dataFile);
         } catch (IOException e) {
-            System.out.println(e);
+            System.out.println(e.toString());
         }
-        while (fileScanner.hasNextLine()) {
-            tempArray.add(Integer.parseInt(fileScanner.nextLine()));
+        while (fileScanner.hasNext()) {
+            if (isByte) {
+                tempArray.add(Byte.parseByte(fileScanner.next()));
+            } else {
+                tempArray.add(Integer.parseInt(fileScanner.nextLine()));
+            }
         }
         fileScanner.close();
-        return convertIntegers(tempArray);
-    }
-
-    public void paint(String filePath) {
-        int[] renderedImage = readArray(filePath);
-        paint();
+        if (isByte) {
+            return convertBytes(tempArray);
+        } else {
+            return convertIntegers(tempArray);
+        }
     }
 
     public void copyRenderedImage(int[] renderedImage) {
@@ -98,6 +123,14 @@ public class DataCollection extends JFrame {
             intArray[i] = integers.get(i);
         }
         return intArray;
+    }
+
+    private byte[] convertBytes(List<Byte> bytes) {
+        byte[] byteArray = new byte[bytes.size()];
+        for (int i = 0; i < byteArray.length; i++) {
+            byteArray[i] = bytes.get(i);
+        }
+        return byteArray;
     }
 
     public void drawPoint(int x, int y, int size, Color color) {

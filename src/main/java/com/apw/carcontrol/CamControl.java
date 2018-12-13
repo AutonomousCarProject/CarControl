@@ -7,7 +7,7 @@ import com.apw.sbcio.PWMController;
 public class CamControl extends CarControlBase {
 
     public CamControl(PWMController drivesys) {
-        super(new FlyCamera(), drivesys);
+        super(new FlyCamera(true), drivesys);
         cam.Connect(4); // 30 FPS
     }
 

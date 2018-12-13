@@ -18,14 +18,15 @@ public class FlyCamera { // (in Java/fly2cam)
             errn; // returns an error number, see ErrorNumberText()
     private long stuff; // used for error reporting, or not at all
 
-   static {System.loadLibrary("fly2cam/FlyCamera");} // comment this line out if no DLLs
+    static {System.loadLibrary("fly2cam/FlyCamera");} // comment this line out if no DLLs
 
-    public FlyCamera() { // (in Java/fly2cam)
-        try{
-            if(DriverCons.D_LiveCam)
+    public FlyCamera() {}
+
+    public FlyCamera(boolean isRealCam) { // (in Java/fly2cam)
+        try {
+            if (isRealCam)
                 System.loadLibrary("fly2cam/FlyCamera");
-
-        }catch(Error e){
+        } catch (Error e) {
             System.out.println("FlyCamera not found");
         }
 
@@ -123,7 +124,7 @@ public class FlyCamera { // (in Java/fly2cam)
     public static void main(String[] args) { // to test the interface (fly2cam)
         int tall = 0, wide = 0, pix = -1;
         byte[] buff;
-        FlyCamera hello = new FlyCamera();
+        FlyCamera hello = new FlyCamera(true);
         if (hello.Connect(0)) tall = hello.Dimz();
         wide = tall & 0xFFFF;
         tall = tall >> 16;

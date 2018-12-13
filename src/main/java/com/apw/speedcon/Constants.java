@@ -3,7 +3,6 @@ package com.apw.speedcon;
 public class Constants {
   //Arduino settings
   public static final boolean
-	useServos = true,
 	readMessages = false;
   
 	//Default Debug Overlays

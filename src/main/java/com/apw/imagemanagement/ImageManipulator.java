@@ -65,25 +65,24 @@ public class ImageManipulator {
 		if (bayer != null) {
 			int white = 0xffffff;
 			int black = 0;
-			ArrayList<Integer> previousColors = new ArrayList<>();
-			double averageColor;
 			int numPastFrames = 10;
+			int horizonLine = numRows >> 1;
+			double averageColor;
 			double multiplier = 0.47;
+			ArrayList<Integer> previousColors = new ArrayList<>();
 
 			for (int i = 1; i <= numPastFrames; i++) {
 				previousColors.add(getRGBPixel(bayer, frameWidth - i, numRows - 1, tile, numColumns, numRows));
 			}
 
 			double averageRightColor = 0;
-			//FIXME Make 250 a percentage
-			for (int row = 250; row < numRows; row++) {
+			for (int row = horizonLine; row < numRows; row++) {
 				averageRightColor += getRGBPixel(bayer, frameWidth - 1, row, tile, numColumns, numRows);
 			}
 			averageRightColor = averageRightColor / (numRows - 250);
 
 			for (int pixelIdx = pixels.length - 1; pixelIdx > 0; pixelIdx--) {
-				//FIXME Make 250 a percentage
-				if (pixelIdx < 251 * numColumns) {
+				if (pixelIdx < horizonLine * numColumns) {
 					pixels[pixelIdx] = black;
 					continue;
 				} else if (pixelIdx % numColumns >= frameWidth) {
@@ -95,7 +94,6 @@ public class ImageManipulator {
 				int currentPixel = getRGBPixel(bayer, currentColumn, currentRow, tile, numColumns, numRows);
 				averageColor = averageArray(previousColors);
 
-				//FIXME Same a above.
 				if (Math.abs(currentPixel - averageColor) > multiplier * averageColor) {
 					pixels[pixelIdx] = white;
 				} else {
