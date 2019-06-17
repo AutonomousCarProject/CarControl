@@ -5,7 +5,7 @@ import java.awt.Color;
 public class SteeringConstants {
 
     // SteeringModule Constants
-    static final int STEERING_VERSION = 4; // Which Version of steering to use
+    static final int STEERING_VERSION = 2; // Which Version of steering to use
     static final boolean DRAW_STEERING_LINES = true;
     static final Color RIGHT_LANE_COLOR = Color.yellow;
     static final Color LEFT_LANE_COLOR = Color.yellow;
